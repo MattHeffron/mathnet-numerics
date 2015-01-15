@@ -4,7 +4,7 @@
 // http://github.com/mathnet/mathnet-numerics
 // http://mathnetnumerics.codeplex.com
 //
-// Copyright (c) 2009-2013 Math.NET
+// Copyright (c) 2009-2015 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -30,7 +30,7 @@
 
 using System;
 
-namespace MathNet.Numerics.LinearAlgebra.Factorization
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
 {
     /// <summary>
     /// <para>A class which encapsulates the functionality of a Cholesky factorization.</para>

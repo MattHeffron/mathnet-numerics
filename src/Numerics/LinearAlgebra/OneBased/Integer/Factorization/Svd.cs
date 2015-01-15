@@ -33,7 +33,7 @@ using System.Linq;
 using MathNet.Numerics.LinearAlgebra.Factorization;
 using MathNet.Numerics.Properties;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer.Factorization
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
 {
     /// <summary>
     /// <para>A class which encapsulates the functionality of the singular value decomposition (SVD).</para>

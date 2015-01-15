@@ -4,7 +4,7 @@
 // http://github.com/mathnet/mathnet-numerics
 // http://mathnetnumerics.codeplex.com
 //
-// Copyright (c) 2009-2014 Math.NET
+// Copyright (c) 2009-2015 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -33,7 +33,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Properties;
 
-namespace MathNet.Numerics.LinearAlgebra.Solvers
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
 {
     /// <summary>
     /// An iterator that is used to check if an iterative calculation should continue or stop.

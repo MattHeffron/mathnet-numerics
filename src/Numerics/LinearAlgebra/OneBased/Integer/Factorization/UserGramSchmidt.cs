@@ -31,7 +31,7 @@
 using System;
 using MathNet.Numerics.Properties;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer.Factorization
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
 {
     /// <summary>
     /// <para>A class which encapsulates the functionality of the QR decomposition Modified Gram-Schmidt Orthogonalization.</para>

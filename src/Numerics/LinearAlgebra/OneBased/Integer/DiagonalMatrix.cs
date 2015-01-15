@@ -37,7 +37,7 @@ using MathNet.Numerics.LinearAlgebra.Storage;
 using MathNet.Numerics.Properties;
 using MathNet.Numerics.Threading;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 {
     /// <summary>
     /// A matrix type for diagonal matrices.

@@ -31,7 +31,7 @@
 using System;
 using MathNet.Numerics.Properties;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer.Factorization
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
 {
     using Numerics;
 

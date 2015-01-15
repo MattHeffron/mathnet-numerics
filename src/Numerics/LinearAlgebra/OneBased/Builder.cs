@@ -36,7 +36,7 @@ using MathNet.Numerics.LinearAlgebra.Solvers;
 using MathNet.Numerics.LinearAlgebra.Storage;
 using MathNet.Numerics.Random;
 
-namespace MathNet.Numerics.LinearAlgebra.Double
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
 {
     internal class MatrixBuilder : MatrixBuilder<double>
     {
@@ -111,7 +111,7 @@ namespace MathNet.Numerics.LinearAlgebra.Double
     }
 }
 
-namespace MathNet.Numerics.LinearAlgebra.Single
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
 {
     internal class MatrixBuilder : MatrixBuilder<float>
     {
@@ -186,7 +186,7 @@ namespace MathNet.Numerics.LinearAlgebra.Single
     }
 }
 
-namespace MathNet.Numerics.LinearAlgebra.Integer
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 {
     internal class MatrixBuilder : MatrixBuilder<int>
     {
@@ -262,7 +262,7 @@ namespace MathNet.Numerics.LinearAlgebra.Integer
 }
 
 
-namespace MathNet.Numerics.LinearAlgebra.Complex
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
 {
 #if NOSYSNUMERICS
     using Complex = Numerics.Complex;
@@ -343,7 +343,7 @@ namespace MathNet.Numerics.LinearAlgebra.Complex
     }
 }
 
-namespace MathNet.Numerics.LinearAlgebra.Complex32
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
 {
     internal class MatrixBuilder : MatrixBuilder<Numerics.Complex32>
     {
@@ -418,7 +418,7 @@ namespace MathNet.Numerics.LinearAlgebra.Complex32
     }
 }
 
-namespace MathNet.Numerics.LinearAlgebra
+namespace MathNet.Numerics.LinearAlgebra.OneBased
 {
 
 #if NOSYSNUMERICS

@@ -4,7 +4,7 @@
 // http://github.com/mathnet/mathnet-numerics
 // http://mathnetnumerics.codeplex.com
 //
-// Copyright (c) 2009-2014 Math.NET
+// Copyright (c) 2009-2015 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -31,7 +31,7 @@
 using System;
 using System.Diagnostics;
 
-namespace MathNet.Numerics.LinearAlgebra.Solvers
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
 {
     /// <summary>
     /// Monitors an iterative calculation for signs of divergence.

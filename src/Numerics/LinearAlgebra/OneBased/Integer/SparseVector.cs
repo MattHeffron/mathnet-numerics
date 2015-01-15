@@ -36,7 +36,7 @@ using System.Linq;
 using MathNet.Numerics.LinearAlgebra.Storage;
 using MathNet.Numerics.Threading;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 {
     /// <summary>
     /// A vector with sparse storage, intended for very large vectors where most of the cells are zero.

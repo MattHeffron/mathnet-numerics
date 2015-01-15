@@ -32,7 +32,7 @@ using System;
 using MathNet.Numerics.LinearAlgebra.Solvers;
 using MathNet.Numerics.Properties;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer.Solvers
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
 {
     /// <summary>
     /// A diagonal preconditioner. The preconditioner uses the inverse

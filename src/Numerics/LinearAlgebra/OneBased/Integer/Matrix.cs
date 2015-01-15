@@ -34,7 +34,7 @@ using MathNet.Numerics.LinearAlgebra.Factorization;
 using MathNet.Numerics.LinearAlgebra.Storage;
 using MathNet.Numerics.Properties;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 {
     /// <summary>
     /// <c>int</c> version of the <see cref="Matrix{T}"/> class.

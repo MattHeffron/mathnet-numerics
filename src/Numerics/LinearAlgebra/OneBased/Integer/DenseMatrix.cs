@@ -40,7 +40,7 @@ using MathNet.Numerics.Properties;
 using MathNet.Numerics.Providers.LinearAlgebra;
 using MathNet.Numerics.Threading;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 {
     /// <summary>
     /// A Matrix class with dense storage. The underlying storage is a one dimensional array in column-major order (column by column).

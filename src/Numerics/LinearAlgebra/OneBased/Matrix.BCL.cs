@@ -4,7 +4,7 @@
 // http://github.com/mathnet/mathnet-numerics
 // http://mathnetnumerics.codeplex.com
 //
-// Copyright (c) 2009-2014 Math.NET
+// Copyright (c) 2009-2015 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -34,7 +34,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace MathNet.Numerics.LinearAlgebra
+namespace MathNet.Numerics.LinearAlgebra.OneBased
 {
     [DebuggerDisplay("Matrix {RowCount}x{ColumnCount}")]
     public abstract partial class Matrix<T>

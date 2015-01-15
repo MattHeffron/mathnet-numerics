@@ -4,7 +4,7 @@
 // http://github.com/mathnet/mathnet-numerics
 // http://mathnetnumerics.codeplex.com
 //
-// Copyright (c) 2009-2014 Math.NET
+// Copyright (c) 2009-2015 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -34,7 +34,7 @@ using System.Linq;
 using MathNet.Numerics.Properties;
 using MathNet.Numerics.Threading;
 
-namespace MathNet.Numerics.LinearAlgebra.Storage
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 {
     [Serializable]
     public class DenseColumnMajorMatrixStorage<T> : MatrixStorage<T>

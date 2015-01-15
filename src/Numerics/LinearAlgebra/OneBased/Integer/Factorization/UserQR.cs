@@ -34,7 +34,7 @@ using MathNet.Numerics.LinearAlgebra.Factorization;
 using MathNet.Numerics.Properties;
 using MathNet.Numerics.Threading;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer.Factorization
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
 {
     /// <summary>
     /// <para>A class which encapsulates the functionality of the QR decomposition.</para>

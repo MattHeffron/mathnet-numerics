@@ -34,7 +34,7 @@ using System.Diagnostics;
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra.Storage;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 {
     /// <summary>
     /// A Matrix with sparse storage, intended for very large matrices where most of the cells are zero.

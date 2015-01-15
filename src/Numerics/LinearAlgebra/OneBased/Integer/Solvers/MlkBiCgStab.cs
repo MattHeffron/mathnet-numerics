@@ -34,7 +34,7 @@ using MathNet.Numerics.Distributions;
 using MathNet.Numerics.LinearAlgebra.Solvers;
 using MathNet.Numerics.Properties;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer.Solvers
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
 {
     /// <summary>
     /// A Multiple-Lanczos Bi-Conjugate Gradient stabilized iterative matrix solver.

@@ -32,7 +32,7 @@ using System;
 using MathNet.Numerics.Properties;
 using MathNet.Numerics.Threading;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer.Factorization
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
 {
     /// <summary>
     /// <para>A class which encapsulates the functionality of a Cholesky factorization for user matrices.</para>

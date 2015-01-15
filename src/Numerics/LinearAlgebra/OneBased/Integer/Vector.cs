@@ -32,7 +32,7 @@ using System;
 using MathNet.Numerics.LinearAlgebra.Storage;
 using MathNet.Numerics.Threading;
 
-namespace MathNet.Numerics.LinearAlgebra.Integer
+namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 {
     /// <summary>
     /// <c>int</c> version of the <see cref="Vector{T}"/> class.
