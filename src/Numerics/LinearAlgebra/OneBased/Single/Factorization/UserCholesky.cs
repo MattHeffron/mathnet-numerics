@@ -53,7 +53,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not positive definite.</exception>
-        public static UserCholesky Create(Matrix<float> matrix)
+        public static UserCholesky Create(Matrix1<float> matrix)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {
@@ -101,7 +101,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
             return new UserCholesky(factor);
         }
 
-        UserCholesky(Matrix<float> factor)
+        UserCholesky(Matrix1<float> factor)
             : base(factor)
         {
         }
@@ -115,7 +115,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// <param name="colLimit">Total columns</param>
         /// <param name="multipliers">Multipliers calculated previously</param>
         /// <param name="availableCores">Number of available processors</param>
-        static void DoCholeskyStep(Matrix<float> data, int rowDim, int firstCol, int colLimit, float[] multipliers, int availableCores)
+        static void DoCholeskyStep(Matrix1<float> data, int rowDim, int firstCol, int colLimit, float[] multipliers, int availableCores)
         {
             var tmpColCount = colLimit - firstCol;
 
@@ -146,7 +146,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<float> input, Matrix<float> result)
+        public override void Solve(Matrix1<float> input, Matrix1<float> result)
         {
             if (result.RowCount != input.RowCount)
             {
@@ -200,7 +200,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<float> input, Vector<float> result)
+        public override void Solve(Vector1<float> input, Vector1<float> result)
         {
             if (input.Count != result.Count)
             {

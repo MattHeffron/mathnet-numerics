@@ -40,7 +40,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
     /// <c>float</c> version of the <see cref="Matrix{T}"/> class.
     /// </summary>
     [Serializable]
-    public abstract class Matrix : Matrix<float>
+    public abstract class Matrix : Matrix1<float>
     {
         /// <summary>
         /// Initializes a new instance of the Matrix class.
@@ -110,7 +110,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Calculates the p-norms of all row vectors.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public override Vector<double> RowNorms(double norm)
+        public override Vector1<double> RowNorms(double norm)
         {
             if (norm <= 0.0)
             {
@@ -135,14 +135,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
                 double invnorm = 1.0/norm;
                 Storage.FoldByRowUnchecked(ret, (s, x) => s + Math.Pow(Math.Abs(x), norm), (x, c) => Math.Pow(x, invnorm), ret, Zeros.AllowSkip);
             }
-            return Vector<double>.Build.Dense(ret);
+            return Vector1<double>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Calculates the p-norms of all column vectors.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public override Vector<double> ColumnNorms(double norm)
+        public override Vector1<double> ColumnNorms(double norm)
         {
             if (norm <= 0.0)
             {
@@ -167,14 +167,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
                 double invnorm = 1.0/norm;
                 Storage.FoldByColumnUnchecked(ret, (s, x) => s + Math.Pow(Math.Abs(x), norm), (x, c) => Math.Pow(x, invnorm), ret, Zeros.AllowSkip);
             }
-            return Vector<double>.Build.Dense(ret);
+            return Vector1<double>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Normalizes all row vectors to a unit p-norm.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public override sealed Matrix<float> NormalizeRows(double norm)
+        public override sealed Matrix1<float> NormalizeRows(double norm)
         {
             var norminv = ((DenseVectorStorage<double>)RowNorms(norm).Storage).Data;
             for (int i = 0; i < norminv.Length; i++)
@@ -191,7 +191,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Normalizes all column vectors to a unit p-norm.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public override sealed Matrix<float> NormalizeColumns(double norm)
+        public override sealed Matrix1<float> NormalizeColumns(double norm)
         {
             var norminv = ((DenseVectorStorage<double>)ColumnNorms(norm).Storage).Data;
             for (int i = 0; i < norminv.Length; i++)
@@ -206,48 +206,48 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <summary>
         /// Calculates the value sum of each row vector.
         /// </summary>
-        public override Vector<float> RowSums()
+        public override Vector1<float> RowSums()
         {
             var ret = new float[RowCount];
             Storage.FoldByRowUnchecked(ret, (s, x) => s + x, (x, c) => x, ret, Zeros.AllowSkip);
-            return Vector<float>.Build.Dense(ret);
+            return Vector1<float>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Calculates the absolute value sum of each row vector.
         /// </summary>
-        public override Vector<float> RowAbsoluteSums()
+        public override Vector1<float> RowAbsoluteSums()
         {
             var ret = new float[RowCount];
             Storage.FoldByRowUnchecked(ret, (s, x) => s + Math.Abs(x), (x, c) => x, ret, Zeros.AllowSkip);
-            return Vector<float>.Build.Dense(ret);
+            return Vector1<float>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Calculates the value sum of each column vector.
         /// </summary>
-        public override Vector<float> ColumnSums()
+        public override Vector1<float> ColumnSums()
         {
             var ret = new float[ColumnCount];
             Storage.FoldByColumnUnchecked(ret, (s, x) => s + x, (x, c) => x, ret, Zeros.AllowSkip);
-            return Vector<float>.Build.Dense(ret);
+            return Vector1<float>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Calculates the absolute value sum of each column vector.
         /// </summary>
-        public override Vector<float> ColumnAbsoluteSums()
+        public override Vector1<float> ColumnAbsoluteSums()
         {
             var ret = new float[ColumnCount];
             Storage.FoldByColumnUnchecked(ret, (s, x) => s + Math.Abs(x), (x, c) => x, ret, Zeros.AllowSkip);
-            return Vector<float>.Build.Dense(ret);
+            return Vector1<float>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Returns the conjugate transpose of this matrix.
         /// </summary>
         /// <returns>The conjugate transpose of this matrix.</returns>
-        public override sealed Matrix<float> ConjugateTranspose()
+        public override sealed Matrix1<float> ConjugateTranspose()
         {
             return Transpose();
         }
@@ -257,7 +257,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="scalar">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
-        protected override void DoAdd(float scalar, Matrix<float> result)
+        protected override void DoAdd(float scalar, Matrix1<float> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -275,7 +275,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">The matrix to store the result of the addition.</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoAdd(Matrix<float> other, Matrix<float> result)
+        protected override void DoAdd(Matrix1<float> other, Matrix1<float> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -291,7 +291,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="scalar">The scalar to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
-        protected override void DoSubtract(float scalar, Matrix<float> result)
+        protected override void DoSubtract(float scalar, Matrix1<float> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -309,7 +309,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">The matrix to store the result of subtraction.</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoSubtract(Matrix<float> other, Matrix<float> result)
+        protected override void DoSubtract(Matrix1<float> other, Matrix1<float> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -325,7 +325,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
-        protected override void DoMultiply(float scalar, Matrix<float> result)
+        protected override void DoMultiply(float scalar, Matrix1<float> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -341,7 +341,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Vector<float> rightSide, Vector<float> result)
+        protected override void DoMultiply(Vector1<float> rightSide, Vector1<float> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -359,7 +359,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Matrix<float> other, Matrix<float> result)
+        protected override void DoMultiply(Matrix1<float> other, Matrix1<float> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -380,7 +380,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The scalar to divide the matrix with.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivide(float divisor, Matrix<float> result)
+        protected override void DoDivide(float divisor, Matrix1<float> result)
         {
             DoMultiply(1.0f/divisor, result);
         }
@@ -390,7 +390,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="dividend">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivideByThis(float dividend, Matrix<float> result)
+        protected override void DoDivideByThis(float dividend, Matrix1<float> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -406,7 +406,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeAndMultiply(Matrix<float> other, Matrix<float> result)
+        protected override void DoTransposeAndMultiply(Matrix1<float> other, Matrix1<float> result)
         {
             for (var j = 0; j < other.RowCount; j++)
             {
@@ -427,7 +427,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override sealed void DoConjugateTransposeAndMultiply(Matrix<float> other, Matrix<float> result)
+        protected override sealed void DoConjugateTransposeAndMultiply(Matrix1<float> other, Matrix1<float> result)
         {
             DoTransposeAndMultiply(other, result);
         }
@@ -437,7 +437,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Matrix<float> other, Matrix<float> result)
+        protected override void DoTransposeThisAndMultiply(Matrix1<float> other, Matrix1<float> result)
         {
             for (var j = 0; j < other.ColumnCount; j++)
             {
@@ -458,7 +458,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override sealed void DoConjugateTransposeThisAndMultiply(Matrix<float> other, Matrix<float> result)
+        protected override sealed void DoConjugateTransposeThisAndMultiply(Matrix1<float> other, Matrix1<float> result)
         {
             DoTransposeThisAndMultiply(other, result);
         }
@@ -468,7 +468,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Vector<float> rightSide, Vector<float> result)
+        protected override void DoTransposeThisAndMultiply(Vector1<float> rightSide, Vector1<float> result)
         {
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -486,7 +486,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override sealed void DoConjugateTransposeThisAndMultiply(Vector<float> rightSide, Vector<float> result)
+        protected override sealed void DoConjugateTransposeThisAndMultiply(Vector1<float> rightSide, Vector1<float> result)
         {
             DoTransposeThisAndMultiply(rightSide, result);
         }
@@ -497,7 +497,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override void DoModulus(float divisor, Matrix<float> result)
+        protected override void DoModulus(float divisor, Matrix1<float> result)
         {
             for (var row = 0; row < RowCount; row++)
             {
@@ -514,7 +514,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoModulusByThis(float dividend, Matrix<float> result)
+        protected override void DoModulusByThis(float dividend, Matrix1<float> result)
         {
             for (var row = 0; row < RowCount; row++)
             {
@@ -531,7 +531,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override void DoRemainder(float divisor, Matrix<float> result)
+        protected override void DoRemainder(float divisor, Matrix1<float> result)
         {
             for (var row = 0; row < RowCount; row++)
             {
@@ -548,7 +548,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoRemainderByThis(float dividend, Matrix<float> result)
+        protected override void DoRemainderByThis(float dividend, Matrix1<float> result)
         {
             for (var row = 0; row < RowCount; row++)
             {
@@ -563,7 +563,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Negate each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the negation.</param>
-        protected override void DoNegate(Matrix<float> result)
+        protected override void DoNegate(Matrix1<float> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -578,7 +578,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Complex conjugates each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the conjugation.</param>
-        protected override sealed void DoConjugate(Matrix<float> result)
+        protected override sealed void DoConjugate(Matrix1<float> result)
         {
             if (ReferenceEquals(this, result))
             {
@@ -593,7 +593,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The matrix to pointwise multiply with this one.</param>
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Matrix<float> other, Matrix<float> result)
+        protected override void DoPointwiseMultiply(Matrix1<float> other, Matrix1<float> result)
         {
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -609,7 +609,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The matrix to pointwise divide this one by.</param>
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
-        protected override void DoPointwiseDivide(Matrix<float> divisor, Matrix<float> result)
+        protected override void DoPointwiseDivide(Matrix1<float> divisor, Matrix1<float> result)
         {
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -625,7 +625,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="exponent">The exponent to raise this matrix values to.</param>
         /// <param name="result">The vector to store the result of the pointwise power.</param>
-        protected override void DoPointwisePower(float exponent, Matrix<float> result)
+        protected override void DoPointwisePower(float exponent, Matrix1<float> result)
         {
             Map(x => (float)Math.Pow(x, exponent), result, Zeros.AllowSkip);
         }
@@ -636,7 +636,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The pointwise denominator matrix to use</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override void DoPointwiseModulus(Matrix<float> divisor, Matrix<float> result)
+        protected override void DoPointwiseModulus(Matrix1<float> divisor, Matrix1<float> result)
         {
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -653,7 +653,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The pointwise denominator matrix to use</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override void DoPointwiseRemainder(Matrix<float> divisor, Matrix<float> result)
+        protected override void DoPointwiseRemainder(Matrix1<float> divisor, Matrix1<float> result)
         {
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -668,7 +668,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Pointwise applies the exponential function to each value and stores the result into the result matrix.
         /// </summary>
         /// <param name="result">The matrix to store the result.</param>
-        protected override void DoPointwiseExp(Matrix<float> result)
+        protected override void DoPointwiseExp(Matrix1<float> result)
         {
             Map(x => (float)Math.Exp(x), result, Zeros.Include);
         }
@@ -677,7 +677,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Pointwise applies the natural logarithm function to each value and stores the result into the result matrix.
         /// </summary>
         /// <param name="result">The matrix to store the result.</param>
-        protected override void DoPointwiseLog(Matrix<float> result)
+        protected override void DoPointwiseLog(Matrix1<float> result)
         {
             Map(x => (float)Math.Log(x), result, Zeros.Include);
         }

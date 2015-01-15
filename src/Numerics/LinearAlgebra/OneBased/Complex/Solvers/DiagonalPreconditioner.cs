@@ -74,7 +74,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         /// The <see cref="Matrix"/> upon which this preconditioner is based.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <see langword="null" />. </exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
-        public void Initialize(Matrix<Complex> matrix)
+        public void Initialize(Matrix1<Complex> matrix)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {
@@ -93,7 +93,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         /// </summary>
         /// <param name="rhs">The right hand side vector.</param>
         /// <param name="lhs">The left hand side vector. Also known as the result vector.</param>
-        public void Approximate(Vector<Complex> rhs, Vector<Complex> lhs)
+        public void Approximate(Vector1<Complex> rhs, Vector1<Complex> lhs)
         {
             if (_inverseDiagonals == null)
             {

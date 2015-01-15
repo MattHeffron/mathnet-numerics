@@ -72,7 +72,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Solvers
         /// <param name="result">The result vector, <c>x</c></param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public void Solve(Matrix<float> matrix, Vector<float> input, Vector<float> result, Iterator<float> iterator, IPreconditioner<float> preconditioner)
+        public void Solve(Matrix1<float> matrix, Vector1<float> input, Vector1<float> result, Iterator<float> iterator, IPreconditioner<float> preconditioner)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {

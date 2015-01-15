@@ -45,7 +45,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
     /// </remarks>
     internal abstract class GramSchmidt : GramSchmidt<Complex32>
     {
-        protected GramSchmidt(Matrix<Complex32> q, Matrix<Complex32> rFull)
+        protected GramSchmidt(Matrix1<Complex32> q, Matrix1<Complex32> rFull)
             : base(q, rFull)
         {
         }

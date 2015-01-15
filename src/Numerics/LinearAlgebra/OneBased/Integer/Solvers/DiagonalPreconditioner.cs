@@ -75,7 +75,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// The <see cref="Matrix"/> upon which this preconditioner is based.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <see langword="null" />. </exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
-        public void Initialize(Matrix<int> matrix)
+        public void Initialize(Matrix1<int> matrix)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -97,7 +97,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// </summary>
         /// <param name="rhs">The right hand side vector.</param>
         /// <param name="lhs">The left hand side vector. Also known as the result vector.</param>
-        public void Approximate(Vector<int> rhs, Vector<int> lhs)
+        public void Approximate(Vector1<int> rhs, Vector1<int> lhs)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

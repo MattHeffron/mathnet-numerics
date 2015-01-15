@@ -43,7 +43,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
     public abstract class GramSchmidt<T> : QR<T>
     where T : struct, IEquatable<T>, IFormattable
     {
-        protected GramSchmidt(Matrix<T> q, Matrix<T> rFull)
+        protected GramSchmidt(Matrix1<T> q, Matrix1<T> rFull)
             : base(q, rFull, QRMethod.Full)
         {
         }

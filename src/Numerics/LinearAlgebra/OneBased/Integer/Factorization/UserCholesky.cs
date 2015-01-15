@@ -53,7 +53,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not positive definite.</exception>
-        public static UserCholesky Create(Matrix<int> matrix)
+        public static UserCholesky Create(Matrix1<int> matrix)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
             ////if (matrix.RowCount != matrix.ColumnCount)
@@ -102,7 +102,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////return new UserCholesky(factor);
         }
 
-        UserCholesky(Matrix<int> factor)
+        UserCholesky(Matrix1<int> factor)
             : base(factor)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -117,7 +117,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// <param name="colLimit">Total columns</param>
         /////// <param name="multipliers">Multipliers calculated previously</param>
         /////// <param name="availableCores">Number of available processors</param>
-        ////static void DoCholeskyStep(Matrix<int> data, int rowDim, int firstCol, int colLimit, int[] multipliers, int availableCores)
+        ////static void DoCholeskyStep(Matrix1<int> data, int rowDim, int firstCol, int colLimit, int[] multipliers, int availableCores)
         ////{
         ////    var tmpColCount = colLimit - firstCol;
 
@@ -148,7 +148,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<int> input, Matrix<int> result)
+        public override void Solve(Matrix1<int> input, Matrix1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -204,7 +204,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<int> input, Vector<int> result)
+        public override void Solve(Vector1<int> input, Vector1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);

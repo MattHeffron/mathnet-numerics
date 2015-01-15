@@ -56,7 +56,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
         /// </summary>
         public Iterator()
         {
-            _stopCriteria = new List<IIterationStopCriterion<T>>(Matrix<T>.Build.IterativeSolverStopCriteria());
+            _stopCriteria = new List<IIterationStopCriterion<T>>(Matrix1<T>.Build.IterativeSolverStopCriteria());
         }
 
         /// <summary>
@@ -104,7 +104,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
         /// on the invocation of this method. Therefore this method should only be called if the
         /// calculation has moved forwards at least one step.
         /// </remarks>
-        public IterationStatus DetermineStatus(int iterationNumber, Vector<T> solutionVector, Vector<T> sourceVector, Vector<T> residualVector)
+        public IterationStatus DetermineStatus(int iterationNumber, Vector1<T> solutionVector, Vector1<T> sourceVector, Vector1<T> residualVector)
         {
             if (_stopCriteria.Count == 0)
             {

@@ -50,7 +50,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
     /// </remarks>
     internal abstract class QR : QR<Complex32>
     {
-        protected QR(Matrix<Complex32> q, Matrix<Complex32> rFull, QRMethod method)
+        protected QR(Matrix1<Complex32> q, Matrix1<Complex32> rFull, QRMethod method)
             : base(q, rFull, method)
         {
         }

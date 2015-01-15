@@ -38,12 +38,12 @@ using MathNet.Numerics.Properties;
 namespace MathNet.Numerics.LinearAlgebra.OneBased
 {
     /// <summary>
-    /// Defines the generic class for <c>Vector</c> classes.
+    /// Defines the generic class for <c>Vector1</c> classes.
     /// </summary>
     /// <typeparam name="T">Supported data types are double, single, <see cref="Complex"/>, and <see cref="Complex32"/>.</typeparam>
     [Serializable]
-    public abstract partial class Vector<T> :
-        IFormattable, IEquatable<Vector<T>>, IList, IList<T>
+    public abstract partial class Vector1<T> :
+        IFormattable, IEquatable<Vector1<T>>, IList, IList<T>
 #if !PORTABLE
         , ICloneable
 #endif
@@ -52,7 +52,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Initializes a new instance of the Vector class.
         /// </summary>
-        protected Vector(VectorStorage<T> storage)
+        protected Vector1(VectorStorage<T> storage)
         {
             Storage = storage;
             Count = storage.Length;
@@ -149,7 +149,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Returns a deep-copy clone of the vector.
         /// </summary>
         /// <returns>A deep-copy clone of the vector.</returns>
-        public Vector<T> Clone()
+        public Vector1<T> Clone()
         {
             var result = Build.SameAs(this);
             Storage.CopyToUnchecked(result.Storage, ExistingData.AssumeZeros);
@@ -174,7 +174,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="target">The vector to copy elements into.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="target"/> is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="target"/> is not the same size as this vector.</exception>
-        public void CopyTo(Vector<T> target)
+        public void CopyTo(Vector1<T> target)
         {
             if (target == null)
             {
@@ -195,7 +195,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <item>If <paramref name="index"/> + <paramref name="count"/> is greater than or equal to the size of the vector.</item>
         /// </list></exception>
         /// <exception cref="ArgumentException">If <paramref name="count"/> is not positive.</exception>
-        public Vector<T> SubVector(int index, int count)
+        public Vector1<T> SubVector(int index, int count)
         {
             var target = Build.SameAs(this, count);
             Storage.CopySubVectorTo(target.Storage, index, 0, count, ExistingData.AssumeZeros);
@@ -209,7 +209,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="count">The number of fields to cpy. Must be positive.</param>
         /// <param name="subVector">The sub-vector to copy from.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="subVector"/> is <see langword="null" /></exception>
-        public void SetSubVector(int index, int count, Vector<T> subVector)
+        public void SetSubVector(int index, int count, Vector1<T> subVector)
         {
             if (subVector == null)
             {
@@ -226,7 +226,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="sourceIndex">The element to start copying from.</param>
         /// <param name="targetIndex">The element to start copying to.</param>
         /// <param name="count">The number of elements to copy.</param>
-        public void CopySubVectorTo(Vector<T> destination, int sourceIndex, int targetIndex, int count)
+        public void CopySubVectorTo(Vector1<T> destination, int sourceIndex, int targetIndex, int count)
         {
             if (destination == null)
             {
@@ -256,9 +256,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <returns>
         /// This vector as a column matrix.
         /// </returns>
-        public Matrix<T> ToColumnMatrix()
+        public Matrix1<T> ToColumnMatrix()
         {
-            var result = Matrix<T>.Build.SameAs(this, Count, 1);
+            var result = Matrix1<T>.Build.SameAs(this, Count, 1);
             Storage.CopyToColumnUnchecked(result.Storage, 0, ExistingData.AssumeZeros);
             return result;
         }
@@ -269,9 +269,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <returns>
         /// This vector as a row matrix.
         /// </returns>
-        public Matrix<T> ToRowMatrix()
+        public Matrix1<T> ToRowMatrix()
         {
-            var result = Matrix<T>.Build.SameAs(this, 1, Count);
+            var result = Matrix1<T>.Build.SameAs(this, 1, Count);
             Storage.CopyToRowUnchecked(result.Storage, 0, ExistingData.AssumeZeros);
             return result;
         }
@@ -388,7 +388,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// If forceMapZero is not set to true, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse vectors).
         /// </summary>
-        public void Map<TU>(Func<T, TU> f, Vector<TU> result, Zeros zeros = Zeros.AllowSkip)
+        public void Map<TU>(Func<T, TU> f, Vector1<TU> result, Zeros zeros = Zeros.AllowSkip)
             where TU : struct, IEquatable<TU>, IFormattable
         {
             // TODO: in v4 update this method to replace TU with T (consistent with Matrix, see MapConvert)
@@ -401,7 +401,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// If forceMapZero is not set to true, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse vectors).
         /// </summary>
-        public void MapIndexed<TU>(Func<int, T, TU> f, Vector<TU> result, Zeros zeros = Zeros.AllowSkip)
+        public void MapIndexed<TU>(Func<int, T, TU> f, Vector1<TU> result, Zeros zeros = Zeros.AllowSkip)
             where TU : struct, IEquatable<TU>, IFormattable
         {
             // TODO: in v4 update this method to replace TU with T (consistent with Matrix, see MapIndexedConvert)
@@ -413,7 +413,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// If forceMapZero is not set to true, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse vectors).
         /// </summary>
-        public void MapConvert<TU>(Func<T, TU> f, Vector<TU> result, Zeros zeros = Zeros.AllowSkip)
+        public void MapConvert<TU>(Func<T, TU> f, Vector1<TU> result, Zeros zeros = Zeros.AllowSkip)
             where TU : struct, IEquatable<TU>, IFormattable
         {
             Storage.MapTo(result.Storage, f, zeros, zeros == Zeros.Include ? ExistingData.AssumeZeros : ExistingData.Clear);
@@ -425,7 +425,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// If forceMapZero is not set to true, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse vectors).
         /// </summary>
-        public void MapIndexedConvert<TU>(Func<int, T, TU> f, Vector<TU> result, Zeros zeros = Zeros.AllowSkip)
+        public void MapIndexedConvert<TU>(Func<int, T, TU> f, Vector1<TU> result, Zeros zeros = Zeros.AllowSkip)
             where TU : struct, IEquatable<TU>, IFormattable
         {
             Storage.MapIndexedTo(result.Storage, f, zeros, zeros == Zeros.Include ? ExistingData.AssumeZeros : ExistingData.Clear);
@@ -436,10 +436,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// If forceMapZero is not set to true, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse vectors).
         /// </summary>
-        public Vector<TU> Map<TU>(Func<T, TU> f, Zeros zeros = Zeros.AllowSkip)
+        public Vector1<TU> Map<TU>(Func<T, TU> f, Zeros zeros = Zeros.AllowSkip)
             where TU : struct, IEquatable<TU>, IFormattable
         {
-            var result = Vector<TU>.Build.SameAs(this);
+            var result = Vector1<TU>.Build.SameAs(this);
             Storage.MapToUnchecked(result.Storage, f, zeros, ExistingData.AssumeZeros);
             return result;
         }
@@ -450,10 +450,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// If forceMapZero is not set to true, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse vectors).
         /// </summary>
-        public Vector<TU> MapIndexed<TU>(Func<int, T, TU> f, Zeros zeros = Zeros.AllowSkip)
+        public Vector1<TU> MapIndexed<TU>(Func<int, T, TU> f, Zeros zeros = Zeros.AllowSkip)
             where TU : struct, IEquatable<TU>, IFormattable
         {
-            var result = Vector<TU>.Build.SameAs(this);
+            var result = Vector1<TU>.Build.SameAs(this);
             Storage.MapIndexedToUnchecked(result.Storage, f, zeros, ExistingData.AssumeZeros);
             return result;
         }
@@ -461,7 +461,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Applies a function to each value pair of two vectors and replaces the value in the result vector.
         /// </summary>
-        public void Map2(Func<T, T, T> f, Vector<T> other, Vector<T> result, Zeros zeros = Zeros.AllowSkip)
+        public void Map2(Func<T, T, T> f, Vector1<T> other, Vector1<T> result, Zeros zeros = Zeros.AllowSkip)
         {
             Storage.Map2To(result.Storage, other.Storage, f, zeros, ExistingData.Clear);
         }
@@ -469,7 +469,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Applies a function to each value pair of two vectors and returns the results as a new vector.
         /// </summary>
-        public Vector<T> Map2(Func<T, T, T> f, Vector<T> other, Zeros zeros = Zeros.AllowSkip)
+        public Vector1<T> Map2(Func<T, T, T> f, Vector1<T> other, Zeros zeros = Zeros.AllowSkip)
         {
             var result = Build.SameAs(this);
             Storage.Map2To(result.Storage, other.Storage, f, zeros, ExistingData.AssumeZeros);
@@ -479,7 +479,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Applies a function to update the status with each value pair of two vectors and returns the resulting status.
         /// </summary>
-        public TState Fold2<TOther, TState>(Func<TState, T, TOther, TState> f, TState state, Vector<TOther> other, Zeros zeros = Zeros.AllowSkip)
+        public TState Fold2<TOther, TState>(Func<TState, T, TOther, TState> f, TState state, Vector1<TOther> other, Zeros zeros = Zeros.AllowSkip)
             where TOther : struct, IEquatable<TOther>, IFormattable
         {
             return Storage.Fold2(other.Storage, f, state, zeros);

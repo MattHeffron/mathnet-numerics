@@ -57,14 +57,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// <param name="computeVectors">Compute the singular U and VT vectors or not.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="NonConvergenceException"></exception>
-        public static UserSvd Create(Matrix<float> matrix, bool computeVectors)
+        public static UserSvd Create(Matrix1<float> matrix, bool computeVectors)
         {
             var nm = Math.Min(matrix.RowCount + 1, matrix.ColumnCount);
             var matrixCopy = matrix.Clone();
 
-            var s = Vector<float>.Build.SameAs(matrixCopy, nm);
-            var u = Matrix<float>.Build.SameAs(matrixCopy, matrixCopy.RowCount, matrixCopy.RowCount);
-            var vt = Matrix<float>.Build.SameAs(matrixCopy, matrixCopy.ColumnCount, matrixCopy.ColumnCount);
+            var s = Vector1<float>.Build.SameAs(matrixCopy, nm);
+            var u = Matrix1<float>.Build.SameAs(matrixCopy, matrixCopy.RowCount, matrixCopy.RowCount);
+            var vt = Matrix1<float>.Build.SameAs(matrixCopy, matrixCopy.ColumnCount, matrixCopy.ColumnCount);
 
             const int maxiter = 1000;
             var e = new float[matrixCopy.ColumnCount];
@@ -570,7 +570,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
             if (matrixCopy.RowCount < matrixCopy.ColumnCount)
             {
                 nm--;
-                var tmp = Vector<float>.Build.SameAs(matrixCopy, nm);
+                var tmp = Vector1<float>.Build.SameAs(matrixCopy, nm);
                 for (i = 0; i < nm; i++)
                 {
                     tmp[i] = s[i];
@@ -582,7 +582,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
             return new UserSvd(s, u, vt, computeVectors);
         }
 
-        UserSvd(Vector<float> s, Matrix<float> u, Matrix<float> vt, bool vectorsComputed)
+        UserSvd(Vector1<float> s, Matrix1<float> u, Matrix1<float> vt, bool vectorsComputed)
             : base(s, u, vt, vectorsComputed)
         {
         }
@@ -605,7 +605,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// <param name="rowCount">The number of rows in <paramref name="a"/></param>
         /// <param name="columnA">Column A index to swap</param>
         /// <param name="columnB">Column B index to swap</param>
-        static void Dswap(Matrix<float> a, int rowCount, int columnA, int columnB)
+        static void Dswap(Matrix1<float> a, int rowCount, int columnA, int columnB)
         {
             for (var i = 0; i < rowCount; i++)
             {
@@ -623,7 +623,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// <param name="column">Column to scale</param>
         /// <param name="rowStart">Row to scale from</param>
         /// <param name="z">Scale value</param>
-        static void DscalColumn(Matrix<float> a, int rowCount, int column, int rowStart, float z)
+        static void DscalColumn(Matrix1<float> a, int rowCount, int column, int rowStart, float z)
         {
             for (var i = rowStart; i < rowCount; i++)
             {
@@ -710,7 +710,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// <param name="column">Column index</param>
         /// <param name="rowStart">Start row index</param>
         /// <returns>Norm2 (Euclidean norm) of the column</returns>
-        static float Dnrm2Column(Matrix<float> a, int rowCount, int column, int rowStart)
+        static float Dnrm2Column(Matrix1<float> a, int rowCount, int column, int rowStart)
         {
             float s = 0;
             for (var i = rowStart; i < rowCount; i++)
@@ -747,7 +747,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// <param name="columnB">Index of column B</param>
         /// <param name="rowStart">Starting row index</param>
         /// <returns>Dot product value</returns>
-        static float Ddot(Matrix<float> a, int rowCount, int columnA, int columnB, int rowStart)
+        static float Ddot(Matrix1<float> a, int rowCount, int columnA, int columnB, int rowStart)
         {
             var z = 0.0f;
             for (var i = rowStart; i < rowCount; i++)
@@ -768,7 +768,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// <param name="columnB">Index of column B</param>
         /// <param name="c">Scalar "c" value</param>
         /// <param name="s">Scalar "s" value</param>
-        static void Drot(Matrix<float> a, int rowCount, int columnA, int columnB, float c, float s)
+        static void Drot(Matrix1<float> a, int rowCount, int columnA, int columnB, float c, float s)
         {
             for (var i = 0; i < rowCount; i++)
             {
@@ -784,7 +784,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<float> input, Matrix<float> result)
+        public override void Solve(Matrix1<float> input, Matrix1<float> result)
         {
             if (!VectorsComputed)
             {
@@ -850,7 +850,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<float> input, Vector<float> result)
+        public override void Solve(Vector1<float> input, Vector1<float> result)
         {
             if (!VectorsComputed)
             {

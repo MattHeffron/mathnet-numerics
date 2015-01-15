@@ -123,7 +123,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// This new matrix will be independent from the other matrix.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfMatrix(Matrix<Complex32> matrix)
+        public static DenseMatrix OfMatrix(Matrix1<Complex32> matrix)
         {
             return new DenseMatrix(DenseColumnMajorMatrixStorage<Complex32>.OfMatrix(matrix.Storage));
         }
@@ -207,7 +207,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfColumnVectors(params Vector<Complex32>[] columns)
+        public static DenseMatrix OfColumnVectors(params Vector1<Complex32>[] columns)
         {
             var storage = new VectorStorage<Complex32>[columns.Length];
             for (int i = 0; i < columns.Length; i++)
@@ -222,7 +222,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfColumnVectors(IEnumerable<Vector<Complex32>> columns)
+        public static DenseMatrix OfColumnVectors(IEnumerable<Vector1<Complex32>> columns)
         {
             return new DenseMatrix(DenseColumnMajorMatrixStorage<Complex32>.OfColumnVectors(columns.Select(c => c.Storage).ToArray()));
         }
@@ -274,7 +274,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfRowVectors(params Vector<Complex32>[] rows)
+        public static DenseMatrix OfRowVectors(params Vector1<Complex32>[] rows)
         {
             var storage = new VectorStorage<Complex32>[rows.Length];
             for (int i = 0; i < rows.Length; i++)
@@ -289,7 +289,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfRowVectors(IEnumerable<Vector<Complex32>> rows)
+        public static DenseMatrix OfRowVectors(IEnumerable<Vector1<Complex32>> rows)
         {
             return new DenseMatrix(DenseColumnMajorMatrixStorage<Complex32>.OfRowVectors(rows.Select(r => r.Storage).ToArray()));
         }
@@ -299,7 +299,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// This new matrix will be independent from the vector.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfDiagonalVector(Vector<Complex32> diagonal)
+        public static DenseMatrix OfDiagonalVector(Vector1<Complex32> diagonal)
         {
             var m = new DenseMatrix(diagonal.Count, diagonal.Count);
             m.SetDiagonal(diagonal);
@@ -311,7 +311,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// This new matrix will be independent from the vector.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfDiagonalVector(int rows, int columns, Vector<Complex32> diagonal)
+        public static DenseMatrix OfDiagonalVector(int rows, int columns, Vector1<Complex32> diagonal)
         {
             var m = new DenseMatrix(rows, columns);
             m.SetDiagonal(diagonal);
@@ -426,7 +426,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Negate each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the negation.</param>
-        protected override void DoNegate(Matrix<Complex32> result)
+        protected override void DoNegate(Matrix1<Complex32> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult != null)
@@ -442,7 +442,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Complex conjugates each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the conjugation.</param>
-        protected override void DoConjugate(Matrix<Complex32> result)
+        protected override void DoConjugate(Matrix1<Complex32> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult != null)
@@ -459,7 +459,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="scalar">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
-        protected override void DoAdd(Complex32 scalar, Matrix<Complex32> result)
+        protected override void DoAdd(Complex32 scalar, Matrix1<Complex32> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -485,7 +485,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">The matrix to store the result of add</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoAdd(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoAdd(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             // dense + dense = dense
             var denseOther = other.Storage as DenseColumnMajorMatrixStorage<Complex32>;
@@ -517,7 +517,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="scalar">The scalar to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
-        protected override void DoSubtract(Complex32 scalar, Matrix<Complex32> result)
+        protected override void DoSubtract(Complex32 scalar, Matrix1<Complex32> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -541,7 +541,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
-        protected override void DoSubtract(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoSubtract(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             // dense + dense = dense
             var denseOther = other.Storage as DenseColumnMajorMatrixStorage<Complex32>;
@@ -573,7 +573,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
-        protected override void DoMultiply(Complex32 scalar, Matrix<Complex32> result)
+        protected override void DoMultiply(Complex32 scalar, Matrix1<Complex32> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -591,7 +591,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Vector<Complex32> rightSide, Vector<Complex32> result)
+        protected override void DoMultiply(Vector1<Complex32> rightSide, Vector1<Complex32> result)
         {
             var denseRight = rightSide as DenseVector;
             var denseResult = result as DenseVector;
@@ -618,7 +618,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -664,7 +664,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeAndMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoTransposeAndMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -714,7 +714,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoConjugateTransposeAndMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoConjugateTransposeAndMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -770,7 +770,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Vector<Complex32> rightSide, Vector<Complex32> result)
+        protected override void DoTransposeThisAndMultiply(Vector1<Complex32> rightSide, Vector1<Complex32> result)
         {
             var denseRight = rightSide as DenseVector;
             var denseResult = result as DenseVector;
@@ -801,7 +801,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoConjugateTransposeThisAndMultiply(Vector<Complex32> rightSide, Vector<Complex32> result)
+        protected override void DoConjugateTransposeThisAndMultiply(Vector1<Complex32> rightSide, Vector1<Complex32> result)
         {
             var denseRight = rightSide as DenseVector;
             var denseResult = result as DenseVector;
@@ -830,7 +830,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoTransposeThisAndMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -881,7 +881,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoConjugateTransposeThisAndMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoConjugateTransposeThisAndMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -932,7 +932,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The scalar to divide the matrix with.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivide(Complex32 divisor, Matrix<Complex32> result)
+        protected override void DoDivide(Complex32 divisor, Matrix1<Complex32> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -950,7 +950,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to pointwise multiply with this one.</param>
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoPointwiseMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -970,7 +970,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The matrix to pointwise divide this one by.</param>
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
-        protected override void DoPointwiseDivide(Matrix<Complex32> divisor, Matrix<Complex32> result)
+        protected override void DoPointwiseDivide(Matrix1<Complex32> divisor, Matrix1<Complex32> result)
         {
             var denseOther = divisor as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -1038,7 +1038,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         }
 
         /// <summary>
-        /// Returns a <strong>Matrix</strong> containing the same values of <paramref name="rightSide"/>.
+        /// Returns a <strong>Matrix1</strong> containing the same values of <paramref name="rightSide"/>.
         /// </summary>
         /// <param name="rightSide">The matrix to get the values from.</param>
         /// <returns>A matrix containing a the same values as <paramref name="rightSide"/>.</returns>
@@ -1101,7 +1101,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
@@ -1118,7 +1118,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
@@ -1166,7 +1166,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> and a Vector.
+        /// Multiplies a <strong>Matrix1</strong> and a Vector.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The vector to multiply.</param>
@@ -1183,7 +1183,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         }
 
         /// <summary>
-        /// Multiplies a Vector and a <strong>Matrix</strong>.
+        /// Multiplies a Vector and a <strong>Matrix1</strong>.
         /// </summary>
         /// <param name="leftSide">The vector to multiply.</param>
         /// <param name="rightSide">The matrix to multiply.</param>
@@ -1200,7 +1200,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>

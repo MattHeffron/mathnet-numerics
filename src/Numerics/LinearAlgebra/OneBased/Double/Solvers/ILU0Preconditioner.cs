@@ -55,7 +55,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// Returns the upper triagonal matrix that was created during the LU decomposition.
         /// </summary>
         /// <returns>A new matrix containing the upper triagonal elements.</returns>
-        internal Matrix<double> UpperTriangle()
+        internal Matrix1<double> UpperTriangle()
         {
             var result = new SparseMatrix(_decompositionLU.RowCount);
             for (var i = 0; i < _decompositionLU.RowCount; i++)
@@ -73,7 +73,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// Returns the lower triagonal matrix that was created during the LU decomposition.
         /// </summary>
         /// <returns>A new matrix containing the lower triagonal elements.</returns>
-        internal Matrix<double> LowerTriangle()
+        internal Matrix1<double> LowerTriangle()
         {
             var result = new SparseMatrix(_decompositionLU.RowCount);
             for (var i = 0; i < _decompositionLU.RowCount; i++)
@@ -100,7 +100,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// <param name="matrix">The matrix upon which the preconditioner is based. </param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
-        public void Initialize(Matrix<double> matrix)
+        public void Initialize(Matrix1<double> matrix)
         {
             if (matrix == null)
             {
@@ -162,7 +162,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// </summary>
         /// <param name="rhs">The right hand side vector.</param>
         /// <param name="lhs">The left hand side vector. Also known as the result vector.</param>
-        public void Approximate(Vector<double> rhs, Vector<double> lhs)
+        public void Approximate(Vector1<double> rhs, Vector1<double> lhs)
         {
             if (_decompositionLU == null)
             {

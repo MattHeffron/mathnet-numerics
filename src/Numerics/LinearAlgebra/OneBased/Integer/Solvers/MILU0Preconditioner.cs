@@ -83,7 +83,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square or is not an
         /// instance of SparseCompressedRowMatrixStorage.</exception>
-        public void Initialize(Matrix<int> matrix)
+        public void Initialize(Matrix1<int> matrix)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -123,7 +123,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// </summary>
         /// <param name="input">The right hand side vector b.</param>
         /// <param name="result">The left hand side vector x.</param>
-        public void Approximate(Vector<int> input, Vector<int> result)
+        public void Approximate(Vector1<int> input, Vector1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);

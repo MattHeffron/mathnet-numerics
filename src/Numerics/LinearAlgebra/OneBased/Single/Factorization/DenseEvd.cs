@@ -99,7 +99,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
             return new DenseEvd(eigenVectors, eigenValues, blockDiagonal, isSymmetric);
         }
 
-        DenseEvd(Matrix<float> eigenVectors, Vector<Complex> eigenValues, Matrix<float> blockDiagonal, bool isSymmetric)
+        DenseEvd(Matrix1<float> eigenVectors, Vector1<Complex> eigenValues, Matrix1<float> blockDiagonal, bool isSymmetric)
             : base(eigenVectors, eigenValues, blockDiagonal, isSymmetric)
         {
         }
@@ -1119,7 +1119,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<float> input, Matrix<float> result)
+        public override void Solve(Matrix1<float> input, Matrix1<float> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -1185,7 +1185,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<float> input, Vector<float> result)
+        public override void Solve(Vector1<float> input, Vector1<float> result)
         {
             // Ax=b where A is an m x m matrix
             // Check that b is a column vector with m entries

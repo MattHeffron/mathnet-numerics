@@ -42,7 +42,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
     /// <c>Complex32</c> version of the <see cref="Matrix{T}"/> class.
     /// </summary>
     [Serializable]
-    public abstract class Matrix : Matrix<Complex32>
+    public abstract class Matrix : Matrix1<Complex32>
     {
         /// <summary>
         /// Initializes a new instance of the Matrix class.
@@ -112,7 +112,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Calculates the p-norms of all row vectors.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public override Vector<double> RowNorms(double norm)
+        public override Vector1<double> RowNorms(double norm)
         {
             if (norm <= 0.0)
             {
@@ -137,14 +137,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
                 double invnorm = 1.0/norm;
                 Storage.FoldByRowUnchecked(ret, (s, x) => s + Math.Pow(x.Magnitude, norm), (x, c) => Math.Pow(x, invnorm), ret, Zeros.AllowSkip);
             }
-            return Vector<double>.Build.Dense(ret);
+            return Vector1<double>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Calculates the p-norms of all column vectors.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public override Vector<double> ColumnNorms(double norm)
+        public override Vector1<double> ColumnNorms(double norm)
         {
             if (norm <= 0.0)
             {
@@ -169,14 +169,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
                 double invnorm = 1.0/norm;
                 Storage.FoldByColumnUnchecked(ret, (s, x) => s + Math.Pow(x.Magnitude, norm), (x, c) => Math.Pow(x, invnorm), ret, Zeros.AllowSkip);
             }
-            return Vector<double>.Build.Dense(ret);
+            return Vector1<double>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Normalizes all row vectors to a unit p-norm.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public override sealed Matrix<Complex32> NormalizeRows(double norm)
+        public override sealed Matrix1<Complex32> NormalizeRows(double norm)
         {
             var norminv = ((DenseVectorStorage<double>)RowNorms(norm).Storage).Data;
             for (int i = 0; i < norminv.Length; i++)
@@ -193,7 +193,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Normalizes all column vectors to a unit p-norm.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public override sealed Matrix<Complex32> NormalizeColumns(double norm)
+        public override sealed Matrix1<Complex32> NormalizeColumns(double norm)
         {
             var norminv = ((DenseVectorStorage<double>)ColumnNorms(norm).Storage).Data;
             for (int i = 0; i < norminv.Length; i++)
@@ -209,48 +209,48 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <summary>
         /// Calculates the value sum of each row vector.
         /// </summary>
-        public override Vector<Complex32> RowSums()
+        public override Vector1<Complex32> RowSums()
         {
             var ret = new Complex32[RowCount];
             Storage.FoldByRowUnchecked(ret, (s, x) => s + x, (x, c) => x, ret, Zeros.AllowSkip);
-            return Vector<Complex32>.Build.Dense(ret);
+            return Vector1<Complex32>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Calculates the absolute value sum of each row vector.
         /// </summary>
-        public override Vector<Complex32> RowAbsoluteSums()
+        public override Vector1<Complex32> RowAbsoluteSums()
         {
             var ret = new Complex32[RowCount];
             Storage.FoldByRowUnchecked(ret, (s, x) => s + x.Magnitude, (x, c) => x, ret, Zeros.AllowSkip);
-            return Vector<Complex32>.Build.Dense(ret);
+            return Vector1<Complex32>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Calculates the value sum of each column vector.
         /// </summary>
-        public override Vector<Complex32> ColumnSums()
+        public override Vector1<Complex32> ColumnSums()
         {
             var ret = new Complex32[ColumnCount];
             Storage.FoldByColumnUnchecked(ret, (s, x) => s + x, (x, c) => x, ret, Zeros.AllowSkip);
-            return Vector<Complex32>.Build.Dense(ret);
+            return Vector1<Complex32>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Calculates the absolute value sum of each column vector.
         /// </summary>
-        public override Vector<Complex32> ColumnAbsoluteSums()
+        public override Vector1<Complex32> ColumnAbsoluteSums()
         {
             var ret = new Complex32[ColumnCount];
             Storage.FoldByColumnUnchecked(ret, (s, x) => s + x.Magnitude, (x, c) => x, ret, Zeros.AllowSkip);
-            return Vector<Complex32>.Build.Dense(ret);
+            return Vector1<Complex32>.Build.Dense(ret);
         }
 
         /// <summary>
         /// Returns the conjugate transpose of this matrix.
         /// </summary>
         /// <returns>The conjugate transpose of this matrix.</returns>
-        public override sealed Matrix<Complex32> ConjugateTranspose()
+        public override sealed Matrix1<Complex32> ConjugateTranspose()
         {
             var ret = Transpose();
             ret.MapInplace(c => c.Conjugate(), Zeros.AllowSkip);
@@ -262,7 +262,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="scalar">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
-        protected override void DoAdd(Complex32 scalar, Matrix<Complex32> result)
+        protected override void DoAdd(Complex32 scalar, Matrix1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -280,7 +280,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">The matrix to store the result of the addition.</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoAdd(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoAdd(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -296,7 +296,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="scalar">The scalar to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
-        protected override void DoSubtract(Complex32 scalar, Matrix<Complex32> result)
+        protected override void DoSubtract(Complex32 scalar, Matrix1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -314,7 +314,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">The matrix to store the result of subtraction.</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoSubtract(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoSubtract(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -330,7 +330,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
-        protected override void DoMultiply(Complex32 scalar, Matrix<Complex32> result)
+        protected override void DoMultiply(Complex32 scalar, Matrix1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -346,7 +346,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Vector<Complex32> rightSide, Vector<Complex32> result)
+        protected override void DoMultiply(Vector1<Complex32> rightSide, Vector1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -364,7 +364,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The scalar to divide the matrix with.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivide(Complex32 divisor, Matrix<Complex32> result)
+        protected override void DoDivide(Complex32 divisor, Matrix1<Complex32> result)
         {
             DoMultiply(1.0f/divisor, result);
         }
@@ -374,7 +374,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="dividend">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivideByThis(Complex32 dividend, Matrix<Complex32> result)
+        protected override void DoDivideByThis(Complex32 dividend, Matrix1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -390,7 +390,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -411,7 +411,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeAndMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoTransposeAndMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             for (var j = 0; j < other.RowCount; j++)
             {
@@ -432,7 +432,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoConjugateTransposeAndMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoConjugateTransposeAndMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             for (var j = 0; j < other.RowCount; j++)
             {
@@ -453,7 +453,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoTransposeThisAndMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             for (var j = 0; j < other.ColumnCount; j++)
             {
@@ -474,7 +474,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoConjugateTransposeThisAndMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoConjugateTransposeThisAndMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             for (var j = 0; j < other.ColumnCount; j++)
             {
@@ -495,7 +495,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Vector<Complex32> rightSide, Vector<Complex32> result)
+        protected override void DoTransposeThisAndMultiply(Vector1<Complex32> rightSide, Vector1<Complex32> result)
         {
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -513,7 +513,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoConjugateTransposeThisAndMultiply(Vector<Complex32> rightSide, Vector<Complex32> result)
+        protected override void DoConjugateTransposeThisAndMultiply(Vector1<Complex32> rightSide, Vector1<Complex32> result)
         {
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -530,7 +530,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Negate each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the negation.</param>
-        protected override void DoNegate(Matrix<Complex32> result)
+        protected override void DoNegate(Matrix1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -545,7 +545,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Complex conjugates each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the conjugation.</param>
-        protected override void DoConjugate(Matrix<Complex32> result)
+        protected override void DoConjugate(Matrix1<Complex32> result)
         {
             for (var i = 0; i < RowCount; i++)
             {
@@ -561,7 +561,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The matrix to pointwise multiply with this one.</param>
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Matrix<Complex32> other, Matrix<Complex32> result)
+        protected override void DoPointwiseMultiply(Matrix1<Complex32> other, Matrix1<Complex32> result)
         {
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -577,7 +577,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The matrix to pointwise divide this one by.</param>
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
-        protected override void DoPointwiseDivide(Matrix<Complex32> divisor, Matrix<Complex32> result)
+        protected override void DoPointwiseDivide(Matrix1<Complex32> divisor, Matrix1<Complex32> result)
         {
             for (var j = 0; j < ColumnCount; j++)
             {
@@ -593,7 +593,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="exponent">The exponent to raise this matrix values to.</param>
         /// <param name="result">The vector to store the result of the pointwise power.</param>
-        protected override void DoPointwisePower(Complex32 exponent, Matrix<Complex32> result)
+        protected override void DoPointwisePower(Complex32 exponent, Matrix1<Complex32> result)
         {
             Map(x => x.Power(exponent), result, Zeros.AllowSkip);
         }
@@ -604,7 +604,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The pointwise denominator matrix to use</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override sealed void DoPointwiseModulus(Matrix<Complex32> divisor, Matrix<Complex32> result)
+        protected override sealed void DoPointwiseModulus(Matrix1<Complex32> divisor, Matrix1<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -615,7 +615,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The pointwise denominator matrix to use</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override sealed void DoPointwiseRemainder(Matrix<Complex32> divisor, Matrix<Complex32> result)
+        protected override sealed void DoPointwiseRemainder(Matrix1<Complex32> divisor, Matrix1<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -626,7 +626,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override sealed void DoModulus(Complex32 divisor, Matrix<Complex32> result)
+        protected override sealed void DoModulus(Complex32 divisor, Matrix1<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -637,7 +637,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoModulusByThis(Complex32 dividend, Matrix<Complex32> result)
+        protected override sealed void DoModulusByThis(Complex32 dividend, Matrix1<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -648,7 +648,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override sealed void DoRemainder(Complex32 divisor, Matrix<Complex32> result)
+        protected override sealed void DoRemainder(Complex32 divisor, Matrix1<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -659,7 +659,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoRemainderByThis(Complex32 dividend, Matrix<Complex32> result)
+        protected override sealed void DoRemainderByThis(Complex32 dividend, Matrix1<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -668,7 +668,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Pointwise applies the exponential function to each value and stores the result into the result matrix.
         /// </summary>
         /// <param name="result">The matrix to store the result.</param>
-        protected override void DoPointwiseExp(Matrix<Complex32> result)
+        protected override void DoPointwiseExp(Matrix1<Complex32> result)
         {
             Map(Complex32.Exp, result, Zeros.Include);
         }
@@ -677,7 +677,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Pointwise applies the natural logarithm function to each value and stores the result into the result matrix.
         /// </summary>
         /// <param name="result">The matrix to store the result.</param>
-        protected override void DoPointwiseLog(Matrix<Complex32> result)
+        protected override void DoPointwiseLog(Matrix1<Complex32> result)
         {
             Map(Complex32.Log, result, Zeros.Include);
         }

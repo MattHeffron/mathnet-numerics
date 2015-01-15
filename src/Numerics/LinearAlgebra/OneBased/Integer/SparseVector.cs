@@ -85,7 +85,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// This new vector will be independent from the other vector.
         /// A new memory block will be allocated for storing the vector.
         /// </summary>
-        public static SparseVector OfVector(Vector<int> vector)
+        public static SparseVector OfVector(Vector1<int> vector)
         {
             return new SparseVector(SparseVectorStorage<int>.OfVector(vector.Storage));
         }
@@ -138,7 +138,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(int scalar, Vector<int> result)
+        protected override void DoAdd(int scalar, Vector1<int> result)
         {
             if (scalar == 0)
             {
@@ -192,7 +192,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Vector<int> other, Vector<int> result)
+        protected override void DoAdd(Vector1<int> other, Vector1<int> result)
         {
             var otherSparse = other as SparseVector;
             if (otherSparse == null)
@@ -275,7 +275,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(int scalar, Vector<int> result)
+        protected override void DoSubtract(int scalar, Vector1<int> result)
         {
             DoAdd(-scalar, result);
         }
@@ -289,7 +289,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Vector<int> other, Vector<int> result)
+        protected override void DoSubtract(Vector1<int> other, Vector1<int> result)
         {
             if (ReferenceEquals(this, other))
             {
@@ -373,7 +373,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// Negates vector and saves result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoNegate(Vector<int> result)
+        protected override void DoNegate(Vector1<int> result)
         {
             var sparseResult = result as SparseVector;
             if (sparseResult == null)
@@ -407,7 +407,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <param name="result">
         /// The vector to store the result of the multiplication.
         /// </param>
-        protected override void DoMultiply(int scalar, Vector<int> result)
+        protected override void DoMultiply(int scalar, Vector1<int> result)
         {
             var sparseResult = result as SparseVector;
             if (sparseResult == null)
@@ -438,7 +438,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of a[i]*b[i] for all i.</returns>
-        protected override int DoDotProduct(Vector<int> other)
+        protected override int DoDotProduct(Vector1<int> other)
         {
             var result = 0;
             if (ReferenceEquals(this, other))
@@ -464,7 +464,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoModulus(int divisor, Vector<int> result)
+        protected override void DoModulus(int divisor, Vector1<int> result)
         {
             if (ReferenceEquals(this, result))
             {
@@ -489,7 +489,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoRemainder(int divisor, Vector<int> result)
+        protected override void DoRemainder(int divisor, Vector1<int> result)
         {
             if (ReferenceEquals(this, result))
             {
@@ -527,7 +527,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         }
 
         /// <summary>
-        /// Returns a <strong>Vector</strong> containing the negated values of <paramref name="rightSide"/>.
+        /// Returns a <strong>Vector1</strong> containing the negated values of <paramref name="rightSide"/>.
         /// </summary>
         /// <param name="rightSide">The vector to get the values from.</param>
         /// <returns>A vector containing the negated values as <paramref name="rightSide"/>.</returns>
@@ -792,7 +792,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="other">The vector to pointwise multiply with this one.</param>
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Vector<int> other, Vector<int> result)
+        protected override void DoPointwiseMultiply(Vector1<int> other, Vector1<int> result)
         {
             if (ReferenceEquals(this, other))
             {
@@ -816,7 +816,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="divisor">The vector to pointwise multiply with this one.</param>
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseDivide(Vector<int> divisor, Vector<int> result)
+        protected override void DoPointwiseDivide(Vector1<int> divisor, Vector1<int> result)
         {
             if (ReferenceEquals(this, divisor))
             {

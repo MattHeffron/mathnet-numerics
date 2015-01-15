@@ -69,7 +69,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////return new DenseSvd(s, u, vt, computeVectors);
         }
 
-        DenseSvd(Vector<int> s, Matrix<int> u, Matrix<int> vt, bool vectorsComputed)
+        DenseSvd(Vector1<int> s, Matrix1<int> u, Matrix1<int> vt, bool vectorsComputed)
             : base(s, u, vt, vectorsComputed)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -80,7 +80,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<int> input, Matrix<int> result)
+        public override void Solve(Matrix1<int> input, Matrix1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -127,7 +127,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<int> input, Vector<int> result)
+        public override void Solve(Vector1<int> input, Vector1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);

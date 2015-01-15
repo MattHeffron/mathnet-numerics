@@ -51,7 +51,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
     /// </remarks>
     internal abstract class Svd : Svd<int>
     {
-        protected Svd(Vector<int> s, Matrix<int> u, Matrix<int> vt, bool vectorsComputed)
+        protected Svd(Vector1<int> s, Matrix1<int> u, Matrix1<int> vt, bool vectorsComputed)
             : base(s, u, vt, vectorsComputed)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

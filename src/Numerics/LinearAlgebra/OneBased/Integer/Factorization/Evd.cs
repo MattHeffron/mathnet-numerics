@@ -57,7 +57,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
     /// </remarks>
     internal abstract class Evd : Evd<int>
     {
-        protected Evd(Matrix<int> eigenVectors, Vector<Complex> eigenValues, Matrix<int> blockDiagonal, bool isSymmetric)
+        protected Evd(Matrix1<int> eigenVectors, Vector1<Complex> eigenValues, Matrix1<int> blockDiagonal, bool isSymmetric)
             : base(eigenVectors, eigenValues, blockDiagonal, isSymmetric)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

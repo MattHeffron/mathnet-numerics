@@ -64,7 +64,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// <param name="symmetricity">If it is known whether the matrix is symmetric or not the routine can skip checking it itself.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If EVD algorithm failed to converge with matrix <paramref name="matrix"/>.</exception>
-        public static UserEvd Create(Matrix<float> matrix, Symmetricity symmetricity)
+        public static UserEvd Create(Matrix1<float> matrix, Symmetricity symmetricity)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {
@@ -74,8 +74,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
             var order = matrix.RowCount;
 
             // Initialize matricies for eigenvalues and eigenvectors
-            var eigenVectors = Matrix<float>.Build.SameAs(matrix, order, order);
-            var blockDiagonal = Matrix<float>.Build.SameAs(matrix, order, order);
+            var eigenVectors = Matrix1<float>.Build.SameAs(matrix, order, order);
+            var blockDiagonal = Matrix1<float>.Build.SameAs(matrix, order, order);
             var eigenValues = new LinearAlgebra.OneBased.Complex.DenseVector(order);
 
             bool isSymmetric;
@@ -134,7 +134,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
             return new UserEvd(eigenVectors, eigenValues, blockDiagonal, isSymmetric);
         }
 
-        UserEvd(Matrix<float> eigenVectors, Vector<Complex> eigenValues, Matrix<float> blockDiagonal, bool isSymmetric)
+        UserEvd(Matrix1<float> eigenVectors, Vector1<Complex> eigenValues, Matrix1<float> blockDiagonal, bool isSymmetric)
             : base(eigenVectors, eigenValues, blockDiagonal, isSymmetric)
         {
         }
@@ -150,7 +150,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// Bowdler, Martin, Reinsch, and Wilkinson, Handbook for 
         /// Auto. Comp., Vol.ii-Linear Algebra, and the corresponding 
         /// Fortran subroutine in EISPACK.</remarks>
-        static void SymmetricTridiagonalize(Matrix<float> eigenVectors, float[] d, float[] e, int order)
+        static void SymmetricTridiagonalize(Matrix1<float> eigenVectors, float[] d, float[] e, int order)
         {
             // Householder reduction to tridiagonal form.
             for (var i = order - 1; i > 0; i--)
@@ -304,7 +304,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
         /// Fortran subroutine in EISPACK.</remarks>
         /// <exception cref="NonConvergenceException"></exception>
-        static void SymmetricDiagonalize(Matrix<float> eigenVectors, float[] d, float[] e, int order)
+        static void SymmetricDiagonalize(Matrix1<float> eigenVectors, float[] d, float[] e, int order)
         {
             const int maxiter = 1000;
 
@@ -449,7 +449,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// by Martin and Wilkinson, Handbook for Auto. Comp.,
         /// Vol.ii-Linear Algebra, and the corresponding
         /// Fortran subroutines in EISPACK.</remarks>
-        static void NonsymmetricReduceToHessenberg(Matrix<float> eigenVectors, float[,] matrixH, int order)
+        static void NonsymmetricReduceToHessenberg(Matrix1<float> eigenVectors, float[,] matrixH, int order)
         {
             var ort = new float[order];
 
@@ -567,7 +567,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// by Martin and Wilkinson, Handbook for Auto. Comp.,
         /// Vol.ii-Linear Algebra, and the corresponding
         /// Fortran subroutine in EISPACK.</remarks>
-        static void NonsymmetricReduceHessenberToRealSchur(Matrix<float> eigenVectors, float[,] matrixH, float[] d, float[] e, int order)
+        static void NonsymmetricReduceHessenberToRealSchur(Matrix1<float> eigenVectors, float[,] matrixH, float[] d, float[] e, int order)
         {
             // Initialize
             var n = order - 1;
@@ -1093,7 +1093,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<float> input, Matrix<float> result)
+        public override void Solve(Matrix1<float> input, Matrix1<float> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -1159,7 +1159,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<float> input, Vector<float> result)
+        public override void Solve(Vector1<float> input, Vector1<float> result)
         {
             // Ax=b where A is an m x m matrix
             // Check that b is a column vector with m entries

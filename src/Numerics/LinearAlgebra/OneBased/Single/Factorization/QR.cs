@@ -48,7 +48,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
     /// </remarks>
     internal abstract class QR : QR<float>
     {
-        protected QR(Matrix<float> q, Matrix<float> rFull, QRMethod method)
+        protected QR(Matrix1<float> q, Matrix1<float> rFull, QRMethod method)
             : base(q, rFull, method)
         {
         }

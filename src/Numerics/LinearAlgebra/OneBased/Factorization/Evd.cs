@@ -57,7 +57,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
     public abstract class Evd<T> : ISolver<T>
     where T : struct, IEquatable<T>, IFormattable
     {
-        protected Evd(Matrix<T> eigenVectors, Vector<Complex> eigenValues, Matrix<T> blockDiagonal, bool isSymmetric)
+        protected Evd(Matrix1<T> eigenVectors, Vector1<Complex> eigenValues, Matrix1<T> blockDiagonal, bool isSymmetric)
         {
             EigenVectors = eigenVectors;
             EigenValues = eigenValues;
@@ -90,26 +90,26 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// <summary>
         /// Gets or sets the eigen values (λ) of matrix in ascending value.
         /// </summary>
-        public Vector<Complex> EigenValues { get; private set; }
+        public Vector1<Complex> EigenValues { get; private set; }
         
         /// <summary>
         /// Gets or sets eigenvectors.
         /// </summary>
-        public Matrix<T> EigenVectors { get; private set; }
+        public Matrix1<T> EigenVectors { get; private set; }
 
         /// <summary>
         /// Gets or sets the block diagonal eigenvalue matrix.
         /// </summary>
-        public Matrix<T> D { get; private set; }
+        public Matrix1<T> D { get; private set; }
 
         /// <summary>
         /// Solves a system of linear equations, <b>AX = B</b>, with A EVD factorized.
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <returns>The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</returns>
-        public virtual Matrix<T> Solve(Matrix<T> input)
+        public virtual Matrix1<T> Solve(Matrix1<T> input)
         {
-            var x = Matrix<T>.Build.SameAs(EigenVectors, EigenVectors.ColumnCount, input.ColumnCount);
+            var x = Matrix1<T>.Build.SameAs(EigenVectors, EigenVectors.ColumnCount, input.ColumnCount);
             Solve(input, x);
             return x;
         }
@@ -119,16 +119,16 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public abstract void Solve(Matrix<T> input, Matrix<T> result);
+        public abstract void Solve(Matrix1<T> input, Matrix1<T> result);
 
         /// <summary>
         /// Solves a system of linear equations, <b>Ax = b</b>, with A EVD factorized.
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <returns>The left hand side <see cref="Vector{T}"/>, <b>x</b>.</returns>
-        public virtual Vector<T> Solve(Vector<T> input)
+        public virtual Vector1<T> Solve(Vector1<T> input)
         {
-            var x = Vector<T>.Build.SameAs(EigenVectors, EigenVectors.ColumnCount);
+            var x = Vector1<T>.Build.SameAs(EigenVectors, EigenVectors.ColumnCount);
             Solve(input, x);
             return x;
         }
@@ -138,6 +138,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public abstract void Solve(Vector<T> input, Vector<T> result);
+        public abstract void Solve(Vector1<T> input, Vector1<T> result);
     }
 }

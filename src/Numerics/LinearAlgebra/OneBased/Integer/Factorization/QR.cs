@@ -48,7 +48,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
     /// </remarks>
     internal abstract class QR : QR<int>
     {
-        protected QR(Matrix<int> q, Matrix<int> rFull, QRMethod method)
+        protected QR(Matrix1<int> q, Matrix1<int> rFull, QRMethod method)
             : base(q, rFull, method)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

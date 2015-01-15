@@ -90,7 +90,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// This new vector will be independent from the other vector.
         /// A new memory block will be allocated for storing the vector.
         /// </summary>
-        public static SparseVector OfVector(Vector<Complex> vector)
+        public static SparseVector OfVector(Vector1<Complex> vector)
         {
             return new SparseVector(SparseVectorStorage<Complex>.OfVector(vector.Storage));
         }
@@ -143,7 +143,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Complex scalar, Vector<Complex> result)
+        protected override void DoAdd(Complex scalar, Vector1<Complex> result)
         {
             if (scalar == Complex.Zero)
             {
@@ -197,7 +197,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Vector<Complex> other, Vector<Complex> result)
+        protected override void DoAdd(Vector1<Complex> other, Vector1<Complex> result)
         {
             var otherSparse = other as SparseVector;
             if (otherSparse == null)
@@ -280,7 +280,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Complex scalar, Vector<Complex> result)
+        protected override void DoSubtract(Complex scalar, Vector1<Complex> result)
         {
             DoAdd(-scalar, result);
         }
@@ -294,7 +294,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Vector<Complex> other, Vector<Complex> result)
+        protected override void DoSubtract(Vector1<Complex> other, Vector1<Complex> result)
         {
             if (ReferenceEquals(this, other))
             {
@@ -378,7 +378,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Negates vector and saves result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoNegate(Vector<Complex> result)
+        protected override void DoNegate(Vector1<Complex> result)
         {
             var sparseResult = result as SparseVector;
             if (sparseResult == null)
@@ -407,7 +407,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Conjugates vector and save result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoConjugate(Vector<Complex> result)
+        protected override void DoConjugate(Vector1<Complex> result)
         {
             var sparseResult = result as SparseVector;
             if (sparseResult != null)
@@ -441,7 +441,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the multiplication.
         /// </param>
-        protected override void DoMultiply(Complex scalar, Vector<Complex> result)
+        protected override void DoMultiply(Complex scalar, Vector1<Complex> result)
         {
             var sparseResult = result as SparseVector;
             if (sparseResult == null)
@@ -472,7 +472,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of a[i]*b[i] for all i.</returns>
-        protected override Complex DoDotProduct(Vector<Complex> other)
+        protected override Complex DoDotProduct(Vector1<Complex> other)
         {
             var result = Complex.Zero;
             if (ReferenceEquals(this, other))
@@ -497,7 +497,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of conj(a[i])*b[i] for all i.</returns>
-        protected override Complex DoConjugateDotProduct(Vector<Complex> other)
+        protected override Complex DoConjugateDotProduct(Vector1<Complex> other)
         {
             var result = Complex.Zero;
             if (ReferenceEquals(this, other))
@@ -536,7 +536,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         }
 
         /// <summary>
-        /// Returns a <strong>Vector</strong> containing the negated values of <paramref name="rightSide"/>.
+        /// Returns a <strong>Vector1</strong> containing the negated values of <paramref name="rightSide"/>.
         /// </summary>
         /// <param name="rightSide">The vector to get the values from.</param>
         /// <returns>A vector containing the negated values as <paramref name="rightSide"/>.</returns>
@@ -750,7 +750,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The vector to pointwise multiply with this one.</param>
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Vector<Complex> other, Vector<Complex> result)
+        protected override void DoPointwiseMultiply(Vector1<Complex> other, Vector1<Complex> result)
         {
             if (ReferenceEquals(this, other))
             {
@@ -774,7 +774,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="divisor">The vector to pointwise multiply with this one.</param>
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseDivide(Vector<Complex> divisor, Vector<Complex> result)
+        protected override void DoPointwiseDivide(Vector1<Complex> divisor, Vector1<Complex> result)
         {
             if (ReferenceEquals(this, divisor))
             {

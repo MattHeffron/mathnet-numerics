@@ -43,27 +43,27 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side Matrix, <c>B</c>.</param>
         /// <returns>The left hand side Matrix, <c>X</c>.</returns>
-        Matrix<T> Solve(Matrix<T> input);
+        Matrix1<T> Solve(Matrix1<T> input);
 
         /// <summary>
         /// Solves a system of linear equations, <c>AX = B</c>.
         /// </summary>
         /// <param name="input">The right hand side Matrix, <c>B</c>.</param>
         /// <param name="result">The left hand side Matrix, <c>X</c>.</param>
-        void Solve(Matrix<T> input, Matrix<T> result);
+        void Solve(Matrix1<T> input, Matrix1<T> result);
 
         /// <summary>
         /// Solves a system of linear equations, <c>Ax = b</c>
         /// </summary>
         /// <param name="input">The right hand side vector, <c>b</c>.</param>
         /// <returns>The left hand side Vector, <c>x</c>.</returns>
-        Vector<T> Solve(Vector<T> input);
+        Vector1<T> Solve(Vector1<T> input);
 
         /// <summary>
         /// Solves a system of linear equations, <c>Ax = b</c>.
         /// </summary>
         /// <param name="input">The right hand side vector, <c>b</c>.</param>
         /// <param name="result">The left hand side Matrix>, <c>x</c>.</param>
-        void Solve(Vector<T> input, Vector<T> result);
+        void Solve(Vector1<T> input, Vector1<T> result);
     }
 }

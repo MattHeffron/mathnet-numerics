@@ -64,7 +64,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// <param name="symmetricity">If it is known whether the matrix is symmetric or not the routine can skip checking it itself.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If EVD algorithm failed to converge with matrix <paramref name="matrix"/>.</exception>
-        public static UserEvd Create(Matrix<int> matrix, Symmetricity symmetricity)
+        public static UserEvd Create(Matrix1<int> matrix, Symmetricity symmetricity)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
             ////if (matrix.RowCount != matrix.ColumnCount)
@@ -75,8 +75,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////var order = matrix.RowCount;
 
             ////// Initialize matricies for eigenvalues and eigenvectors
-            ////var eigenVectors = Matrix<int>.Build.SameAs(matrix, order, order);
-            ////var blockDiagonal = Matrix<int>.Build.SameAs(matrix, order, order);
+            ////var eigenVectors = Matrix1<int>.Build.SameAs(matrix, order, order);
+            ////var blockDiagonal = Matrix1<int>.Build.SameAs(matrix, order, order);
 			////var eigenValues = new LinearAlgebra.OneBased.Complex.DenseVector(order);
 
             ////bool isSymmetric;
@@ -135,7 +135,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////return new UserEvd(eigenVectors, eigenValues, blockDiagonal, isSymmetric);
         }
 
-        UserEvd(Matrix<int> eigenVectors, Vector<Complex> eigenValues, Matrix<int> blockDiagonal, bool isSymmetric)
+        UserEvd(Matrix1<int> eigenVectors, Vector1<Complex> eigenValues, Matrix1<int> blockDiagonal, bool isSymmetric)
             : base(eigenVectors, eigenValues, blockDiagonal, isSymmetric)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -152,7 +152,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// Bowdler, Martin, Reinsch, and Wilkinson, Handbook for 
         /////// Auto. Comp., Vol.ii-Linear Algebra, and the corresponding 
         /////// Fortran subroutine in EISPACK.</remarks>
-        ////static void SymmetricTridiagonalize(Matrix<int> eigenVectors, int[] d, int[] e, int order)
+        ////static void SymmetricTridiagonalize(Matrix1<int> eigenVectors, int[] d, int[] e, int order)
         ////{
         ////    // Householder reduction to tridiagonal form.
         ////    for (var i = order - 1; i > 0; i--)
@@ -306,7 +306,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
         /////// Fortran subroutine in EISPACK.</remarks>
         /////// <exception cref="NonConvergenceException"></exception>
-        ////static void SymmetricDiagonalize(Matrix<int> eigenVectors, int[] d, int[] e, int order)
+        ////static void SymmetricDiagonalize(Matrix1<int> eigenVectors, int[] d, int[] e, int order)
         ////{
         ////    const int maxiter = 1000;
 
@@ -451,7 +451,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// by Martin and Wilkinson, Handbook for Auto. Comp.,
         /////// Vol.ii-Linear Algebra, and the corresponding
         /////// Fortran subroutines in EISPACK.</remarks>
-        ////static void NonsymmetricReduceToHessenberg(Matrix<int> eigenVectors, int[,] matrixH, int order)
+        ////static void NonsymmetricReduceToHessenberg(Matrix1<int> eigenVectors, int[,] matrixH, int order)
         ////{
         ////    var ort = new int[order];
 
@@ -569,7 +569,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// by Martin and Wilkinson, Handbook for Auto. Comp.,
         /////// Vol.ii-Linear Algebra, and the corresponding
         /////// Fortran subroutine in EISPACK.</remarks>
-        ////static void NonsymmetricReduceHessenberToRealSchur(Matrix<int> eigenVectors, int[,] matrixH, int[] d, int[] e, int order)
+        ////static void NonsymmetricReduceHessenberToRealSchur(Matrix1<int> eigenVectors, int[,] matrixH, int[] d, int[] e, int order)
         ////{
         ////    // Initialize
         ////    var n = order - 1;
@@ -1095,7 +1095,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<int> input, Matrix<int> result)
+        public override void Solve(Matrix1<int> input, Matrix1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -1163,7 +1163,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<int> input, Vector<int> result)
+        public override void Solve(Vector1<int> input, Vector1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);

@@ -58,7 +58,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
     /// </remarks>
     internal abstract class Evd : Evd<Complex32>
     {
-        protected Evd(Matrix<Complex32> eigenVectors, Vector<Complex> eigenValues, Matrix<Complex32> blockDiagonal, bool isSymmetric)
+        protected Evd(Matrix1<Complex32> eigenVectors, Vector1<Complex> eigenValues, Matrix1<Complex32> blockDiagonal, bool isSymmetric)
             : base(eigenVectors, eigenValues, blockDiagonal, isSymmetric)
         {
         }

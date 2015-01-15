@@ -35,9 +35,9 @@ using MathNet.Numerics.Properties;
 namespace MathNet.Numerics.LinearAlgebra.OneBased
 {
     /// <summary>
-    /// Defines the base class for <c>Matrix</c> classes.
+    /// Defines the base class for <c>Matrix1</c> classes.
     /// </summary>
-    public abstract partial class Matrix<T>
+    public abstract partial class Matrix1<T>
     {
         /// <summary>
         /// The value of 1.0.
@@ -53,20 +53,20 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Negate each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the negation.</param>
-        protected abstract void DoNegate(Matrix<T> result);
+        protected abstract void DoNegate(Matrix1<T> result);
 
         /// <summary>
         /// Complex conjugates each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the conjugation.</param>
-        protected abstract void DoConjugate(Matrix<T> result);
+        protected abstract void DoConjugate(Matrix1<T> result);
 
         /// <summary>
         /// Add a scalar to each element of the matrix and stores the result in the result vector.
         /// </summary>
         /// <param name="scalar">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
-        protected abstract void DoAdd(T scalar, Matrix<T> result);
+        protected abstract void DoAdd(T scalar, Matrix1<T> result);
 
         /// <summary>
         /// Adds another matrix to this matrix.
@@ -74,21 +74,21 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to add to this matrix.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected abstract void DoAdd(Matrix<T> other, Matrix<T> result);
+        protected abstract void DoAdd(Matrix1<T> other, Matrix1<T> result);
 
         /// <summary>
         /// Subtracts a scalar from each element of the matrix and stores the result in the result matrix.
         /// </summary>
         /// <param name="scalar">The scalar to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
-        protected abstract void DoSubtract(T scalar, Matrix<T> result);
+        protected abstract void DoSubtract(T scalar, Matrix1<T> result);
 
         /// <summary>
         /// Subtracts each element of the matrix from a scalar and stores the result in the result matrix.
         /// </summary>
         /// <param name="scalar">The scalar to subtract from.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
-        protected void DoSubtractFrom(T scalar, Matrix<T> result)
+        protected void DoSubtractFrom(T scalar, Matrix1<T> result)
         {
             DoNegate(result);
             result.DoAdd(scalar, result);
@@ -99,84 +99,84 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="other">The matrix to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
-        protected abstract void DoSubtract(Matrix<T> other, Matrix<T> result);
+        protected abstract void DoSubtract(Matrix1<T> other, Matrix1<T> result);
 
         /// <summary>
         /// Multiplies each element of the matrix by a scalar and places results into the result matrix.
         /// </summary>
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
-        protected abstract void DoMultiply(T scalar, Matrix<T> result);
+        protected abstract void DoMultiply(T scalar, Matrix1<T> result);
 
         /// <summary>
         /// Multiplies this matrix with a vector and places the results into the result vector.
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected abstract void DoMultiply(Vector<T> rightSide, Vector<T> result);
+        protected abstract void DoMultiply(Vector1<T> rightSide, Vector1<T> result);
 
         /// <summary>
         /// Multiplies this matrix with another matrix and places the results into the result matrix.
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected abstract void DoMultiply(Matrix<T> other, Matrix<T> result);
+        protected abstract void DoMultiply(Matrix1<T> other, Matrix1<T> result);
 
         /// <summary>
         /// Multiplies this matrix with the transpose of another matrix and places the results into the result matrix.
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected abstract void DoTransposeAndMultiply(Matrix<T> other, Matrix<T> result);
+        protected abstract void DoTransposeAndMultiply(Matrix1<T> other, Matrix1<T> result);
 
         /// <summary>
         /// Multiplies this matrix with the conjugate transpose of another matrix and places the results into the result matrix.
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected abstract void DoConjugateTransposeAndMultiply(Matrix<T> other, Matrix<T> result);
+        protected abstract void DoConjugateTransposeAndMultiply(Matrix1<T> other, Matrix1<T> result);
 
         /// <summary>
         /// Multiplies the transpose of this matrix with a vector and places the results into the result vector.
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected abstract void DoTransposeThisAndMultiply(Vector<T> rightSide, Vector<T> result);
+        protected abstract void DoTransposeThisAndMultiply(Vector1<T> rightSide, Vector1<T> result);
 
         /// <summary>
         /// Multiplies the conjugate transpose of this matrix with a vector and places the results into the result vector.
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected abstract void DoConjugateTransposeThisAndMultiply(Vector<T> rightSide, Vector<T> result);
+        protected abstract void DoConjugateTransposeThisAndMultiply(Vector1<T> rightSide, Vector1<T> result);
 
         /// <summary>
         /// Multiplies the transpose of this matrix with another matrix and places the results into the result matrix.
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected abstract void DoTransposeThisAndMultiply(Matrix<T> other, Matrix<T> result);
+        protected abstract void DoTransposeThisAndMultiply(Matrix1<T> other, Matrix1<T> result);
 
         /// <summary>
         /// Multiplies the transpose of this matrix with another matrix and places the results into the result matrix.
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected abstract void DoConjugateTransposeThisAndMultiply(Matrix<T> other, Matrix<T> result);
+        protected abstract void DoConjugateTransposeThisAndMultiply(Matrix1<T> other, Matrix1<T> result);
 
         /// <summary>
         /// Divides each element of the matrix by a scalar and places results into the result matrix.
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected abstract void DoDivide(T divisor, Matrix<T> result);
+        protected abstract void DoDivide(T divisor, Matrix1<T> result);
 
         /// <summary>
         /// Divides a scalar by each element of the matrix and stores the result in the result matrix.
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected abstract void DoDivideByThis(T dividend, Matrix<T> result);
+        protected abstract void DoDivideByThis(T dividend, Matrix1<T> result);
 
         /// <summary>
         /// Computes the canonical modulus, where the result has the sign of the divisor,
@@ -184,7 +184,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected abstract void DoModulus(T divisor, Matrix<T> result);
+        protected abstract void DoModulus(T divisor, Matrix1<T> result);
 
         /// <summary>
         /// Computes the canonical modulus, where the result has the sign of the divisor,
@@ -192,7 +192,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected abstract void DoModulusByThis(T dividend, Matrix<T> result);
+        protected abstract void DoModulusByThis(T dividend, Matrix1<T> result);
 
         /// <summary>
         /// Computes the remainder (% operator), where the result has the sign of the dividend,
@@ -200,7 +200,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected abstract void DoRemainder(T divisor, Matrix<T> result);
+        protected abstract void DoRemainder(T divisor, Matrix1<T> result);
 
         /// <summary>
         /// Computes the remainder (% operator), where the result has the sign of the dividend,
@@ -208,28 +208,28 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected abstract void DoRemainderByThis(T dividend, Matrix<T> result);
+        protected abstract void DoRemainderByThis(T dividend, Matrix1<T> result);
 
         /// <summary>
         /// Pointwise multiplies this matrix with another matrix and stores the result into the result matrix.
         /// </summary>
         /// <param name="other">The matrix to pointwise multiply with this one.</param>
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
-        protected abstract void DoPointwiseMultiply(Matrix<T> other, Matrix<T> result);
+        protected abstract void DoPointwiseMultiply(Matrix1<T> other, Matrix1<T> result);
 
         /// <summary>
         /// Pointwise divide this matrix by another matrix and stores the result into the result matrix.
         /// </summary>
         /// <param name="divisor">The pointwise denominator matrix to use.</param>
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
-        protected abstract void DoPointwiseDivide(Matrix<T> divisor, Matrix<T> result);
+        protected abstract void DoPointwiseDivide(Matrix1<T> divisor, Matrix1<T> result);
 
         /// <summary>
         /// Pointwise raise this matrix to an exponent and store the result into the result vector.
         /// </summary>
         /// <param name="exponent">The exponent to raise this matrix values to.</param>
         /// <param name="result">The vector to store the result of the pointwise power.</param>
-        protected abstract void DoPointwisePower(T exponent, Matrix<T> result);
+        protected abstract void DoPointwisePower(T exponent, Matrix1<T> result);
 
         /// <summary>
         /// Pointwise canonical modulus, where the result has the sign of the divisor,
@@ -237,7 +237,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The pointwise denominator matrix to use</param>
         /// <param name="result">The result of the modulus.</param>
-        protected abstract void DoPointwiseModulus(Matrix<T> divisor, Matrix<T> result);
+        protected abstract void DoPointwiseModulus(Matrix1<T> divisor, Matrix1<T> result);
 
         /// <summary>
         /// Pointwise remainder (% operator), where the result has the sign of the dividend,
@@ -245,19 +245,19 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The pointwise denominator matrix to use</param>
         /// <param name="result">The result of the modulus.</param>
-        protected abstract void DoPointwiseRemainder(Matrix<T> divisor, Matrix<T> result);
+        protected abstract void DoPointwiseRemainder(Matrix1<T> divisor, Matrix1<T> result);
 
         /// <summary>
         /// Pointwise applies the exponential function to each value and stores the result into the result matrix.
         /// </summary>
         /// <param name="result">The matrix to store the result.</param>
-        protected abstract void DoPointwiseExp(Matrix<T> result);
+        protected abstract void DoPointwiseExp(Matrix1<T> result);
 
         /// <summary>
         /// Pointwise applies the natural logarithm function to each value and stores the result into the result matrix.
         /// </summary>
         /// <param name="result">The matrix to store the result.</param>
-        protected abstract void DoPointwiseLog(Matrix<T> result);
+        protected abstract void DoPointwiseLog(Matrix1<T> result);
 
         /// <summary>
         /// Adds a scalar to each element of the matrix.
@@ -265,7 +265,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="scalar">The scalar to add.</param>
         /// <returns>The result of the addition.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        public Matrix<T> Add(T scalar)
+        public Matrix1<T> Add(T scalar)
         {
             if (scalar.Equals(Zero))
             {
@@ -283,7 +283,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="scalar">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        public void Add(T scalar, Matrix<T> result)
+        public void Add(T scalar, Matrix1<T> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -305,7 +305,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to add to this matrix.</param>
         /// <returns>The result of the addition.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        public Matrix<T> Add(Matrix<T> other)
+        public Matrix1<T> Add(Matrix1<T> other)
         {
             if (other.RowCount != RowCount || other.ColumnCount != ColumnCount)
             {
@@ -323,7 +323,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to add to this matrix.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        public void Add(Matrix<T> other, Matrix<T> result)
+        public void Add(Matrix1<T> other, Matrix1<T> result)
         {
             if (other.RowCount != RowCount || other.ColumnCount != ColumnCount)
             {
@@ -343,7 +343,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="scalar">The scalar to subtract.</param>
         /// <returns>A new matrix containing the subtraction of this matrix and the scalar.</returns>
-        public Matrix<T> Subtract(T scalar)
+        public Matrix1<T> Subtract(T scalar)
         {
             if (scalar.Equals(Zero))
             {
@@ -361,7 +361,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="scalar">The scalar to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="result"/> are not the same size.</exception>
-        public void Subtract(T scalar, Matrix<T> result)
+        public void Subtract(T scalar, Matrix1<T> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -382,7 +382,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="scalar">The scalar to subtract from.</param>
         /// <returns>A new matrix containing the subtraction of the scalar and this matrix.</returns>
-        public Matrix<T> SubtractFrom(T scalar)
+        public Matrix1<T> SubtractFrom(T scalar)
         {
             var result = Build.SameAs(this);
             DoSubtractFrom(scalar, result);
@@ -395,7 +395,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="scalar">The scalar to subtract from.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="result"/> are not the same size.</exception>
-        public void SubtractFrom(T scalar, Matrix<T> result)
+        public void SubtractFrom(T scalar, Matrix1<T> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -411,7 +411,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to subtract.</param>
         /// <returns>The result of the subtraction.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        public Matrix<T> Subtract(Matrix<T> other)
+        public Matrix1<T> Subtract(Matrix1<T> other)
         {
             if (other.RowCount != RowCount || other.ColumnCount != ColumnCount)
             {
@@ -429,7 +429,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        public void Subtract(Matrix<T> other, Matrix<T> result)
+        public void Subtract(Matrix1<T> other, Matrix1<T> result)
         {
             if (other.RowCount != RowCount || other.ColumnCount != ColumnCount)
             {
@@ -449,7 +449,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="scalar">The scalar to multiply with.</param>
         /// <returns>The result of the multiplication.</returns>
-        public Matrix<T> Multiply(T scalar)
+        public Matrix1<T> Multiply(T scalar)
         {
             if (scalar.Equals(One))
             {
@@ -472,7 +472,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public void Multiply(T scalar, Matrix<T> result)
+        public void Multiply(T scalar, Matrix1<T> result)
         {
             if (result.RowCount != RowCount)
             {
@@ -504,7 +504,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="scalar">The scalar to divide with.</param>
         /// <returns>The result of the division.</returns>
-        public Matrix<T> Divide(T scalar)
+        public Matrix1<T> Divide(T scalar)
         {
             if (scalar.Equals(One))
             {
@@ -527,7 +527,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="scalar">The scalar to divide the matrix with.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public void Divide(T scalar, Matrix<T> result)
+        public void Divide(T scalar, Matrix1<T> result)
         {
             if (result.RowCount != RowCount)
             {
@@ -558,7 +558,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="scalar">The scalar to divide.</param>
         /// <returns>The result of the division.</returns>
-        public Matrix<T> DivideByThis(T scalar)
+        public Matrix1<T> DivideByThis(T scalar)
         {
             var result = Build.SameAs(this);
             DoDivideByThis(scalar, result);
@@ -571,7 +571,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="scalar">The scalar to divide.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public void DivideByThis(T scalar, Matrix<T> result)
+        public void DivideByThis(T scalar, Matrix1<T> result)
         {
             if (result.RowCount != RowCount)
             {
@@ -592,14 +592,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <returns>The result of the multiplication.</returns>
         /// <exception cref="ArgumentException">If <c>this.ColumnCount != rightSide.Count</c>.</exception>
-        public Vector<T> Multiply(Vector<T> rightSide)
+        public Vector1<T> Multiply(Vector1<T> rightSide)
         {
             if (ColumnCount != rightSide.Count)
             {
                 throw DimensionsDontMatch<ArgumentException>(this, rightSide, "rightSide");
             }
 
-            var ret = Vector<T>.Build.SameAs(this, rightSide, RowCount);
+            var ret = Vector1<T>.Build.SameAs(this, rightSide, RowCount);
             DoMultiply(rightSide, ret);
             return ret;
         }
@@ -611,7 +611,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result of the multiplication.</param>
         /// <exception cref="ArgumentException">If <strong>result.Count != this.RowCount</strong>.</exception>
         /// <exception cref="ArgumentException">If <strong>this.ColumnCount != <paramref name="rightSide"/>.Count</strong>.</exception>
-        public void Multiply(Vector<T> rightSide, Vector<T> result)
+        public void Multiply(Vector1<T> rightSide, Vector1<T> result)
         {
             if (ColumnCount != rightSide.Count)
             {
@@ -625,7 +625,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
             if (ReferenceEquals(rightSide, result))
             {
-                var tmp = Vector<T>.Build.SameAs(result);
+                var tmp = Vector1<T>.Build.SameAs(result);
                 DoMultiply(rightSide, tmp);
                 tmp.CopyTo(result);
             }
@@ -641,14 +641,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="leftSide">The vector to multiply with.</param>
         /// <returns>The result of the multiplication.</returns>
         /// <exception cref="ArgumentException">If <strong>this.RowCount != <paramref name="leftSide"/>.Count</strong>.</exception>
-        public Vector<T> LeftMultiply(Vector<T> leftSide)
+        public Vector1<T> LeftMultiply(Vector1<T> leftSide)
         {
             if (RowCount != leftSide.Count)
             {
                 throw DimensionsDontMatch<ArgumentException>(this, leftSide, "leftSide");
             }
 
-            var ret = Vector<T>.Build.SameAs(this, leftSide, ColumnCount);
+            var ret = Vector1<T>.Build.SameAs(this, leftSide, ColumnCount);
             DoLeftMultiply(leftSide, ret);
             return ret;
         }
@@ -660,7 +660,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result of the multiplication.</param>
         /// <exception cref="ArgumentException">If <strong>result.Count != this.ColumnCount</strong>.</exception>
         /// <exception cref="ArgumentException">If <strong>this.RowCount != <paramref name="leftSide"/>.Count</strong>.</exception>
-        public void LeftMultiply(Vector<T> leftSide, Vector<T> result)
+        public void LeftMultiply(Vector1<T> leftSide, Vector1<T> result)
         {
             if (RowCount != leftSide.Count)
             {
@@ -674,7 +674,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
             if (ReferenceEquals(leftSide, result))
             {
-                var tmp = Vector<T>.Build.SameAs(result);
+                var tmp = Vector1<T>.Build.SameAs(result);
                 DoLeftMultiply(leftSide, tmp);
                 tmp.CopyTo(result);
             }
@@ -689,7 +689,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="leftSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected void DoLeftMultiply(Vector<T> leftSide, Vector<T> result)
+        protected void DoLeftMultiply(Vector1<T> leftSide, Vector1<T> result)
         {
             DoTransposeThisAndMultiply(leftSide, result);
         }
@@ -701,7 +701,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result of the multiplication.</param>
         /// <exception cref="ArgumentException">If <strong>this.Columns != other.Rows</strong>.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the this.Rows x other.Columns.</exception>
-        public void Multiply(Matrix<T> other, Matrix<T> result)
+        public void Multiply(Matrix1<T> other, Matrix1<T> result)
         {
             if (ColumnCount != other.RowCount || result.RowCount != RowCount || result.ColumnCount != other.ColumnCount)
             {
@@ -726,7 +726,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to multiply with.</param>
         /// <exception cref="ArgumentException">If <strong>this.Columns != other.Rows</strong>.</exception>
         /// <returns>The result of the multiplication.</returns>
-        public Matrix<T> Multiply(Matrix<T> other)
+        public Matrix1<T> Multiply(Matrix1<T> other)
         {
             if (ColumnCount != other.RowCount)
             {
@@ -745,7 +745,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result of the multiplication.</param>
         /// <exception cref="ArgumentException">If <strong>this.Columns != other.ColumnCount</strong>.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the this.RowCount x other.RowCount.</exception>
-        public void TransposeAndMultiply(Matrix<T> other, Matrix<T> result)
+        public void TransposeAndMultiply(Matrix1<T> other, Matrix1<T> result)
         {
             if (ColumnCount != other.ColumnCount || result.RowCount != RowCount || result.ColumnCount != other.RowCount)
             {
@@ -770,7 +770,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to multiply with.</param>
         /// <exception cref="ArgumentException">If <strong>this.Columns != other.ColumnCount</strong>.</exception>
         /// <returns>The result of the multiplication.</returns>
-        public Matrix<T> TransposeAndMultiply(Matrix<T> other)
+        public Matrix1<T> TransposeAndMultiply(Matrix1<T> other)
         {
             if (ColumnCount != other.ColumnCount)
             {
@@ -788,14 +788,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <returns>The result of the multiplication.</returns>
         /// <exception cref="ArgumentException">If <c>this.RowCount != rightSide.Count</c>.</exception>
-        public Vector<T> TransposeThisAndMultiply(Vector<T> rightSide)
+        public Vector1<T> TransposeThisAndMultiply(Vector1<T> rightSide)
         {
             if (RowCount != rightSide.Count)
             {
                 throw DimensionsDontMatch<ArgumentException>(this, rightSide, "rightSide");
             }
 
-            var result = Vector<T>.Build.SameAs(this, rightSide, ColumnCount);
+            var result = Vector1<T>.Build.SameAs(this, rightSide, ColumnCount);
             DoTransposeThisAndMultiply(rightSide, result);
             return result;
         }
@@ -807,7 +807,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result of the multiplication.</param>
         /// <exception cref="ArgumentException">If <strong>result.Count != this.ColumnCount</strong>.</exception>
         /// <exception cref="ArgumentException">If <strong>this.RowCount != <paramref name="rightSide"/>.Count</strong>.</exception>
-        public void TransposeThisAndMultiply(Vector<T> rightSide, Vector<T> result)
+        public void TransposeThisAndMultiply(Vector1<T> rightSide, Vector1<T> result)
         {
             if (RowCount != rightSide.Count)
             {
@@ -821,7 +821,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
             if (ReferenceEquals(rightSide, result))
             {
-                var tmp = Vector<T>.Build.SameAs(result);
+                var tmp = Vector1<T>.Build.SameAs(result);
                 DoTransposeThisAndMultiply(rightSide, tmp);
                 tmp.CopyTo(result);
             }
@@ -838,7 +838,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result of the multiplication.</param>
         /// <exception cref="ArgumentException">If <strong>this.Rows != other.RowCount</strong>.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the this.ColumnCount x other.ColumnCount.</exception>
-        public void TransposeThisAndMultiply(Matrix<T> other, Matrix<T> result)
+        public void TransposeThisAndMultiply(Matrix1<T> other, Matrix1<T> result)
         {
             if (RowCount != other.RowCount || result.RowCount != ColumnCount || result.ColumnCount != other.ColumnCount)
             {
@@ -863,7 +863,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to multiply with.</param>
         /// <exception cref="ArgumentException">If <strong>this.Rows != other.RowCount</strong>.</exception>
         /// <returns>The result of the multiplication.</returns>
-        public Matrix<T> TransposeThisAndMultiply(Matrix<T> other)
+        public Matrix1<T> TransposeThisAndMultiply(Matrix1<T> other)
         {
             if (RowCount != other.RowCount)
             {
@@ -884,7 +884,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result of the multiplication.</param>
         /// <exception cref="ArgumentException">If <strong>this.Columns != other.ColumnCount</strong>.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the this.RowCount x other.RowCount.</exception>
-        public void ConjugateTransposeAndMultiply(Matrix<T> other, Matrix<T> result)
+        public void ConjugateTransposeAndMultiply(Matrix1<T> other, Matrix1<T> result)
         {
             if (ColumnCount != other.ColumnCount || result.RowCount != RowCount || result.ColumnCount != other.RowCount)
             {
@@ -909,7 +909,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to multiply with.</param>
         /// <exception cref="ArgumentException">If <strong>this.Columns != other.ColumnCount</strong>.</exception>
         /// <returns>The result of the multiplication.</returns>
-        public Matrix<T> ConjugateTransposeAndMultiply(Matrix<T> other)
+        public Matrix1<T> ConjugateTransposeAndMultiply(Matrix1<T> other)
         {
             if (ColumnCount != other.ColumnCount)
             {
@@ -927,14 +927,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <returns>The result of the multiplication.</returns>
         /// <exception cref="ArgumentException">If <c>this.RowCount != rightSide.Count</c>.</exception>
-        public Vector<T> ConjugateTransposeThisAndMultiply(Vector<T> rightSide)
+        public Vector1<T> ConjugateTransposeThisAndMultiply(Vector1<T> rightSide)
         {
             if (RowCount != rightSide.Count)
             {
                 throw DimensionsDontMatch<ArgumentException>(this, rightSide, "rightSide");
             }
 
-            var result = Vector<T>.Build.SameAs(this, rightSide, ColumnCount);
+            var result = Vector1<T>.Build.SameAs(this, rightSide, ColumnCount);
             DoConjugateTransposeThisAndMultiply(rightSide, result);
             return result;
         }
@@ -946,7 +946,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result of the multiplication.</param>
         /// <exception cref="ArgumentException">If <strong>result.Count != this.ColumnCount</strong>.</exception>
         /// <exception cref="ArgumentException">If <strong>this.RowCount != <paramref name="rightSide"/>.Count</strong>.</exception>
-        public void ConjugateTransposeThisAndMultiply(Vector<T> rightSide, Vector<T> result)
+        public void ConjugateTransposeThisAndMultiply(Vector1<T> rightSide, Vector1<T> result)
         {
             if (RowCount != rightSide.Count)
             {
@@ -960,7 +960,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
             if (ReferenceEquals(rightSide, result))
             {
-                var tmp = Vector<T>.Build.SameAs(result);
+                var tmp = Vector1<T>.Build.SameAs(result);
                 DoConjugateTransposeThisAndMultiply(rightSide, tmp);
                 tmp.CopyTo(result);
             }
@@ -977,7 +977,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result of the multiplication.</param>
         /// <exception cref="ArgumentException">If <strong>this.Rows != other.RowCount</strong>.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the this.ColumnCount x other.ColumnCount.</exception>
-        public void ConjugateTransposeThisAndMultiply(Matrix<T> other, Matrix<T> result)
+        public void ConjugateTransposeThisAndMultiply(Matrix1<T> other, Matrix1<T> result)
         {
             if (RowCount != other.RowCount || result.RowCount != ColumnCount || result.ColumnCount != other.ColumnCount)
             {
@@ -1002,7 +1002,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to multiply with.</param>
         /// <exception cref="ArgumentException">If <strong>this.Rows != other.RowCount</strong>.</exception>
         /// <returns>The result of the multiplication.</returns>
-        public Matrix<T> ConjugateTransposeThisAndMultiply(Matrix<T> other)
+        public Matrix1<T> ConjugateTransposeThisAndMultiply(Matrix1<T> other)
         {
             if (RowCount != other.RowCount)
             {
@@ -1014,7 +1014,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             return result;
         }
 
-        private static Matrix<T> IntPower(int exponent, Matrix<T> x, Matrix<T> y, Matrix<T> work)
+        private static Matrix1<T> IntPower(int exponent, Matrix1<T> x, Matrix1<T> y, Matrix1<T> work)
         {
             // We try to be smart about not allocating more matrices than needed
             // and to minimize the number of multiplications (not optimal on either though)
@@ -1078,7 +1078,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="exponent">The positive integer exponent to raise the matrix to.</param>
         /// <param name="result">The result of the power.</param>
-        public void Power(int exponent, Matrix<T> result)
+        public void Power(int exponent, Matrix1<T> result)
         {
             if (RowCount != ColumnCount || result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -1115,7 +1115,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Multiplies this square matrix with another matrix and returns the result.
         /// </summary>
         /// <param name="exponent">The positive integer exponent to raise the matrix to.</param>
-        public Matrix<T> Power(int exponent)
+        public Matrix1<T> Power(int exponent)
         {
             if (RowCount != ColumnCount) throw new ArgumentException(Resources.ArgumentMatrixSquare);
             if (exponent < 0) throw new ArgumentException(Resources.ArgumentNotNegative);
@@ -1131,7 +1131,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Negate each element of this matrix.
         /// </summary>
         /// <returns>A matrix containing the negated values.</returns>
-        public Matrix<T> Negate()
+        public Matrix1<T> Negate()
         {
             var result = Build.SameAs(this);
             DoNegate(result);
@@ -1143,7 +1143,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="result">The result of the negation.</param>
         /// <exception cref="ArgumentException">if the result matrix's dimensions are not the same as this matrix.</exception>
-        public void Negate(Matrix<T> result)
+        public void Negate(Matrix1<T> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -1157,7 +1157,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Complex conjugate each element of this matrix.
         /// </summary>
         /// <returns>A matrix containing the conjugated values.</returns>
-        public Matrix<T> Conjugate()
+        public Matrix1<T> Conjugate()
         {
             var result = Build.SameAs(this);
             DoConjugate(result);
@@ -1169,7 +1169,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="result">The result of the conjugation.</param>
         /// <exception cref="ArgumentException">if the result matrix's dimensions are not the same as this matrix.</exception>
-        public void Conjugate(Matrix<T> result)
+        public void Conjugate(Matrix1<T> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -1185,7 +1185,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <returns>A matrix containing the results.</returns>
-        public Matrix<T> Modulus(T divisor)
+        public Matrix1<T> Modulus(T divisor)
         {
             var result = Build.SameAs(this);
             DoModulus(divisor, result);
@@ -1198,7 +1198,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        public void Modulus(T divisor, Matrix<T> result)
+        public void Modulus(T divisor, Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount)
             {
@@ -1214,7 +1214,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <returns>A matrix containing the results.</returns>
-        public Matrix<T> ModulusByThis(T dividend)
+        public Matrix1<T> ModulusByThis(T dividend)
         {
             var result = Build.SameAs(this);
             DoModulusByThis(dividend, result);
@@ -1227,7 +1227,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        public void ModulusByThis(T dividend, Matrix<T> result)
+        public void ModulusByThis(T dividend, Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount)
             {
@@ -1243,7 +1243,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <returns>A matrix containing the results.</returns>
-        public Matrix<T> Remainder(T divisor)
+        public Matrix1<T> Remainder(T divisor)
         {
             var result = Build.SameAs(this);
             DoRemainder(divisor, result);
@@ -1256,7 +1256,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        public void Remainder(T divisor, Matrix<T> result)
+        public void Remainder(T divisor, Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount)
             {
@@ -1272,7 +1272,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <returns>A matrix containing the results.</returns>
-        public Matrix<T> RemainderByThis(T dividend)
+        public Matrix1<T> RemainderByThis(T dividend)
         {
             var result = Build.SameAs(this);
             DoRemainderByThis(dividend, result);
@@ -1285,7 +1285,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        public void RemainderByThis(T dividend, Matrix<T> result)
+        public void RemainderByThis(T dividend, Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount)
             {
@@ -1301,7 +1301,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The matrix to pointwise multiply with this one.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="other"/> are not the same size.</exception>
         /// <returns>A new matrix that is the pointwise multiplication of this matrix and <paramref name="other"/>.</returns>
-        public Matrix<T> PointwiseMultiply(Matrix<T> other)
+        public Matrix1<T> PointwiseMultiply(Matrix1<T> other)
         {
             if (ColumnCount != other.ColumnCount || RowCount != other.RowCount)
             {
@@ -1320,7 +1320,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="other"/> are not the same size.</exception>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="result"/> are not the same size.</exception>
-        public void PointwiseMultiply(Matrix<T> other, Matrix<T> result)
+        public void PointwiseMultiply(Matrix1<T> other, Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount || ColumnCount != other.ColumnCount || RowCount != other.RowCount)
             {
@@ -1336,7 +1336,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="divisor">The pointwise denominator matrix to use.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="divisor"/> are not the same size.</exception>
         /// <returns>A new matrix that is the pointwise division of this matrix and <paramref name="divisor"/>.</returns>
-        public Matrix<T> PointwiseDivide(Matrix<T> divisor)
+        public Matrix1<T> PointwiseDivide(Matrix1<T> divisor)
         {
             if (ColumnCount != divisor.ColumnCount || RowCount != divisor.RowCount)
             {
@@ -1355,7 +1355,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="divisor"/> are not the same size.</exception>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="result"/> are not the same size.</exception>
-        public void PointwiseDivide(Matrix<T> divisor, Matrix<T> result)
+        public void PointwiseDivide(Matrix1<T> divisor, Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount || ColumnCount != divisor.ColumnCount || RowCount != divisor.RowCount)
             {
@@ -1369,7 +1369,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Pointwise raise this matrix to an exponent and store the result into the result matrix.
         /// </summary>
         /// <param name="exponent">The exponent to raise this matrix values to.</param>
-        public Matrix<T> PointwisePower(T exponent)
+        public Matrix1<T> PointwisePower(T exponent)
         {
             var result = Build.SameAs(this);
             DoPointwisePower(exponent, result);
@@ -1382,7 +1382,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="exponent">The exponent to raise this matrix values to.</param>
         /// <param name="result">The matrix to store the result into.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="result"/> are not the same size.</exception>
-        public void PointwisePower(T exponent, Matrix<T> result)
+        public void PointwisePower(T exponent, Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount)
             {
@@ -1398,7 +1398,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The pointwise denominator matrix to use.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="divisor"/> are not the same size.</exception>
-        public Matrix<T> PointwiseModulus(Matrix<T> divisor)
+        public Matrix1<T> PointwiseModulus(Matrix1<T> divisor)
         {
             if (ColumnCount != divisor.ColumnCount || RowCount != divisor.RowCount)
             {
@@ -1418,7 +1418,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The matrix to store the result of the pointwise modulus.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="divisor"/> are not the same size.</exception>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="result"/> are not the same size.</exception>
-        public void PointwiseModulus(Matrix<T> divisor, Matrix<T> result)
+        public void PointwiseModulus(Matrix1<T> divisor, Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount || ColumnCount != divisor.ColumnCount || RowCount != divisor.RowCount)
             {
@@ -1434,7 +1434,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="divisor">The pointwise denominator matrix to use.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="divisor"/> are not the same size.</exception>
-        public Matrix<T> PointwiseRemainder(Matrix<T> divisor)
+        public Matrix1<T> PointwiseRemainder(Matrix1<T> divisor)
         {
             if (ColumnCount != divisor.ColumnCount || RowCount != divisor.RowCount)
             {
@@ -1454,7 +1454,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The matrix to store the result of the pointwise remainder.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="divisor"/> are not the same size.</exception>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="result"/> are not the same size.</exception>
-        public void PointwiseRemainder(Matrix<T> divisor, Matrix<T> result)
+        public void PointwiseRemainder(Matrix1<T> divisor, Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount || ColumnCount != divisor.ColumnCount || RowCount != divisor.RowCount)
             {
@@ -1467,7 +1467,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Pointwise applies the exponent function to each value.
         /// </summary>
-        public Matrix<T> PointwiseExp()
+        public Matrix1<T> PointwiseExp()
         {
             var result = Build.SameAs(this);
             DoPointwiseExp(result);
@@ -1479,7 +1479,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="result">The matrix to store the result.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="result"/> are not the same size.</exception>
-        public void PointwiseExp(Matrix<T> result)
+        public void PointwiseExp(Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount)
             {
@@ -1492,7 +1492,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Pointwise applies the natural logarithm function to each value.
         /// </summary>
-        public Matrix<T> PointwiseLog()
+        public Matrix1<T> PointwiseLog()
         {
             var result = Build.SameAs(this);
             DoPointwiseLog(result);
@@ -1504,7 +1504,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="result">The matrix to store the result.</param>
         /// <exception cref="ArgumentException">If this matrix and <paramref name="result"/> are not the same size.</exception>
-        public void PointwiseLog(Matrix<T> result)
+        public void PointwiseLog(Matrix1<T> result)
         {
             if (ColumnCount != result.ColumnCount || RowCount != result.RowCount)
             {
@@ -1563,7 +1563,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Computes an orthonormal basis for the null space of this matrix,
         /// also known as the kernel of the corresponding matrix transformation.
         /// </summary>
-        public virtual Vector<T>[] Kernel()
+        public virtual Vector1<T>[] Kernel()
         {
             var svd = Svd(true);
             return svd.VT.EnumerateRows(svd.Rank, ColumnCount - svd.Rank).ToArray();
@@ -1573,7 +1573,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Computes an orthonormal basis for the column space of this matrix,
         /// also known as the range or image of the corresponding matrix transformation.
         /// </summary>
-        public virtual Vector<T>[] Range()
+        public virtual Vector1<T>[] Range()
         {
             var svd = Svd(true);
             return svd.U.EnumerateColumns(0, svd.Rank).ToArray();
@@ -1581,7 +1581,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
         /// <summary>Computes the inverse of this matrix.</summary>
         /// <returns>The inverse of this matrix.</returns>
-        public virtual Matrix<T> Inverse()
+        public virtual Matrix1<T> Inverse()
         {
             if (RowCount != ColumnCount)
             {
@@ -1597,7 +1597,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="other">The other matrix.</param>
         /// <returns>The Kronecker product of the two matrices.</returns>
-        public Matrix<T> KroneckerProduct(Matrix<T> other)
+        public Matrix1<T> KroneckerProduct(Matrix1<T> other)
         {
             var result = Build.SameAs(this, other, RowCount*other.RowCount, ColumnCount*other.ColumnCount);
             KroneckerProduct(other, result);
@@ -1611,7 +1611,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="other">The other matrix.</param>
         /// <param name="result">The Kronecker product of the two matrices.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not (this.Rows * lower.rows) x (this.Columns * lower.Columns).</exception>
-        public virtual void KroneckerProduct(Matrix<T> other, Matrix<T> result)
+        public virtual void KroneckerProduct(Matrix1<T> other, Matrix1<T> result)
         {
             if (result.RowCount != (RowCount*other.RowCount) || result.ColumnCount != (ColumnCount*other.ColumnCount))
             {
@@ -1654,88 +1654,88 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Calculates the p-norms of all row vectors.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public abstract Vector<double> RowNorms(double norm);
+        public abstract Vector1<double> RowNorms(double norm);
 
         /// <summary>
         /// Calculates the p-norms of all column vectors.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public abstract Vector<double> ColumnNorms(double norm);
+        public abstract Vector1<double> ColumnNorms(double norm);
 
         /// <summary>
         /// Normalizes all row vectors to a unit p-norm.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public abstract Matrix<T> NormalizeRows(double norm);
+        public abstract Matrix1<T> NormalizeRows(double norm);
 
         /// <summary>
         /// Normalizes all column vectors to a unit p-norm.
         /// Typical values for p are 1.0 (L1, Manhattan norm), 2.0 (L2, Euclidean norm) and positive infinity (infinity norm)
         /// </summary>
-        public abstract Matrix<T> NormalizeColumns(double norm);
+        public abstract Matrix1<T> NormalizeColumns(double norm);
 
         /// <summary>
         /// Calculates the value sum of each row vector.
         /// </summary>
-        public abstract Vector<T> RowSums();
+        public abstract Vector1<T> RowSums();
 
         /// <summary>
         /// Calculates the value sum of each column vector.
         /// </summary>
-        public abstract Vector<T> ColumnSums();
+        public abstract Vector1<T> ColumnSums();
 
         /// <summary>
         /// Calculates the absolute value sum of each row vector.
         /// </summary>
-        public abstract Vector<T> RowAbsoluteSums();
+        public abstract Vector1<T> RowAbsoluteSums();
 
         /// <summary>
         /// Calculates the absolute value sum of each column vector.
         /// </summary>
-        public abstract Vector<T> ColumnAbsoluteSums();
+        public abstract Vector1<T> ColumnAbsoluteSums();
 
         #region Exceptions - possibly move elsewhere?
 
-        internal static Exception DimensionsDontMatch<TException>(Matrix<T> left, Matrix<T> right, Matrix<T> result, string paramName = null)
+        internal static Exception DimensionsDontMatch<TException>(Matrix1<T> left, Matrix1<T> right, Matrix1<T> result, string paramName = null)
             where TException : Exception
         {
             var message = string.Format(Resources.ArgumentMatrixDimensions3, left.RowCount + "x" + left.ColumnCount, right.RowCount + "x" + right.ColumnCount, result.RowCount + "x" + result.ColumnCount);
             return CreateException<TException>(message, paramName);
         }
 
-        internal static Exception DimensionsDontMatch<TException>(Matrix<T> left, Matrix<T> right, string paramName = null)
+        internal static Exception DimensionsDontMatch<TException>(Matrix1<T> left, Matrix1<T> right, string paramName = null)
             where TException : Exception
         {
             var message = string.Format(Resources.ArgumentMatrixDimensions2, left.RowCount + "x" + left.ColumnCount, right.RowCount + "x" + right.ColumnCount);
             return CreateException<TException>(message, paramName);
         }
 
-        internal static Exception DimensionsDontMatch<TException>(Matrix<T> matrix)
+        internal static Exception DimensionsDontMatch<TException>(Matrix1<T> matrix)
             where TException : Exception
         {
             var message = string.Format(Resources.ArgumentMatrixDimensions1, matrix.RowCount + "x" + matrix.ColumnCount);
             return CreateException<TException>(message);
         }
 
-        internal static Exception DimensionsDontMatch<TException>(Matrix<T> left, Vector<T> right, Vector<T> result, string paramName = null)
+        internal static Exception DimensionsDontMatch<TException>(Matrix1<T> left, Vector1<T> right, Vector1<T> result, string paramName = null)
             where TException : Exception
         {
             return DimensionsDontMatch<TException>(left, right.ToColumnMatrix(), result.ToColumnMatrix(), paramName);
         }
 
-        internal static Exception DimensionsDontMatch<TException>(Matrix<T> left, Vector<T> right, string paramName = null)
+        internal static Exception DimensionsDontMatch<TException>(Matrix1<T> left, Vector1<T> right, string paramName = null)
             where TException : Exception
         {
             return DimensionsDontMatch<TException>(left, right.ToColumnMatrix(), paramName);
         }
 
-        internal static Exception DimensionsDontMatch<TException>(Vector<T> left, Matrix<T> right, string paramName = null)
+        internal static Exception DimensionsDontMatch<TException>(Vector1<T> left, Matrix1<T> right, string paramName = null)
             where TException : Exception
         {
             return DimensionsDontMatch<TException>(left.ToColumnMatrix(), right, paramName);
         }
 
-        internal static Exception DimensionsDontMatch<TException>(Vector<T> left, Vector<T> right, string paramName = null)
+        internal static Exception DimensionsDontMatch<TException>(Vector1<T> left, Vector1<T> right, string paramName = null)
             where TException : Exception
         {
             return DimensionsDontMatch<TException>(left.ToColumnMatrix(), right.ToColumnMatrix(), paramName);

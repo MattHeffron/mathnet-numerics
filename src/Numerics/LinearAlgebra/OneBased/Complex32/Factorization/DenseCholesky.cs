@@ -67,7 +67,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             return new DenseCholesky(factor);
         }
 
-        DenseCholesky(Matrix<Complex32> factor)
+        DenseCholesky(Matrix1<Complex32> factor)
             : base(factor)
         {
         }
@@ -77,7 +77,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<Complex32> input, Matrix<Complex32> result)
+        public override void Solve(Matrix1<Complex32> input, Matrix1<Complex32> result)
         {
             if (result.RowCount != input.RowCount)
             {
@@ -119,7 +119,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<Complex32> input, Vector<Complex32> result)
+        public override void Solve(Vector1<Complex32> input, Vector1<Complex32> result)
         {
             if (input.Count != result.Count)
             {

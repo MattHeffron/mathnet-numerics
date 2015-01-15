@@ -77,7 +77,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /////// <param name="residual">Residual values in <see cref="Vector"/>.</param>
         /////// <param name="x">Instance of the <see cref="Vector"/> x.</param>
         /////// <param name="b">Instance of the <see cref="Vector"/> b.</param>
-        ////static void CalculateTrueResidual(Matrix<int> matrix, Vector<int> residual, Vector<int> x, Vector<int> b)
+        ////static void CalculateTrueResidual(Matrix1<int> matrix, Vector1<int> residual, Vector1<int> x, Vector1<int> b)
         ////{
         ////    // -Ax = residual
         ////    matrix.Multiply(x, residual);
@@ -98,7 +98,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// <param name="result">The result <see cref="Vector"/>, <c>x</c>.</param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public void Solve(Matrix<int> matrix, Vector<int> input, Vector<int> result, Iterator<int> iterator, IPreconditioner<int> preconditioner)
+        public void Solve(Matrix1<int> matrix, Vector1<int> input, Vector1<int> result, Iterator<int> iterator, IPreconditioner<int> preconditioner)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

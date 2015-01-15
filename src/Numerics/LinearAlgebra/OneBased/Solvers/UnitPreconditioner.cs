@@ -53,7 +53,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
         /// The matrix upon which the preconditioner is based.
         /// </param>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
-        public void Initialize(Matrix<T> matrix)
+        public void Initialize(Matrix1<T> matrix)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {
@@ -79,7 +79,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
         ///     If the size of <paramref name="rhs"/> is different the number of rows of the coefficient matrix.
         ///   </para>
         /// </exception>
-        public void Approximate(Vector<T> rhs, Vector<T> lhs)
+        public void Approximate(Vector1<T> rhs, Vector1<T> lhs)
         {
             if ((lhs.Count != rhs.Count) || (lhs.Count != _size))
             {

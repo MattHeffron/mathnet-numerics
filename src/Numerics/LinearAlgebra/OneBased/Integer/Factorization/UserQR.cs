@@ -54,7 +54,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// <param name="matrix">The matrix to factor.</param>
         /// <param name="method">The QR factorization method to use.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
-        public static UserQR Create(Matrix<int> matrix, QRMethod method = QRMethod.Full)
+        public static UserQR Create(Matrix1<int> matrix, QRMethod method = QRMethod.Full)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
             ////if (matrix.RowCount < matrix.ColumnCount)
@@ -62,8 +62,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////    throw Matrix.DimensionsDontMatch<ArgumentException>(matrix);
             ////}
 
-            ////Matrix<int> q;
-            ////Matrix<int> r;
+            ////Matrix1<int> q;
+            ////Matrix1<int> r;
 
             ////var minmn = Math.Min(matrix.RowCount, matrix.ColumnCount);
             ////var u = new int[minmn][];
@@ -71,7 +71,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////if (method == QRMethod.Full)
             ////{
             ////    r = matrix.Clone();
-            ////    q = Matrix<int>.Build.SameAs(matrix, matrix.RowCount, matrix.RowCount);
+            ////    q = Matrix1<int>.Build.SameAs(matrix, matrix.RowCount, matrix.RowCount);
 
             ////    for (var i = 0; i < matrix.RowCount; i++)
             ////    {
@@ -116,7 +116,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////return new UserQR(q, r, method);
         }
 
-        UserQR(Matrix<int> q, Matrix<int> rFull, QRMethod method)
+        UserQR(Matrix1<int> q, Matrix1<int> rFull, QRMethod method)
             : base(q, rFull, method)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -129,7 +129,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// <param name="row">The first row</param>
         /////// <param name="column">Column index</param>
         /////// <returns>Generated vector</returns>
-        ////static int[] GenerateColumn(Matrix<int> a, int row, int column)
+        ////static int[] GenerateColumn(Matrix1<int> a, int row, int column)
         ////{
         ////    var ru = a.RowCount - row;
         ////    var u = new int[ru];
@@ -184,7 +184,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// <param name="columnStart">The first column</param>
         /////// <param name="columnDim">The last column</param>
         /////// <param name="availableCores">Number of available CPUs</param>
-        ////static void ComputeQR(int[] u, Matrix<int> a, int rowStart, int rowDim, int columnStart, int columnDim, int availableCores)
+        ////static void ComputeQR(int[] u, Matrix1<int> a, int rowStart, int rowDim, int columnStart, int columnDim, int availableCores)
         ////{
         ////    if (rowDim < rowStart || columnDim < columnStart)
         ////    {
@@ -225,7 +225,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<int> input, Matrix<int> result)
+        public override void Solve(Matrix1<int> input, Matrix1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -301,7 +301,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<int> input, Vector<int> result)
+        public override void Solve(Vector1<int> input, Vector1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);

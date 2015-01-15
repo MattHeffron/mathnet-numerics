@@ -74,7 +74,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             return new DenseLU(factors, pivots);
         }
 
-        DenseLU(Matrix<Complex32> factors, int[] pivots)
+        DenseLU(Matrix1<Complex32> factors, int[] pivots)
             : base(factors, pivots)
         {
         }
@@ -84,7 +84,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <c>B</c>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <c>X</c>.</param>
-        public override void Solve(Matrix<Complex32> input, Matrix<Complex32> result)
+        public override void Solve(Matrix1<Complex32> input, Matrix1<Complex32> result)
         {
             // Check for proper arguments.
             if (input == null)
@@ -138,7 +138,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <c>b</c>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <c>x</c>.</param>
-        public override void Solve(Vector<Complex32> input, Vector<Complex32> result)
+        public override void Solve(Vector1<Complex32> input, Vector1<Complex32> result)
         {
             // Check for proper arguments.
             if (input == null)
@@ -186,7 +186,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// Returns the inverse of this matrix. The inverse is calculated using LU decomposition.
         /// </summary>
         /// <returns>The inverse of this matrix.</returns>
-        public override Matrix<Complex32> Inverse()
+        public override Matrix1<Complex32> Inverse()
         {
             var result = (DenseMatrix) Factors.Clone();
             Control.LinearAlgebraProvider.LUInverseFactored(result.Values, result.RowCount, Pivots);

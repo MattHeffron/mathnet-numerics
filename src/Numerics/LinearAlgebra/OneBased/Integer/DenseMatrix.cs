@@ -121,7 +121,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// This new matrix will be independent from the other matrix.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfMatrix(Matrix<int> matrix)
+        public static DenseMatrix OfMatrix(Matrix1<int> matrix)
         {
             return new DenseMatrix(DenseColumnMajorMatrixStorage<int>.OfMatrix(matrix.Storage));
         }
@@ -205,7 +205,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfColumnVectors(params Vector<int>[] columns)
+        public static DenseMatrix OfColumnVectors(params Vector1<int>[] columns)
         {
             var storage = new VectorStorage<int>[columns.Length];
             for (int i = 0; i < columns.Length; i++)
@@ -220,7 +220,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfColumnVectors(IEnumerable<Vector<int>> columns)
+        public static DenseMatrix OfColumnVectors(IEnumerable<Vector1<int>> columns)
         {
             return new DenseMatrix(DenseColumnMajorMatrixStorage<int>.OfColumnVectors(columns.Select(c => c.Storage).ToArray()));
         }
@@ -272,7 +272,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfRowVectors(params Vector<int>[] rows)
+        public static DenseMatrix OfRowVectors(params Vector1<int>[] rows)
         {
             var storage = new VectorStorage<int>[rows.Length];
             for (int i = 0; i < rows.Length; i++)
@@ -287,7 +287,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfRowVectors(IEnumerable<Vector<int>> rows)
+        public static DenseMatrix OfRowVectors(IEnumerable<Vector1<int>> rows)
         {
             return new DenseMatrix(DenseColumnMajorMatrixStorage<int>.OfRowVectors(rows.Select(r => r.Storage).ToArray()));
         }
@@ -297,7 +297,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// This new matrix will be independent from the vector.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfDiagonalVector(Vector<int> diagonal)
+        public static DenseMatrix OfDiagonalVector(Vector1<int> diagonal)
         {
             var m = new DenseMatrix(diagonal.Count, diagonal.Count);
             m.SetDiagonal(diagonal);
@@ -309,7 +309,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// This new matrix will be independent from the vector.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DenseMatrix OfDiagonalVector(int rows, int columns, Vector<int> diagonal)
+        public static DenseMatrix OfDiagonalVector(int rows, int columns, Vector1<int> diagonal)
         {
             var m = new DenseMatrix(rows, columns);
             m.SetDiagonal(diagonal);
@@ -426,7 +426,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// Negate each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the negation.</param>
-        protected override void DoNegate(Matrix<int> result)
+        protected override void DoNegate(Matrix1<int> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult != null)
@@ -443,7 +443,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="scalar">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
-        protected override void DoAdd(int scalar, Matrix<int> result)
+        protected override void DoAdd(int scalar, Matrix1<int> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -469,7 +469,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <param name="result">The matrix to store the result of add</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoAdd(Matrix<int> other, Matrix<int> result)
+        protected override void DoAdd(Matrix1<int> other, Matrix1<int> result)
         {
             // dense + dense = dense
             var denseOther = other.Storage as DenseColumnMajorMatrixStorage<int>;
@@ -501,7 +501,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="scalar">The scalar to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
-        protected override void DoSubtract(int scalar, Matrix<int> result)
+        protected override void DoSubtract(int scalar, Matrix1<int> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -525,7 +525,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="other">The matrix to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
-        protected override void DoSubtract(Matrix<int> other, Matrix<int> result)
+        protected override void DoSubtract(Matrix1<int> other, Matrix1<int> result)
         {
             // dense + dense = dense
             var denseOther = other.Storage as DenseColumnMajorMatrixStorage<int>;
@@ -557,7 +557,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
-        protected override void DoMultiply(int scalar, Matrix<int> result)
+        protected override void DoMultiply(int scalar, Matrix1<int> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -575,7 +575,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Vector<int> rightSide, Vector<int> result)
+        protected override void DoMultiply(Vector1<int> rightSide, Vector1<int> result)
         {
             var denseRight = rightSide as DenseVector;
             var denseResult = result as DenseVector;
@@ -602,7 +602,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Matrix<int> other, Matrix<int> result)
+        protected override void DoMultiply(Matrix1<int> other, Matrix1<int> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -648,7 +648,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeAndMultiply(Matrix<int> other, Matrix<int> result)
+        protected override void DoTransposeAndMultiply(Matrix1<int> other, Matrix1<int> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -698,7 +698,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Vector<int> rightSide, Vector<int> result)
+        protected override void DoTransposeThisAndMultiply(Vector1<int> rightSide, Vector1<int> result)
         {
             var denseRight = rightSide as DenseVector;
             var denseResult = result as DenseVector;
@@ -729,7 +729,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Matrix<int> other, Matrix<int> result)
+        protected override void DoTransposeThisAndMultiply(Matrix1<int> other, Matrix1<int> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -780,7 +780,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="divisor">The scalar to divide the matrix with.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivide(int divisor, Matrix<int> result)
+        protected override void DoDivide(int divisor, Matrix1<int> result)
         {
             if (divisor == 0)
             {
@@ -821,7 +821,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="other">The matrix to pointwise multiply with this one.</param>
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Matrix<int> other, Matrix<int> result)
+        protected override void DoPointwiseMultiply(Matrix1<int> other, Matrix1<int> result)
         {
             var denseOther = other as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -841,7 +841,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="divisor">The matrix to pointwise divide this one by.</param>
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
-        protected override void DoPointwiseDivide(Matrix<int> divisor, Matrix<int> result)
+        protected override void DoPointwiseDivide(Matrix1<int> divisor, Matrix1<int> result)
         {
             var denseOther = divisor as DenseMatrix;
             var denseResult = result as DenseMatrix;
@@ -862,7 +862,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override void DoModulus(int divisor, Matrix<int> result)
+        protected override void DoModulus(int divisor, Matrix1<int> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -892,7 +892,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoModulusByThis(int dividend, Matrix<int> result)
+        protected override void DoModulusByThis(int dividend, Matrix1<int> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -917,7 +917,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override void DoRemainder(int divisor, Matrix<int> result)
+        protected override void DoRemainder(int divisor, Matrix1<int> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -947,7 +947,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoRemainderByThis(int dividend, Matrix<int> result)
+        protected override void DoRemainderByThis(int dividend, Matrix1<int> result)
         {
             var denseResult = result as DenseMatrix;
             if (denseResult == null)
@@ -1019,7 +1019,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         }
 
         /// <summary>
-        /// Returns a <strong>Matrix</strong> containing the same values of <paramref name="rightSide"/>.
+        /// Returns a <strong>Matrix1</strong> containing the same values of <paramref name="rightSide"/>.
         /// </summary>
         /// <param name="rightSide">The matrix to get the values from.</param>
         /// <returns>A matrix containing a the same values as <paramref name="rightSide"/>.</returns>
@@ -1082,7 +1082,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
@@ -1099,7 +1099,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
@@ -1147,7 +1147,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> and a Vector.
+        /// Multiplies a <strong>Matrix1</strong> and a Vector.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The vector to multiply.</param>
@@ -1164,7 +1164,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         }
 
         /// <summary>
-        /// Multiplies a Vector and a <strong>Matrix</strong>.
+        /// Multiplies a Vector and a <strong>Matrix1</strong>.
         /// </summary>
         /// <param name="leftSide">The vector to multiply.</param>
         /// <param name="rightSide">The matrix to multiply.</param>
@@ -1181,7 +1181,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>

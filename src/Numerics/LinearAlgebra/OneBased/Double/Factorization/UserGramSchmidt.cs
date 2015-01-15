@@ -50,7 +50,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> row count is less then column count</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is rank deficient</exception>
-        public static UserGramSchmidt Create(Matrix<double> matrix)
+        public static UserGramSchmidt Create(Matrix1<double> matrix)
         {
             if (matrix.RowCount < matrix.ColumnCount)
             {
@@ -58,7 +58,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
             }
 
             var q = matrix.Clone();
-            var r = Matrix<double>.Build.SameAs(matrix, matrix.ColumnCount, matrix.ColumnCount);
+            var r = Matrix1<double>.Build.SameAs(matrix, matrix.ColumnCount, matrix.ColumnCount);
 
             for (var k = 0; k < q.ColumnCount; k++)
             {
@@ -89,7 +89,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
             return new UserGramSchmidt(q, r);
         }
 
-        UserGramSchmidt(Matrix<double> q, Matrix<double> rFull)
+        UserGramSchmidt(Matrix1<double> q, Matrix1<double> rFull)
             : base(q, rFull)
         {
         }
@@ -99,7 +99,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<double> input, Matrix<double> result)
+        public override void Solve(Matrix1<double> input, Matrix1<double> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -173,7 +173,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<double> input, Vector<double> result)
+        public override void Solve(Vector1<double> input, Vector1<double> result)
         {
             // Ax=b where A is an m x n matrix
             // Check that b is a column vector with m entries

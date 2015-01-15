@@ -95,7 +95,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// This new matrix will be independent from the other matrix.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfMatrix(Matrix<float> matrix)
+        public static SparseMatrix OfMatrix(Matrix1<float> matrix)
         {
             return new SparseMatrix(SparseCompressedRowMatrixStorage<float>.OfMatrix(matrix.Storage));
         }
@@ -192,7 +192,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfColumnVectors(params Vector<float>[] columns)
+        public static SparseMatrix OfColumnVectors(params Vector1<float>[] columns)
         {
             var storage = new VectorStorage<float>[columns.Length];
             for (int i = 0; i < columns.Length; i++)
@@ -207,7 +207,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfColumnVectors(IEnumerable<Vector<float>> columns)
+        public static SparseMatrix OfColumnVectors(IEnumerable<Vector1<float>> columns)
         {
             return new SparseMatrix(SparseCompressedRowMatrixStorage<float>.OfColumnVectors(columns.Select(c => c.Storage).ToArray()));
         }
@@ -259,7 +259,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfRowVectors(params Vector<float>[] rows)
+        public static SparseMatrix OfRowVectors(params Vector1<float>[] rows)
         {
             var storage = new VectorStorage<float>[rows.Length];
             for (int i = 0; i < rows.Length; i++)
@@ -274,7 +274,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfRowVectors(IEnumerable<Vector<float>> rows)
+        public static SparseMatrix OfRowVectors(IEnumerable<Vector1<float>> rows)
         {
             return new SparseMatrix(SparseCompressedRowMatrixStorage<float>.OfRowVectors(rows.Select(r => r.Storage).ToArray()));
         }
@@ -284,7 +284,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// This new matrix will be independent from the vector.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfDiagonalVector(Vector<float> diagonal)
+        public static SparseMatrix OfDiagonalVector(Vector1<float> diagonal)
         {
             var m = new SparseMatrix(diagonal.Count, diagonal.Count);
             m.SetDiagonal(diagonal);
@@ -296,7 +296,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// This new matrix will be independent from the vector.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfDiagonalVector(int rows, int columns, Vector<float> diagonal)
+        public static SparseMatrix OfDiagonalVector(int rows, int columns, Vector1<float> diagonal)
         {
             var m = new SparseMatrix(rows, columns);
             m.SetDiagonal(diagonal);
@@ -373,7 +373,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Returns a new matrix containing the lower triangle of this matrix.
         /// </summary>
         /// <returns>The lower triangle of this matrix.</returns>
-        public override Matrix<float> LowerTriangle()
+        public override Matrix1<float> LowerTriangle()
         {
             var result = Build.SameAs(this);
             LowerTriangleImpl(result);
@@ -386,7 +386,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="result"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void LowerTriangle(Matrix<float> result)
+        public override void LowerTriangle(Matrix1<float> result)
         {
             if (result == null)
             {
@@ -415,7 +415,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Puts the lower triangle of this matrix into the result matrix.
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
-        private void LowerTriangleImpl(Matrix<float> result)
+        private void LowerTriangleImpl(Matrix1<float> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -438,7 +438,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Returns a new matrix containing the upper triangle of this matrix.
         /// </summary>
         /// <returns>The upper triangle of this matrix.</returns>
-        public override Matrix<float> UpperTriangle()
+        public override Matrix1<float> UpperTriangle()
         {
             var result = Build.SameAs(this);
             UpperTriangleImpl(result);
@@ -451,7 +451,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="result"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void UpperTriangle(Matrix<float> result)
+        public override void UpperTriangle(Matrix1<float> result)
         {
             if (result == null)
             {
@@ -480,7 +480,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Puts the upper triangle of this matrix into the result matrix.
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
-        private void UpperTriangleImpl(Matrix<float> result)
+        private void UpperTriangleImpl(Matrix1<float> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -504,7 +504,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// does not contain the diagonal elements of this matrix.
         /// </summary>
         /// <returns>The lower triangle of this matrix.</returns>
-        public override Matrix<float> StrictlyLowerTriangle()
+        public override Matrix1<float> StrictlyLowerTriangle()
         {
             var result = Build.SameAs(this);
             StrictlyLowerTriangleImpl(result);
@@ -517,7 +517,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="result"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void StrictlyLowerTriangle(Matrix<float> result)
+        public override void StrictlyLowerTriangle(Matrix1<float> result)
         {
             if (result == null)
             {
@@ -546,7 +546,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Puts the strictly lower triangle of this matrix into the result matrix.
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
-        private void StrictlyLowerTriangleImpl(Matrix<float> result)
+        private void StrictlyLowerTriangleImpl(Matrix1<float> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -570,7 +570,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// does not contain the diagonal elements of this matrix.
         /// </summary>
         /// <returns>The upper triangle of this matrix.</returns>
-        public override Matrix<float> StrictlyUpperTriangle()
+        public override Matrix1<float> StrictlyUpperTriangle()
         {
             var result = Build.SameAs(this);
             StrictlyUpperTriangleImpl(result);
@@ -583,7 +583,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="result"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void StrictlyUpperTriangle(Matrix<float> result)
+        public override void StrictlyUpperTriangle(Matrix1<float> result)
         {
             if (result == null)
             {
@@ -612,7 +612,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Puts the strictly upper triangle of this matrix into the result matrix.
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
-        private void StrictlyUpperTriangleImpl(Matrix<float> result)
+        private void StrictlyUpperTriangleImpl(Matrix1<float> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -635,7 +635,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Negate each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the negation.</param>
-        protected override void DoNegate(Matrix<float> result)
+        protected override void DoNegate(Matrix1<float> result)
         {
             CopyTo(result);
             DoMultiply(-1, result);
@@ -708,7 +708,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">The matrix to store the result of the addition.</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoAdd(Matrix<float> other, Matrix<float> result)
+        protected override void DoAdd(Matrix1<float> other, Matrix1<float> result)
         {
             var sparseOther = other as SparseMatrix;
             var sparseResult = result as SparseMatrix;
@@ -765,7 +765,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">The matrix to store the result of subtraction.</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoSubtract(Matrix<float> other, Matrix<float> result)
+        protected override void DoSubtract(Matrix1<float> other, Matrix1<float> result)
         {
             var sparseOther = other as SparseMatrix;
             var sparseResult = result as SparseMatrix;
@@ -827,7 +827,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
-        protected override void DoMultiply(float scalar, Matrix<float> result)
+        protected override void DoMultiply(float scalar, Matrix1<float> result)
         {
             if (scalar == 1.0)
             {
@@ -883,7 +883,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Matrix<float> other, Matrix<float> result)
+        protected override void DoMultiply(Matrix1<float> other, Matrix1<float> result)
         {
             var sparseOther = other as SparseMatrix;
             var sparseResult = result as SparseMatrix;
@@ -1033,7 +1033,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Vector<float> rightSide, Vector<float> result)
+        protected override void DoMultiply(Vector1<float> rightSide, Vector1<float> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -1064,7 +1064,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeAndMultiply(Matrix<float> other, Matrix<float> result)
+        protected override void DoTransposeAndMultiply(Matrix1<float> other, Matrix1<float> result)
         {
             var otherSparse = other as SparseMatrix;
             var resultSparse = result as SparseMatrix;
@@ -1124,7 +1124,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The matrix to pointwise multiply with this one.</param>
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Matrix<float> other, Matrix<float> result)
+        protected override void DoPointwiseMultiply(Matrix1<float> other, Matrix1<float> result)
         {
             result.Clear();
 
@@ -1151,7 +1151,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The matrix to pointwise divide this one by.</param>
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
-        protected override void DoPointwiseDivide(Matrix<float> divisor, Matrix<float> result)
+        protected override void DoPointwiseDivide(Matrix1<float> divisor, Matrix1<float> result)
         {
             result.Clear();
 
@@ -1172,7 +1172,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
             }
         }
 
-        public override void KroneckerProduct(Matrix<float> other, Matrix<float> result)
+        public override void KroneckerProduct(Matrix1<float> other, Matrix1<float> result)
         {
             if (other == null)
             {
@@ -1212,7 +1212,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override void DoModulus(float divisor, Matrix<float> result)
+        protected override void DoModulus(float divisor, Matrix1<float> result)
         {
             var sparseResult = result as SparseMatrix;
             if (sparseResult == null)
@@ -1239,7 +1239,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override void DoRemainder(float divisor, Matrix<float> result)
+        protected override void DoRemainder(float divisor, Matrix1<float> result)
         {
             var sparseResult = result as SparseMatrix;
             if (sparseResult == null)
@@ -1331,7 +1331,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         }
 
         /// <summary>
-        /// Returns a <strong>Matrix</strong> containing the same values of <paramref name="rightSide"/>.
+        /// Returns a <strong>Matrix1</strong> containing the same values of <paramref name="rightSide"/>.
         /// </summary>
         /// <param name="rightSide">The matrix to get the values from.</param>
         /// <returns>A matrix containing a the same values as <paramref name="rightSide"/>.</returns>
@@ -1394,7 +1394,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
@@ -1411,7 +1411,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
@@ -1459,7 +1459,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> and a Vector.
+        /// Multiplies a <strong>Matrix1</strong> and a Vector.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The vector to multiply.</param>
@@ -1476,7 +1476,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         }
 
         /// <summary>
-        /// Multiplies a Vector and a <strong>Matrix</strong>.
+        /// Multiplies a Vector and a <strong>Matrix1</strong>.
         /// </summary>
         /// <param name="leftSide">The vector to multiply.</param>
         /// <param name="rightSide">The matrix to multiply.</param>
@@ -1493,7 +1493,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>

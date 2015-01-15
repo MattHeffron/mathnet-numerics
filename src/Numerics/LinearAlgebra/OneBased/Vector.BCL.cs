@@ -40,7 +40,7 @@ using MathNet.Numerics.Properties;
 namespace MathNet.Numerics.LinearAlgebra.OneBased
 {
     [DebuggerDisplay("Vector {Count}")]
-    public abstract partial class Vector<T>
+    public abstract partial class Vector1<T>
     {
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -49,7 +49,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <returns>
         ///    <c>true</c> if the current object is equal to the <paramref name="other"/> parameter; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Vector<T> other)
+        public bool Equals(Vector1<T> other)
         {
             return other != null && Storage.Equals(other.Storage);
         }
@@ -63,7 +63,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </returns>
         public override sealed bool Equals(object obj)
         {
-            var other = obj as Vector<T>;
+            var other = obj as Vector1<T>;
             return other != null && Storage.Equals(other.Storage);
         }
 

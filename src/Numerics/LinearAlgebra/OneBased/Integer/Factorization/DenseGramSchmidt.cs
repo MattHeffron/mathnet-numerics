@@ -51,7 +51,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> row count is less then column count</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is rank deficient</exception>
-        public static DenseGramSchmidt Create(Matrix<int> matrix)
+        public static DenseGramSchmidt Create(Matrix1<int> matrix)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
             ////if (matrix.RowCount < matrix.ColumnCount)
@@ -66,7 +66,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////return new DenseGramSchmidt(q, r);
         }
 
-        DenseGramSchmidt(Matrix<int> q, Matrix<int> rFull)
+        DenseGramSchmidt(Matrix1<int> q, Matrix1<int> rFull)
             : base(q, rFull)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -128,7 +128,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<int> input, Matrix<int> result)
+        public override void Solve(Matrix1<int> input, Matrix1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -170,7 +170,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<int> input, Vector<int> result)
+        public override void Solve(Vector1<int> input, Vector1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);

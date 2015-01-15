@@ -130,7 +130,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// The matrix to copy from must be diagonal as well.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DiagonalMatrix OfMatrix(Matrix<Complex> matrix)
+        public static DiagonalMatrix OfMatrix(Matrix1<Complex> matrix)
         {
             return new DiagonalMatrix(DiagonalMatrixStorage<Complex>.OfMatrix(matrix.Storage));
         }
@@ -195,7 +195,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Negate each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the negation.</param>
-        protected override void DoNegate(Matrix<Complex> result)
+        protected override void DoNegate(Matrix1<Complex> result)
         {
             var diagResult = result as DiagonalMatrix;
             if (diagResult != null)
@@ -215,7 +215,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Complex conjugates each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the conjugation.</param>
-        protected override void DoConjugate(Matrix<Complex> result)
+        protected override void DoConjugate(Matrix1<Complex> result)
         {
             var diagResult = result as DiagonalMatrix;
             if (diagResult != null)
@@ -237,7 +237,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="other">The matrix to add to this matrix.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoAdd(Matrix<Complex> other, Matrix<Complex> result)
+        protected override void DoAdd(Matrix1<Complex> other, Matrix1<Complex> result)
         {
             // diagonal + diagonal = diagonal
             var diagOther = other as DiagonalMatrix;
@@ -261,7 +261,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="other">The matrix to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoSubtract(Matrix<Complex> other, Matrix<Complex> result)
+        protected override void DoSubtract(Matrix1<Complex> other, Matrix1<Complex> result)
         {
             // diagonal - diagonal = diagonal
             var diagOther = other as DiagonalMatrix;
@@ -285,7 +285,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        protected override void DoMultiply(Complex scalar, Matrix<Complex> result)
+        protected override void DoMultiply(Complex scalar, Matrix1<Complex> result)
         {
             if (scalar == 0.0)
             {
@@ -315,7 +315,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Vector<Complex> rightSide, Vector<Complex> result)
+        protected override void DoMultiply(Vector1<Complex> rightSide, Vector1<Complex> result)
         {
             var d = Math.Min(ColumnCount, RowCount);
             if (d < RowCount)
@@ -345,7 +345,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Matrix<Complex> other, Matrix<Complex> result)
+        protected override void DoMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
             var diagonalOther = other as DiagonalMatrix;
             var diagonalResult = result as DiagonalMatrix;
@@ -398,7 +398,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeAndMultiply(Matrix<Complex> other, Matrix<Complex> result)
+        protected override void DoTransposeAndMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
             var diagonalOther = other as DiagonalMatrix;
             var diagonalResult = result as DiagonalMatrix;
@@ -442,7 +442,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoConjugateTransposeAndMultiply(Matrix<Complex> other, Matrix<Complex> result)
+        protected override void DoConjugateTransposeAndMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
             var diagonalOther = other as DiagonalMatrix;
             var diagonalResult = result as DiagonalMatrix;
@@ -488,7 +488,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Matrix<Complex> other, Matrix<Complex> result)
+        protected override void DoTransposeThisAndMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
             var diagonalOther = other as DiagonalMatrix;
             var diagonalResult = result as DiagonalMatrix;
@@ -541,7 +541,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoConjugateTransposeThisAndMultiply(Matrix<Complex> other, Matrix<Complex> result)
+        protected override void DoConjugateTransposeThisAndMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
             var diagonalOther = other as DiagonalMatrix;
             var diagonalResult = result as DiagonalMatrix;
@@ -593,7 +593,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Vector<Complex> rightSide, Vector<Complex> result)
+        protected override void DoTransposeThisAndMultiply(Vector1<Complex> rightSide, Vector1<Complex> result)
         {
             var d = Math.Min(ColumnCount, RowCount);
             if (d < ColumnCount)
@@ -623,7 +623,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoConjugateTransposeThisAndMultiply(Vector<Complex> rightSide, Vector<Complex> result)
+        protected override void DoConjugateTransposeThisAndMultiply(Vector1<Complex> rightSide, Vector1<Complex> result)
         {
             var d = Math.Min(ColumnCount, RowCount);
             if (d < ColumnCount)
@@ -655,7 +655,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="divisor">The scalar to divide the matrix with.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivide(Complex divisor, Matrix<Complex> result)
+        protected override void DoDivide(Complex divisor, Matrix1<Complex> result)
         {
             if (divisor == Complex.One)
             {
@@ -682,7 +682,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="dividend">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivideByThis(Complex dividend, Matrix<Complex> result)
+        protected override void DoDivideByThis(Complex dividend, Matrix1<Complex> result)
         {
             var diagResult = result as DiagonalMatrix;
             if (diagResult != null)
@@ -725,7 +725,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <returns>The elements of the diagonal.</returns>
         /// <remarks>For non-square matrices, the method returns Min(Rows, Columns) elements where
         /// i == j (i is the row index, and j is the column index).</remarks>
-        public override Vector<Complex> Diagonal()
+        public override Vector1<Complex> Diagonal()
         {
             return new DenseVector(_data).Clone();
         }
@@ -758,7 +758,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// equal Min(Rows, Columns).</exception>
         /// <remarks>For non-square matrices, the elements of <paramref name="source"/> are copied to
         /// this[i,i].</remarks>
-        public override void SetDiagonal(Vector<Complex> source)
+        public override void SetDiagonal(Vector1<Complex> source)
         {
             var denseSource = source as DenseVector;
             if (denseSource == null)
@@ -822,7 +822,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <exception cref="ArgumentException">If <see cref="DiagonalMatrix"/> is not a square matrix.</exception>
         /// <exception cref="ArgumentException">If <see cref="DiagonalMatrix"/> is singular.</exception>
         /// <returns>The inverse of this matrix.</returns>
-        public override Matrix<Complex> Inverse()
+        public override Matrix1<Complex> Inverse()
         {
             if (RowCount != ColumnCount)
             {
@@ -849,7 +849,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Returns a new matrix containing the lower triangle of this matrix.
         /// </summary>
         /// <returns>The lower triangle of this matrix.</returns>
-        public override Matrix<Complex> LowerTriangle()
+        public override Matrix1<Complex> LowerTriangle()
         {
             return Clone();
         }
@@ -859,7 +859,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void LowerTriangle(Matrix<Complex> result)
+        public override void LowerTriangle(Matrix1<Complex> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -883,7 +883,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// does not contain the diagonal elements of this matrix.
         /// </summary>
         /// <returns>The lower triangle of this matrix.</returns>
-        public override Matrix<Complex> StrictlyLowerTriangle()
+        public override Matrix1<Complex> StrictlyLowerTriangle()
         {
             return new DiagonalMatrix(RowCount, ColumnCount);
         }
@@ -893,7 +893,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void StrictlyLowerTriangle(Matrix<Complex> result)
+        public override void StrictlyLowerTriangle(Matrix1<Complex> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -907,7 +907,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Returns a new matrix containing the upper triangle of this matrix.
         /// </summary>
         /// <returns>The upper triangle of this matrix.</returns>
-        public override Matrix<Complex> UpperTriangle()
+        public override Matrix1<Complex> UpperTriangle()
         {
             return Clone();
         }
@@ -917,7 +917,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void UpperTriangle(Matrix<Complex> result)
+        public override void UpperTriangle(Matrix1<Complex> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -936,7 +936,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// does not contain the diagonal elements of this matrix.
         /// </summary>
         /// <returns>The upper triangle of this matrix.</returns>
-        public override Matrix<Complex> StrictlyUpperTriangle()
+        public override Matrix1<Complex> StrictlyUpperTriangle()
         {
             return new DiagonalMatrix(RowCount, ColumnCount);
         }
@@ -946,7 +946,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void StrictlyUpperTriangle(Matrix<Complex> result)
+        public override void StrictlyUpperTriangle(Matrix1<Complex> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -972,10 +972,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <item><c>(rowIndex + rowLength) &gt;= Rows</c></item></list></exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowCount"/> or <paramref name="columnCount"/>
         /// is not positive.</exception>
-        public override Matrix<Complex> SubMatrix(int rowIndex, int rowCount, int columnIndex, int columnCount)
+        public override Matrix1<Complex> SubMatrix(int rowIndex, int rowCount, int columnIndex, int columnCount)
         {
             var target = rowIndex == columnIndex
-                ? (Matrix<Complex>)new DiagonalMatrix(rowCount, columnCount)
+                ? (Matrix1<Complex>)new DiagonalMatrix(rowCount, columnCount)
                 : new SparseMatrix(rowCount, columnCount);
 
             Storage.CopySubMatrixTo(target.Storage, rowIndex, 0, rowCount, columnIndex, 0, columnCount, ExistingData.AssumeZeros);

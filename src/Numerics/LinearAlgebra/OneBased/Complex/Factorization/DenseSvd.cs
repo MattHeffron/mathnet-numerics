@@ -75,7 +75,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             return new DenseSvd(s, u, vt, computeVectors);
         }
 
-        DenseSvd(Vector<Complex> s, Matrix<Complex> u, Matrix<Complex> vt, bool vectorsComputed)
+        DenseSvd(Vector1<Complex> s, Matrix1<Complex> u, Matrix1<Complex> vt, bool vectorsComputed)
             : base(s, u, vt, vectorsComputed)
         {
         }
@@ -85,7 +85,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<Complex> input, Matrix<Complex> result)
+        public override void Solve(Matrix1<Complex> input, Matrix1<Complex> result)
         {
             if (!VectorsComputed)
             {
@@ -130,7 +130,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<Complex> input, Vector<Complex> result)
+        public override void Solve(Vector1<Complex> input, Vector1<Complex> result)
         {
             if (!VectorsComputed)
             {

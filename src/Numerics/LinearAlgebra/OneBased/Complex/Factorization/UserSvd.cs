@@ -64,14 +64,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="computeVectors">Compute the singular U and VT vectors or not.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="NonConvergenceException"></exception>
-        public static UserSvd Create(Matrix<Complex> matrix, bool computeVectors)
+        public static UserSvd Create(Matrix1<Complex> matrix, bool computeVectors)
         {
             var nm = Math.Min(matrix.RowCount + 1, matrix.ColumnCount);
             var matrixCopy = matrix.Clone();
 
-            var s = Vector<Complex>.Build.SameAs(matrixCopy, nm);
-            var u = Matrix<Complex>.Build.SameAs(matrixCopy, matrixCopy.RowCount, matrixCopy.RowCount);
-            var vt = Matrix<Complex>.Build.SameAs(matrixCopy, matrixCopy.ColumnCount, matrixCopy.ColumnCount);
+            var s = Vector1<Complex>.Build.SameAs(matrixCopy, nm);
+            var u = Matrix1<Complex>.Build.SameAs(matrixCopy, matrixCopy.RowCount, matrixCopy.RowCount);
+            var vt = Matrix1<Complex>.Build.SameAs(matrixCopy, matrixCopy.ColumnCount, matrixCopy.ColumnCount);
 
             const int maxiter = 1000;
             var e = new Complex[matrixCopy.ColumnCount];
@@ -592,7 +592,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             if (matrixCopy.RowCount < matrixCopy.ColumnCount)
             {
                 nm--;
-                var tmp = Vector<Complex>.Build.SameAs(matrixCopy, nm);
+                var tmp = Vector1<Complex>.Build.SameAs(matrixCopy, nm);
                 for (i = 0; i < nm; i++)
                 {
                     tmp[i] = s[i];
@@ -604,7 +604,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             return new UserSvd(s, u, vt, computeVectors);
         }
 
-        UserSvd(Vector<Complex> s, Matrix<Complex> u, Matrix<Complex> vt, bool vectorsComputed)
+        UserSvd(Vector1<Complex> s, Matrix1<Complex> u, Matrix1<Complex> vt, bool vectorsComputed)
             : base(s, u, vt, vectorsComputed)
         {
         }
@@ -627,7 +627,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="rowCount">The number of rows in <paramref name="a"/></param>
         /// <param name="columnA">Column A index to swap</param>
         /// <param name="columnB">Column B index to swap</param>
-        static void Swap(Matrix<Complex> a, int rowCount, int columnA, int columnB)
+        static void Swap(Matrix1<Complex> a, int rowCount, int columnA, int columnB)
         {
             for (var i = 0; i < rowCount; i++)
             {
@@ -645,7 +645,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="column">Column to scale</param>
         /// <param name="rowStart">Row to scale from</param>
         /// <param name="z">Scale value</param>
-        static void CscalColumn(Matrix<Complex> a, int rowCount, int column, int rowStart, Complex z)
+        static void CscalColumn(Matrix1<Complex> a, int rowCount, int column, int rowStart, Complex z)
         {
             for (var i = rowStart; i < rowCount; i++)
             {
@@ -732,7 +732,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="column">Column index</param>
         /// <param name="rowStart">Start row index</param>
         /// <returns>Norm2 (Euclidean norm) of the column</returns>
-        static double Cnrm2Column(Matrix<Complex> a, int rowCount, int column, int rowStart)
+        static double Cnrm2Column(Matrix1<Complex> a, int rowCount, int column, int rowStart)
         {
             var s = 0.0;
             for (var i = rowStart; i < rowCount; i++)
@@ -769,7 +769,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="columnB">Index of column B</param>
         /// <param name="rowStart">Starting row index</param>
         /// <returns>Dot product value</returns>
-        static Complex Cdotc(Matrix<Complex> a, int rowCount, int columnA, int columnB, int rowStart)
+        static Complex Cdotc(Matrix1<Complex> a, int rowCount, int columnA, int columnB, int rowStart)
         {
             var z = Complex.Zero;
             for (var i = rowStart; i < rowCount; i++)
@@ -790,7 +790,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="columnB">Index of column B</param>
         /// <param name="c">scalar cos value</param>
         /// <param name="s">scalar sin value</param>
-        static void Csrot(Matrix<Complex> a, int rowCount, int columnA, int columnB, double c, double s)
+        static void Csrot(Matrix1<Complex> a, int rowCount, int columnA, int columnB, double c, double s)
         {
             for (var i = 0; i < rowCount; i++)
             {
@@ -806,7 +806,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<Complex> input, Matrix<Complex> result)
+        public override void Solve(Matrix1<Complex> input, Matrix1<Complex> result)
         {
             if (!VectorsComputed)
             {
@@ -872,7 +872,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<Complex> input, Vector<Complex> result)
+        public override void Solve(Vector1<Complex> input, Vector1<Complex> result)
         {
             if (!VectorsComputed)
             {

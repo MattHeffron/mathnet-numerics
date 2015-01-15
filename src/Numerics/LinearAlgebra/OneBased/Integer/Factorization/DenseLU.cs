@@ -73,7 +73,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////return new DenseLU(factors, pivots);
         }
 
-        DenseLU(Matrix<int> factors, int[] pivots)
+        DenseLU(Matrix1<int> factors, int[] pivots)
             : base(factors, pivots)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -84,7 +84,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <c>B</c>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <c>X</c>.</param>
-        public override void Solve(Matrix<int> input, Matrix<int> result)
+        public override void Solve(Matrix1<int> input, Matrix1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -140,7 +140,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <c>b</c>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <c>x</c>.</param>
-        public override void Solve(Vector<int> input, Vector<int> result)
+        public override void Solve(Vector1<int> input, Vector1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);
@@ -190,7 +190,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// Returns the inverse of this matrix. The inverse is calculated using LU decomposition.
         /// </summary>
         /// <returns>The inverse of this matrix.</returns>
-        public override Matrix<int> Inverse()
+        public override Matrix1<int> Inverse()
         {
             // Shouldn't be possible since this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

@@ -45,7 +45,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
     /// </remarks>
     internal abstract class Cholesky : Cholesky<float>
     {
-        protected Cholesky(Matrix<float> factor)
+        protected Cholesky(Matrix1<float> factor)
             : base(factor)
         {
         }

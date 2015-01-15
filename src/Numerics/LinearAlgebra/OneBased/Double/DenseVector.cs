@@ -96,7 +96,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// This new vector will be independent from the other vector.
         /// A new memory block will be allocated for storing the vector.
         /// </summary>
-        public static DenseVector OfVector(Vector<double> vector)
+        public static DenseVector OfVector(Vector1<double> vector)
         {
             return new DenseVector(DenseVectorStorage<double>.OfVector(vector.Storage));
         }
@@ -170,7 +170,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <summary>
         /// Returns a reference to the internal data structure.
         /// </summary>
-        /// <param name="vector">The <c>DenseVector</c> whose internal data we are
+        /// <param name="vector">The <c>DenseVector1</c> whose internal data we are
         /// returning.</param>
         /// <returns>
         /// A reference to the internal date of the given vector.
@@ -188,9 +188,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <summary>
         /// Returns a vector bound directly to a reference of the provided array.
         /// </summary>
-        /// <param name="array">The array to bind to the <c>DenseVector</c> object.</param>
+        /// <param name="array">The array to bind to the <c>DenseVector1</c> object.</param>
         /// <returns>
-        /// A <c>DenseVector</c> whose values are bound to the given array.
+        /// A <c>DenseVector1</c> whose values are bound to the given array.
         /// </returns>
         public static implicit operator DenseVector(double[] array)
         {
@@ -207,7 +207,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="scalar">The scalar to add.</param>
         /// <param name="result">The vector to store the result of the addition.</param>
-        protected override void DoAdd(double scalar, Vector<double> result)
+        protected override void DoAdd(double scalar, Vector1<double> result)
         {
             var dense = result as DenseVector;
             if (dense == null)
@@ -231,7 +231,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="other">The vector to add to this one.</param>
         /// <param name="result">The vector to store the result of the addition.</param>
-        protected override void DoAdd(Vector<double> other, Vector<double> result)
+        protected override void DoAdd(Vector1<double> other, Vector1<double> result)
         {
             var otherDense = other as DenseVector;
             var resultDense = result as DenseVector;
@@ -279,7 +279,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="scalar">The scalar to subtract.</param>
         /// <param name="result">The vector to store the result of the subtraction.</param>
-        protected override void DoSubtract(double scalar, Vector<double> result)
+        protected override void DoSubtract(double scalar, Vector1<double> result)
         {
             var dense = result as DenseVector;
             if (dense == null)
@@ -303,7 +303,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="other">The vector to subtract from this one.</param>
         /// <param name="result">The vector to store the result of the subtraction.</param>
-        protected override void DoSubtract(Vector<double> other, Vector<double> result)
+        protected override void DoSubtract(Vector1<double> other, Vector1<double> result)
         {
             var otherDense = other as DenseVector;
             var resultDense = result as DenseVector;
@@ -319,7 +319,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         }
 
         /// <summary>
-        /// Returns a <strong>Vector</strong> containing the negated values of <paramref name="rightSide"/>.
+        /// Returns a <strong>Vector1</strong> containing the negated values of <paramref name="rightSide"/>.
         /// </summary>
         /// <param name="rightSide">The vector to get the values from.</param>
         /// <returns>A vector containing the negated values as <paramref name="rightSide"/>.</returns>
@@ -356,7 +356,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// Negates vector and saves result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoNegate(Vector<double> result)
+        protected override void DoNegate(Vector1<double> result)
         {
             var denseResult = result as DenseVector;
             if (denseResult == null)
@@ -374,7 +374,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="scalar">The scalar to multiply.</param>
         /// <param name="result">The vector to store the result of the multiplication.</param>
         /// <remarks></remarks>
-        protected override void DoMultiply(double scalar, Vector<double> result)
+        protected override void DoMultiply(double scalar, Vector1<double> result)
         {
             var denseResult = result as DenseVector;
             if (denseResult == null)
@@ -391,7 +391,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of a[i]*b[i] for all i.</returns>
-        protected override double DoDotProduct(Vector<double> other)
+        protected override double DoDotProduct(Vector1<double> other)
         {
             var denseVector = other as DenseVector;
             return denseVector == null
@@ -474,7 +474,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="divisor">The divisor to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoModulus(double divisor, Vector<double> result)
+        protected override void DoModulus(double divisor, Vector1<double> result)
         {
             var dense = result as DenseVector;
             if (dense == null)
@@ -499,7 +499,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="divisor">The divisor to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoRemainder(double divisor, Vector<double> result)
+        protected override void DoRemainder(double divisor, Vector1<double> result)
         {
             var dense = result as DenseVector;
             if (dense == null)
@@ -708,7 +708,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="other">The vector to pointwise divide this one by.</param>
         /// <param name="result">The vector to store the result of the pointwise division.</param>
-        protected override void DoPointwiseMultiply(Vector<double> other, Vector<double> result)
+        protected override void DoPointwiseMultiply(Vector1<double> other, Vector1<double> result)
         {
             var denseOther = other as DenseVector;
             var denseResult = result as DenseVector;
@@ -729,7 +729,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="divisor">The vector to pointwise divide this one by.</param>
         /// <param name="result">The vector to store the result of the pointwise division.</param>
         /// <remarks></remarks>
-        protected override void DoPointwiseDivide(Vector<double> divisor, Vector<double> result)
+        protected override void DoPointwiseDivide(Vector1<double> divisor, Vector1<double> result)
         {
             var denseOther = divisor as DenseVector;
             var denseResult = result as DenseVector;

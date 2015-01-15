@@ -65,7 +65,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
             return new DenseCholesky(factor);
         }
 
-        DenseCholesky(Matrix<double> factor)
+        DenseCholesky(Matrix1<double> factor)
             : base(factor)
         {
         }
@@ -75,7 +75,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<double> input, Matrix<double> result)
+        public override void Solve(Matrix1<double> input, Matrix1<double> result)
         {
             if (result.RowCount != input.RowCount)
             {
@@ -117,7 +117,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<double> input, Vector<double> result)
+        public override void Solve(Vector1<double> input, Vector1<double> result)
         {
             if (input.Count != result.Count)
             {

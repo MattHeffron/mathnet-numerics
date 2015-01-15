@@ -78,7 +78,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         /// <summary>
         /// The collection of starting vectors which are used as the basis for the Krylov sub-space.
         /// </summary>
-        IList<Vector<Complex>> _startingVectors;
+        IList<Vector1<Complex>> _startingVectors;
 
         /// <summary>
         /// The number of starting vectors used by the algorithm
@@ -121,7 +121,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         /// Gets or sets a series of orthonormal vectors which will be used as basis for the 
         /// Krylov sub-space.
         /// </summary>
-        public IList<Vector<Complex>> StartingVectors
+        public IList<Vector1<Complex>> StartingVectors
         {
             [DebuggerStepThrough]
             get { return _startingVectors; }
@@ -163,7 +163,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         ///  the <paramref name="numberOfVariables"/> is smaller than 
         ///  the <paramref name="maximumNumberOfStartingVectors"/>.
         /// </returns>
-        static IList<Vector<Complex>> CreateStartingVectors(int maximumNumberOfStartingVectors, int numberOfVariables)
+        static IList<Vector1<Complex>> CreateStartingVectors(int maximumNumberOfStartingVectors, int numberOfVariables)
         {
             // Create no more starting vectors than the size of the problem - 1
             // Get random values and then orthogonalize them with
@@ -194,7 +194,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
             var orthogonalMatrix = gs.Q;
 
             // Now transfer this to vectors
-            var result = new List<Vector<Complex>>();
+            var result = new List<Vector1<Complex>>();
             for (var i = 0; i < orthogonalMatrix.ColumnCount; i++)
             {
                 result.Add(orthogonalMatrix.Column(i));
@@ -212,9 +212,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         /// <param name="arraySize">Number of vectors</param>
         /// <param name="vectorSize">Size of each vector</param>
         /// <returns>Array of random vectors</returns>
-        static Vector<Complex>[] CreateVectorArray(int arraySize, int vectorSize)
+        static Vector1<Complex>[] CreateVectorArray(int arraySize, int vectorSize)
         {
-            var result = new Vector<Complex>[arraySize];
+            var result = new Vector1<Complex>[arraySize];
             for (var i = 0; i < result.Length; i++)
             {
                 result[i] = new DenseVector(vectorSize);
@@ -230,7 +230,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         /// <param name="residual">Residual <see cref="Vector"/> data.</param>
         /// <param name="x">x <see cref="Vector"/> data.</param>
         /// <param name="b">b <see cref="Vector"/> data.</param>
-        static void CalculateTrueResidual(Matrix<Complex> matrix, Vector<Complex> residual, Vector<Complex> x, Vector<Complex> b)
+        static void CalculateTrueResidual(Matrix1<Complex> matrix, Vector1<Complex> residual, Vector1<Complex> x, Vector1<Complex> b)
         {
             // -Ax = residual
             matrix.Multiply(x, residual);
@@ -249,7 +249,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         /// <param name="result">The result vector, <c>x</c></param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public void Solve(Matrix<Complex> matrix, Vector<Complex> input, Vector<Complex> result, Iterator<Complex> iterator, IPreconditioner<Complex> preconditioner)
+        public void Solve(Matrix1<Complex> matrix, Vector1<Complex> input, Vector1<Complex> result, Iterator<Complex> iterator, IPreconditioner<Complex> preconditioner)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {

@@ -57,15 +57,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// <param name="computeVectors">Compute the singular U and VT vectors or not.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="NonConvergenceException"></exception>
-        public static UserSvd Create(Matrix<int> matrix, bool computeVectors)
+        public static UserSvd Create(Matrix1<int> matrix, bool computeVectors)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
             ////var nm = Math.Min(matrix.RowCount + 1, matrix.ColumnCount);
             ////var matrixCopy = matrix.Clone();
 
-            ////var s = Vector<int>.Build.SameAs(matrixCopy, nm);
-            ////var u = Matrix<int>.Build.SameAs(matrixCopy, matrixCopy.RowCount, matrixCopy.RowCount);
-            ////var vt = Matrix<int>.Build.SameAs(matrixCopy, matrixCopy.ColumnCount, matrixCopy.ColumnCount);
+            ////var s = Vector1<int>.Build.SameAs(matrixCopy, nm);
+            ////var u = Matrix1<int>.Build.SameAs(matrixCopy, matrixCopy.RowCount, matrixCopy.RowCount);
+            ////var vt = Matrix1<int>.Build.SameAs(matrixCopy, matrixCopy.ColumnCount, matrixCopy.ColumnCount);
 
             ////const int maxiter = 1000;
             ////var e = new int[matrixCopy.ColumnCount];
@@ -571,7 +571,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////if (matrixCopy.RowCount < matrixCopy.ColumnCount)
             ////{
             ////    nm--;
-            ////    var tmp = Vector<int>.Build.SameAs(matrixCopy, nm);
+            ////    var tmp = Vector1<int>.Build.SameAs(matrixCopy, nm);
             ////    for (i = 0; i < nm; i++)
             ////    {
             ////        tmp[i] = s[i];
@@ -583,7 +583,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             ////return new UserSvd(s, u, vt, computeVectors);
         }
 
-        UserSvd(Vector<int> s, Matrix<int> u, Matrix<int> vt, bool vectorsComputed)
+        UserSvd(Vector1<int> s, Matrix1<int> u, Matrix1<int> vt, bool vectorsComputed)
             : base(s, u, vt, vectorsComputed)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -607,7 +607,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// <param name="rowCount">The number of rows in <paramref name="a"/></param>
         /////// <param name="columnA">Column A index to swap</param>
         /////// <param name="columnB">Column B index to swap</param>
-        ////static void Dswap(Matrix<int> a, int rowCount, int columnA, int columnB)
+        ////static void Dswap(Matrix1<int> a, int rowCount, int columnA, int columnB)
         ////{
         ////    for (var i = 0; i < rowCount; i++)
         ////    {
@@ -625,7 +625,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// <param name="column">Column to scale</param>
         /////// <param name="rowStart">Row to scale from</param>
         /////// <param name="z">Scale value</param>
-        ////static void DscalColumn(Matrix<int> a, int rowCount, int column, int rowStart, int z)
+        ////static void DscalColumn(Matrix1<int> a, int rowCount, int column, int rowStart, int z)
         ////{
         ////    for (var i = rowStart; i < rowCount; i++)
         ////    {
@@ -712,7 +712,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// <param name="column">Column index</param>
         /////// <param name="rowStart">Start row index</param>
         /////// <returns>Norm2 (Euclidean norm) of the column</returns>
-        ////static int Dnrm2Column(Matrix<int> a, int rowCount, int column, int rowStart)
+        ////static int Dnrm2Column(Matrix1<int> a, int rowCount, int column, int rowStart)
         ////{
         ////    int s = 0;
         ////    for (var i = rowStart; i < rowCount; i++)
@@ -749,7 +749,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// <param name="columnB">Index of column B</param>
         /////// <param name="rowStart">Starting row index</param>
         /////// <returns>Dot product value</returns>
-        ////static int Ddot(Matrix<int> a, int rowCount, int columnA, int columnB, int rowStart)
+        ////static int Ddot(Matrix1<int> a, int rowCount, int columnA, int columnB, int rowStart)
         ////{
         ////    var z = 0.0f;
         ////    for (var i = rowStart; i < rowCount; i++)
@@ -770,7 +770,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /////// <param name="columnB">Index of column B</param>
         /////// <param name="c">Scalar "c" value</param>
         /////// <param name="s">Scalar "s" value</param>
-        ////static void Drot(Matrix<int> a, int rowCount, int columnA, int columnB, int c, int s)
+        ////static void Drot(Matrix1<int> a, int rowCount, int columnA, int columnB, int c, int s)
         ////{
         ////    for (var i = 0; i < rowCount; i++)
         ////    {
@@ -786,7 +786,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix<int> input, Matrix<int> result)
+        public override void Solve(Matrix1<int> input, Matrix1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -854,7 +854,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector<int> input, Vector<int> result)
+        public override void Solve(Vector1<int> input, Vector1<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);
