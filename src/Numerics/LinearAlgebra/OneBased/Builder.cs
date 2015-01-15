@@ -32,8 +32,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Distributions;
-using MathNet.Numerics.LinearAlgebra.Solvers;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Solvers;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Random;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Double

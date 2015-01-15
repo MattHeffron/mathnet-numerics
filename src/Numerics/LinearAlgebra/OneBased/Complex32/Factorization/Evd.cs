@@ -29,7 +29,7 @@
 // </copyright>
 
 using System;
-using MathNet.Numerics.LinearAlgebra.Factorization;
+using MathNet.Numerics.LinearAlgebra.OneBased.Factorization;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
 {

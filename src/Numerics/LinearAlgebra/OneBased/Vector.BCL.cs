@@ -34,7 +34,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Properties;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased

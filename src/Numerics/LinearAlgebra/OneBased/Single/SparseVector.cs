@@ -28,7 +28,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 // </copyright>
 
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Threading;
 using System;
 using System.Collections.Generic;

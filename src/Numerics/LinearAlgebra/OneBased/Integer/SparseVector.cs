@@ -33,7 +33,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Threading;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer

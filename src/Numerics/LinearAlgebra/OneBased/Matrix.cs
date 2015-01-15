@@ -32,7 +32,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Properties;
 using MathNet.Numerics.Threading;
 

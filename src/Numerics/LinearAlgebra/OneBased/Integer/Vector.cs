@@ -29,7 +29,7 @@
 // </copyright>
 
 using System;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Threading;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer

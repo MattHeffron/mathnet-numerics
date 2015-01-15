@@ -33,7 +33,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using MathNet.Numerics.Distributions;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Properties;
 using MathNet.Numerics.Threading;
 

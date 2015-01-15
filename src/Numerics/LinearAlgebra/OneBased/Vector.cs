@@ -32,7 +32,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Properties;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased

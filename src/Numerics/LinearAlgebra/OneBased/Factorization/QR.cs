@@ -35,17 +35,19 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
     /// <summary>
     /// The type of QR factorization go perform.
     /// </summary>
+	/// <remarks>There's no way to universally alias QRMethod in this namespace 
+	/// to QRMethod in a different namespace, so "copy" the values.</remarks>
     public enum QRMethod
     {
         /// <summary>
         /// Compute the full QR factorization of a matrix.
         /// </summary>
-        Full = 0,
+		Full = LinearAlgebra.Factorization.QRMethod.Full,
 
         /// <summary>
         /// Compute the thin QR factorization of a matrix.
         /// </summary>
-        Thin = 1
+		Thin = LinearAlgebra.Factorization.QRMethod.Thin
     }
 
     /// <summary>

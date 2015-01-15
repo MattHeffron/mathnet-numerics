@@ -29,8 +29,8 @@
 // </copyright>
 
 using System;
-using MathNet.Numerics.LinearAlgebra.Factorization;
-using MathNet.Numerics.LinearAlgebra.Solvers;
+using MathNet.Numerics.LinearAlgebra.OneBased.Factorization;
+using MathNet.Numerics.LinearAlgebra.OneBased.Solvers;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased
 {

@@ -30,7 +30,7 @@
 
 using System;
 using System.Collections.Generic;
-using MathNet.Numerics.LinearAlgebra.Solvers;
+using MathNet.Numerics.LinearAlgebra.OneBased.Solvers;
 using MathNet.Numerics.Properties;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers

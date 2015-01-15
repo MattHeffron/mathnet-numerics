@@ -29,7 +29,7 @@
 // </copyright>
 
 using MathNet.Numerics.Distributions;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Threading;
 using System;
 using System.Collections.Generic;

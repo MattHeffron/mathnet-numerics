@@ -29,8 +29,8 @@
 // </copyright>
 
 using System;
-using MathNet.Numerics.LinearAlgebra.Solvers;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Solvers;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Properties;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Solvers

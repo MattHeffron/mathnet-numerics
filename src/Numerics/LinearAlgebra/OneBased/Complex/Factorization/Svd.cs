@@ -30,7 +30,7 @@
 
 using System;
 using System.Linq;
-using MathNet.Numerics.LinearAlgebra.Factorization;
+using MathNet.Numerics.LinearAlgebra.OneBased.Factorization;
 using MathNet.Numerics.Properties;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization

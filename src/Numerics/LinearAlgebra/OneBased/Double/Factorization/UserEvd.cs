@@ -77,7 +77,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
             // Initialize matricies for eigenvalues and eigenvectors
             var eigenVectors = Matrix<double>.Build.SameAs(matrix, order, order);
             var blockDiagonal = Matrix<double>.Build.SameAs(matrix, order, order);
-            var eigenValues = new LinearAlgebra.Complex.DenseVector(order);
+            var eigenValues = new LinearAlgebra.OneBased.Complex.DenseVector(order);
 
             bool isSymmetric;
             switch (symmetricity)

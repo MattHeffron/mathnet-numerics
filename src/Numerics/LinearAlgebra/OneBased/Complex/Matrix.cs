@@ -29,9 +29,9 @@
 // </copyright>
 
 using System;
-using MathNet.Numerics.LinearAlgebra.Complex.Factorization;
-using MathNet.Numerics.LinearAlgebra.Factorization;
-using MathNet.Numerics.LinearAlgebra.Storage;
+using MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization;
+using MathNet.Numerics.LinearAlgebra.OneBased.Factorization;
+using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 using MathNet.Numerics.Properties;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex

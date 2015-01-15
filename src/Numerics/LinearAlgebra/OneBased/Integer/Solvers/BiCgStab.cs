@@ -29,7 +29,7 @@
 // </copyright>
 
 using System;
-using MathNet.Numerics.LinearAlgebra.Solvers;
+using MathNet.Numerics.LinearAlgebra.OneBased.Solvers;
 using MathNet.Numerics.Properties;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
