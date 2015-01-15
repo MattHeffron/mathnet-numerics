@@ -4,7 +4,7 @@
 // http://github.com/mathnet/mathnet-numerics
 // http://mathnetnumerics.codeplex.com
 //
-// Copyright (c) 2009-2014 Math.NET
+// Copyright (c) 2009-2015 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -164,7 +164,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
 
         public virtual void ClearColumns(int[] columnIndices)
         {
-            for (var k = 0; k < ColumnCount; k++)
+            for (var k = 0; k < columnIndices.Length; k++)
             {
                 int column = columnIndices[k];
                 for (var i = 0; i < RowCount; i++)

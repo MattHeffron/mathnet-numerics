@@ -33,195 +33,195 @@ using MathNet.Numerics.Properties;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 {
-    // ReSharper disable UnusedParameter.Local
+	// ReSharper disable UnusedParameter.Local
 
-    public partial class MatrixStorage<T>
-    {
-        void ValidateRange(int row, int column)
-        {
-            if (row < 0 || row >= RowCount)
-            {
-                throw new ArgumentOutOfRangeException("row");
-            }
+	public partial class MatrixStorage<T>
+	{
+		void ValidateRange(int row, int column)
+		{
+			if (row <= 0 || row > RowCount)
+			{
+				throw new ArgumentOutOfRangeException("row");
+			}
 
-            if (column < 0 || column >= ColumnCount)
-            {
-                throw new ArgumentOutOfRangeException("column");
-            }
-        }
+			if (column <= 0 || column > ColumnCount)
+			{
+				throw new ArgumentOutOfRangeException("column");
+			}
+		}
 
-        void ValidateSubMatrixRange<TU>(MatrixStorage<TU> target,
-            int sourceRowIndex, int targetRowIndex, int rowCount,
-            int sourceColumnIndex, int targetColumnIndex, int columnCount)
-            where TU : struct, IEquatable<TU>, IFormattable
-        {
-            if (rowCount < 1)
-            {
-                throw new ArgumentOutOfRangeException("rowCount", Resources.ArgumentMustBePositive);
-            }
+		void ValidateSubMatrixRange<TU>(MatrixStorage<TU> target,
+			int sourceRowIndex, int targetRowIndex, int rowCount,
+			int sourceColumnIndex, int targetColumnIndex, int columnCount)
+			where TU : struct, IEquatable<TU>, IFormattable
+		{
+			if (rowCount < 0)
+			{
+				throw new ArgumentOutOfRangeException("rowCount", Resources.ArgumentNotNegative);
+			}
 
-            if (columnCount < 1)
-            {
-                throw new ArgumentOutOfRangeException("columnCount", Resources.ArgumentMustBePositive);
-            }
+			if (columnCount < 0)
+			{
+				throw new ArgumentOutOfRangeException("columnCount", Resources.ArgumentNotNegative);
+			}
 
-            // Verify Source
+			// Verify Source
 
-            if (sourceRowIndex >= RowCount || sourceRowIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("sourceRowIndex");
-            }
+			if (sourceRowIndex > RowCount || sourceRowIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("sourceRowIndex");
+			}
 
-            if (sourceColumnIndex >= ColumnCount || sourceColumnIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("sourceColumnIndex");
-            }
+			if (sourceColumnIndex > ColumnCount || sourceColumnIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("sourceColumnIndex");
+			}
 
-            var sourceRowMax = sourceRowIndex + rowCount;
-            var sourceColumnMax = sourceColumnIndex + columnCount;
+			var sourceRowMax = sourceRowIndex + rowCount - 1;
+			var sourceColumnMax = sourceColumnIndex + columnCount - 1;
 
-            if (sourceRowMax > RowCount)
-            {
-                throw new ArgumentOutOfRangeException("rowCount");
-            }
+			if (sourceRowMax > RowCount)
+			{
+				throw new ArgumentOutOfRangeException("rowCount");
+			}
 
-            if (sourceColumnMax > ColumnCount)
-            {
-                throw new ArgumentOutOfRangeException("columnCount");
-            }
+			if (sourceColumnMax > ColumnCount)
+			{
+				throw new ArgumentOutOfRangeException("columnCount");
+			}
 
-            // Verify Target
+			// Verify Target
 
-            if (targetRowIndex >= target.RowCount || targetRowIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("targetRowIndex");
-            }
+			if (targetRowIndex > target.RowCount || targetRowIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("targetRowIndex");
+			}
 
-            if (targetColumnIndex >= target.ColumnCount || targetColumnIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("targetColumnIndex");
-            }
+			if (targetColumnIndex > target.ColumnCount || targetColumnIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("targetColumnIndex");
+			}
 
-            var targetRowMax = targetRowIndex + rowCount;
-            var targetColumnMax = targetColumnIndex + columnCount;
+			var targetRowMax = targetRowIndex + rowCount - 1;
+			var targetColumnMax = targetColumnIndex + columnCount - 1;
 
-            if (targetRowMax > target.RowCount)
-            {
-                throw new ArgumentOutOfRangeException("rowCount");
-            }
+			if (targetRowMax > target.RowCount)
+			{
+				throw new ArgumentOutOfRangeException("rowCount");
+			}
 
-            if (targetColumnMax > target.ColumnCount)
-            {
-                throw new ArgumentOutOfRangeException("columnCount");
-            }
-        }
+			if (targetColumnMax > target.ColumnCount)
+			{
+				throw new ArgumentOutOfRangeException("columnCount");
+			}
+		}
 
-        void ValidateRowRange<TU>(VectorStorage<TU> target, int rowIndex)
-            where TU : struct, IEquatable<TU>, IFormattable
-        {
-            if (rowIndex >= RowCount || rowIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("rowIndex");
-            }
+		void ValidateRowRange<TU>(VectorStorage<TU> target, int rowIndex)
+			where TU : struct, IEquatable<TU>, IFormattable
+		{
+			if (rowIndex > RowCount || rowIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("rowIndex");
+			}
 
-            if (ColumnCount != target.Length)
-            {
-                throw new ArgumentException(Resources.ArgumentMatrixSameRowDimension, "target");
-            }
-        }
+			if (ColumnCount != target.Length)
+			{
+				throw new ArgumentException(Resources.ArgumentMatrixSameRowDimension, "target");
+			}
+		}
 
-        void ValidateColumnRange<TU>(VectorStorage<TU> target, int columnIndex)
-            where TU : struct, IEquatable<TU>, IFormattable
-        {
-            if (columnIndex >= ColumnCount || columnIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("columnIndex");
-            }
+		void ValidateColumnRange<TU>(VectorStorage<TU> target, int columnIndex)
+			where TU : struct, IEquatable<TU>, IFormattable
+		{
+			if (columnIndex > ColumnCount || columnIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("columnIndex");
+			}
 
-            if (RowCount != target.Length)
-            {
-                throw new ArgumentException(Resources.ArgumentMatrixSameColumnDimension, "target");
-            }
-        }
+			if (RowCount != target.Length)
+			{
+				throw new ArgumentException(Resources.ArgumentMatrixSameColumnDimension, "target");
+			}
+		}
 
-        void ValidateSubRowRange<TU>(VectorStorage<TU> target, int rowIndex,
-            int sourceColumnIndex, int targetColumnIndex, int columnCount)
-            where TU : struct, IEquatable<TU>, IFormattable
-        {
-            if (columnCount < 1)
-            {
-                throw new ArgumentOutOfRangeException("columnCount", Resources.ArgumentMustBePositive);
-            }
+		void ValidateSubRowRange<TU>(VectorStorage<TU> target, int rowIndex,
+			int sourceColumnIndex, int targetColumnIndex, int columnCount)
+			where TU : struct, IEquatable<TU>, IFormattable
+		{
+			if (columnCount < 0)
+			{
+				throw new ArgumentOutOfRangeException("columnCount", Resources.ArgumentNotNegative);
+			}
 
-            // Verify Source
+			// Verify Source
 
-            if (rowIndex >= RowCount || rowIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("rowIndex");
-            }
+			if (rowIndex > RowCount || rowIndex <= 0)
+			{
+				throw new ArgumentOutOfRangeException("rowIndex");
+			}
 
-            if (sourceColumnIndex >= ColumnCount || sourceColumnIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("sourceColumnIndex");
-            }
+			if (sourceColumnIndex > ColumnCount || sourceColumnIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("sourceColumnIndex");
+			}
 
-            if (sourceColumnIndex + columnCount > ColumnCount)
-            {
-                throw new ArgumentOutOfRangeException("columnCount");
-            }
+			if (sourceColumnIndex + columnCount - 1 > ColumnCount)
+			{
+				throw new ArgumentOutOfRangeException("columnCount");
+			}
 
-            // Verify Target
+			// Verify Target
 
-            if (targetColumnIndex >= target.Length || targetColumnIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("targetColumnIndex");
-            }
+			if (targetColumnIndex > target.Length || targetColumnIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("targetColumnIndex");
+			}
 
-            if (targetColumnIndex + columnCount > target.Length)
-            {
-                throw new ArgumentOutOfRangeException("columnCount");
-            }
-        }
+			if (targetColumnIndex + columnCount - 1 > target.Length)
+			{
+				throw new ArgumentOutOfRangeException("columnCount");
+			}
+		}
 
-        void ValidateSubColumnRange<TU>(VectorStorage<TU> target, int columnIndex,
-            int sourceRowIndex, int targetRowIndex, int rowCount)
-            where TU : struct, IEquatable<TU>, IFormattable
-        {
-            if (rowCount < 1)
-            {
-                throw new ArgumentOutOfRangeException("rowCount", Resources.ArgumentMustBePositive);
-            }
+		void ValidateSubColumnRange<TU>(VectorStorage<TU> target, int columnIndex,
+			int sourceRowIndex, int targetRowIndex, int rowCount)
+			where TU : struct, IEquatable<TU>, IFormattable
+		{
+			if (rowCount < 0)
+			{
+				throw new ArgumentOutOfRangeException("rowCount", Resources.ArgumentNotNegative);
+			}
 
-            // Verify Source
+			// Verify Source
 
-            if (columnIndex >= ColumnCount || columnIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("columnIndex");
-            }
+			if (columnIndex > ColumnCount || columnIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("columnIndex");
+			}
 
-            if (sourceRowIndex >= RowCount || sourceRowIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("sourceRowIndex");
-            }
+			if (sourceRowIndex > RowCount || sourceRowIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("sourceRowIndex");
+			}
 
-            if (sourceRowIndex + rowCount > RowCount)
-            {
-                throw new ArgumentOutOfRangeException("rowCount");
-            }
+			if (sourceRowIndex + rowCount - 1 > RowCount)
+			{
+				throw new ArgumentOutOfRangeException("rowCount");
+			}
 
-            // Verify Target
+			// Verify Target
 
-            if (targetRowIndex >= target.Length || targetRowIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException("targetRowIndex");
-            }
+			if (targetRowIndex > target.Length || targetRowIndex < 1)
+			{
+				throw new ArgumentOutOfRangeException("targetRowIndex");
+			}
 
-            if (targetRowIndex + rowCount > target.Length)
-            {
-                throw new ArgumentOutOfRangeException("rowCount");
-            }
-        }
-    }
+			if (targetRowIndex + rowCount - 1 > target.Length)
+			{
+				throw new ArgumentOutOfRangeException("rowCount");
+			}
+		}
+	}
 
-    // ReSharper restore UnusedParameter.Local
+	// ReSharper restore UnusedParameter.Local
 }

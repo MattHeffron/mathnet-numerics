@@ -45,9 +45,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         protected VectorStorage(int length)
         {
-            if (length <= 0)
+            if (length < 0)
             {
-                throw new ArgumentOutOfRangeException("length", Resources.ArgumentMustBePositive);
+				throw new ArgumentOutOfRangeException("length", Resources.ArgumentNotNegative);
             }
 
             Length = length;
@@ -100,7 +100,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual void Clear()
         {
-            for (var i = 0; i < Length; i++)
+            for (var i = 1; i <= Length; i++)
             {
                 At(i, Zero);
             }
@@ -142,7 +142,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             }
 
             // If all else fails, perform element wise comparison.
-            for (var index = 0; index < Length; index++)
+            for (var index = 1; index <= Length; index++)
             {
                 if (!At(index).Equals(other.At(index)))
                 {
@@ -177,7 +177,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             int hash = 17;
             unchecked
             {
-                for (var i = 0; i < hashNum; i++)
+                for (var i = 1; i <= hashNum; i++)
                 {
                     hash = hash*31 + At(i).GetHashCode();
                 }
@@ -209,7 +209,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         internal virtual void CopyToUnchecked(VectorStorage<T> target, ExistingData existingData = ExistingData.Clear)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 1; i <= Length; i++)
             {
                 target.At(i, At(i));
             }
@@ -235,7 +235,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         internal virtual void CopyToRowUnchecked(MatrixStorage<T> target, int rowIndex, ExistingData existingData = ExistingData.Clear)
         {
-            for (int j = 0; j < Length; j++)
+            for (int j = 1; j <= Length; j++)
             {
                 target.At(rowIndex, j, At(j));
             }
@@ -261,7 +261,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         internal virtual void CopyToColumnUnchecked(MatrixStorage<T> target, int columnIndex, ExistingData existingData = ExistingData.Clear)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 1; i <= Length; i++)
             {
                 target.At(i, columnIndex, At(i));
             }
@@ -376,7 +376,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual IEnumerable<T> Enumerate()
         {
-            for (var i = 0; i < Length; i++)
+            for (var i = 1; i <= Length; i++)
             {
                 yield return At(i);
             }
@@ -384,7 +384,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual IEnumerable<Tuple<int, T>> EnumerateIndexed()
         {
-            for (var i = 0; i < Length; i++)
+            for (var i = 1; i <= Length; i++)
             {
                 yield return new Tuple<int, T>(i, At(i));
             }
@@ -392,7 +392,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual IEnumerable<T> EnumerateNonZero()
         {
-            for (var i = 0; i < Length; i++)
+            for (var i = 1; i <= Length; i++)
             {
                 var x = At(i);
                 if (!Zero.Equals(x))
@@ -404,7 +404,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual IEnumerable<Tuple<int, T>> EnumerateNonZeroIndexed()
         {
-            for (var i = 0; i < Length; i++)
+            for (var i = 1; i <= Length; i++)
             {
                 var x = At(i);
                 if (!Zero.Equals(x))
@@ -437,7 +437,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
             where TU : struct, IEquatable<TU>, IFormattable
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 1; i <= Length; i++)
             {
                 target.At(i, f(At(i)));
             }
@@ -464,7 +464,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
             where TU : struct, IEquatable<TU>, IFormattable
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 1; i <= Length; i++)
             {
                 target.At(i, f(i, At(i)));
             }
@@ -499,7 +499,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         internal virtual void Map2ToUnchecked(VectorStorage<T> target, VectorStorage<T> other, Func<T, T, T> f,
             Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 1; i <= Length; i++)
             {
                 target.At(i, f(At(i), other.At(i)));
             }
@@ -524,7 +524,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         internal virtual TState Fold2Unchecked<TOther, TState>(VectorStorage<TOther> other, Func<TState, T, TOther, TState> f, TState state, Zeros zeros = Zeros.AllowSkip)
             where TOther : struct, IEquatable<TOther>, IFormattable
         {
-            for (int i = 0; i < Length; i++)
+            for (int i = 1; i <= Length; i++)
             {
                 state = f(state, At(i), other.At(i));
             }

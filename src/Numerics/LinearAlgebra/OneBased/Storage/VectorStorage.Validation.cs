@@ -38,7 +38,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
     {
         void ValidateRange(int index)
         {
-            if (index < 0 || index >= Length)
+            if (index < 1 || index > Length)
             {
                 throw new ArgumentOutOfRangeException("index");
             }
@@ -47,19 +47,19 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         void ValidateSubVectorRange(VectorStorage<T> target,
             int sourceIndex, int targetIndex, int count)
         {
-            if (count < 1)
+            if (count < 0)
             {
-                throw new ArgumentOutOfRangeException("count", Resources.ArgumentMustBePositive);
+                throw new ArgumentOutOfRangeException("count", Resources.ArgumentNotNegative);
             }
 
             // Verify Source
 
-            if (sourceIndex >= Length || sourceIndex < 0)
+            if (sourceIndex > Length || sourceIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("sourceIndex");
             }
 
-            var sourceMax = sourceIndex + count;
+            var sourceMax = sourceIndex + count - 1;
 
             if (sourceMax > Length)
             {
@@ -68,12 +68,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             // Verify Target
 
-            if (targetIndex >= target.Length || targetIndex < 0)
+            if (targetIndex > target.Length || targetIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("targetIndex");
             }
 
-            var targetMax = targetIndex + count;
+            var targetMax = targetIndex + count - 1;
 
             if (targetMax > target.Length)
             {
@@ -83,7 +83,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         void ValidateRowRange(MatrixStorage<T> target, int rowIndex)
         {
-            if (rowIndex >= target.RowCount || rowIndex < 0)
+            if (rowIndex > target.RowCount || rowIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("rowIndex");
             }
@@ -96,7 +96,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         void ValidateColumnRange(MatrixStorage<T> target, int columnIndex)
         {
-            if (columnIndex >= target.ColumnCount || columnIndex < 0)
+            if (columnIndex > target.ColumnCount || columnIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("columnIndex");
             }
@@ -110,36 +110,36 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         void ValidateSubRowRange(MatrixStorage<T> target, int rowIndex,
             int sourceColumnIndex, int targetColumnIndex, int columnCount)
         {
-            if (columnCount < 1)
+            if (columnCount < 0)
             {
                 throw new ArgumentOutOfRangeException("columnCount", Resources.ArgumentMustBePositive);
             }
 
             // Verify Source
 
-            if (sourceColumnIndex >= Length || sourceColumnIndex < 0)
+            if (sourceColumnIndex > Length || sourceColumnIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("sourceColumnIndex");
             }
 
-            if (sourceColumnIndex + columnCount > Length)
+            if (sourceColumnIndex + columnCount - 1 > Length)
             {
                 throw new ArgumentOutOfRangeException("columnCount");
             }
 
             // Verify Target
 
-            if (rowIndex >= target.RowCount || rowIndex < 0)
+            if (rowIndex > target.RowCount - 1 || rowIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("rowIndex");
             }
 
-            if (targetColumnIndex >= target.ColumnCount || targetColumnIndex < 0)
+            if (targetColumnIndex > target.ColumnCount || targetColumnIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("targetColumnIndex");
             }
 
-            if (targetColumnIndex + columnCount > target.ColumnCount)
+            if (targetColumnIndex + columnCount - 1 > target.ColumnCount)
             {
                 throw new ArgumentOutOfRangeException("columnCount");
             }
@@ -148,36 +148,36 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         void ValidateSubColumnRange(MatrixStorage<T> target, int columnIndex,
             int sourceRowIndex, int targetRowIndex, int rowCount)
         {
-            if (rowCount < 1)
+            if (rowCount < 0)
             {
                 throw new ArgumentOutOfRangeException("rowCount", Resources.ArgumentMustBePositive);
             }
 
             // Verify Source
 
-            if (sourceRowIndex >= Length || sourceRowIndex < 0)
+            if (sourceRowIndex > Length || sourceRowIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("sourceRowIndex");
             }
 
-            if (sourceRowIndex + rowCount > Length)
+            if (sourceRowIndex + rowCount - 1 > Length)
             {
                 throw new ArgumentOutOfRangeException("rowCount");
             }
 
             // Verify Target
 
-            if (columnIndex >= target.ColumnCount || columnIndex < 0)
+            if (columnIndex > target.ColumnCount || columnIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("columnIndex");
             }
 
-            if (targetRowIndex >= target.RowCount || targetRowIndex < 0)
+            if (targetRowIndex > target.RowCount || targetRowIndex < 1)
             {
                 throw new ArgumentOutOfRangeException("targetRowIndex");
             }
 
-            if (targetRowIndex + rowCount > target.RowCount)
+            if (targetRowIndex + rowCount - 1 > target.RowCount)
             {
                 throw new ArgumentOutOfRangeException("rowCount");
             }

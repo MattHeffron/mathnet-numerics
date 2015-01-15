@@ -290,6 +290,7 @@
   </data>
   <data name="MatrixRowsOrColumnsMustBePositive" xml:space="preserve">
     <value>The number of rows or columns of a matrix must be positive.</value>
+    <comment>Not referenced</comment>
   </data>
   <data name="ArgumentBetween0And1" xml:space="preserve">
     <value>The argument must be between 0 and 1.</value>
@@ -411,5 +412,15 @@
   </data>
   <data name="NotSupportedForIntegerVectors" xml:space="preserve">
     <value>This operation is not supported for integer vectors.</value>
+  </data>
+  <data name="Matrix1ColumnsMustNotBeNegative" xml:space="preserve">
+    <value>The number of columns of a matrix must not be negative (zero is ok).</value>
+  </data>
+  <data name="Matrix1RowsMustNotBeNegative" xml:space="preserve">
+    <value>The number of rows of a matrix must not be negative (zero is ok).</value>
+  </data>
+  <data name="Matrix1RowsOrColumnsMustNotBeNegative" xml:space="preserve">
+    <value>The number of rows or columns of a matrix must not be negative (zero is ok).</value>
+    <comment>Not referenced</comment>
   </data>
 </root>

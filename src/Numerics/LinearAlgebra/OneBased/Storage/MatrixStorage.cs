@@ -46,14 +46,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         protected MatrixStorage(int rowCount, int columnCount)
         {
-            if (rowCount <= 0)
+            if (rowCount < 0)
             {
-                throw new ArgumentOutOfRangeException("rowCount", Resources.MatrixRowsMustBePositive);
+                throw new ArgumentOutOfRangeException("rowCount", Resources.Matrix1RowsMustNotBeNegative);
             }
 
-            if (columnCount <= 0)
+            if (columnCount < 0)
             {
-                throw new ArgumentOutOfRangeException("columnCount", Resources.MatrixColumnsMustBePositive);
+                throw new ArgumentOutOfRangeException("columnCount", Resources.Matrix1ColumnsMustNotBeNegative);
             }
 
             RowCount = rowCount;
@@ -130,9 +130,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual void Clear()
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     At(i, j, Zero);
                 }
@@ -155,7 +155,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             for (var k = 0; k < rowIndices.Length; k++)
             {
                 int row = rowIndices[k];
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     At(row, j, Zero);
                 }
@@ -164,10 +164,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual void ClearColumns(int[] columnIndices)
         {
-            for (var k = 0; k < ColumnCount; k++)
+            for (var k = 0; k < columnIndices.Length; k++)
             {
                 int column = columnIndices[k];
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     At(i, column, Zero);
                 }
@@ -202,9 +202,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             }
 
             // If all else fails, perform element wise comparison.
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = 0; column < ColumnCount; column++)
+                for (var column = 1; column <= ColumnCount; column++)
                 {
                     if (!At(row, column).Equals(other.At(row, column)))
                     {
@@ -236,15 +236,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         /// </returns>
         public override int GetHashCode()
         {
-            var hashNum = Math.Min(RowCount*ColumnCount, 25);
+            var hashNum = Math.Min(RowCount * ColumnCount, 25);
             int hash = 17;
             unchecked
             {
                 for (var i = 0; i < hashNum; i++)
                 {
-                    var col = i%ColumnCount;
-                    var row = (i - col)/RowCount;
-                    hash = hash*31 + At(row, col).GetHashCode();
+                    var col = i % ColumnCount;
+                    var row = (i - col) / RowCount;
+                    hash = hash * 31 + At(row + 1, col + 1).GetHashCode();
                 }
             }
             return hash;
@@ -275,9 +275,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         internal virtual void CopyToUnchecked(MatrixStorage<T> target, ExistingData existingData = ExistingData.Clear)
         {
-            for (int j = 0; j < ColumnCount; j++)
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
                     target.At(i, j, At(i, j));
                 }
@@ -336,7 +336,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             }
 
             ValidateRowRange(target, rowIndex);
-            CopySubRowToUnchecked(target, rowIndex, 0, 0, ColumnCount, existingData);
+            CopySubRowToUnchecked(target, rowIndex, 1, 1, ColumnCount, existingData);
         }
 
         public void CopySubRowTo(VectorStorage<T> target, int rowIndex,
@@ -377,7 +377,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             }
 
             ValidateColumnRange(target, columnIndex);
-            CopySubColumnToUnchecked(target, columnIndex, 0, 0, RowCount, existingData);
+            CopySubColumnToUnchecked(target, columnIndex, 1, 1, RowCount, existingData);
         }
 
         public void CopySubColumnTo(VectorStorage<T> target, int columnIndex,
@@ -433,9 +433,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         internal virtual void TransposeToUnchecked(MatrixStorage<T> target, ExistingData existingData = ExistingData.Clear)
         {
-            for (int j = 0; j < ColumnCount; j++)
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
                     target.At(j, i, At(i, j));
                 }
@@ -446,11 +446,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual T[] ToRowMajorArray()
         {
-            var ret = new T[RowCount*ColumnCount];
-            for (int i = 0; i < RowCount; i++)
+            var ret = new T[RowCount * ColumnCount];
+            for (int i = 1; i <= RowCount; i++)
             {
-                var offset = i*ColumnCount;
-                for (int j = 0; j < ColumnCount; j++)
+                var offset = (i - 1) * ColumnCount - 1;		// account for one-based indexing
+                for (int j = 1; j <= ColumnCount; j++)
                 {
                     ret[offset + j] = At(i, j);
                 }
@@ -460,11 +460,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual T[] ToColumnMajorArray()
         {
-            var ret = new T[RowCount*ColumnCount];
-            for (int j = 0; j < ColumnCount; j++)
+            var ret = new T[RowCount * ColumnCount];
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                var offset = j*RowCount;
-                for (int i = 0; i < RowCount; i++)
+                var offset = (j - 1) * RowCount - 1;		// account for one-based indexing
+                for (int i = 1; i <= RowCount; i++)
                 {
                     ret[offset + i] = At(i, j);
                 }
@@ -475,11 +475,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         public virtual T[,] ToArray()
         {
             var ret = new T[RowCount, ColumnCount];
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 1; i <= RowCount; i++)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
-                    ret[i, j] = At(i, j);
+                    ret[i - 1, j - 1] = At(i, j);
                 }
             }
             return ret;
@@ -489,9 +489,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual IEnumerable<T> Enumerate()
         {
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 1; i <= RowCount; i++)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
                     yield return At(i, j);
                 }
@@ -500,9 +500,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual IEnumerable<Tuple<int, int, T>> EnumerateIndexed()
         {
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 1; i <= RowCount; i++)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
                     yield return new Tuple<int, int, T>(i, j, At(i, j));
                 }
@@ -511,9 +511,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual IEnumerable<T> EnumerateNonZero()
         {
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 1; i <= RowCount; i++)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
                     var x = At(i, j);
                     if (!Zero.Equals(x))
@@ -526,9 +526,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual IEnumerable<Tuple<int, int, T>> EnumerateNonZeroIndexed()
         {
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 1; i <= RowCount; i++)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
                     var x = At(i, j);
                     if (!Zero.Equals(x))
@@ -543,9 +543,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual void MapInplace(Func<T, T> f, Zeros zeros = Zeros.AllowSkip)
         {
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 1; i <= RowCount; i++)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
                     At(i, j, f(At(i, j)));
                 }
@@ -554,9 +554,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual void MapIndexedInplace(Func<int, int, T, T> f, Zeros zeros = Zeros.AllowSkip)
         {
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 1; i <= RowCount; i++)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
                     At(i, j, f(i, j, At(i, j)));
                 }
@@ -585,9 +585,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
             where TU : struct, IEquatable<TU>, IFormattable
         {
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 1; i <= RowCount; i++)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
                     target.At(i, j, f(At(i, j)));
                 }
@@ -616,9 +616,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
             where TU : struct, IEquatable<TU>, IFormattable
         {
-            for (int j = 0; j < ColumnCount; j++)
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
                     target.At(i, j, f(i, j, At(i, j)));
                 }
@@ -697,14 +697,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         /// <remarks>The state array will not be modified, unless it is the same instance as the target array (which is allowed).</remarks>
         internal virtual void FoldByRowUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros = Zeros.AllowSkip)
         {
-            for (int i = 0; i < RowCount; i++)
+            for (int i = 1; i <= RowCount; i++)
             {
-                TU s = state[i];
-                for (int j = 0; j < ColumnCount; j++)
+                TU s = state[i - 1];
+                for (int j = 1; j <= ColumnCount; j++)
                 {
                     s = f(s, At(i, j));
                 }
-                target[i] = finalize(s, ColumnCount);
+                target[i - 1] = finalize(s, ColumnCount);
             }
         }
 
@@ -735,14 +735,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         /// <remarks>The state array will not be modified, unless it is the same instance as the target array (which is allowed).</remarks>
         internal virtual void FoldByColumnUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros = Zeros.AllowSkip)
         {
-            for (int j = 0; j < ColumnCount; j++)
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                TU s = state[j];
-                for (int i = 0; i < RowCount; i++)
+                TU s = state[j - 1];
+                for (int i = 1; i <= RowCount; i++)
                 {
                     s = f(s, At(i, j));
                 }
-                target[j] = finalize(s, RowCount);
+                target[j - 1] = finalize(s, RowCount);
             }
         }
     }
