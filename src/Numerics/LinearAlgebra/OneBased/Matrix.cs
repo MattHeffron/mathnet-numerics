@@ -1530,7 +1530,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
         /// <summary>
         /// Applies a function to each value of this matrix and replaces the value with its result.
-        /// If forceMapZero is not set to true, zero values may or may not be skipped depending
+        /// If zeros is set to Zeros.AllowSkip, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse matrices).
         /// </summary>
         public void MapInplace(Func<T, T> f, Zeros zeros = Zeros.AllowSkip)
@@ -1541,7 +1541,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Applies a function to each value of this matrix and replaces the value with its result.
         /// The row and column indices of each value (zero-based) are passed as first arguments to the function.
-        /// If forceMapZero is not set to true, zero values may or may not be skipped depending
+        /// If zeros is set to Zeros.AllowSkip, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse matrices).
         /// </summary>
         public void MapIndexedInplace(Func<int, int, T, T> f, Zeros zeros = Zeros.AllowSkip)
@@ -1551,7 +1551,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
         /// <summary>
         /// Applies a function to each value of this matrix and replaces the value in the result matrix.
-        /// If forceMapZero is not set to true, zero values may or may not be skipped depending
+        /// If zeros is set to Zeros.AllowSkip, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse matrices).
         /// </summary>
         public void Map(Func<T, T> f, Matrix1<T> result, Zeros zeros = Zeros.AllowSkip)
@@ -1569,7 +1569,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Applies a function to each value of this matrix and replaces the value in the result matrix.
         /// The index of each value (zero-based) is passed as first argument to the function.
-        /// If forceMapZero is not set to true, zero values may or may not be skipped depending
+        /// If zeros is set to Zeros.AllowSkip, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse matrices).
         /// </summary>
         public void MapIndexed(Func<int, int, T, T> f, Matrix1<T> result, Zeros zeros = Zeros.AllowSkip)
@@ -1586,7 +1586,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
         /// <summary>
         /// Applies a function to each value of this matrix and replaces the value in the result matrix.
-        /// If forceMapZero is not set to true, zero values may or may not be skipped depending
+        /// If zeros is set to Zeros.AllowSkip, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse matrices).
         /// </summary>
         public void MapConvert<TU>(Func<T, TU> f, Matrix1<TU> result, Zeros zeros = Zeros.AllowSkip)
@@ -1598,7 +1598,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Applies a function to each value of this matrix and replaces the value in the result matrix.
         /// The index of each value (zero-based) is passed as first argument to the function.
-        /// If forceMapZero is not set to true, zero values may or may not be skipped depending
+        /// If zeros is set to Zeros.AllowSkip, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse matrices).
         /// </summary>
         public void MapIndexedConvert<TU>(Func<int, int, T, TU> f, Matrix1<TU> result, Zeros zeros = Zeros.AllowSkip)
@@ -1609,7 +1609,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
         /// <summary>
         /// Applies a function to each value of this matrix and returns the results as a new matrix.
-        /// If forceMapZero is not set to true, zero values may or may not be skipped depending
+        /// If zeros is set to Zeros.AllowSkip, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse matrices).
         /// </summary>
         public Matrix1<TU> Map<TU>(Func<T, TU> f, Zeros zeros = Zeros.AllowSkip)
@@ -1623,7 +1623,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// Applies a function to each value of this matrix and returns the results as a new matrix.
         /// The index of each value (zero-based) is passed as first argument to the function.
-        /// If forceMapZero is not set to true, zero values may or may not be skipped depending
+        /// If zeros is set to Zeros.AllowSkip, zero values may or may not be skipped depending
         /// on the actual data storage implementation (relevant mostly for sparse matrices).
         /// </summary>
         public Matrix1<TU> MapIndexed<TU>(Func<int, int, T, TU> f, Zeros zeros = Zeros.AllowSkip)
