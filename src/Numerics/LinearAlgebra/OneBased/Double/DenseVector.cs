@@ -44,7 +44,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
     /// A vector using dense storage.
     /// </summary>
     [Serializable]
-    [DebuggerDisplay("DenseVector {Count}-Double")]
+    [DebuggerDisplay("DenseVector[1] {Count}-Double")]
     public class DenseVector : Vector
     {
         /// <summary>

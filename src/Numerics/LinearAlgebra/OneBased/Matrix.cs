@@ -60,7 +60,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             ColumnCount = storage.ColumnCount;
         }
 
-        public static readonly MatrixBuilder<T> Build = BuilderInstance<T>.Matrix;
+        public static readonly MatrixBuilder<T> Build = BuilderInstance<T>.Matrix1;
 
         /// <summary>
         /// Gets the raw matrix data storage.
@@ -153,12 +153,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         public void ClearRow(int rowIndex)
         {
-            if (rowIndex < 0 || rowIndex >= RowCount)
+            if (rowIndex <= 0 || rowIndex > RowCount)
             {
                 throw new ArgumentOutOfRangeException("rowIndex");
             }
 
-            Storage.Clear(rowIndex, 1, 0, ColumnCount);
+            Storage.Clear(rowIndex, 1, 1, ColumnCount);
         }
 
         /// <summary>
@@ -166,12 +166,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         public void ClearColumn(int columnIndex)
         {
-            if (columnIndex < 0 || columnIndex >= ColumnCount)
+            if (columnIndex <= 0 || columnIndex > ColumnCount)
             {
                 throw new ArgumentOutOfRangeException("columnIndex");
             }
 
-            Storage.Clear(0, RowCount, columnIndex, 1);
+            Storage.Clear(1, RowCount, columnIndex, 1);
         }
 
         /// <summary>
@@ -186,7 +186,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
             for (int k = 0; k < rowIndices.Length; k++)
             {
-                if (rowIndices[k] < 0 || rowIndices[k] >= RowCount)
+                if (rowIndices[k] <= 0 || rowIndices[k] > RowCount)
                 {
                     throw new ArgumentOutOfRangeException("rowIndices");
                 }
@@ -207,7 +207,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
             for (int k = 0; k < columnIndices.Length; k++)
             {
-                if (columnIndices[k] < 0 || columnIndices[k] >= ColumnCount)
+                if (columnIndices[k] <= 0 || columnIndices[k] > ColumnCount)
                 {
                     throw new ArgumentOutOfRangeException("columnIndices");
                 }
@@ -227,12 +227,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 return;
             }
 
-            if (rowIndex + rowCount > RowCount || rowIndex < 0)
+            if (rowIndex + rowCount - 1 > RowCount || rowIndex <= 0)
             {
                 throw new ArgumentOutOfRangeException("rowIndex");
             }
 
-            if (columnIndex + columnCount > ColumnCount || columnIndex < 0)
+            if (columnIndex + columnCount - 1 > ColumnCount || columnIndex <= 0)
             {
                 throw new ArgumentOutOfRangeException("columnIndex");
             }
@@ -293,17 +293,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="index">The row to copy.</param>
         /// <returns>A Vector containing the copied elements.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is negative,
-        /// or greater than or equal to the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is not positive,
+        /// or greater than the number of rows.</exception>
         public Vector1<T> Row(int index)
         {
-            if (index >= RowCount || index < 0)
+            if (index > RowCount || index <= 0)
             {
                 throw new ArgumentOutOfRangeException("index");
             }
 
             var ret = Vector1<T>.Build.SameAs(this, ColumnCount);
-            Storage.CopySubRowToUnchecked(ret.Storage, index, 0, 0, ColumnCount);
+            Storage.CopySubRowToUnchecked(ret.Storage, index, 1, 1, ColumnCount);
             return ret;
         }
 
@@ -313,8 +313,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="index">The row to copy.</param>
         /// <param name="result">The Vector to copy the row into.</param>
         /// <exception cref="ArgumentNullException">If the result vector is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is negative,
-        /// or greater than or equal to the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is not positive,
+        /// or greater than the number of rows.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <b>this.Columns != result.Count</b>.</exception>
         public void Row(int index, Vector1<T> result)
         {
@@ -334,16 +334,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="length">The number of elements to copy.</param>
         /// <returns>A Vector containing the requested elements.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If:
-        /// <list><item><paramref name="rowIndex"/> is negative,
-        /// or greater than or equal to the number of rows.</item>
-        /// <item><paramref name="columnIndex"/> is negative,
-        /// or greater than or equal to the number of columns.</item>
-        /// <item><c>(columnIndex + length) &gt;= Columns.</c></item></list></exception>
+        /// <list><item><paramref name="rowIndex"/> is not positive,
+        /// or greater than the number of rows.</item>
+        /// <item><paramref name="columnIndex"/> is not positive,
+        /// or greater than the number of columns.</item>
+        /// <item><paramref name="columnIndex"/> + <paramref name="length"/> - 1
+        /// is greater than the number of columns.</item></list></exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="length"/> is not positive.</exception>
         public Vector1<T> Row(int rowIndex, int columnIndex, int length)
         {
             var ret = Vector1<T>.Build.SameAs(this, length);
-            Storage.CopySubRowTo(ret.Storage, rowIndex, columnIndex, 0, length);
+            Storage.CopySubRowTo(ret.Storage, rowIndex, columnIndex, 1, length);
             return ret;
         }
 
@@ -355,14 +356,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="length">The number of elements to copy.</param>
         /// <param name="result">The Vector to copy the column into.</param>
         /// <exception cref="ArgumentNullException">If the result Vector is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is negative,
-        /// or greater than or equal to the number of columns.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is negative,
-        /// or greater than or equal to the number of rows.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> + <paramref name="length"/>
-        /// is greater than or equal to the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is not positive,
+        /// or greater than the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is not positive,
+        /// or greater than the number of columns.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> + <paramref name="length"/> - 1
+        /// is greater than the number of columns.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="length"/> is not positive.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <strong>result.Count &lt; length</strong>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <c>result.Count &lt; length</c>.</exception>
         public void Row(int rowIndex, int columnIndex, int length, Vector1<T> result)
         {
             if (result == null)
@@ -370,7 +371,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentNullException("result");
             }
 
-            Storage.CopySubRowTo(result.Storage, rowIndex, columnIndex, 0, length);
+            Storage.CopySubRowTo(result.Storage, rowIndex, columnIndex, 1, length);
         }
 
         /// <summary>
@@ -378,17 +379,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="index">The column to copy.</param>
         /// <returns>A Vector containing the copied elements.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is negative,
-        /// or greater than or equal to the number of columns.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is not positive,
+        /// or greater than the number of columns.</exception>
         public Vector1<T> Column(int index)
         {
-            if (index >= ColumnCount || index < 0)
+            if (index > ColumnCount || index <= 0)
             {
                 throw new ArgumentOutOfRangeException("index");
             }
 
             var ret = Vector1<T>.Build.SameAs(this, RowCount);
-            Storage.CopySubColumnToUnchecked(ret.Storage, index, 0, 0, RowCount);
+            Storage.CopySubColumnToUnchecked(ret.Storage, index, 1, 1, RowCount);
             return ret;
         }
 
@@ -398,9 +399,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="index">The column to copy.</param>
         /// <param name="result">The Vector to copy the column into.</param>
         /// <exception cref="ArgumentNullException">If the result Vector is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is negative,
-        /// or greater than or equal to the number of columns.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <b>this.Rows != result.Count</b>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="index"/> is not positive,
+        /// or greater than the number of columns.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <c>this.Rows != result.Count</c>.</exception>
         public void Column(int index, Vector1<T> result)
         {
             if (result == null)
@@ -419,17 +420,18 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="length">The number of elements to copy.</param>
         /// <returns>A Vector containing the requested elements.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If:
-        /// <list><item><paramref name="columnIndex"/> is negative,
-        /// or greater than or equal to the number of columns.</item>
-        /// <item><paramref name="rowIndex"/> is negative,
-        /// or greater than or equal to the number of rows.</item>
-        /// <item><c>(rowIndex + length) &gt;= Rows.</c></item></list>
+        /// <list><item><paramref name="columnIndex"/> is not positive,
+        /// or greater than the number of columns.</item>
+        /// <item><paramref name="rowIndex"/> is not positive,
+        /// or greater than the number of rows.</item>
+        /// <item><paramref name="rowIndex"/> + <paramref name="length"/> - 1
+        /// is greater than the number of rows.</item></list>
         /// </exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="length"/> is not positive.</exception>
         public Vector1<T> Column(int columnIndex, int rowIndex, int length)
         {
             var ret = Vector1<T>.Build.SameAs(this, length);
-            Storage.CopySubColumnTo(ret.Storage, columnIndex, rowIndex, 0, length);
+            Storage.CopySubColumnTo(ret.Storage, columnIndex, rowIndex, 1, length);
             return ret;
         }
 
@@ -441,14 +443,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="length">The number of elements to copy.</param>
         /// <param name="result">The Vector to copy the column into.</param>
         /// <exception cref="ArgumentNullException">If the result Vector is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is negative,
-        /// or greater than or equal to the number of columns.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is negative,
-        /// or greater than or equal to the number of rows.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> + <paramref name="length"/>
-        /// is greater than or equal to the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is not positive,
+        /// or greater than the number of columns.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is not positive,
+        /// or greater than the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> + <paramref name="length"/> - 1
+        /// is greater than the number of rows.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="length"/> is not positive.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <strong>result.Count &lt; length</strong>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <c>result.Count &lt; length</c>.</exception>
         public void Column(int columnIndex, int rowIndex, int length, Vector1<T> result)
         {
             if (result == null)
@@ -456,7 +458,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentNullException("result");
             }
 
-            Storage.CopySubColumnTo(result.Storage, columnIndex, rowIndex, 0, length);
+            Storage.CopySubColumnTo(result.Storage, columnIndex, rowIndex, 1, length);
         }
 
         /// <summary>
@@ -466,9 +468,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public virtual Matrix1<T> UpperTriangle()
         {
             var result = Build.SameAs(this);
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = row; column < ColumnCount; column++)
+                for (var column = row; column <= ColumnCount; column++)
                 {
                     result.At(row, column, At(row, column));
                 }
@@ -483,9 +485,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public virtual Matrix1<T> LowerTriangle()
         {
             var result = Build.SameAs(this);
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = 0; column <= row && column < ColumnCount; column++)
+                for (var column = 1; column <= row && column <= ColumnCount; column++)
                 {
                     result.At(row, column, At(row, column));
                 }
@@ -511,9 +513,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw DimensionsDontMatch<ArgumentException>(this, result, "result");
             }
 
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row < RowCount; row++)
             {
-                for (var column = 0; column < ColumnCount; column++)
+                for (var column = 1; column <= ColumnCount; column++)
                 {
                     result.At(row, column, row >= column ? At(row, column) : Zero);
                 }
@@ -538,9 +540,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw DimensionsDontMatch<ArgumentException>(this, result, "result");
             }
 
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = 0; column < ColumnCount; column++)
+                for (var column = 1; column <= ColumnCount; column++)
                 {
                     result.At(row, column, row <= column ? At(row, column) : Zero);
                 }
@@ -556,17 +558,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="columnCount">The number of columns to copy. Must be positive.</param>
         /// <returns>The requested sub-matrix.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If: <list><item><paramref name="rowIndex"/> is
-        /// negative, or greater than or equal to the number of rows.</item>
-        /// <item><paramref name="columnIndex"/> is negative, or greater than or equal to the number
+        /// not positive, or greater than the number of rows.</item>
+        /// <item><paramref name="columnIndex"/> is not positive, or greater than the number
         /// of columns.</item>
-        /// <item><c>(columnIndex + columnLength) &gt;= Columns</c></item>
-        /// <item><c>(rowIndex + rowLength) &gt;= Rows</c></item></list></exception>
+        /// <item><c>(columnIndex + columnLength - 1) &gt;= Columns</c></item>
+        /// <item><c>(rowIndex + rowLength - 1) &gt;= Rows</c></item></list></exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowCount"/> or <paramref name="columnCount"/>
         /// is not positive.</exception>
         public virtual Matrix1<T> SubMatrix(int rowIndex, int rowCount, int columnIndex, int columnCount)
         {
             var result = Build.SameAs(this, rowCount, columnCount);
-            Storage.CopySubMatrixTo(result.Storage, rowIndex, 0, rowCount, columnIndex, 0, columnCount, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(result.Storage, rowIndex, 1, rowCount, columnIndex, 1, columnCount, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -581,7 +583,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             var min = Math.Min(RowCount, ColumnCount);
             var diagonal = Vector1<T>.Build.SameAs(this, min);
 
-            for (var i = 0; i < min; i++)
+            for (var i = 1; i <= min; i++)
             {
                 diagonal.At(i, At(i, i));
             }
@@ -597,10 +599,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public virtual Matrix1<T> StrictlyLowerTriangle()
         {
             var result = Build.SameAs(this);
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                var columns = Math.Min(row, ColumnCount);
-                for (var column = 0; column < columns; column++)
+                var columns = Math.Min(row, ColumnCount) - 1;
+                for (var column = 1; column <= columns; column++)
                 {
                     result.At(row, column, At(row, column));
                 }
@@ -626,9 +628,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw DimensionsDontMatch<ArgumentException>(this, result, "result");
             }
 
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = 0; column < ColumnCount; column++)
+                for (var column = 1; column <= ColumnCount; column++)
                 {
                     result.At(row, column, row > column ? At(row, column) : Zero);
                 }
@@ -643,9 +645,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public virtual Matrix1<T> StrictlyUpperTriangle()
         {
             var result = Build.SameAs(this);
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = row + 1; column < ColumnCount; column++)
+                for (var column = row + 1; column <= ColumnCount; column++)
                 {
                     result.At(row, column, At(row, column));
                 }
@@ -671,9 +673,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw DimensionsDontMatch<ArgumentException>(this, result, "result");
             }
 
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = 0; column < ColumnCount; column++)
+                for (var column = 1; column <= ColumnCount; column++)
                 {
                     result.At(row, column, row < column ? At(row, column) : Zero);
                 }
@@ -687,7 +689,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="column">The column to insert.</param>
         /// <returns>A new matrix with the inserted column.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="column "/> is <see langword="null" />. </exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is &lt; zero or &gt; the number of columns.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is &lt;= zero or &gt; the number of columns + 1.</exception>
         /// <exception cref="ArgumentException">If the size of <paramref name="column"/> != the number of rows.</exception>
         public Matrix1<T> InsertColumn(int columnIndex, Vector1<T> column)
         {
@@ -696,7 +698,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentNullException("column");
             }
 
-            if (columnIndex < 0 || columnIndex > ColumnCount)
+            if (columnIndex <= 0 || columnIndex > ColumnCount + 1)
             {
                 throw new ArgumentOutOfRangeException("columnIndex");
             }
@@ -707,9 +709,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             }
 
             var result = Build.SameAs(this, RowCount, ColumnCount + 1, fullyMutable: true);
-            Storage.CopySubMatrixTo(result.Storage, 0, 0, RowCount, 0, 0, columnIndex, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(result.Storage, 1, 1, RowCount, 1, 1, columnIndex, ExistingData.AssumeZeros);
             result.SetColumn(columnIndex, column);
-            Storage.CopySubMatrixTo(result.Storage, 0, 0, RowCount, columnIndex, columnIndex + 1, ColumnCount - columnIndex, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(result.Storage, 1, 1, RowCount, columnIndex, columnIndex + 1, ColumnCount - columnIndex, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -718,17 +720,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="columnIndex">The index of the column to remove.</param>
         /// <returns>A new matrix without the chosen column.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is &lt; zero or &gt;= the number of columns.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is &lt;= zero or &gt; the number of columns.</exception>
         public Matrix1<T> RemoveColumn(int columnIndex)
         {
-            if (columnIndex < 0 || columnIndex >= ColumnCount)
+            if (columnIndex <= 0 || columnIndex > ColumnCount)
             {
                 throw new ArgumentOutOfRangeException("columnIndex");
             }
 
             var result = Build.SameAs(this, RowCount, ColumnCount - 1, fullyMutable: true);
-            Storage.CopySubMatrixTo(result.Storage, 0, 0, RowCount, 0, 0, columnIndex, ExistingData.AssumeZeros);
-            Storage.CopySubMatrixTo(result.Storage, 0, 0, RowCount, columnIndex + 1, columnIndex, ColumnCount - columnIndex - 1, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(result.Storage, 1, 1, RowCount, 1, 1, columnIndex - 1, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(result.Storage, 1, 1, RowCount, columnIndex + 1, columnIndex, ColumnCount - columnIndex, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -738,8 +740,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="columnIndex">The column to copy the values to.</param>
         /// <param name="column">The vector to copy the values from.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="column"/> is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is less than zero,
-        /// or greater than or equal to the number of columns.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is &lt;= zero,
+        /// or greater than the number of columns.</exception>
         /// <exception cref="ArgumentException">If the size of <paramref name="column"/> does not
         /// equal the number of rows of this <strong>Matrix1</strong>.</exception>
         public void SetColumn(int columnIndex, Vector1<T> column)
@@ -760,8 +762,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="length">The number of elements to copy.</param>
         /// <param name="column">The vector to copy the values from.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="column"/> is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is less than zero,
-        /// or greater than or equal to the number of columns.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is &lt;= zero,
+        /// or greater than the number of columns.</exception>
         /// <exception cref="ArgumentException">If the size of <paramref name="column"/> does not
         /// equal the number of rows of this <strong>Matrix1</strong>.</exception>
         public void SetColumn(int columnIndex, int rowIndex, int length, Vector1<T> column)
@@ -771,7 +773,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentNullException("column");
             }
 
-            column.Storage.CopyToSubColumn(Storage, columnIndex, 0, rowIndex, length);
+            column.Storage.CopyToSubColumn(Storage, columnIndex, 1, rowIndex, length);
         }
 
         /// <summary>
@@ -780,10 +782,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="columnIndex">The column to copy the values to.</param>
         /// <param name="column">The array to copy the values from.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="column"/> is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is less than zero,
-        /// or greater than or equal to the number of columns.</exception>
-        /// <exception cref="ArgumentException">If the size of <paramref name="column"/> does not
-        /// equal the number of rows of this <strong>Matrix1</strong>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="columnIndex"/> is &lt;= zero,
+        /// or greater than the number of columns.</exception>
         /// <exception cref="ArgumentException">If the size of <paramref name="column"/> does not
         /// equal the number of rows of this <strong>Matrix1</strong>.</exception>
         public void SetColumn(int columnIndex, T[] column)
@@ -803,7 +803,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="row">The row to insert.</param>
         /// <returns>A new matrix with the inserted column.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="row"/> is <see langword="null" />. </exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is &lt; zero or &gt; the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is &lt;= zero or &gt; the number of rows + 1.</exception>
         /// <exception cref="ArgumentException">If the size of <paramref name="row"/> != the number of columns.</exception>
         public Matrix1<T> InsertRow(int rowIndex, Vector1<T> row)
         {
@@ -812,7 +812,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentNullException("row");
             }
 
-            if (rowIndex < 0 || rowIndex > RowCount)
+            if (rowIndex <= 0 || rowIndex > RowCount + 1)
             {
                 throw new ArgumentOutOfRangeException("rowIndex");
             }
@@ -823,9 +823,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             }
 
             var result = Build.SameAs(this, RowCount + 1, ColumnCount, fullyMutable: true);
-            Storage.CopySubMatrixTo(result.Storage, 0, 0, rowIndex, 0, 0, ColumnCount, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(result.Storage, 1, 1, rowIndex, 1, 1, ColumnCount, ExistingData.AssumeZeros);
             result.SetRow(rowIndex, row);
-            Storage.CopySubMatrixTo(result.Storage, rowIndex, rowIndex+1, RowCount - rowIndex, 0, 0, ColumnCount, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(result.Storage, rowIndex, rowIndex+1, RowCount - rowIndex, 1, 1, ColumnCount, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -834,17 +834,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="rowIndex">The index of the row to remove.</param>
         /// <returns>A new matrix without the chosen row.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is &lt; zero or &gt;= the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is &lt;= zero or &gt; the number of rows.</exception>
         public Matrix1<T> RemoveRow(int rowIndex)
         {
-            if (rowIndex < 0 || rowIndex >= RowCount)
+            if (rowIndex <= 0 || rowIndex > RowCount)
             {
                 throw new ArgumentOutOfRangeException("rowIndex");
             }
 
             var result = Build.SameAs(this, RowCount - 1, ColumnCount, fullyMutable: true);
-            Storage.CopySubMatrixTo(result.Storage, 0, 0, rowIndex, 0, 0, ColumnCount, ExistingData.AssumeZeros);
-            Storage.CopySubMatrixTo(result.Storage, rowIndex + 1, rowIndex, RowCount - rowIndex - 1, 0, 0, ColumnCount, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(result.Storage, 1, 1, rowIndex - 1, 1, 1, ColumnCount, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(result.Storage, rowIndex + 1, rowIndex, RowCount - rowIndex, 1, 1, ColumnCount, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -854,8 +854,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="rowIndex">The row to copy the values to.</param>
         /// <param name="row">The vector to copy the values from.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="row"/> is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is less than zero,
-        /// or greater than or equal to the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is &lt;= zero,
+        /// or greater than the number of rows.</exception>
         /// <exception cref="ArgumentException">If the size of <paramref name="row"/> does not
         /// equal the number of columns of this <strong>Matrix1</strong>.</exception>
         public void SetRow(int rowIndex, Vector1<T> row)
@@ -876,8 +876,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="length">The number of elements to copy.</param>
         /// <param name="row">The vector to copy the values from.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="row"/> is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is less than zero,
-        /// or greater than or equal to the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is &lt;= zero,
+        /// or greater than the number of rows.</exception>
         /// <exception cref="ArgumentException">If the size of <paramref name="row"/> does not
         /// equal the number of columns of this <strong>Matrix1</strong>.</exception>
         public void SetRow(int rowIndex, int columnIndex, int length, Vector1<T> row)
@@ -887,7 +887,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentNullException("row");
             }
 
-            row.Storage.CopyToSubRow(Storage, rowIndex, 0, columnIndex, length);
+            row.Storage.CopyToSubRow(Storage, rowIndex, 1, columnIndex, length);
         }
 
 
@@ -897,8 +897,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="rowIndex">The row to copy the values to.</param>
         /// <param name="row">The array to copy the values from.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="row"/> is <see langword="null" />.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is less than zero,
-        /// or greater than or equal to the number of rows.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowIndex"/> is &lt;= zero,
+        /// or greater than the number of rows.</exception>
         /// <exception cref="ArgumentException">If the size of <paramref name="row"/> does not
         /// equal the number of columns of this <strong>Matrix1</strong>.</exception>
         public void SetRow(int rowIndex, T[] row)
@@ -918,14 +918,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="columnIndex">The column to start copying to.</param>
         /// <param name="subMatrix">The sub-matrix to copy from.</param>
         /// <exception cref="ArgumentOutOfRangeException">If: <list><item><paramref name="rowIndex"/> is
-        /// negative, or greater than or equal to the number of rows.</item>
-        /// <item><paramref name="columnIndex"/> is negative, or greater than or equal to the number
+        /// &lt;= zero, or greater than the number of rows.</item>
+        /// <item><paramref name="columnIndex"/> is &lt;= zero, or greater than the number
         /// of columns.</item>
-        /// <item><c>(columnIndex + columnLength) &gt;= Columns</c></item>
-        /// <item><c>(rowIndex + rowLength) &gt;= Rows</c></item></list></exception>
+        /// <item><c>(columnIndex + columnLength - 1) &gt;= Columns</c></item>
+        /// <item><c>(rowIndex + rowLength - 1) &gt;= Rows</c></item></list></exception>
         public void SetSubMatrix(int rowIndex, int columnIndex, Matrix1<T> subMatrix)
         {
-            subMatrix.Storage.CopySubMatrixTo(Storage, 0, rowIndex, subMatrix.RowCount, 0, columnIndex, subMatrix.ColumnCount);
+            subMatrix.Storage.CopySubMatrixTo(Storage, 1, rowIndex, subMatrix.RowCount, 1, columnIndex, subMatrix.ColumnCount);
         }
 
         /// <summary>
@@ -937,17 +937,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="columnCount">The number of columns to copy. Must be positive.</param>
         /// <param name="subMatrix">The sub-matrix to copy from.</param>
         /// <exception cref="ArgumentOutOfRangeException">If: <list><item><paramref name="rowIndex"/> is
-        /// negative, or greater than or equal to the number of rows.</item>
-        /// <item><paramref name="columnIndex"/> is negative, or greater than or equal to the number
+        /// &lt;= zero, or greater than the number of rows.</item>
+        /// <item><paramref name="columnIndex"/> is &lt;= zero, or greater than the number
         /// of columns.</item>
-        /// <item><c>(columnIndex + columnLength) &gt;= Columns</c></item>
-        /// <item><c>(rowIndex + rowLength) &gt;= Rows</c></item></list></exception>
+        /// <item><c>(columnIndex + columnLength - 1) &gt;= Columns</c></item>
+        /// <item><c>(rowIndex + rowLength - 1) &gt;= Rows</c></item></list></exception>
         /// <item>the size of <paramref name="subMatrix"/> is not at least <paramref name="rowCount"/> x <paramref name="columnCount"/>.</item>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowCount"/> or <paramref name="columnCount"/>
         /// is not positive.</exception>
         public void SetSubMatrix(int rowIndex, int rowCount, int columnIndex, int columnCount, Matrix1<T> subMatrix)
         {
-            subMatrix.Storage.CopySubMatrixTo(Storage, 0, rowIndex, rowCount, 0, columnIndex, columnCount);
+            subMatrix.Storage.CopySubMatrixTo(Storage, 1, rowIndex, rowCount, 1, columnIndex, columnCount);
         }
 
         /// <summary>
@@ -961,11 +961,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="columnCount">The number of columns to copy. Must be positive.</param>
         /// <param name="subMatrix">The sub-matrix to copy from.</param>
         /// <exception cref="ArgumentOutOfRangeException">If: <list><item><paramref name="rowIndex"/> is
-        /// negative, or greater than or equal to the number of rows.</item>
-        /// <item><paramref name="columnIndex"/> is negative, or greater than or equal to the number
+        /// &lt;= zero, or greater than the number of rows.</item>
+        /// <item><paramref name="columnIndex"/> is &lt;= zero, or greater than the number
         /// of columns.</item>
-        /// <item><c>(columnIndex + columnLength) &gt;= Columns</c></item>
-        /// <item><c>(rowIndex + rowLength) &gt;= Rows</c></item></list></exception>
+        /// <item><c>(columnIndex + columnLength - 1) &gt;= Columns</c></item>
+        /// <item><c>(rowIndex + rowLength - 1) &gt;= Rows</c></item></list></exception>
         /// <item>the size of <paramref name="subMatrix"/> is not at least <paramref name="rowCount"/> x <paramref name="columnCount"/>.</item>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowCount"/> or <paramref name="columnCount"/>
         /// is not positive.</exception>
@@ -998,7 +998,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentException(Resources.ArgumentVectorsSameLength, "source");
             }
 
-            for (var i = 0; i < min; i++)
+            for (var i = 1; i <= min; i++)
             {
                 At(i, i, source.At(i));
             }
@@ -1028,9 +1028,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentException(Resources.ArgumentArraysSameLength, "source");
             }
 
-            for (var i = 0; i < min; i++)
+            for (var i = 1; i <= min; i++)
             {
-                At(i, i, source[i]);
+                At(i, i, source[i - 1]);
             }
         }
 
@@ -1069,8 +1069,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             {
                 if (inv[i] != i)
                 {
-                    var q = inv[i];
-                    for (var j = 0; j < ColumnCount; j++)
+                    var q = inv[i]; //CONSIDER: do I need to adjust q for one-based, or do I do it IN the Permutation???
+                    for (var j = 1; j <= ColumnCount; j++)
                     {
                         var temp = At(q, j);
                         At(q, j, At(i, j));
@@ -1098,8 +1098,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             {
                 if (inv[i] != i)
                 {
-                    var q = inv[i];
-                    for (var j = 0; j < RowCount; j++)
+                    var q = inv[i]; //CONSIDER: do I need to adjust q for one-based, or do I do it IN the Permutation???
+                    for (var j = 1; j <= RowCount; j++)
                     {
                         var temp = At(j, q);
                         At(j, q, At(j, i));
@@ -1129,8 +1129,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             }
 
             var result = Build.SameAs(this, right, RowCount, ColumnCount + right.ColumnCount, fullyMutable: true);
-            Storage.CopySubMatrixToUnchecked(result.Storage, 0, 0, RowCount, 0, 0, ColumnCount, ExistingData.AssumeZeros);
-            right.Storage.CopySubMatrixToUnchecked(result.Storage, 0, 0, right.RowCount, 0, ColumnCount, right.ColumnCount, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount, ExistingData.AssumeZeros);
+            right.Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, right.RowCount, 1, ColumnCount, right.ColumnCount, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -1163,8 +1163,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentException(Resources.ArgumentMatrixSameColumnDimension);
             }
 
-            Storage.CopySubMatrixToUnchecked(result.Storage, 0, 0, RowCount, 0, 0, ColumnCount);
-            right.Storage.CopySubMatrixToUnchecked(result.Storage, 0, 0, right.RowCount, 0, ColumnCount, right.ColumnCount);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount);
+            right.Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, right.RowCount, 1, ColumnCount, right.ColumnCount);
         }
 
         /// <summary>
@@ -1189,8 +1189,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             }
 
             var result = Build.SameAs(this, lower, RowCount + lower.RowCount, ColumnCount, fullyMutable: true);
-            Storage.CopySubMatrixToUnchecked(result.Storage, 0, 0, RowCount, 0, 0, ColumnCount, ExistingData.AssumeZeros);
-            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 0, RowCount, lower.RowCount, 0, 0, lower.ColumnCount, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount, ExistingData.AssumeZeros);
+            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, 1, lower.ColumnCount, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -1225,8 +1225,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw DimensionsDontMatch<ArgumentException>(this, result, "result");
             }
 
-            Storage.CopySubMatrixToUnchecked(result.Storage, 0, 0, RowCount, 0, 0, ColumnCount);
-            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 0, RowCount, lower.RowCount, 0, 0, lower.ColumnCount);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount);
+            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, 1, lower.ColumnCount);
         }
 
         /// <summary>
@@ -1247,8 +1247,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             }
 
             var result = Build.SameAs(this, lower, RowCount + lower.RowCount, ColumnCount + lower.ColumnCount, RowCount != ColumnCount);
-            Storage.CopySubMatrixToUnchecked(result.Storage, 0, 0, RowCount, 0, 0, ColumnCount);
-            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 0, RowCount, lower.RowCount, 0, ColumnCount, lower.ColumnCount);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount);
+            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, ColumnCount, lower.ColumnCount);
             return result;
         }
 
@@ -1279,8 +1279,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw DimensionsDontMatch<ArgumentException>(this, result, "result");
             }
 
-            Storage.CopySubMatrixToUnchecked(result.Storage, 0, 0, RowCount, 0, 0, ColumnCount);
-            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 0, RowCount, lower.RowCount, 0, ColumnCount, lower.ColumnCount);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount);
+            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, ColumnCount, lower.ColumnCount);
         }
 
         /// <summary>
@@ -1293,9 +1293,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 return false;
             }
 
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = row + 1; column < ColumnCount; column++)
+                for (var column = row + 1; column <= ColumnCount; column++)
                 {
                     if (!At(row, column).Equals(At(column, row)))
                     {
@@ -1459,7 +1459,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         public IEnumerable<Vector1<T>> EnumerateColumns()
         {
-            for (var i = 0; i < ColumnCount; i++)
+            for (var i = 1; i <= ColumnCount; i++)
             {
                 yield return Column(i);
             }
@@ -1473,7 +1473,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public IEnumerable<Vector1<T>> EnumerateColumns(int index, int length)
         {
             var maxIndex = Math.Min(index + length, ColumnCount);
-            for (var i = Math.Max(index, 0); i < maxIndex; i++)
+            for (var i = Math.Max(index, 1); i <= maxIndex; i++)
             {
                 yield return Column(i);
             }
@@ -1488,7 +1488,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </remarks>
         public IEnumerable<Tuple<int, Vector1<T>>> EnumerateColumnsIndexed()
         {
-            for (var i = 0; i < ColumnCount; i++)
+            for (var i = 1; i <= ColumnCount; i++)
             {
                 yield return new Tuple<int, Vector1<T>>(i, Column(i));
             }
@@ -1506,7 +1506,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public IEnumerable<Tuple<int, Vector1<T>>> EnumerateColumnsIndexed(int index, int length)
         {
             var maxIndex = Math.Min(index + length, ColumnCount);
-            for (var i = Math.Max(index, 0); i < maxIndex; i++)
+            for (var i = Math.Max(index, 1); i <= maxIndex; i++)
             {
                 yield return new Tuple<int, Vector1<T>>(i, Column(i));
             }
@@ -1517,7 +1517,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         public IEnumerable<Vector1<T>> EnumerateRows()
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 yield return Row(i);
             }
@@ -1531,7 +1531,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public IEnumerable<Vector1<T>> EnumerateRows(int index, int length)
         {
             var maxIndex = Math.Min(index + length, RowCount);
-            for (var i = Math.Max(index, 0); i < maxIndex; i++)
+            for (var i = Math.Max(index, 1); i <= maxIndex; i++)
             {
                 yield return Row(i);
             }
@@ -1546,7 +1546,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </remarks>
         public IEnumerable<Tuple<int, Vector1<T>>> EnumerateRowsIndexed()
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 yield return new Tuple<int, Vector1<T>>(i, Row(i));
             }
@@ -1564,7 +1564,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public IEnumerable<Tuple<int, Vector1<T>>> EnumerateRowsIndexed(int index, int length)
         {
             var maxIndex = Math.Min(index + length, RowCount);
-            for (var i = Math.Max(index, 0); i < maxIndex; i++)
+            for (var i = Math.Max(index, 1); i <= maxIndex; i++)
             {
                 yield return new Tuple<int, Vector1<T>>(i, Row(i));
             }
@@ -1685,7 +1685,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             var result = new TU[RowCount];
             if (!EqualityComparer<TU>.Default.Equals(state, default(TU)))
             {
-                CommonParallel.For(0, result.Length, 4096, (a, b) =>
+                CommonParallel.For(1, result.Length + 1, 4096, (a, b) =>      // no equivalent to "for(i = 1; i <= result.Length; ++i)" exists, so the +1 is necessary.
                 {
                     for (int i = a; i < b; i++)
                     {
@@ -1706,7 +1706,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             var result = new TU[ColumnCount];
             if (!EqualityComparer<TU>.Default.Equals(state, default(TU)))
             {
-                CommonParallel.For(0, result.Length, 4096, (a, b) =>
+                CommonParallel.For(1, result.Length + 1, 4096, (a, b) =>      // no equivalent to "for(i = 1; i <= result.Length; ++i)" exists, so the +1 is necessary.
                 {
                     for (int i = a; i < b; i++)
                     {

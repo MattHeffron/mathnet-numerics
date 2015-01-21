@@ -46,7 +46,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
     /// A Matrix class with dense storage. The underlying storage is a one dimensional array in column-major order (column by column).
     /// </summary>
     [Serializable]
-    [DebuggerDisplay("DenseMatrix {RowCount}x{ColumnCount}-Double")]
+    [DebuggerDisplay("DenseMatrix[1] {RowCount}x{ColumnCount}-Double")]
     public class DenseMatrix : Matrix
     {
         /// <summary>
@@ -486,7 +486,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 var diagonal = diagonalOther.Data;
                 for (int i = 0; i < diagonal.Length; i++)
                 {
-                    result.At(i, i, result.At(i, i) + diagonal[i]);
+                    int i1 = i + 1;     // account for one based indexing
+                    result.At(i1, i1, result.At(i1, i1) + diagonal[i]);
                 }
                 return;
             }
@@ -542,7 +543,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 var diagonal = diagonalOther.Data;
                 for (int i = 0; i < diagonal.Length; i++)
                 {
-                    result.At(i, i, result.At(i, i) - diagonal[i]);
+                    int i1 = i + 1;     // account for one based indexing
+                    result.At(i1, i1, result.At(i1, i1) - diagonal[i]);
                 }
                 return;
             }
@@ -624,14 +626,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 var d = Math.Min(ColumnCount, other.ColumnCount);
                 if (d < other.ColumnCount)
                 {
-                    result.ClearSubMatrix(0, RowCount, ColumnCount, other.ColumnCount - ColumnCount);
+                    result.ClearSubMatrix(1, RowCount, ColumnCount, other.ColumnCount - ColumnCount);
                 }
                 int index = 0;
-                for (int j = 0; j < d; j++)
+                for (int j = 1; j <= d; j++)
                 {
-                    for (int i = 0; i < RowCount; i++)
+                    int j0 = j - 1;     // account for diagonal being zero-based
+                    for (int i = 1; i <= RowCount; i++)
                     {
-                        result.At(i, j, _values[index]*diagonal[j]);
+                        result.At(i, j, _values[index]*diagonal[j0]);
                         index++;
                     }
                 }
@@ -851,7 +854,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 CopyTo(result);
             }
 
-            CommonParallel.For(0, _values.Length, (a, b) =>
+            CommonParallel.For(0, _values.Length, 4096, (a, b) =>
             {
                 var v = denseResult._values;
                 for (int i = a; i < b; i++)
@@ -906,7 +909,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 CopyTo(result);
             }
 
-            CommonParallel.For(0, _values.Length, (a, b) =>
+            CommonParallel.For(0, _values.Length, 4096, (a, b) =>
             {
                 var v = denseResult._values;
                 for (int i = a; i < b; i++)

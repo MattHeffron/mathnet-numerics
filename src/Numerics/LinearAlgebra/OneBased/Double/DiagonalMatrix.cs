@@ -44,12 +44,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
     /// </summary>
     /// <remarks>
     /// Diagonal matrices can be non-square matrices but the diagonal always starts
-    /// at element 0,0. A diagonal matrix will throw an exception if non diagonal
+    /// at element 1,1. A diagonal matrix will throw an exception if non diagonal
     /// entries are set. The exception to this is when the off diagonal elements are
     /// 0.0 or NaN; these settings will cause no change to the diagonal matrix.
     /// </remarks>
     [Serializable]
-    [DebuggerDisplay("DiagonalMatrix {RowCount}x{ColumnCount}-Double")]
+    [DebuggerDisplay("DiagonalMatrix[1] {RowCount}x{ColumnCount}-Double")]
     public class DiagonalMatrix : Matrix
     {
         /// <summary>
@@ -73,7 +73,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <summary>
         /// Create a new square diagonal matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
+        /// Zero-length matrices are supported.
         /// </summary>
         /// <exception cref="ArgumentException">If the order is less than one.</exception>
         public DiagonalMatrix(int order)
@@ -84,9 +84,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <summary>
         /// Create a new diagonal matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
+        /// Zero-length matrices are supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the row or column count is less than one.</exception>
+        /// <exception cref="ArgumentException">If the row or column count is less than zero.</exception>
         public DiagonalMatrix(int rows, int columns)
             : this(new DiagonalMatrixStorage<double>(rows, columns))
         {
@@ -95,9 +95,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <summary>
         /// Create a new diagonal matrix with the given number of rows and columns.
         /// All diagonal cells of the matrix will be initialized to the provided value, all non-diagonal ones to zero.
-        /// Zero-length matrices are not supported.
+        /// Zero-length matrices are supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the row or column count is less than one.</exception>
+        /// <exception cref="ArgumentException">If the row or column count is less than zero.</exception>
         public DiagonalMatrix(int rows, int columns, double diagonalValue)
             : this(rows, columns)
         {
@@ -200,7 +200,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             result.Clear();
             for (var i = 0; i < _data.Length; i++)
             {
-                result.At(i, i, -_data[i]);
+                int i1 = i + 1;     // account for one based indexing
+                result.At(i1, i1, -_data[i]);
             }
         }
 
@@ -224,7 +225,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             other.CopyTo(result);
             for (int i = 0; i < _data.Length; i++)
             {
-                result.At(i, i, result.At(i, i) + _data[i]);
+                int i1 = i + 1;     // account for one based indexing
+                result.At(i1, i1, result.At(i1, i1) + _data[i]);
             }
         }
 
@@ -248,7 +250,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             other.Negate(result);
             for (int i = 0; i < _data.Length; i++)
             {
-                result.At(i, i, result.At(i, i) + _data[i]);
+                int i1 = i + 1;     // account for one based indexing
+                result.At(i1, i1, result.At(i1, i1) + _data[i]);
             }
         }
 
@@ -291,7 +294,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         protected override void DoMultiply(Vector1<double> rightSide, Vector1<double> result)
         {
             var d = Math.Min(ColumnCount, RowCount);
-            if (d < RowCount)
+            if (d <= RowCount)
             {
                 result.ClearSubVector(ColumnCount, RowCount - ColumnCount);
             }
@@ -309,7 +312,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
 
             for (var i = 0; i < d; i++)
             {
-                result.At(i, _data[i]*rightSide.At(i));
+                int i1 = i + 1;     // account for one based indexing
+                result.At(i1, _data[i] * rightSide.At(i1));
             }
         }
 
@@ -338,16 +342,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 var dense = denseOther.Data;
                 var diagonal = _data;
                 var d = Math.Min(denseOther.RowCount, RowCount);
-                if (d < RowCount)
+                if (d <= RowCount)
                 {
                     result.ClearSubMatrix(denseOther.RowCount, RowCount - denseOther.RowCount, 0, denseOther.ColumnCount);
                 }
                 int index = 0;
-                for (int i = 0; i < denseOther.ColumnCount; i++)
+                for (int i = 1; i <= denseOther.ColumnCount; i++)
                 {
-                    for (int j = 0; j < d; j++)
+                    for (int j = 1; j <= d; j++)
                     {
-                        result.At(j, i, dense[index]*diagonal[j]);
+                        int j0 = j - 1;     // account for one based indexing
+                        result.At(j, i, dense[index]*diagonal[j0]);
                         index++;
                     }
                     index += (denseOther.RowCount - d);
@@ -362,7 +367,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             else
             {
                 result.Clear();
-                other.Storage.MapSubMatrixIndexedTo(result.Storage, (i, j, x) => x*_data[i], 0, 0, other.RowCount, 0, 0, other.ColumnCount, Zeros.AllowSkip, ExistingData.AssumeZeros);
+                other.Storage.MapSubMatrixIndexedTo(result.Storage, (i, j, x) => x*_data[i], 1, 1, other.RowCount, 1, 1, other.ColumnCount, Zeros.AllowSkip, ExistingData.AssumeZeros);
             }
         }
 
@@ -391,16 +396,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 var dense = denseOther.Data;
                 var diagonal = _data;
                 var d = Math.Min(denseOther.ColumnCount, RowCount);
-                if (d < RowCount)
+                if (d <= RowCount)
                 {
-                    result.ClearSubMatrix(denseOther.ColumnCount, RowCount - denseOther.ColumnCount, 0, denseOther.RowCount);
+                    result.ClearSubMatrix(denseOther.ColumnCount, RowCount - denseOther.ColumnCount, 1, denseOther.RowCount);
                 }
                 int index = 0;
-                for (int j = 0; j < d; j++)
+                for (int j = 1; j <= d; j++)
                 {
-                    for (int i = 0; i < denseOther.RowCount; i++)
+                    int j0 = j - 1;     // account for one based indexing
+                    for (int i = 1; i <= denseOther.RowCount; i++)
                     {
-                        result.At(j, i, dense[index]*diagonal[j]);
+                        result.At(j, i, dense[index]*diagonal[j0]);
                         index++;
                     }
                 }
@@ -435,16 +441,16 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 var dense = denseOther.Data;
                 var diagonal = _data;
                 var d = Math.Min(denseOther.RowCount, ColumnCount);
-                if (d < ColumnCount)
+                if (d <= ColumnCount)
                 {
-                    result.ClearSubMatrix(denseOther.RowCount, ColumnCount - denseOther.RowCount, 0, denseOther.ColumnCount);
+                    result.ClearSubMatrix(denseOther.RowCount, ColumnCount - denseOther.RowCount, 1, denseOther.ColumnCount);
                 }
                 int index = 0;
-                for (int i = 0; i < denseOther.ColumnCount; i++)
+                for (int i = 1; i <= denseOther.ColumnCount; i++)
                 {
                     for (int j = 0; j < d; j++)
                     {
-                        result.At(j, i, dense[index]*diagonal[j]);
+                        result.At(j+1, i, dense[index]*diagonal[j]);    // +1 to account for one-based indexing
                         index++;
                     }
                     index += (denseOther.RowCount - d);
@@ -459,7 +465,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             else
             {
                 result.Clear();
-                other.Storage.MapSubMatrixIndexedTo(result.Storage, (i, j, x) => x*_data[i], 0, 0, other.RowCount, 0, 0, other.ColumnCount, Zeros.AllowSkip, ExistingData.AssumeZeros);
+                other.Storage.MapSubMatrixIndexedTo(result.Storage, (i, j, x) => x*_data[i], 1, 1, other.RowCount, 1, 1, other.ColumnCount, Zeros.AllowSkip, ExistingData.AssumeZeros);
             }
         }
 
@@ -471,7 +477,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         protected override void DoTransposeThisAndMultiply(Vector1<double> rightSide, Vector1<double> result)
         {
             var d = Math.Min(ColumnCount, RowCount);
-            if (d < ColumnCount)
+            if (d <= ColumnCount)
             {
                 result.ClearSubVector(RowCount, ColumnCount - RowCount);
             }
@@ -487,9 +493,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 }
             }
 
-            for (var i = 0; i < d; i++)
+            for (var i = 1; i <= d; i++)
             {
-                result.At(i, _data[i]*rightSide.At(i));
+                result.At(i, _data[i-1] * rightSide.At(i));     // -1 to account for zero-based indexing
             }
         }
 
@@ -516,7 +522,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             result.Clear();
             for (int i = 0; i < _data.Length; i++)
             {
-                result.At(i, i, _data[i]/divisor);
+                int i1 = i + 1;     // account for one based indexing
+                result.At(i1, i1, _data[i] / divisor);
             }
         }
 
@@ -544,7 +551,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             result.Clear();
             for (int i = 0; i < _data.Length; i++)
             {
-                result.At(i, i, dividend/_data[i]);
+                int i1 = i + 1;     // account for one based indexing
+                result.At(i1, i1, dividend / _data[i]);
             }
         }
 
@@ -717,7 +725,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             result.Clear();
             for (var i = 0; i < _data.Length; i++)
             {
-                result.At(i, i, _data[i]);
+                int i1 = i + 1;     // account for one based indexing
+                result.At(i1, i1, _data[i]);
             }
         }
 
@@ -770,7 +779,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             result.Clear();
             for (var i = 0; i < _data.Length; i++)
             {
-                result.At(i, i, _data[i]);
+                int i1 = i + 1;     // account for one based indexing
+                result.At(i1, i1, _data[i]);
             }
         }
 
@@ -808,11 +818,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="columnCount">The number of columns to copy. Must be positive.</param>
         /// <returns>The requested sub-matrix.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If: <list><item><paramref name="rowIndex"/> is
-        /// negative, or greater than or equal to the number of rows.</item>
-        /// <item><paramref name="columnIndex"/> is negative, or greater than or equal to the number
+        /// &lt; 1, or greater than the number of rows.</item>
+        /// <item><paramref name="columnIndex"/> is &lt; 1, or greater than the number
         /// of columns.</item>
-        /// <item><c>(columnIndex + columnLength) &gt;= Columns</c></item>
-        /// <item><c>(rowIndex + rowLength) &gt;= Rows</c></item></list></exception>
+        /// <item><c>(columnIndex + columnLength - 1) &gt; Columns</c></item>
+        /// <item><c>(rowIndex + rowLength - 1) &gt; Rows</c></item></list></exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowCount"/> or <paramref name="columnCount"/>
         /// is not positive.</exception>
         public override Matrix1<double> SubMatrix(int rowIndex, int rowCount, int columnIndex, int columnCount)
@@ -821,7 +831,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 ? (Matrix1<double>)new DiagonalMatrix(rowCount, columnCount)
                 : new SparseMatrix(rowCount, columnCount);
 
-            Storage.CopySubMatrixTo(target.Storage, rowIndex, 0, rowCount, columnIndex, 0, columnCount, ExistingData.AssumeZeros);
+            Storage.CopySubMatrixTo(target.Storage, rowIndex, 1, rowCount, columnIndex, 1, columnCount, ExistingData.AssumeZeros);
             return target;
         }
 

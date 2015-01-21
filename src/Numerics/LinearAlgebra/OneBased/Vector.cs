@@ -58,7 +58,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             Count = storage.Length;
         }
 
-        public static readonly VectorBuilder<T> Build = BuilderInstance<T>.Vector;
+        public static readonly VectorBuilder<T> Build = BuilderInstance<T>.Vector1;
 
         /// <summary>
         /// Gets the raw vector data storage.
@@ -119,12 +119,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         public void ClearSubVector(int index, int count)
         {
-            if (count < 1)
+            if (count < 0)
             {
-                throw new ArgumentOutOfRangeException("count", Resources.ArgumentMustBePositive);
+                throw new ArgumentOutOfRangeException("count", Resources.ArgumentNotNegative);
             }
 
-            if (index + count > Count || index < 0)
+            if (index + count - 1 > Count || index <= 0)
             {
                 throw new ArgumentOutOfRangeException("index");
             }
@@ -198,7 +198,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public Vector1<T> SubVector(int index, int count)
         {
             var target = Build.SameAs(this, count);
-            Storage.CopySubVectorTo(target.Storage, index, 0, count, ExistingData.AssumeZeros);
+            Storage.CopySubVectorTo(target.Storage, index, 1, count, ExistingData.AssumeZeros);
             return target;
         }
 
@@ -216,7 +216,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentNullException("subVector");
             }
 
-            subVector.Storage.CopySubVectorTo(Storage, 0, index, count);
+            subVector.Storage.CopySubVectorTo(Storage, 1, index, count);
         }
 
         /// <summary>
@@ -259,7 +259,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public Matrix1<T> ToColumnMatrix()
         {
             var result = Matrix1<T>.Build.SameAs(this, Count, 1);
-            Storage.CopyToColumnUnchecked(result.Storage, 0, ExistingData.AssumeZeros);
+            Storage.CopyToColumnUnchecked(result.Storage, 1, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -272,7 +272,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public Matrix1<T> ToRowMatrix()
         {
             var result = Matrix1<T>.Build.SameAs(this, 1, Count);
-            Storage.CopyToRowUnchecked(result.Storage, 0, ExistingData.AssumeZeros);
+            Storage.CopyToRowUnchecked(result.Storage, 1, ExistingData.AssumeZeros);
             return result;
         }
 

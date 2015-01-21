@@ -898,10 +898,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 }
             }
             var m = Dense(rowspans.Sum(), colspans.Sum());
-            int rowoffset = 0;
+            int rowoffset = 1;
             for (int i = 0; i < rowspans.Length; i++)
             {
-                int coloffset = 0;
+                int coloffset = 1;
                 for (int j = 0; j < colspans.Length; j++)
                 {
                     m.SetSubMatrix(rowoffset, coloffset, matrices[i, j]);
@@ -1245,10 +1245,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 }
             }
             var m = Sparse(rowspans.Sum(), colspans.Sum());
-            int rowoffset = 0;
+            int rowoffset = 1;
             for (int i = 0; i < rowspans.Length; i++)
             {
-                int coloffset = 0;
+                int coloffset = 1;
                 for (int j = 0; j < colspans.Length; j++)
                 {
                     m.SetSubMatrix(rowoffset, coloffset, matrices[i, j]);
@@ -1698,12 +1698,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             _singleton = new Lazy<Tuple<MatrixBuilder<T>, VectorBuilder<T>>>(() => new Tuple<MatrixBuilder<T>, VectorBuilder<T>>(matrixBuilder, vectorBuilder));
         }
 
-        public static MatrixBuilder<T> Matrix
+        public static MatrixBuilder<T> Matrix1
         {
             get { return _singleton.Value.Item1; }
         }
 
-        public static VectorBuilder<T> Vector
+        public static VectorBuilder<T> Vector1
         {
             get { return _singleton.Value.Item2; }
         }

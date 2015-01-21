@@ -42,12 +42,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// The value of 1.0.
         /// </summary>
-        public static readonly T One = BuilderInstance<T>.Matrix.One;
+        public static readonly T One = BuilderInstance<T>.Matrix1.One;
 
         /// <summary>
         /// The value of 0.0.
         /// </summary>
-        public static readonly T Zero = BuilderInstance<T>.Matrix.Zero;
+        public static readonly T Zero = BuilderInstance<T>.Matrix1.Zero;
 
         /// <summary>
         /// Negate each element of this matrix and place the results into the result matrix.
@@ -1566,7 +1566,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public virtual Vector1<T>[] Kernel()
         {
             var svd = Svd(true);
-            return svd.VT.EnumerateRows(svd.Rank, ColumnCount - svd.Rank).ToArray();
+            return svd.VT.EnumerateRows(svd.Rank + 1, ColumnCount - svd.Rank).ToArray();
         }
 
         /// <summary>
@@ -1576,7 +1576,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public virtual Vector1<T>[] Range()
         {
             var svd = Svd(true);
-            return svd.U.EnumerateColumns(0, svd.Rank).ToArray();
+            return svd.U.EnumerateColumns(1, svd.Rank).ToArray();
         }
 
         /// <summary>Computes the inverse of this matrix.</summary>
@@ -1606,11 +1606,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
         /// <summary>
         /// Computes the Kronecker product of this matrix with the given matrix. The new matrix is M-by-N
-        /// with M = this.Rows * lower.Rows and N = this.Columns * lower.Columns.
+        /// with M = this.Rows * other.Rows and N = this.Columns * lower.Columns.
         /// </summary>
         /// <param name="other">The other matrix.</param>
         /// <param name="result">The Kronecker product of the two matrices.</param>
-        /// <exception cref="ArgumentException">If the result matrix's dimensions are not (this.Rows * lower.rows) x (this.Columns * lower.Columns).</exception>
+        /// <exception cref="ArgumentException">If the result matrix's dimensions are not (this.Rows * other.rows) x (this.Columns * other.Columns).</exception>
         public virtual void KroneckerProduct(Matrix1<T> other, Matrix1<T> result)
         {
             if (result.RowCount != (RowCount*other.RowCount) || result.ColumnCount != (ColumnCount*other.ColumnCount))
@@ -1618,11 +1618,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw DimensionsDontMatch<ArgumentOutOfRangeException>(this, other, result);
             }
 
+            // Because these j and i are multiplicative factors in addition to indexes, adjust the index values at point of use.
             for (var j = 0; j < ColumnCount; j++)
             {
                 for (var i = 0; i < RowCount; i++)
                 {
-                    result.SetSubMatrix(i*other.RowCount, other.RowCount, j*other.ColumnCount, other.ColumnCount, At(i, j)*other);
+                    result.SetSubMatrix(i * other.RowCount + 1, other.RowCount, j * other.ColumnCount + 1, other.ColumnCount, At(i + 1, j + 1) * other);
                 }
             }
         }

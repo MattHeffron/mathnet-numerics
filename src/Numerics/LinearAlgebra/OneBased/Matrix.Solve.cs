@@ -199,7 +199,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 preconditioner = new UnitPreconditioner<T>();
             }
 
-            for (var column = 0; column < input.ColumnCount; column++)
+            for (var column = 1; column <= input.ColumnCount; column++)
             {
                 var solution = Vector1<T>.Build.Dense(RowCount);
 

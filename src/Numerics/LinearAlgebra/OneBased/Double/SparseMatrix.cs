@@ -42,7 +42,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
     /// <a href="http://en.wikipedia.org/wiki/Sparse_matrix#Compressed_sparse_row_.28CSR_or_CRS.29">Wikipedia - CSR</a>.
     /// </summary>
     [Serializable]
-    [DebuggerDisplay("SparseMatrix {RowCount}x{ColumnCount}-Double {NonZerosCount}-NonZero")]
+    [DebuggerDisplay("SparseMatrix[1] {RowCount}x{ColumnCount}-Double {NonZerosCount}-NonZero")]
     public class SparseMatrix : Matrix
     {
         readonly SparseCompressedRowMatrixStorage<double> _storage;
@@ -71,9 +71,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <summary>
         /// Create a new square sparse matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
+        /// Zero-length matrices are supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the order is less than one.</exception>
+        /// <exception cref="ArgumentException">If the order is less than zero.</exception>
         public SparseMatrix(int order)
             : this(order, order)
         {
@@ -82,9 +82,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <summary>
         /// Create a new sparse matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
+        /// Zero-length matrices are supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the row or column count is less than one.</exception>
+        /// <exception cref="ArgumentException">If the row or column count is less than zero.</exception>
         public SparseMatrix(int rows, int columns)
             : this(new SparseCompressedRowMatrixStorage<double>(rows, columns))
         {
@@ -1504,7 +1504,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
 
         public override string ToTypeString()
         {
-            return string.Format("SparseMatrix {0}x{1}-Double {2:P2} Filled", RowCount, ColumnCount, NonZerosCount / (RowCount * (double)ColumnCount));
+            return string.Format("SparseMatrix[1] {0}x{1}-Double {2:P2} Filled", RowCount, ColumnCount, NonZerosCount / (RowCount * (double)ColumnCount));
         }
     }
 }

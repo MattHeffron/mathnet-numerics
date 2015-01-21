@@ -67,7 +67,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </param>
         protected override void DoAdd(double scalar, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) + scalar);
             }
@@ -84,7 +84,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </param>
         protected override void DoAdd(Vector1<double> other, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) + other.At(index));
             }
@@ -115,7 +115,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </param>
         protected override void DoSubtract(Vector1<double> other, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) - other.At(index));
             }
@@ -132,7 +132,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </param>
         protected override void DoMultiply(double scalar, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) * scalar);
             }
@@ -159,7 +159,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The vector to store the result of the division.</param>
         protected override void DoDivideByThis(double dividend, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, dividend / At(index));
             }
@@ -172,7 +172,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
         protected override void DoPointwiseMultiply(Vector1<double> other, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) * other.At(index));
             }
@@ -185,7 +185,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The vector to store the result of the pointwise division.</param>
         protected override void DoPointwiseDivide(Vector1<double> divisor, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) / divisor.At(index));
             }
@@ -209,7 +209,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the modulus.</param>
         protected override void DoPointwiseModulus(Vector1<double> divisor, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, Euclid.Modulus(At(index), divisor.At(index)));
             }
@@ -223,7 +223,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the modulus.</param>
         protected override void DoPointwiseRemainder(Vector1<double> divisor, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index)%divisor.At(index));
             }
@@ -255,7 +255,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         protected override double DoDotProduct(Vector1<double> other)
         {
             var dot = 0.0;
-            for (var i = 0; i < Count; i++)
+            for (var i = 1; i <= Count; i++)
             {
                 dot += At(i) * other.At(i);
             }
@@ -280,7 +280,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">A vector to store the results in.</param>
         protected override void DoModulus(double divisor, Vector1<double> result)
         {
-            for (int i = 0; i < Count; i++)
+            for (int i = 1; i <= Count; i++)
             {
                 result.At(i, Euclid.Modulus(At(i), divisor));
             }
@@ -294,7 +294,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">A vector to store the results in.</param>
         protected override void DoModulusByThis(double dividend, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, Euclid.Modulus(dividend, At(index)));
             }
@@ -308,7 +308,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">A vector to store the results in.</param>
         protected override void DoRemainder(double divisor, Vector1<double> result)
         {
-            for (int i = 0; i < Count; i++)
+            for (int i = 1; i <= Count; i++)
             {
                 result.At(i, At(i)%divisor);
             }
@@ -322,7 +322,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">A vector to store the results in.</param>
         protected override void DoRemainderByThis(double dividend, Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, dividend%At(index));
             }
@@ -343,9 +343,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <returns>The index of absolute minimum element.</returns>
         public override int AbsoluteMinimumIndex()
         {
-            var index = 0;
+            var index = 1;
             var min = Math.Abs(At(index));
-            for (var i = 1; i < Count; i++)
+            for (var i = 2; i <= Count; i++)
             {
                 var test = Math.Abs(At(i));
                 if (test < min)
@@ -373,9 +373,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <returns>The index of absolute maximum element.</returns>
         public override int AbsoluteMaximumIndex()
         {
-            var index = 0;
+            var index = 1;
             var max = Math.Abs(At(index));
-            for (var i = 1; i < Count; i++)
+            for (var i = 2; i <= Count; i++)
             {
                 var test = Math.Abs(At(i));
                 if (test > max)
@@ -395,7 +395,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         public override double Sum()
         {
             var sum = 0.0;
-            for (var i = 0; i < Count; i++)
+            for (var i = 1; i <= Count; i++)
             {
                 sum += At(i);
             }
@@ -409,7 +409,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         public override double L1Norm()
         {
             var sum = 0.0;
-            for (var i = 0; i < Count; i++)
+            for (var i = 1; i <= Count; i++)
             {
                 sum += Math.Abs(At(i));
             }
@@ -452,7 +452,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             if (double.IsPositiveInfinity(p)) return InfinityNorm();
 
             var sum = 0d;
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 sum += Math.Pow(Math.Abs(At(index)), p);
             }
@@ -479,7 +479,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">Target vector</param>
         protected override void DoNegate(Vector1<double> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, -At(index));
             }
@@ -491,9 +491,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <returns>The index of absolute maximum element.</returns>
         public override int MaximumIndex()
         {
-            var index = 0;
+            var index = 1;
             var max = At(index);
-            for (var i = 1; i < Count; i++)
+            for (var i = 2; i <= Count; i++)
             {
                 var test = At(i);
                 if (test > max)
@@ -512,9 +512,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <returns>The index of minimum element.</returns>
         public override int MinimumIndex()
         {
-            var index = 0;
+            var index = 1;
             var min = At(index);
-            for (var i = 1; i < Count; i++)
+            for (var i = 2; i <= Count; i++)
             {
                 var test = At(i);
                 if (test < min)

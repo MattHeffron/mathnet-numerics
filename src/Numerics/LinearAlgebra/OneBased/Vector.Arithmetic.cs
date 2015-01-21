@@ -38,12 +38,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// The zero value for type T.
         /// </summary>
-        public static readonly T Zero = BuilderInstance<T>.Vector.Zero;
+        public static readonly T Zero = BuilderInstance<T>.Vector1.Zero;
 
         /// <summary>
         /// The value of 1.0 for type T.
         /// </summary>
-        public static readonly T One = BuilderInstance<T>.Vector.One;
+        public static readonly T One = BuilderInstance<T>.Vector1.One;
 
         /// <summary>
         /// Negates vector and save result to <paramref name="result"/>
@@ -125,7 +125,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         protected void DoOuterProduct(Vector1<T> other, Matrix1<T> result)
         {
             var work = Build.Dense(Count);
-            for (var i = 0; i < other.Count; i++)
+            for (var i = 1; i <= other.Count; i++)
             {
                 DoMultiply(other.At(i), work);
                 result.SetColumn(i, work);

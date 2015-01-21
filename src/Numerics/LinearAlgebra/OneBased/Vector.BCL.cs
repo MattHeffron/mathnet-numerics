@@ -95,10 +95,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
         int IList<T>.IndexOf(T item)
         {
-            for (int i = 0; i < Count; ++i)
+            for (int i = 1; i <= Count; ++i)
             {
                 if (At(i).Equals(item))
-                    return i;
+                    return i-1;     // IList<T> is zero based so adjust the index
             }
             return -1;
         }
@@ -146,7 +146,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentNullException("array");
             }
 
-            Storage.CopySubVectorTo(new DenseVectorStorage<T>(array.Length, array), 0, arrayIndex, Count);
+            Storage.CopySubVectorTo(new DenseVectorStorage<T>(array.Length, array), 1, arrayIndex, Count);
         }
 
         bool IList.IsReadOnly
@@ -226,7 +226,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentException(Resources.ArgumentSingleDimensionArray, "array");
             }
 
-            Storage.CopySubVectorTo(new DenseVectorStorage<T>(array.Length, (T[]) array), 0, index, Count);
+            Storage.CopySubVectorTo(new DenseVectorStorage<T>(array.Length, (T[]) array), 1, index, Count);
         }
 
         /// <summary>
@@ -256,7 +256,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         public virtual string ToTypeString()
         {
-            return string.Format("{0} {1}-{2}", GetType().Name, Count, typeof (T).Name);
+            // include notation that this is one-based indexing
+            return string.Format("{0}[1] {1}-{2}", GetType().Name, Count, typeof(T).Name);
         }
 
         public string[,] ToVectorStringArray(int maxPerColumn, int maxWidth, int padding, string ellipsis, Func<T, string> formatValue)
@@ -267,7 +268,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             var columns = new List<Tuple<int, string[]>>();
             int chars = 0;
             int offset = 0;
-            while (offset < Count)
+            while (offset <= Count)
             {
                 // full column
                 int height = Math.Min(maxPerColumn, Count - offset);
@@ -280,7 +281,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 columns.Add(candidate);
                 offset += height;
             }
-            if (offset < Count)
+            if (offset <= Count)
             {
                 // we're not done yet, but adding the last column has failed
                 // --> make the last column partial
@@ -288,8 +289,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 var c = last.Item2;
                 c[c.Length - 4] = ellipsis;
                 c[c.Length - 3] = ellipsis;
-                c[c.Length - 2] = formatValue(At(Count - 2));
-                c[c.Length - 1] = formatValue(At(Count - 1));
+                c[c.Length - 2] = formatValue(At(Count - 1));
+                c[c.Length - 1] = formatValue(At(Count));
             }
 
             int rows = columns[0].Item2.Length;
@@ -345,7 +346,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             int index = 0;
             for (var k = 0; k < height; k++)
             {
-                c[index++] = formatValue(At(offset + k));
+                c[index++] = formatValue(At(offset + k + 1));       // adjust for one-based indexing
             }
             int w = c.Max(x => x.Length);
             return new Tuple<int, string[]>(w, c);

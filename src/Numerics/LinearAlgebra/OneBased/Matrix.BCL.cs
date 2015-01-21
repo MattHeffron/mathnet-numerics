@@ -97,7 +97,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         public virtual string ToTypeString()
         {
-            return string.Format("{0} {1}x{2}-{3}", GetType().Name, RowCount, ColumnCount, typeof (T).Name);
+            // include notation that this is one-based indexing
+            return string.Format("{0}[1] {1}x{2}-{3}", GetType().Name, RowCount, ColumnCount, typeof (T).Name); 
         }
 
         /// <summary>
@@ -126,7 +127,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             {
                 for (int j = 0; j < left; j++)
                 {
-                    array[i, j] = formatValue(At(i, j));
+                    array[i, j] = formatValue(At(i+1, j+1));        // account for one based.
                 }
                 int colOffset = left;
                 if (colEllipsis)
@@ -136,7 +137,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 }
                 for (int j = 0; j < right; j++)
                 {
-                    array[i, colOffset + j] = formatValue(At(i, ColumnCount - right + j));
+                    array[i, colOffset + j] = formatValue(At(i + 1, ColumnCount - right + j + 1));        // account for one based.
                 }
             }
             int rowOffset = upper;
@@ -162,7 +163,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             {
                 for (int j = 0; j < left; j++)
                 {
-                    array[rowOffset + i, j] = formatValue(At(RowCount - lower + i, j));
+                    array[rowOffset + i, j] = formatValue(At(RowCount - lower + i + 1, j + 1));        // account for one based.
                 }
                 int colOffset = left;
                 if (colEllipsis)
@@ -172,7 +173,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 }
                 for (int j = 0; j < right; j++)
                 {
-                    array[rowOffset + i, colOffset + j] = formatValue(At(RowCount - lower + i, ColumnCount - right + j));
+                    array[rowOffset + i, colOffset + j] = formatValue(At(RowCount - lower + i + 1, ColumnCount - right + j + 1));        // account for one based.
                 }
             }
             return array;
@@ -272,7 +273,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             int index = 0;
             for (var row = 0; row < upper; row++)
             {
-                c[index++] = formatValue(At(row, column));
+                c[index++] = formatValue(At(row + 1, column + 1));
             }
             if (withEllipsis)
             {
@@ -280,7 +281,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             }
             for (var row = RowCount - lower; row < RowCount; row++)
             {
-                c[index++] = formatValue(At(row, column));
+                c[index++] = formatValue(At(row + 1, column + 1));
             }
             int w = c.Max(x => x.Length);
             if (withEllipsis)

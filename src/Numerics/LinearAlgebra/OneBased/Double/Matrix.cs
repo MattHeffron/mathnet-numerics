@@ -63,10 +63,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         public override double L1Norm()
         {
             var norm = 0d;
-            for (var j = 0; j < ColumnCount; j++)
+            for (var j = 1; j <= ColumnCount; j++)
             {
                 var s = 0d;
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     s += Math.Abs(At(i, j));
                 }
@@ -80,10 +80,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         public override double InfinityNorm()
         {
             var norm = 0d;
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 var s = 0d;
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     s += Math.Abs(At(i, j));
                 }
@@ -99,7 +99,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             var transpose = Transpose();
             var aat = this*transpose;
             var norm = 0d;
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 norm += aat.At(i, i);
             }
@@ -260,9 +260,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The matrix to store the result of the addition.</param>
         protected override void DoAdd(double scalar, Matrix1<double> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j) + scalar);
                 }
@@ -278,9 +278,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
         protected override void DoAdd(Matrix1<double> other, Matrix1<double> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j) + other.At(i, j));
                 }
@@ -294,9 +294,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The matrix to store the result of the subtraction.</param>
         protected override void DoSubtract(double scalar, Matrix1<double> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j) - scalar);
                 }
@@ -312,9 +312,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
         protected override void DoSubtract(Matrix1<double> other, Matrix1<double> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j) - other.At(i, j));
                 }
@@ -328,9 +328,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The matrix to store the result of the multiplication.</param>
         protected override void DoMultiply(double scalar, Matrix1<double> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j)*scalar);
                 }
@@ -344,10 +344,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoMultiply(Vector1<double> rightSide, Vector1<double> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 var s = 0.0;
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     s += At(i, j)*rightSide[j];
                 }
@@ -372,9 +372,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The matrix to store the result of the division.</param>
         protected override void DoDivideByThis(double dividend, Matrix1<double> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, dividend/At(i, j));
                 }
@@ -388,12 +388,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoMultiply(Matrix1<double> other, Matrix1<double> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < other.ColumnCount; j++)
+                for (var j = 1; j <= other.ColumnCount; j++)
                 {
                     var s = 0.0;
-                    for (var k = 0; k < ColumnCount; k++)
+                    for (var k = 1; k <= ColumnCount; k++)
                     {
                         s += At(i, k)*other.At(k, j);
                     }
@@ -409,12 +409,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoTransposeAndMultiply(Matrix1<double> other, Matrix1<double> result)
         {
-            for (var j = 0; j < other.RowCount; j++)
+            for (var j = 1; j <= other.RowCount; j++)
             {
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     var s = 0.0;
-                    for (var k = 0; k < ColumnCount; k++)
+                    for (var k = 1; k <= ColumnCount; k++)
                     {
                         s += At(i, k)*other.At(j, k);
                     }
@@ -440,12 +440,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoTransposeThisAndMultiply(Matrix1<double> other, Matrix1<double> result)
         {
-            for (var j = 0; j < other.ColumnCount; j++)
+            for (var j = 1; j <= other.ColumnCount; j++)
             {
-                for (var i = 0; i < ColumnCount; i++)
+                for (var i = 1; i <= ColumnCount; i++)
                 {
                     var s = 0.0;
-                    for (var k = 0; k < RowCount; k++)
+                    for (var k = 1; k <= RowCount; k++)
                     {
                         s += At(k, i)*other.At(k, j);
                     }
@@ -471,10 +471,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoTransposeThisAndMultiply(Vector1<double> rightSide, Vector1<double> result)
         {
-            for (var j = 0; j < ColumnCount; j++)
+            for (var j = 1; j <= ColumnCount; j++)
             {
                 var s = 0.0;
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     s += At(i, j)*rightSide[i];
                 }
@@ -498,9 +498,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the negation.</param>
         protected override void DoNegate(Matrix1<double> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, -At(i, j));
                 }
@@ -529,9 +529,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">Matrix to store the results in.</param>
         protected override void DoModulus(double divisor, Matrix1<double> result)
         {
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = 0; column < ColumnCount; column++)
+                for (var column = 1; column <= ColumnCount; column++)
                 {
                     result.At(row, column, Euclid.Modulus(At(row, column), divisor));
                 }
@@ -546,9 +546,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">A vector to store the results in.</param>
         protected override void DoModulusByThis(double dividend, Matrix1<double> result)
         {
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = 0; column < ColumnCount; column++)
+                for (var column = 1; column <= ColumnCount; column++)
                 {
                     result.At(row, column, Euclid.Modulus(dividend, At(row, column)));
                 }
@@ -563,9 +563,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">Matrix to store the results in.</param>
         protected override void DoRemainder(double divisor, Matrix1<double> result)
         {
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = 0; column < ColumnCount; column++)
+                for (var column = 1; column <= ColumnCount; column++)
                 {
                     result.At(row, column, At(row, column)%divisor);
                 }
@@ -580,9 +580,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">A vector to store the results in.</param>
         protected override void DoRemainderByThis(double dividend, Matrix1<double> result)
         {
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = 0; column < ColumnCount; column++)
+                for (var column = 1; column <= ColumnCount; column++)
                 {
                     result.At(row, column, dividend%At(row, column));
                 }
@@ -596,9 +596,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
         protected override void DoPointwiseMultiply(Matrix1<double> other, Matrix1<double> result)
         {
-            for (var j = 0; j < ColumnCount; j++)
+            for (var j = 1; j <= ColumnCount; j++)
             {
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     result.At(i, j, At(i, j)*other.At(i, j));
                 }
@@ -612,9 +612,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
         protected override void DoPointwiseDivide(Matrix1<double> divisor, Matrix1<double> result)
         {
-            for (var j = 0; j < ColumnCount; j++)
+            for (var j = 1; j <= ColumnCount; j++)
             {
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     result.At(i, j, At(i, j)/divisor.At(i, j));
                 }
@@ -639,9 +639,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the modulus.</param>
         protected override void DoPointwiseModulus(Matrix1<double> divisor, Matrix1<double> result)
         {
-            for (var j = 0; j < ColumnCount; j++)
+            for (var j = 1; j <= ColumnCount; j++)
             {
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     result.At(i, j, Euclid.Modulus(At(i, j), divisor.At(i, j)));
                 }
@@ -656,9 +656,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="result">The result of the modulus.</param>
         protected override void DoPointwiseRemainder(Matrix1<double> divisor, Matrix1<double> result)
         {
-            for (var j = 0; j < ColumnCount; j++)
+            for (var j = 1; j <= ColumnCount; j++)
             {
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     result.At(i, j, At(i, j)%divisor.At(i, j));
                 }
@@ -696,7 +696,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             }
 
             var sum = 0.0;
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 sum += At(i, i);
             }

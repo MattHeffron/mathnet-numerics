@@ -32,19 +32,20 @@ using System;
 
 namespace MathNet.Numerics.LinearAlgebra.OneBased
 {
+    // "Alias" these enums to the zero-based versions
     public enum ExistingData
     {
         /// <summary>
         /// Existing data may not be all zeros, so clearing may be necessary
         /// if not all of it will be overwritten anyway.
         /// </summary>
-        Clear = 0,
+        Clear = MathNet.Numerics.LinearAlgebra.ExistingData.Clear,
 
         /// <summary>
         /// If existing data is assumed to be all zeros already,
         /// clearing it may be skipped if applicable.
         /// </summary>
-        AssumeZeros = 1
+        AssumeZeros = MathNet.Numerics.LinearAlgebra.ExistingData.AssumeZeros
     }
 
     public enum Zeros
@@ -53,12 +54,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Allow skipping zero entries (without enforcing skipping them).
         /// When enumerating sparse matrices this can significantly speed up operations.
         /// </summary>
-        AllowSkip = 0,
+        AllowSkip = MathNet.Numerics.LinearAlgebra.Zeros.AllowSkip,
 
         /// <summary>
         /// Force applying the operation to all fields even if they are zero.
         /// </summary>
-        Include = 1
+        Include = MathNet.Numerics.LinearAlgebra.Zeros.Include
     }
 
     public enum Symmetricity
@@ -66,24 +67,24 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <summary>
         /// It is not known yet whether a matrix is symmetric or not.
         /// </summary>
-        Unknown = 0,
+        Unknown = MathNet.Numerics.LinearAlgebra.Symmetricity.Unknown,
 
         /// <summary>
         /// A matrix is symmetric
         /// </summary>
-        Symmetric = 1,
+        Symmetric = MathNet.Numerics.LinearAlgebra.Symmetricity.Symmetric,
 
         /// <summary>
         /// A matrix is hermitian (conjugate symmetric).
         /// </summary>
-        Hermitian = 2,
+        Hermitian = MathNet.Numerics.LinearAlgebra.Symmetricity.Hermitian,
 
         [Obsolete("Use Hermitian instead. Will be removed in v4.")]
-        ConjugateSymmetric = 2,
+        ConjugateSymmetric = MathNet.Numerics.LinearAlgebra.Symmetricity.ConjugateSymmetric,
 
         /// <summary>
         /// A matrix is not symmetric
         /// </summary>
-        Asymmetric = 3
+        Asymmetric = MathNet.Numerics.LinearAlgebra.Symmetricity.Asymmetric
     }
 }
