@@ -115,11 +115,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 var det = Complex.One;
                 foreach (var value in S)
                 {
-                    det *= value;
                     if (value.Magnitude.AlmostEqual(0.0))
                     {
                         return 0;
                     }
+                    det *= value;
                 }
 
                 return det.Magnitude;

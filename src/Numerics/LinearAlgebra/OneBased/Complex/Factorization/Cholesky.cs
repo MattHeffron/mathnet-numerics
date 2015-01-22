@@ -63,7 +63,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             get
             {
                 var det = Complex.One;
-                for (var j = 0; j < Factor.RowCount; j++)
+                for (var j = 1; j <= Factor.RowCount; j++)
                 {
                     var d = Factor.At(j, j);
                     det *= d*d;
@@ -81,7 +81,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             get
             {
                 var det = Complex.Zero;
-                for (var j = 0; j < Factor.RowCount; j++)
+                for (var j = 1; j <= Factor.RowCount; j++)
                 {
                     det += 2.0*Factor.At(j, j).Ln();
                 }

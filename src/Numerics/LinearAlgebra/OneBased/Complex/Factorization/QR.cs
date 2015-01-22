@@ -73,13 +73,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 }
 
                 var det = Complex.One;
-                for (var i = 0; i < FullR.ColumnCount; i++)
+                for (var i = 1; i <= FullR.ColumnCount; i++)
                 {
-                    det *= FullR.At(i, i);
-                    if (FullR.At(i, i).Magnitude.AlmostEqual(0.0))
+                    var fr = FullR.At(i, i);
+                    if (fr.Magnitude.AlmostEqual(0.0))
                     {
                         return 0;
                     }
+                    det *= fr;
                 }
 
                 return det.Magnitude;
@@ -94,7 +95,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         {
             get
             {
-                for (var i = 0; i < FullR.ColumnCount; i++)
+                for (var i = 1; i <= FullR.ColumnCount; i++)
                 {
                     if (FullR.At(i, i).Magnitude.AlmostEqual(0.0))
                     {

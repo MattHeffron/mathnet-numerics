@@ -64,9 +64,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             get
             {
                 var det = Complex.One;
-                for (var j = 0; j < Factors.RowCount; j++)
+                for (var j = 1; j <= Factors.RowCount; j++)
                 {
-                    if (Pivots[j] != j)
+                    if (Pivots[j - 1] != j)
                     {
                         det *= -Factors.At(j, j);
                     }

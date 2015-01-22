@@ -49,7 +49,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
     /// <a href="http://en.wikipedia.org/wiki/Sparse_matrix#Compressed_sparse_row_.28CSR_or_CRS.29">Wikipedia - CSR</a>.
     /// </summary>
     [Serializable]
-    [DebuggerDisplay("SparseMatrix {RowCount}x{ColumnCount}-Complex {NonZerosCount}-NonZero")]
+    [DebuggerDisplay("SparseMatrix[1] {RowCount}x{ColumnCount}-Complex {NonZerosCount}-NonZero")]
     public class SparseMatrix : Matrix
     {
         readonly SparseCompressedRowMatrixStorage<Complex> _storage;
@@ -78,9 +78,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <summary>
         /// Create a new square sparse matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the order is less than one.</exception>
+        /// <exception cref="ArgumentException">If the order is less than zero.</exception>
         public SparseMatrix(int order)
             : this(order, order)
         {
@@ -89,9 +88,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <summary>
         /// Create a new sparse matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the row or column count is less than one.</exception>
+        /// <exception cref="ArgumentException">If the row or column count is less than zero.</exception>
         public SparseMatrix(int rows, int columns)
             : this(new SparseCompressedRowMatrixStorage<Complex>(rows, columns))
         {
@@ -901,12 +899,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 var diagonal = diagonalOther.Data;
                 if (other.ColumnCount == other.RowCount)
                 {
-                    Storage.MapIndexedTo(result.Storage, (i, j, x) => x*diagonal[j], Zeros.AllowSkip, ExistingData.Clear);
+                    Storage.MapIndexedTo(result.Storage, (i, j, x) => x*diagonal[j - 1], Zeros.AllowSkip, ExistingData.Clear);
                 }
                 else
                 {
                     result.Storage.Clear();
-                    Storage.MapSubMatrixIndexedTo(result.Storage, (i, j, x) => x*diagonal[j], 0, 0, RowCount, 0, 0, ColumnCount, Zeros.AllowSkip, ExistingData.AssumeZeros);
+                    Storage.MapSubMatrixIndexedTo(result.Storage, (i, j, x) => x*diagonal[j - 1], 1, 1, RowCount, 1, 1, ColumnCount, Zeros.AllowSkip, ExistingData.AssumeZeros);
                 }
                 return;
             }
@@ -1494,7 +1492,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
 
         public override string ToTypeString()
         {
-            return string.Format("SparseMatrix {0}x{1}-Complex {2:P2} Filled", RowCount, ColumnCount, 100d * NonZerosCount / (RowCount * (double)ColumnCount));
+            return string.Format("SparseMatrix[1] {0}x{1}-Complex {2:P2} Filled", RowCount, ColumnCount, 100d * NonZerosCount / (RowCount * (double)ColumnCount));
         }
     }
  }

@@ -67,7 +67,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             var q = matrix.Clone();
             var r = Matrix1<Complex>.Build.SameAs(matrix, matrix.ColumnCount, matrix.ColumnCount);
 
-            for (var k = 0; k < q.ColumnCount; k++)
+            for (var k = 1; k <= q.ColumnCount; k++)
             {
                 var norm = q.Column(k).L2Norm();
                 if (norm == 0.0)
@@ -76,21 +76,21 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 }
 
                 r.At(k, k, norm);
-                for (var i = 0; i < q.RowCount; i++)
+                for (var i = 1; i <= q.RowCount; i++)
                 {
                     q.At(i, k, q.At(i, k) / norm);
                 }
 
-                for (var j = k + 1; j < q.ColumnCount; j++)
+                for (var j = k + 1; j <= q.ColumnCount; j++)
                 {
                     var dot = Complex.Zero;
-                    for (int i = 0; i < q.RowCount; i++)
+                    for (int i = 1; i <= q.RowCount; i++)
                     {
-                        dot += q.Column(k)[i].Conjugate() * q.Column(j)[i];
+                        dot += q.At(i, k).Conjugate() * q.At(i, j);
                     }
                     
                     r.At(k, j, dot);
-                    for (var i = 0; i < q.RowCount; i++)
+                    for (var i = 1; i <= q.RowCount; i++)
                     {
                         var value = q.At(i, j) - (q.At(i, k) * dot);
                         q.At(i, j, value);
@@ -134,18 +134,18 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             var inputCopy = input.Clone();
             
             // Compute Y = transpose(Q)*B
-            var column = new Complex[Q.RowCount];
-            for (var j = 0; j < input.ColumnCount; j++)
+            var column = new Complex[Q.RowCount + 1];   // Simplify indexing below, just allocate Q.RowCount+1 elements and "waste" the 0 position
+            for (var j = 1; j <= input.ColumnCount; j++)
             {
-                for (var k = 0; k < Q.RowCount; k++)
+                for (var k = 1; k <= Q.RowCount; k++)
                 {
                     column[k] = inputCopy.At(k, j);
                 }
 
-                for (var i = 0; i < Q.ColumnCount; i++)
+                for (var i = 1; i <= Q.ColumnCount; i++)
                 {
                     var s = Complex.Zero;
-                    for (var k = 0; k < Q.RowCount; k++)
+                    for (var k = 1; k <= Q.RowCount; k++)
                     {
                         s += Q.At(k, i).Conjugate() * column[k];
                     }
@@ -155,25 +155,27 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             }
 
             // Solve R*X = Y;
-            for (var k = Q.ColumnCount - 1; k >= 0; k--)
+            for (var k = Q.ColumnCount; k > 0; k--)
             {
-                for (var j = 0; j < input.ColumnCount; j++)
+                var frkk = FullR.At(k, k);
+                for (var j = 1; j <= input.ColumnCount; j++)
                 {
-                    inputCopy.At(k, j, inputCopy.At(k, j) / FullR.At(k, k));
+                    inputCopy.At(k, j, inputCopy.At(k, j) / frkk);
                 }
 
-                for (var i = 0; i < k; i++)
+                for (var i = 1; i < k; i++)
                 {
-                    for (var j = 0; j < input.ColumnCount; j++)
+                    var frik = FullR.At(i, k);
+                    for (var j = 1; j <= input.ColumnCount; j++)
                     {
-                        inputCopy.At(i, j, inputCopy.At(i, j) - (inputCopy.At(k, j) * FullR.At(i, k)));
+                        inputCopy.At(i, j, inputCopy.At(i, j) - (inputCopy.At(k, j) * frik));
                     }
                 }
             }
 
-            for (var i = 0; i < FullR.ColumnCount; i++)
+            for (var i = 1; i <= FullR.ColumnCount; i++)
             {
-                for (var j = 0; j < input.ColumnCount; j++)
+                for (var j = 1; j <= input.ColumnCount; j++)
                 {
                     result.At(i, j, inputCopy.At(i, j));
                 }
@@ -203,36 +205,40 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             var inputCopy = input.Clone();
 
             // Compute Y = transpose(Q)*B
-            var column = new Complex[Q.RowCount];
-            for (var k = 0; k < Q.RowCount; k++)
+            var column = new Complex[Q.RowCount + 1];       // Simplify indexing below, just allocate Q.RowCount+1 elements and "waste" the 0 position
+            for (var k = 1; k <= Q.RowCount; k++)
             {
-                column[k] = inputCopy[k];
+                column[k] = inputCopy.At(k);
             }
 
-            for (var i = 0; i < Q.ColumnCount; i++)
+            for (var i = 1; i <= Q.ColumnCount; i++)
             {
                 var s = Complex.Zero;
-                for (var k = 0; k < Q.RowCount; k++)
+                for (var k = 1; k <= Q.RowCount; k++)
                 {
                     s += Q.At(k, i).Conjugate() * column[k];
                 }
 
-                inputCopy[i] = s;
+                inputCopy.At(i, s);
             }
 
             // Solve R*X = Y;
-            for (var k = Q.ColumnCount - 1; k >= 0; k--)
+            for (var k = Q.ColumnCount; k > 0; k--)
             {
-                inputCopy[k] /= FullR.At(k, k);
-                for (var i = 0; i < k; i++)
+                var iCk = inputCopy.At(k);
+                iCk /= FullR.At(k, k);
+                inputCopy.At(k, iCk);
+                for (var i = 1; i <= k; i++)
                 {
-                    inputCopy[i] -= inputCopy[k] * FullR.At(i, k);
+                    var iCi = inputCopy.At(i);
+                    iCi -= iCk * FullR.At(i, k);
+                    inputCopy.At(i, iCi); 
                 }
             }
 
-            for (var i = 0; i < FullR.ColumnCount; i++)
+            for (var i = 1; i <= FullR.ColumnCount; i++)
             {
-                result[i] = inputCopy[i];
+                result.At(i, inputCopy.At(i));
             }
         }
     }

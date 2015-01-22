@@ -69,10 +69,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
 
             // Create a new matrix for the Cholesky factor, then perform factorization (while overwriting).
             var factor = matrix.Clone();
-            var tmpColumn = new Complex[factor.RowCount];
+            var tmpColumn = new Complex[factor.RowCount + 1];   // Simplify indexing below, just allocate an extra element and "waste" the 0 position
 
             // Main loop - along the diagonal
-            for (var ij = 0; ij < factor.RowCount; ij++)
+            for (var ij = 1; ij <= factor.RowCount; ij++)
             {
                 // "Pivot" element
                 var tmpVal = factor.At(ij, ij);
@@ -85,7 +85,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
 
                     // Calculate multipliers and copy to local column
                     // Current column, below the diagonal
-                    for (var i = ij + 1; i < factor.RowCount; i++)
+                    for (var i = ij + 1; i <= factor.RowCount; i++)
                     {
                         factor.At(i, ij, factor.At(i, ij)/tmpVal);
                         tmpColumn[i] = factor.At(i, ij);
@@ -99,7 +99,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                     throw new ArgumentException(Resources.ArgumentMatrixPositiveDefinite);
                 }
 
-                for (var i = ij + 1; i < factor.RowCount; i++)
+                for (var i = ij + 1; i <= factor.RowCount; i++)
                 {
                     factor.At(ij, i, Complex.Zero);
                 }
@@ -119,30 +119,30 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="data">Factor matrix</param>
         /// <param name="rowDim">Number of rows</param>
         /// <param name="firstCol">Column start</param>
-        /// <param name="colLimit">Total columns</param>
-        /// <param name="multipliers">Multipliers calculated previously</param>
+        /// <param name="lastCol">Last column</param>
+        /// <param name="multipliers">Multipliers calculated previously (includes "wasted" 0 position)</param>
         /// <param name="availableCores">Number of available processors</param>
-        static void DoCholeskyStep(Matrix1<Complex> data, int rowDim, int firstCol, int colLimit, Complex[] multipliers, int availableCores)
+        static void DoCholeskyStep(Matrix1<Complex> data, int rowDim, int firstCol, int lastCol, Complex[] multipliers, int availableCores)
         {
-            var tmpColCount = colLimit - firstCol;
+            var tmpColCount = lastCol - firstCol + 1;
 
             if ((availableCores > 1) && (tmpColCount > 200))
             {
-                var tmpSplit = firstCol + (tmpColCount/3);
+                var tmpSplit = firstCol + (tmpColCount/2);
                 var tmpCores = availableCores/2;
 
                 CommonParallel.Invoke(
-                    () => DoCholeskyStep(data, rowDim, firstCol, tmpSplit, multipliers, tmpCores),
-                    () => DoCholeskyStep(data, rowDim, tmpSplit, colLimit, multipliers, tmpCores));
+                    () => DoCholeskyStep(data, rowDim, firstCol, tmpSplit - 1, multipliers, tmpCores),
+                    () => DoCholeskyStep(data, rowDim, tmpSplit, lastCol, multipliers, tmpCores));
             }
             else
             {
-                for (var j = firstCol; j < colLimit; j++)
+                for (var j = firstCol; j <= lastCol; j++)
                 {
-                    var tmpVal = multipliers[j];
+                    var tmpVal = multipliers[j].Conjugate();
                     for (var i = j; i < rowDim; i++)
                     {
-                        data.At(i, j, data.At(i, j) - (multipliers[i]*tmpVal.Conjugate()));
+                        data.At(i, j, data.At(i, j) - (multipliers[i]*tmpVal));
                     }
                 }
             }
@@ -173,14 +173,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             input.CopyTo(result);
             var order = Factor.RowCount;
 
-            for (var c = 0; c < result.ColumnCount; c++)
+            for (var c = 1; c <= result.ColumnCount; c++)
             {
                 // Solve L*Y = B;
                 Complex sum;
-                for (var i = 0; i < order; i++)
+                for (var i = 1; i <= order; i++)
                 {
                     sum = result.At(i, c);
-                    for (var k = i - 1; k >= 0; k--)
+                    for (var k = i - 1; k > 0; k--)
                     {
                         sum -= Factor.At(i, k)*result.At(k, c);
                     }
@@ -189,10 +189,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 }
 
                 // Solve L'*X = Y;
-                for (var i = order - 1; i >= 0; i--)
+                for (var i = order; i > 0; i--)
                 {
                     sum = result.At(i, c);
-                    for (var k = i + 1; k < order; k++)
+                    for (var k = i + 1; k <= order; k++)
                     {
                         sum -= Factor.At(k, i).Conjugate()*result.At(k, c);
                     }
@@ -224,27 +224,27 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
 
             // Solve L*Y = B;
             Complex sum;
-            for (var i = 0; i < order; i++)
+            for (var i = 1; i <= order; i++)
             {
-                sum = result[i];
-                for (var k = i - 1; k >= 0; k--)
+                sum = result.At(i);
+                for (var k = i; k > 0; k--)
                 {
-                    sum -= Factor.At(i, k)*result[k];
+                    sum -= Factor.At(i, k) * result.At(k);
                 }
 
-                result[i] = sum/Factor.At(i, i);
+                result.At(i, sum/Factor.At(i, i));
             }
 
             // Solve L'*X = Y;
-            for (var i = order - 1; i >= 0; i--)
+            for (var i = order; i > 0; i--)
             {
-                sum = result[i];
+                sum = result.At(i);
                 for (var k = i + 1; k < order; k++)
                 {
-                    sum -= Factor.At(k, i).Conjugate()*result[k];
+                    sum -= Factor.At(k, i).Conjugate()*result.At(k);
                 }
 
-                result[i] = sum/Factor.At(i, i);
+                result.At(i, sum/Factor.At(i, i));
             }
         }
     }

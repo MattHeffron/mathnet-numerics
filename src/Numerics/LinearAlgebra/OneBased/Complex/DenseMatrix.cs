@@ -53,7 +53,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
     /// A Matrix class with dense storage. The underlying storage is a one dimensional array in column-major order (column by column).
     /// </summary>
     [Serializable]
-    [DebuggerDisplay("DenseMatrix {RowCount}x{ColumnCount}-Complex")]
+    [DebuggerDisplay("DenseMatrix[1] {RowCount}x{ColumnCount}-Complex")]
     public class DenseMatrix : Matrix
     {
         /// <summary>
@@ -93,9 +93,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <summary>
         /// Create a new square dense matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the order is less than one.</exception>
+        /// <exception cref="ArgumentException">If the order is less than zero.</exception>
         public DenseMatrix(int order)
             : this(new DenseColumnMajorMatrixStorage<Complex>(order, order))
         {
@@ -104,9 +103,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <summary>
         /// Create a new dense matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the row or column count is less than one.</exception>
+        /// <exception cref="ArgumentException">If the row or column count is less than zero.</exception>
         public DenseMatrix(int rows, int columns)
             : this(new DenseColumnMajorMatrixStorage<Complex>(rows, columns))
         {
@@ -507,9 +505,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 Storage.CopyToUnchecked(result.Storage);
                 var diagonal = diagonalOther.Data;
-                for (int i = 0; i < diagonal.Length; i++)
+                for (int i = 1; i <= diagonal.Length; i++)
                 {
-                    result.At(i, i, result.At(i, i) + diagonal[i]);
+                    result.At(i, i, result.At(i, i) + diagonal[i - 1]);
                 }
                 return;
             }
@@ -563,9 +561,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 CopyTo(result);
                 var diagonal = diagonalOther.Data;
-                for (int i = 0; i < diagonal.Length; i++)
+                for (int i = 1; i <= diagonal.Length; i++)
                 {
-                    result.At(i, i, result.At(i, i) - diagonal[i]);
+                    result.At(i, i, result.At(i, i) - diagonal[i - 1]);
                 }
                 return;
             }
@@ -650,11 +648,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                     result.ClearSubMatrix(0, RowCount, ColumnCount, other.ColumnCount - ColumnCount);
                 }
                 int index = 0;
-                for (int j = 0; j < d; j++)
+                for (int j = 1; j <= d; j++)
                 {
-                    for (int i = 0; i < RowCount; i++)
+                    var diagj = diagonal[j - 1];
+                    for (int i = 1; i <= RowCount; i++)
                     {
-                        result.At(i, j, _values[index]*diagonal[j]);
+                        result.At(i, j, _values[index] * diagj);
                         index++;
                     }
                 }
@@ -700,11 +699,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                     result.ClearSubMatrix(0, RowCount, ColumnCount, other.RowCount - ColumnCount);
                 }
                 int index = 0;
-                for (int j = 0; j < d; j++)
+                for (int j = 1; j <= d; j++)
                 {
-                    for (int i = 0; i < RowCount; i++)
+                    var diagj = diagonal[j - 1];
+                    for (int i = 1; i <= RowCount; i++)
                     {
-                        result.At(i, j, _values[index]*diagonal[j]);
+                        result.At(i, j, _values[index] * diagj);
                         index++;
                     }
                 }
@@ -756,11 +756,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                     result.ClearSubMatrix(0, RowCount, ColumnCount, other.RowCount - ColumnCount);
                 }
                 int index = 0;
-                for (int j = 0; j < d; j++)
+                for (int j = 1; j <= d; j++)
                 {
-                    for (int i = 0; i < RowCount; i++)
+                    var cdiagj = conjugateDiagonal[j - 1];
+                    for (int i = 1; i <= RowCount; i++)
                     {
-                        result.At(i, j, _values[index]*conjugateDiagonal[j]);
+                        result.At(i, j, _values[index]*cdiagj);
                         index++;
                     }
                 }
@@ -864,11 +865,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                     result.ClearSubMatrix(0, ColumnCount, RowCount, other.ColumnCount - RowCount);
                 }
                 int index = 0;
-                for (int i = 0; i < ColumnCount; i++)
+                for (int i = 1; i <= ColumnCount; i++)
                 {
-                    for (int j = 0; j < d; j++)
+                    for (int j = 1; j <= d; j++)
                     {
-                        result.At(i, j, _values[index]*diagonal[j]);
+                        result.At(i, j, _values[index]*diagonal[j - 1]);
                         index++;
                     }
                     index += (RowCount - d);
@@ -915,11 +916,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                     result.ClearSubMatrix(0, ColumnCount, RowCount, other.ColumnCount - RowCount);
                 }
                 int index = 0;
-                for (int i = 0; i < ColumnCount; i++)
+                for (int i = 1; i <= ColumnCount; i++)
                 {
-                    for (int j = 0; j < d; j++)
+                    for (int j = 1; j <= d; j++)
                     {
-                        result.At(i, j, _values[index].Conjugate()*diagonal[j]);
+                        result.At(i, j, _values[index].Conjugate()*diagonal[j - 1]);
                         index++;
                     }
                     index += (RowCount - d);

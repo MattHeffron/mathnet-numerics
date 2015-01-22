@@ -48,7 +48,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
     /// </summary>
     /// <remarks>The sparse vector is not thread safe.</remarks>
     [Serializable]
-    [DebuggerDisplay("SparseVector {Count}-Complex {NonZerosCount}-NonZero")]
+    [DebuggerDisplay("SparseVector[1] {Count}-Complex {NonZerosCount}-NonZero")]
     public class SparseVector : Vector
     {
         readonly SparseVectorStorage<Complex> _storage;
@@ -77,9 +77,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <summary>
         /// Create a new sparse vector with the given length.
         /// All cells of the vector will be initialized to zero.
-        /// Zero-length vectors are not supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If length is less than one.</exception>
+        /// <exception cref="ArgumentException">If length is less than zero.</exception>
         public SparseVector(int length)
             : this(new SparseVectorStorage<Complex>(length))
         {
@@ -172,8 +171,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 for (int j = 0; j < _storage.ValueCount; j++)
                 {
                     vnonZeroValues[indices[j]] = values[j] + scalar;
+                    // TODO: result can be zero, remove?
                 }
-
                 //assign this vectors arrary to the new arrays.
                 _storage.Values = vnonZeroValues;
                 _storage.Indices = vnonZeroIndices;
@@ -181,7 +180,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             }
             else
             {
-                for (var index = 0; index < Count; index++)
+                ////base.DoAdd(scalar, result);
+                for (var index = 1; index <= Count; index++)
                 {
                     result.At(index, At(index) + scalar);
                 }
@@ -253,6 +253,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                         if (next != last)
                         {
                             last = next;
+                            ++next;     // adjust for one based indexing (.At)
                             result.At(next, _storage.Values[i] + otherSparse.At(next));
                         }
                         i++;
@@ -263,6 +264,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                         if (next != last)
                         {
                             last = next;
+                            ++next;     // adjust for one based indexing (.At)
                             result.At(next, At(next) + otherStorage.Values[j]);
                         }
                         j++;
@@ -356,6 +358,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                         if (next != last)
                         {
                             last = next;
+                            ++next;     // adjust for one based indexing (.At)
                             result.At(next, _storage.Values[i] - otherSparse.At(next));
                         }
                         i++;
@@ -366,6 +369,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                         if (next != last)
                         {
                             last = next;
+                            ++next;     // adjust for one based indexing (.At)
                             result.At(next, At(next) - otherStorage.Values[j]);
                         }
                         j++;
@@ -386,7 +390,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 result.Clear();
                 for (var index = 0; index < _storage.ValueCount; index++)
                 {
-                    result.At(_storage.Indices[index], -_storage.Values[index]);
+                    result.At(_storage.Indices[index] + 1, -_storage.Values[index]);
                 }
                 return;
             }
@@ -428,7 +432,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             result.Clear();
             for (var index = 0; index < _storage.ValueCount; index++)
             {
-                result.At(_storage.Indices[index], _storage.Values[index].Conjugate());
+                result.At(_storage.Indices[index] + 1, _storage.Values[index].Conjugate());
             }
         }
 
@@ -449,7 +453,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 result.Clear();
                 for (var index = 0; index < _storage.ValueCount; index++)
                 {
-                    result.At(_storage.Indices[index], scalar * _storage.Values[index]);
+                    result.At(_storage.Indices[index] + 1, scalar * _storage.Values[index]);
                 }
             }
             else
@@ -486,7 +490,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 for (var i = 0; i < _storage.ValueCount; i++)
                 {
-                    result += _storage.Values[i] * other.At(_storage.Indices[i]);
+                    result += _storage.Values[i] * other.At(_storage.Indices[i] + 1);
                 }
             }
             return result;
@@ -511,7 +515,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 for (var i = 0; i < _storage.ValueCount; i++)
                 {
-                    result += _storage.Values[i].Conjugate() * other.At(_storage.Indices[i]);
+                    result += _storage.Values[i].Conjugate() * other.At(_storage.Indices[i] + 1);
                 }
             }
             return result;
@@ -679,7 +683,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 }
             }
 
-            return _storage.Indices[index];
+            return _storage.Indices[index] + 1;
         }
 
         /// <summary>
@@ -763,7 +767,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 for (var i = 0; i < _storage.ValueCount; i++)
                 {
-                    var index = _storage.Indices[i];
+                    var index = _storage.Indices[i] + 1;
                     result.At(index, other.At(index) * _storage.Values[i]);
                 }
             }
@@ -787,7 +791,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 for (var i = 0; i < _storage.ValueCount; i++)
                 {
-                    var index = _storage.Indices[i];
+                    var index = _storage.Indices[i] + 1;
                     result.At(index, _storage.Values[i] / divisor.At(index));
                 }
             }
@@ -937,7 +941,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
 
         public override string ToTypeString()
         {
-            return string.Format("SparseVector {0}-Complex {1:P2} Filled", Count, NonZerosCount / (double)Count);
+            return string.Format("SparseVector[1] {0}-Complex {1:P2} Filled", Count, NonZerosCount / (double)Count);
         }
     }
 }

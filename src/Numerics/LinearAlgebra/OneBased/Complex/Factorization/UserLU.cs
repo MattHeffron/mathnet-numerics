@@ -72,29 +72,29 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             // Create an array for the pivot indices.
             var order = matrix.RowCount;
             var factors = matrix.Clone();
-            var pivots = new int[order];
+            var pivots1 = new int[order + 1];  // Simplify indexing below, just allocate order+1 elements and "waste" the 0 position
 
             // Initialize the pivot matrix to the identity permutation.
-            for (var i = 0; i < order; i++)
+            for (var i = 1; i <= order; i++)
             {
-                pivots[i] = i;
+                pivots1[i] = i;
             }
 
-            var vectorLUcolj = new Complex[order];
-            for (var j = 0; j < order; j++)
+            var vectorLUcolj = new Complex[order + 1];  // Simplify indexing below, just allocate order+1 elements and "waste" the 0 position
+            for (var j = 1; j <= order; j++)
             {
                 // Make a copy of the j-th column to localize references.
-                for (var i = 0; i < order; i++)
+                for (var i = 1; i <= order; i++)
                 {
                     vectorLUcolj[i] = factors.At(i, j);
                 }
 
                 // Apply previous transformations.
-                for (var i = 0; i < order; i++)
+                for (var i = 1; i <= order; i++)
                 {
                     var kmax = Math.Min(i, j);
                     var s = Complex.Zero;
-                    for (var k = 0; k < kmax; k++)
+                    for (var k = 1; k <= kmax; k++)
                     {
                         s += factors.At(i, k)*vectorLUcolj[k];
                     }
@@ -105,7 +105,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
 
                 // Find pivot and exchange if necessary.
                 var p = j;
-                for (var i = j + 1; i < order; i++)
+                for (var i = j + 1; i <= order; i++)
                 {
                     if (vectorLUcolj[i].Magnitude > vectorLUcolj[p].Magnitude)
                     {
@@ -115,26 +115,32 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
 
                 if (p != j)
                 {
-                    for (var k = 0; k < order; k++)
+                    for (var k = 1; k <= order; k++)
                     {
                         var temp = factors.At(p, k);
                         factors.At(p, k, factors.At(j, k));
                         factors.At(j, k, temp);
                     }
 
-                    pivots[j] = p;
+                    pivots1[j] = p;
                 }
 
                 // Compute multipliers.
                 if (j < order & factors.At(j, j) != 0.0)
                 {
-                    for (var i = j + 1; i < order; i++)
+                    for (var i = j + 1; i <= order; i++)
                     {
                         factors.At(i, j, (factors.At(i, j)/factors.At(j, j)));
                     }
                 }
             }
 
+            // "undo" the wasted 0 position we created above.
+            int[] pivots = new int[order];
+            for (int i = 0; i < order; i++)
+            {
+                pivots[i] = pivots1[i + 1] - 1;     // adjust these to be 0-based indices as well.
+            }
             return new UserLU(factors, pivots);
         }
 
@@ -186,8 +192,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                     continue;
                 }
 
-                var p = Pivots[i];
-                for (var j = 0; j < result.ColumnCount; j++)
+                var p = Pivots[i] + 1;
+                for (var j = 1; j <= result.ColumnCount; j++)
                 {
                     var temp = result.At(p, j);
                     result.At(p, j, result.At(i, j));
@@ -198,31 +204,34 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             var order = Factors.RowCount;
 
             // Solve L*Y = P*B
-            for (var k = 0; k < order; k++)
+            for (var k = 1; k <= order; k++)
             {
-                for (var i = k + 1; i < order; i++)
+                for (var i = k + 1; i <= order; i++)
                 {
-                    for (var j = 0; j < result.ColumnCount; j++)
+                    var fik = Factors.At(i, k);
+                    for (var j = 1; j <= result.ColumnCount; j++)
                     {
-                        var temp = result.At(k, j)*Factors.At(i, k);
+                        var temp = result.At(k, j)*fik;
                         result.At(i, j, result.At(i, j) - temp);
                     }
                 }
             }
 
             // Solve U*X = Y;
-            for (var k = order - 1; k >= 0; k--)
+            for (var k = order; k > 0; k--)
             {
-                for (var j = 0; j < result.ColumnCount; j++)
+                var fkk = Factors.At(k, k);
+                for (var j = 1; j <= result.ColumnCount; j++)
                 {
-                    result.At(k, j, (result.At(k, j)/Factors.At(k, k)));
+                    result.At(k, j, (result.At(k, j)/fkk));
                 }
 
-                for (var i = 0; i < k; i++)
+                for (var i = 1; i <= k; i++)
                 {
-                    for (var j = 0; j < result.ColumnCount; j++)
+                    var fik = Factors.At(i, k);
+                    for (var j = 1; j <= result.ColumnCount; j++)
                     {
-                        var temp = result.At(k, j)*Factors.At(i, k);
+                        var temp = result.At(k, j)*fik;
                         result.At(i, j, result.At(i, j) - temp);
                     }
                 }
@@ -267,30 +276,33 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                     continue;
                 }
 
-                var p = Pivots[i];
-                var temp = result[p];
-                result[p] = result[i];
-                result[i] = temp;
+                var p = Pivots[i] + 1;
+                var temp = result.At(p);
+                result.At(p, result.At(i));
+                result.At(i, temp);
             }
 
             var order = Factors.RowCount;
 
             // Solve L*Y = P*B
-            for (var k = 0; k < order; k++)
+            for (var k = 1; k <= order; k++)
             {
-                for (var i = k + 1; i < order; i++)
+                var rk = result.At(k);
+                for (var i = k + 1; i <= order; i++)
                 {
-                    result[i] -= result[k]*Factors.At(i, k);
+                    result.At(i, result.At(i) - rk*Factors.At(i, k));
                 }
             }
 
             // Solve U*X = Y;
-            for (var k = order - 1; k >= 0; k--)
+            for (var k = order; k > 0; k--)
             {
-                result[k] /= Factors.At(k, k);
+                var rk = result.At(k);
+                rk /= Factors.At(k, k);
+                result.At(k, rk);
                 for (var i = 0; i < k; i++)
                 {
-                    result[i] -= result[k]*Factors.At(i, k);
+                    result.At(i, result.At(i) - rk*Factors.At(i, k));
                 }
             }
         }
@@ -303,9 +315,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         {
             var order = Factors.RowCount;
             var inverse = Matrix1<Complex>.Build.SameAs(Factors, order, order);
-            for (var i = 0; i < order; i++)
+            for (var i = 1; i <= order; i++)
             {
-                inverse.At(i, i, 1.0);
+                inverse.At(i, i, Complex.One);
             }
 
             return Solve(inverse);

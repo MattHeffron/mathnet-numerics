@@ -106,7 +106,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
 
                 for (var i = 0; i < order; i++)
                 {
-                    eigenValues[i] = new Complex(d[i], e[i]);
+                    eigenValues.At(i + 1, new Complex(d[i], e[i]));
                 }
             }
             else
@@ -328,26 +328,27 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                         var el1 = e[l + 1];
                         var s = 0.0;
                         var s2 = 0.0;
-                        for (var i = m - 1; i >= l; i--)
+                        for (int i = m - 1; i >= l; i--)
                         {
+                            int i1 = i + 1;
                             c3 = c2;
                             c2 = c;
                             s2 = s;
                             g = c*e[i];
                             h = c*p;
                             r = SpecialFunctions.Hypotenuse(p, e[i]);
-                            e[i + 1] = s*r;
+                            e[i + 1] = s*r;     // a good optimizing compiler should notice that i + 1 here is the same as i1 above and skip recomputing it
                             s = e[i]/r;
                             c = p/r;
                             p = (c*d[i]) - (s*g);
                             d[i + 1] = h + (s*((c*g) + (s*d[i])));
 
                             // Accumulate transformation.
-                            for (var k = 0; k < order; k++)
+                            for (var k = 1; k <= order; k++)
                             {
-                                h = eigenVectors.At(k, i + 1).Real;
-                                eigenVectors.At(k, i + 1, (s*eigenVectors.At(k, i).Real) + (c*h));
-                                eigenVectors.At(k, i, (c*eigenVectors.At(k, i).Real) - (s*h));
+                                h = eigenVectors.At(k, i1 + 1).Real;
+                                eigenVectors.At(k, i1 + 1, (s*eigenVectors.At(k, i1).Real) + (c*h));
+                                eigenVectors.At(k, i1, (c*eigenVectors.At(k, i1).Real) - (s*h));
                             }
                         }
 
@@ -386,11 +387,13 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 {
                     d[k] = d[i];
                     d[i] = p;
-                    for (var j = 0; j < order; j++)
+                    int i1 = i + 1;
+                    int k1 = k + 1;
+                    for (var j = 1; j <= order; j++)
                     {
-                        p = eigenVectors.At(j, i).Real;
-                        eigenVectors.At(j, i, eigenVectors.At(j, k));
-                        eigenVectors.At(j, k, p);
+                        p = eigenVectors.At(j, i1).Real;
+                        eigenVectors.At(j, i1, eigenVectors.At(j, k1));
+                        eigenVectors.At(j, k1, p);
                     }
                 }
             }
@@ -409,11 +412,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// Fortran subroutine in EISPACK.</remarks>
         static void SymmetricUntridiagonalize(Matrix1<Complex> eigenVectors, Complex[,] matrixA, Complex[] tau, int order)
         {
-            for (var i = 0; i < order; i++)
+            for (var i = 1; i <= order; i++)
             {
-                for (var j = 0; j < order; j++)
+                var tc = tau[i - 1].Conjugate();         // tau is 0-based indexing
+                for (var j = 1; j <= order; j++)
                 {
-                    eigenVectors.At(i, j, eigenVectors.At(i, j).Real*tau[i].Conjugate());
+                    eigenVectors.At(i, j, eigenVectors.At(i, j).Real*tc);
                 }
             }
 
@@ -423,19 +427,20 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 var h = matrixA[i, i].Imaginary;
                 if (h != 0)
                 {
-                    for (var j = 0; j < order; j++)
+                    for (var j = 1; j <= order; j++)
                     {
                         var s = Complex.Zero;
                         for (var k = 0; k < i; k++)
                         {
-                            s += eigenVectors.At(k, j)*matrixA[i, k];
+                            s += eigenVectors.At(k + 1, j)*matrixA[i, k];
                         }
 
                         s = (s/h)/h;
 
                         for (var k = 0; k < i; k++)
                         {
-                            eigenVectors.At(k, j, eigenVectors.At(k, j) - s*matrixA[i, k].Conjugate());
+                            int k1 = k + 1;
+                            eigenVectors.At(k1, j, eigenVectors.At(k1, j) - s*matrixA[i, k].Conjugate());
                         }
                     }
                 }
@@ -526,9 +531,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             }
 
             // Accumulate transformations (Algol's ortran).
-            for (var i = 0; i < order; i++)
+            for (var i = 1; i <= order; i++)
             {
-                for (var j = 0; j < order; j++)
+                for (var j = 1; j <= order; j++)
                 {
                     eigenVectors.At(i, j, i == j ? Complex.One : Complex.Zero);
                 }
@@ -547,17 +552,19 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
 
                     for (var j = m; j < order; j++)
                     {
+                        int j1 = j + 1;
                         var g = Complex.Zero;
                         for (var i = m; i < order; i++)
                         {
-                            g += ort[i].Conjugate()*eigenVectors.At(i, j);
+                            g += ort[i].Conjugate()*eigenVectors.At(i + 1, j1);
                         }
 
                         // Double division avoids possible underflow
                         g /= norm;
                         for (var i = m; i < order; i++)
                         {
-                            eigenVectors.At(i, j, eigenVectors.At(i, j) + g*ort[i]);
+                            int i1 = i + 1;
+                            eigenVectors.At(i1, j1, eigenVectors.At(i1, j1) + g*ort[i]);
                         }
                     }
                 }
@@ -580,9 +587,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                         matrixH[j, i] *= y;
                     }
 
-                    for (var j = 0; j < order; j++)
+                    int i1 = i + 1;
+                    for (var j = 1; j <= order; j++)
                     {
-                        eigenVectors.At(j, i, eigenVectors.At(j, i)*y);
+                        eigenVectors.At(j, i1, eigenVectors.At(j, i1)*y);
                     }
                 }
             }
@@ -630,7 +638,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 if (l == n)
                 {
                     matrixH[n, n] += exshift;
-                    eigenValues[n] = matrixH[n, n];
+                    eigenValues[n + 1] = matrixH[n, n];     // one based indexing
                     n--;
                     iter = 0;
                 }
@@ -676,15 +684,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                         s = matrixH[i, i - 1].Real;
                         norm = SpecialFunctions.Hypotenuse(matrixH[i - 1, i - 1].Magnitude, s.Real);
                         x = matrixH[i - 1, i - 1]/norm;
-                        eigenValues[i - 1] = x;
+                        eigenValues[i] = x;          // one based indexing
                         matrixH[i - 1, i - 1] = norm;
                         matrixH[i, i - 1] = new Complex(0.0, s.Real/norm);
-
+                        var xc = x.Conjugate();
                         for (var j = i; j < order; j++)
                         {
                             y = matrixH[i - 1, j];
                             z = matrixH[i, j];
-                            matrixH[i - 1, j] = (x.Conjugate()*y) + (matrixH[i, i - 1].Imaginary*z);
+                            matrixH[i - 1, j] = (xc*y) + (matrixH[i, i - 1].Imaginary*z);
                             matrixH[i, j] = (x*z) - (matrixH[i, i - 1].Imaginary*y);
                         }
                     }
@@ -694,17 +702,18 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                     {
                         s /= matrixH[n, n].Magnitude;
                         matrixH[n, n] = matrixH[n, n].Magnitude;
-
+                        var sc = s.Conjugate();
                         for (var j = n + 1; j < order; j++)
                         {
-                            matrixH[n, j] *= s.Conjugate();
+                            matrixH[n, j] *= sc;
                         }
                     }
 
                     // Inverse operation (columns).
                     for (var j = l + 1; j <= n; j++)
                     {
-                        x = eigenValues[j - 1];
+                        x = eigenValues[j];          // one based indexing
+                        var xc = x.Conjugate();
                         for (var i = 0; i <= j; i++)
                         {
                             z = matrixH[i, j];
@@ -719,15 +728,16 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                                 matrixH[i, j - 1] = new Complex((x.Real*y.Real) - (x.Imaginary*y.Imaginary) + (matrixH[j, j - 1].Imaginary*z.Real), matrixH[i, j - 1].Imaginary);
                             }
 
-                            matrixH[i, j] = (x.Conjugate()*z) - (matrixH[j, j - 1].Imaginary*y);
+                            matrixH[i, j] = (xc*z) - (matrixH[j, j - 1].Imaginary*y);
                         }
 
-                        for (var i = 0; i < order; i++)
+                        int j1 = j + 1;
+                        for (var i = 1; i <= order; i++)
                         {
-                            y = eigenVectors.At(i, j - 1);
-                            z = eigenVectors.At(i, j);
-                            eigenVectors.At(i, j - 1, (x*y) + (matrixH[j, j - 1].Imaginary*z));
-                            eigenVectors.At(i, j, (x.Conjugate()*z) - (matrixH[j, j - 1].Imaginary*y));
+                            y = eigenVectors.At(i, j);
+                            z = eigenVectors.At(i, j1);
+                            eigenVectors.At(i, j, (x*y) + (matrixH[j, j - 1].Imaginary*z));
+                            eigenVectors.At(i, j1, (xc*z) - (matrixH[j, j - 1].Imaginary*y));
                         }
                     }
 
@@ -738,9 +748,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                             matrixH[i, n] *= s;
                         }
 
-                        for (var i = 0; i < order; i++)
+                        int n1 = n + 1;
+                        for (var i = 1; i <= order; i++)
                         {
-                            eigenVectors.At(i, n, eigenVectors.At(i, n)*s);
+                            eigenVectors.At(i, n1, eigenVectors.At(i, n1)*s);
                         }
                     }
                 }
@@ -769,7 +780,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
 
             for (n = order - 1; n > 0; n--)
             {
-                x = eigenValues[n];
+                x = eigenValues[n + 1];
                 matrixH[n, n] = 1.0;
 
                 for (var i = n - 1; i >= 0; i--)
@@ -780,7 +791,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                         z += matrixH[i, j]*matrixH[j, n];
                     }
 
-                    y = x - eigenValues[i];
+                    y = x - eigenValues[i + 1];
                     if (y.Real == 0.0 && y.Imaginary == 0.0)
                     {
                         y = eps*norm;
@@ -803,15 +814,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             // Back transformation to get eigenvectors of original matrix
             for (var j = order - 1; j > 0; j--)
             {
-                for (var i = 0; i < order; i++)
+                for (var i = 1; i <= order; i++)
                 {
                     z = Complex.Zero;
                     for (var k = 0; k <= j; k++)
                     {
-                        z += eigenVectors.At(i, k)*matrixH[k, j];
+                        z += eigenVectors.At(i, k + 1)*matrixH[k, j];
                     }
 
-                    eigenVectors.At(i, j, z);
+                    eigenVectors.At(i, j + 1, z);
                 }
             }
         }
@@ -844,16 +855,16 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             if (IsSymmetric)
             {
                 var order = EigenValues.Count;
-                var tmp = new Complex[order];
+                var tmp = new Complex[order + 1];   // Simplify indexing below, just allocate order+1 elements and "waste" the 0 position
 
-                for (var k = 0; k < order; k++)
+                for (var k = 1; k <= order; k++)
                 {
-                    for (var j = 0; j < order; j++)
+                    for (var j = 1; j <= order; j++)
                     {
                         Complex value = 0.0;
-                        if (j < order)
+                        if (j <= order)     //CONSIDER: isn't this *always* true by construction of the for above?
                         {
-                            for (var i = 0; i < order; i++)
+                            for (var i = 1; i <= order; i++)
                             {
                                 value += EigenVectors.At(i, j).Conjugate()*input.At(i, k);
                             }
@@ -864,10 +875,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                         tmp[j] = value;
                     }
 
-                    for (var j = 0; j < order; j++)
+                    for (var j = 1; j <= order; j++)
                     {
                         Complex value = 0.0;
-                        for (var i = 0; i < order; i++)
+                        for (var i = 1; i <= order; i++)
                         {
                             value += EigenVectors.At(j, i)*tmp[i];
                         }
@@ -906,34 +917,34 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             {
                 // Symmetric case -> x = V * inv(λ) * VH * b;
                 var order = EigenValues.Count;
-                var tmp = new Complex[order];
+                var tmp = new Complex[order + 1];   // Simplify indexing below, just allocate order+1 elements and "waste" the 0 position
                 Complex value;
 
-                for (var j = 0; j < order; j++)
+                for (var j = 1; j <= order; j++)
                 {
                     value = 0;
-                    if (j < order)
+                    if (j <= order)     //CONSIDER: isn't this *always* true by construction of the for above?
                     {
-                        for (var i = 0; i < order; i++)
+                        for (var i = 1; i <= order; i++)
                         {
-                            value += EigenVectors.At(i, j).Conjugate()*input[i];
+                            value += EigenVectors.At(i, j).Conjugate()*input.At(i);
                         }
 
-                        value /= EigenValues[j].Real;
+                        value /= EigenValues.At(j).Real;
                     }
 
                     tmp[j] = value;
                 }
 
-                for (var j = 0; j < order; j++)
+                for (var j = 1; j <= order; j++)
                 {
                     value = 0;
-                    for (int i = 0; i < order; i++)
+                    for (int i = 1; i <= order; i++)
                     {
                         value += EigenVectors.At(j, i)*tmp[i];
                     }
 
-                    result[j] = value;
+                    result.At(j, value);
                 }
             }
             else

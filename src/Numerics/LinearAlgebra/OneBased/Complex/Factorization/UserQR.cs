@@ -71,51 +71,53 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             Matrix1<Complex> q;
             Matrix1<Complex> r;
 
-            var minmn = Math.Min(matrix.RowCount, matrix.ColumnCount);
-            var u = new Complex[minmn][];
+            ////var minmn = Math.Min(matrix.RowCount, matrix.ColumnCount);
+            var minmn = matrix.ColumnCount;         //CONSIDER: the dimension check above, guarantees that ColumnCount == the minimum
+            var u = new Complex[minmn + 1][];       // Simplify indexing below, just allocate one extra element and "waste" the 0 position
 
             if (method == QRMethod.Full)
             {
                 r = matrix.Clone();
-                q = Matrix1<Complex>.Build.SameAs(matrix, matrix.RowCount, matrix.RowCount);
+                int qDim = matrix.RowCount;
+                q = Matrix1<Complex>.Build.SameAs(matrix, qDim, qDim);
 
-                for (var i = 0; i < matrix.RowCount; i++)
+                for (var i = 1; i <= qDim; i++)
                 {
-                    q.At(i, i, 1.0f);
+                    q.At(i, i, Complex.One);
                 }
 
-                for (var i = 0; i < minmn; i++)
+                for (var i = 1; i <= minmn; i++)
                 {
                     u[i] = GenerateColumn(r, i, i);
                     ComputeQR(u[i], r, i, matrix.RowCount, i + 1, matrix.ColumnCount, Control.MaxDegreeOfParallelism);
                 }
 
-                for (var i = minmn - 1; i >= 0; i--)
+                for (var i = minmn; i > 0; i--)
                 {
-                    ComputeQR(u[i], q, i, matrix.RowCount, i, matrix.RowCount, Control.MaxDegreeOfParallelism);
+                    ComputeQR(u[i], q, i, qDim, i, qDim, Control.MaxDegreeOfParallelism);
                 }
             }
             else
             {
                 q = matrix.Clone();
 
-                for (var i = 0; i < minmn; i++)
+                for (var i = 1; i <= minmn; i++)
                 {
                     u[i] = GenerateColumn(q, i, i);
-                    ComputeQR(u[i], q, i, matrix.RowCount, i + 1, matrix.ColumnCount, Control.MaxDegreeOfParallelism);
+                    ComputeQR(u[i], q, i, q.RowCount, i + 1, q.ColumnCount, Control.MaxDegreeOfParallelism);
                 }
 
-                r = q.SubMatrix(0, matrix.ColumnCount, 0, matrix.ColumnCount);
+                r = q.SubMatrix(1, q.ColumnCount, 1, q.ColumnCount);
                 q.Clear();
 
-                for (var i = 0; i < matrix.ColumnCount; i++)
+                for (var i = 1; i <= q.ColumnCount; i++)
                 {
-                    q.At(i, i, 1.0f);
+                    q.At(i, i, Complex.One);
                 }
 
-                for (var i = minmn - 1; i >= 0; i--)
+                for (var i = minmn; i > 0; i--)
                 {
-                    ComputeQR(u[i], q, i, matrix.RowCount, i, matrix.ColumnCount, Control.MaxDegreeOfParallelism);
+                    ComputeQR(u[i], q, i, q.RowCount, i, q.ColumnCount, Control.MaxDegreeOfParallelism);
                 }
             }
 
@@ -136,19 +138,19 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <returns>Generated vector</returns>
         static Complex[] GenerateColumn(Matrix1<Complex> a, int row, int column)
         {
-            var ru = a.RowCount - row;
+            var ru = a.RowCount - row + 1;      // correct this count (ru) since row parameter is one based
             var u = new Complex[ru];
 
-            for (var i = row; i < a.RowCount; i++)
+            for (int i = row; i <= a.RowCount; i++)
             {
                 u[i - row] = a.At(i, column);
-                a.At(i, column, 0.0);
+                a.At(i, column, Complex.Zero);
             }
 
             var norm = u.Aggregate(Complex.Zero, (current, t) => current + (t.Magnitude*t.Magnitude));
             norm = norm.SquareRoot();
 
-            if (row == a.RowCount - 1 || norm.Magnitude == 0)
+            if (row == a.RowCount || norm.Magnitude == 0)
             {
                 a.At(row, column, -u[0]);
                 u[0] = Constants.Sqrt2;
@@ -167,9 +169,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 u[i] /= norm;
             }
 
-            u[0] += 1.0;
+            u[0] += Complex.One;
 
-            var s = (1.0/u[0]).SquareRoot();
+            var s = u[0].Reciprocal().SquareRoot();
             for (var i = 0; i < ru; i++)
             {
                 u[i] = u[i].Conjugate()*s;
@@ -184,18 +186,18 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="u">Work array</param>
         /// <param name="a">Q or R matrices</param>
         /// <param name="rowStart">The first row</param>
-        /// <param name="rowDim">The last row</param>
+        /// <param name="rowEnd">The last row</param>
         /// <param name="columnStart">The first column</param>
-        /// <param name="columnDim">The last column</param>
+        /// <param name="columnEnd">The last column</param>
         /// <param name="availableCores">Number of available CPUs</param>
-        static void ComputeQR(Complex[] u, Matrix1<Complex> a, int rowStart, int rowDim, int columnStart, int columnDim, int availableCores)
+        static void ComputeQR(Complex[] u, Matrix1<Complex> a, int rowStart, int rowEnd, int columnStart, int columnEnd, int availableCores)
         {
-            if (rowDim < rowStart || columnDim < columnStart)
+            if (rowEnd <= rowStart || columnEnd <= columnStart)
             {
                 return;
             }
 
-            var tmpColCount = columnDim - columnStart;
+            var tmpColCount = columnEnd - columnStart + 1;
 
             if ((availableCores > 1) && (tmpColCount > 200))
             {
@@ -203,20 +205,20 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 var tmpCores = availableCores/2;
 
                 CommonParallel.Invoke(
-                    () => ComputeQR(u, a, rowStart, rowDim, columnStart, tmpSplit, tmpCores),
-                    () => ComputeQR(u, a, rowStart, rowDim, tmpSplit, columnDim, tmpCores));
+                    () => ComputeQR(u, a, rowStart, rowEnd, columnStart, tmpSplit - 1, tmpCores),
+                    () => ComputeQR(u, a, rowStart, rowEnd, tmpSplit, columnEnd, tmpCores));
             }
             else
             {
-                for (var j = columnStart; j < columnDim; j++)
+                for (var j = columnStart; j <= columnEnd; j++)
                 {
                     var scale = Complex.Zero;
-                    for (var i = rowStart; i < rowDim; i++)
+                    for (var i = rowStart; i <= rowEnd; i++)
                     {
                         scale += u[i - rowStart]*a.At(i, j);
                     }
 
-                    for (var i = rowStart; i < rowDim; i++)
+                    for (var i = rowStart; i <= rowEnd; i++)
                     {
                         a.At(i, j, a.At(i, j) - (u[i - rowStart].Conjugate()*scale));
                     }
@@ -252,18 +254,18 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             var inputCopy = input.Clone();
 
             // Compute Y = transpose(Q)*B
-            var column = new Complex[FullR.RowCount];
-            for (var j = 0; j < input.ColumnCount; j++)
+            var column = new Complex[FullR.RowCount + 1];   // Simplify indexing below, just allocate an extra element and "waste" the 0 position
+            for (var j = 1; j <= input.ColumnCount; j++)
             {
-                for (var k = 0; k < FullR.RowCount; k++)
+                for (var k = 1; k <= FullR.RowCount; k++)
                 {
                     column[k] = inputCopy.At(k, j);
                 }
 
-                for (var i = 0; i < FullR.RowCount; i++)
+                for (var i = 1; i <= FullR.RowCount; i++)
                 {
                     var s = Complex.Zero;
-                    for (var k = 0; k < FullR.RowCount; k++)
+                    for (var k = 1; k <= FullR.RowCount; k++)
                     {
                         s += Q.At(k, i).Conjugate()*column[k];
                     }
@@ -273,25 +275,27 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             }
 
             // Solve R*X = Y;
-            for (var k = FullR.ColumnCount - 1; k >= 0; k--)
+            for (var k = FullR.ColumnCount; k > 0; k--)
             {
-                for (var j = 0; j < input.ColumnCount; j++)
+                var frkk = FullR.At(k, k);
+                for (var j = 1; j <= input.ColumnCount; j++)
                 {
-                    inputCopy.At(k, j, inputCopy.At(k, j)/FullR.At(k, k));
+                    inputCopy.At(k, j, inputCopy.At(k, j)/frkk);
                 }
 
-                for (var i = 0; i < k; i++)
+                for (var i = 1; i <= k; i++)
                 {
-                    for (var j = 0; j < input.ColumnCount; j++)
+                    var frik = FullR.At(i, k);
+                    for (var j = 1; j <= input.ColumnCount; j++)
                     {
-                        inputCopy.At(i, j, inputCopy.At(i, j) - (inputCopy.At(k, j)*FullR.At(i, k)));
+                        inputCopy.At(i, j, inputCopy.At(i, j) - (inputCopy.At(k, j)*frik));
                     }
                 }
             }
 
-            for (var i = 0; i < FullR.ColumnCount; i++)
+            for (var i = 1; i <= FullR.ColumnCount; i++)
             {
-                for (var j = 0; j < inputCopy.ColumnCount; j++)
+                for (var j = 1; j <= inputCopy.ColumnCount; j++)
                 {
                     result.At(i, j, inputCopy.At(i, j));
                 }
@@ -321,36 +325,38 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             var inputCopy = input.Clone();
 
             // Compute Y = transpose(Q)*B
-            var column = new Complex[FullR.RowCount];
-            for (var k = 0; k < FullR.RowCount; k++)
+            var column = new Complex[FullR.RowCount + 1];   // Simplify indexing below, just allocate an extra element and "waste" the 0 position
+            for (var k = 1; k <= FullR.RowCount; k++)
             {
-                column[k] = inputCopy[k];
+                column[k] = inputCopy.At(k);
             }
 
-            for (var i = 0; i < FullR.RowCount; i++)
+            for (var i = 1; i <= FullR.RowCount; i++)
             {
                 var s = Complex.Zero;
-                for (var k = 0; k < FullR.RowCount; k++)
+                for (var k = 1; k <= FullR.RowCount; k++)
                 {
                     s += Q.At(k, i).Conjugate()*column[k];
                 }
 
-                inputCopy[i] = s;
+                inputCopy.At(i, s);
             }
 
             // Solve R*X = Y;
-            for (var k = FullR.ColumnCount - 1; k >= 0; k--)
+            for (var k = FullR.ColumnCount; k > 0; k--)
             {
-                inputCopy[k] /= FullR.At(k, k);
-                for (var i = 0; i < k; i++)
+                var iCk = inputCopy.At(k);
+                iCk /= FullR.At(k, k);
+                inputCopy.At(k, iCk);
+                for (var i = 1; i <= k; i++)
                 {
-                    inputCopy[i] -= inputCopy[k]*FullR.At(i, k);
+                    inputCopy.At(i, inputCopy.At(i) - iCk*FullR.At(i, k));
                 }
             }
 
-            for (var i = 0; i < FullR.ColumnCount; i++)
+            for (var i = 1; i <= FullR.ColumnCount; i++)
             {
-                result[i] = inputCopy[i];
+                result.At(i, inputCopy.At(i));
             }
         }
     }

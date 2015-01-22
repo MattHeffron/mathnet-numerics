@@ -851,30 +851,30 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 var order = EigenValues.Count;
                 var tmp = new Complex[order];
 
-                for (var k = 0; k < order; k++)
+                for (var k = 1; k <= order; k++)
                 {
-                    for (var j = 0; j < order; j++)
+                    for (int j = 1, j0 = 0; j <= order; j++, j0++)
                     {
                         Complex value = 0.0;
-                        if (j < order)
+                        if (j <= order)     // CONSIDER: Isn't j *always* <= order by construction??
                         {
                             for (var i = 0; i < order; i++)
                             {
-                                value += ((DenseMatrix) EigenVectors).Values[(j*order) + i].Conjugate()*input.At(i, k);
+                                value += ((DenseMatrix) EigenVectors).Values[(j0*order) + i].Conjugate()*input.At(i + 1, k);
                             }
 
                             value /= EigenValues[j].Real;
                         }
 
-                        tmp[j] = value;
+                        tmp[j0] = value;
                     }
 
-                    for (var j = 0; j < order; j++)
+                    for (int j = 1, j0 = 0; j <= order; j++, j0++)
                     {
                         Complex value = 0.0;
                         for (var i = 0; i < order; i++)
                         {
-                            value += ((DenseMatrix) EigenVectors).Values[(i*order) + j]*tmp[i];
+                            value += ((DenseMatrix) EigenVectors).Values[(i*order) + j0]*tmp[i];
                         }
 
                         result.At(j, k, value);
@@ -914,31 +914,31 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 var tmp = new Complex[order];
                 Complex value;
 
-                for (var j = 0; j < order; j++)
+                for (int j = 1, j0 = 0; j <= order; j++, j0++)
                 {
                     value = 0;
-                    if (j < order)
+                    if (j <= order)     // CONSIDER: Isn't j *always* <= order by construction??
                     {
                         for (var i = 0; i < order; i++)
                         {
-                            value += ((DenseMatrix) EigenVectors).Values[(j*order) + i].Conjugate()*input[i];
+                            value += ((DenseMatrix) EigenVectors).Values[(j0*order) + i].Conjugate()*input.At(i + 1);
                         }
 
                         value /= EigenValues[j].Real;
                     }
 
-                    tmp[j] = value;
+                    tmp[j0] = value;
                 }
 
-                for (var j = 0; j < order; j++)
+                for (int j = 1, j0 = 0; j <= order; j++, j0++)
                 {
                     value = 0;
                     for (var i = 0; i < order; i++)
                     {
-                        value += ((DenseMatrix) EigenVectors).Values[(i*order) + j]*tmp[i];
+                        value += ((DenseMatrix) EigenVectors).Values[(i*order) + j0]*tmp[i];
                     }
 
-                    result[j] = value;
+                    result.At(j, value);
                 }
             }
             else

@@ -70,10 +70,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         public override double L1Norm()
         {
             var norm = 0d;
-            for (var j = 0; j < ColumnCount; j++)
+            for (var j = 1; j <= ColumnCount; j++)
             {
                 var s = 0d;
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     s += At(i, j).Magnitude;
                 }
@@ -87,10 +87,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         public override double InfinityNorm()
         {
             var norm = 0d;
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 var s = 0d;
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     s += At(i, j).Magnitude;
                 }
@@ -106,7 +106,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             var transpose = ConjugateTranspose();
             var aat = this*transpose;
             var norm = 0d;
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 norm += aat.At(i, i).Magnitude;
             }
@@ -190,7 +190,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             }
 
             var result = Build.SameAs(this, RowCount, ColumnCount);
-            Storage.MapIndexedTo(result.Storage, (i, j, x) => norminv[i]*x, Zeros.AllowSkip, ExistingData.AssumeZeros);
+            Storage.MapIndexedTo(result.Storage, (i, j, x) => norminv[i - 1]*x, Zeros.AllowSkip, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -207,7 +207,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             }
 
             var result = Build.SameAs(this, RowCount, ColumnCount);
-            Storage.MapIndexedTo(result.Storage, (i, j, x) => norminv[j]*x, Zeros.AllowSkip, ExistingData.AssumeZeros);
+            Storage.MapIndexedTo(result.Storage, (i, j, x) => norminv[j - 1]*x, Zeros.AllowSkip, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -269,9 +269,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The matrix to store the result of the addition.</param>
         protected override void DoAdd(Complex scalar, Matrix1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j) + scalar);
                 }
@@ -287,9 +287,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
         protected override void DoAdd(Matrix1<Complex> other, Matrix1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j) + other.At(i, j));
                 }
@@ -303,9 +303,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The matrix to store the result of the subtraction.</param>
         protected override void DoSubtract(Complex scalar, Matrix1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j) - scalar);
                 }
@@ -321,9 +321,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
         protected override void DoSubtract(Matrix1<Complex> other, Matrix1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j) - other.At(i, j));
                 }
@@ -337,9 +337,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The matrix to store the result of the multiplication.</param>
         protected override void DoMultiply(Complex scalar, Matrix1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j)*scalar);
                 }
@@ -353,10 +353,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoMultiply(Vector1<Complex> rightSide, Vector1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 var s = Complex.Zero;
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     s += At(i, j)*rightSide[j];
                 }
@@ -371,12 +371,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j != other.ColumnCount; j++)
+                for (var j = 1; j <= other.ColumnCount; j++)
                 {
                     var s = Complex.Zero;
-                    for (var k = 0; k < ColumnCount; k++)
+                    for (var k = 1; k <= ColumnCount; k++)
                     {
                         s += At(i, k)*other.At(k, j);
                     }
@@ -402,9 +402,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The matrix to store the result of the division.</param>
         protected override void DoDivideByThis(Complex dividend, Matrix1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, dividend/At(i, j));
                 }
@@ -418,12 +418,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoTransposeAndMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
-            for (var j = 0; j < other.RowCount; j++)
+            for (var j = 1; j <= other.RowCount; j++)
             {
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     var s = Complex.Zero;
-                    for (var k = 0; k < ColumnCount; k++)
+                    for (var k = 1; k <= ColumnCount; k++)
                     {
                         s += At(i, k)*other.At(j, k);
                     }
@@ -439,12 +439,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoConjugateTransposeAndMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
-            for (var j = 0; j < other.RowCount; j++)
+            for (var j = 1; j <= other.RowCount; j++)
             {
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     var s = Complex.Zero;
-                    for (var k = 0; k < ColumnCount; k++)
+                    for (var k = 1; k <= ColumnCount; k++)
                     {
                         s += At(i, k)*other.At(j, k).Conjugate();
                     }
@@ -460,12 +460,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoTransposeThisAndMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
-            for (var j = 0; j < other.ColumnCount; j++)
+            for (var j = 1; j <= other.ColumnCount; j++)
             {
-                for (var i = 0; i < ColumnCount; i++)
+                for (var i = 1; i <= ColumnCount; i++)
                 {
                     var s = Complex.Zero;
-                    for (var k = 0; k < RowCount; k++)
+                    for (var k = 1; k <= RowCount; k++)
                     {
                         s += At(k, i)*other.At(k, j);
                     }
@@ -481,12 +481,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoConjugateTransposeThisAndMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
-            for (var j = 0; j < other.ColumnCount; j++)
+            for (var j = 1; j <= other.ColumnCount; j++)
             {
-                for (var i = 0; i < ColumnCount; i++)
+                for (var i = 1; i <= ColumnCount; i++)
                 {
                     var s = Complex.Zero;
-                    for (var k = 0; k < RowCount; k++)
+                    for (var k = 1; k <= RowCount; k++)
                     {
                         s += At(k, i).Conjugate()*other.At(k, j);
                     }
@@ -502,10 +502,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoTransposeThisAndMultiply(Vector1<Complex> rightSide, Vector1<Complex> result)
         {
-            for (var j = 0; j < ColumnCount; j++)
+            for (var j = 1; j <= ColumnCount; j++)
             {
                 var s = Complex.Zero;
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     s += At(i, j)*rightSide[i];
                 }
@@ -520,10 +520,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the multiplication.</param>
         protected override void DoConjugateTransposeThisAndMultiply(Vector1<Complex> rightSide, Vector1<Complex> result)
         {
-            for (var j = 0; j < ColumnCount; j++)
+            for (var j = 1; j <= ColumnCount; j++)
             {
                 var s = Complex.Zero;
-                for (var i = 0; i < RowCount; i++)
+                for (var i = 1; i <= RowCount; i++)
                 {
                     s += At(i, j).Conjugate()*rightSide[i];
                 }
@@ -537,9 +537,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the negation.</param>
         protected override void DoNegate(Matrix1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, -At(i, j));
                 }
@@ -552,9 +552,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The result of the conjugation.</param>
         protected override void DoConjugate(Matrix1<Complex> result)
         {
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var j = 0; j < ColumnCount; j++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j).Conjugate());
                 }
@@ -568,9 +568,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
         protected override void DoPointwiseMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
         {
-            for (var j = 0; j < ColumnCount; j++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var i = 0; i < RowCount; i++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j)*other.At(i, j));
                 }
@@ -584,9 +584,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
         protected override void DoPointwiseDivide(Matrix1<Complex> divisor, Matrix1<Complex> result)
         {
-            for (var j = 0; j < ColumnCount; j++)
+            for (var i = 1; i <= RowCount; i++)
             {
-                for (var i = 0; i < RowCount; i++)
+                for (var j = 1; j <= ColumnCount; j++)
                 {
                     result.At(i, j, At(i, j)/divisor.At(i, j));
                 }
@@ -700,7 +700,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             }
 
             var sum = Complex.Zero;
-            for (var i = 0; i < RowCount; i++)
+            for (var i = 1; i <= RowCount; i++)
             {
                 sum += At(i, i);
             }
@@ -718,7 +718,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 return false;
             }
 
-            for (var k = 0; k < RowCount; k++)
+            for (var k = 1; k <= RowCount; k++)
             {
                 if (!At(k, k).IsReal())
                 {
@@ -726,9 +726,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 }
             }
 
-            for (var row = 0; row < RowCount; row++)
+            for (var row = 1; row <= RowCount; row++)
             {
-                for (var column = row + 1; column < ColumnCount; column++)
+                for (var column = row + 1; column <= ColumnCount; column++)
                 {
                     if (!At(row, column).Equals(At(column, row).Conjugate()))
                     {

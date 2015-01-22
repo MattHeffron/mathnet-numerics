@@ -49,7 +49,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
     /// A vector using dense storage.
     /// </summary>
     [Serializable]
-    [DebuggerDisplay("DenseVector {Count}-Complex")]
+    [DebuggerDisplay("DenseVector[1] {Count}-Complex")]
     public class DenseVector : Vector
     {
         /// <summary>
@@ -78,9 +78,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <summary>
         /// Create a new dense vector with the given length.
         /// All cells of the vector will be initialized to zero.
-        /// Zero-length vectors are not supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If length is less than one.</exception>
+        /// <exception cref="ArgumentException">If length is less than zero.</exception>
         public DenseVector(int length)
             : this(new DenseVectorStorage<Complex>(length))
         {
@@ -516,7 +515,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 }
             }
 
-            return index;
+            return index + 1;
         }
 
         /// <summary>
@@ -555,7 +554,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 }
             }
 
-            return index;
+            return index + 1;
         }
 
         /// <summary>

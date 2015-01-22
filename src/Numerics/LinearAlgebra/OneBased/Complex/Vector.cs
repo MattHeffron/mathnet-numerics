@@ -74,7 +74,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </param>
         protected override void DoAdd(Complex scalar, Vector1<Complex> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) + scalar);
             }
@@ -91,7 +91,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </param>
         protected override void DoAdd(Vector1<Complex> other, Vector1<Complex> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) + other.At(index));
             }
@@ -122,7 +122,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </param>
         protected override void DoSubtract(Vector1<Complex> other, Vector1<Complex> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) - other.At(index));
             }
@@ -139,7 +139,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </param>
         protected override void DoMultiply(Complex scalar, Vector1<Complex> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) * scalar);
             }
@@ -166,7 +166,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The vector to store the result of the division.</param>
         protected override void DoDivideByThis(Complex dividend, Vector1<Complex> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, dividend / At(index));
             }
@@ -179,7 +179,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
         protected override void DoPointwiseMultiply(Vector1<Complex> other, Vector1<Complex> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) * other.At(index));
             }
@@ -192,7 +192,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The vector to store the result of the pointwise division.</param>
         protected override void DoPointwiseDivide(Vector1<Complex> divisor, Vector1<Complex> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index) / divisor.At(index));
             }
@@ -256,7 +256,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         protected override Complex DoDotProduct(Vector1<Complex> other)
         {
             var dot = Complex.Zero;
-            for (var i = 0; i < Count; i++)
+            for (var i = 1; i <= Count; i++)
             {
                 dot += At(i) * other.At(i);
             }
@@ -271,7 +271,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         protected override Complex DoConjugateDotProduct(Vector1<Complex> other)
         {
             var dot = Complex.Zero;
-            for (var i = 0; i < Count; i++)
+            for (var i = 1; i <= Count; i++)
             {
                 dot += At(i).Conjugate() * other.At(i);
             }
@@ -337,9 +337,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <returns>The index of absolute minimum element.</returns>
         public override int AbsoluteMinimumIndex()
         {
-            var index = 0;
+            var index = 1;
             var min = At(index).Magnitude;
-            for (var i = 1; i < Count; i++)
+            for (var i = 2; i <= Count; i++)
             {
                 var test = At(i).Magnitude;
                 if (test < min)
@@ -367,9 +367,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <returns>The index of absolute maximum element.</returns>
         public override int AbsoluteMaximumIndex()
         {
-            var index = 0;
+            var index = 1;
             var max = At(index).Magnitude;
-            for (var i = 1; i < Count; i++)
+            for (var i = 2; i <= Count; i++)
             {
                 var test = At(i).Magnitude;
                 if (test > max)
@@ -389,7 +389,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         public override Complex Sum()
         {
             var sum = Complex.Zero;
-            for (var i = 0; i < Count; i++)
+            for (var i = 1; i <= Count; i++)
             {
                 sum += At(i);
             }
@@ -403,7 +403,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         public override double L1Norm()
         {
             double sum = 0d;
-            for (var i = 0; i < Count; i++)
+            for (var i = 1; i <= Count; i++)
             {
                 sum += At(i).Magnitude;
             }
@@ -425,7 +425,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <returns>The maximum absolute value.</returns>
         public override double InfinityNorm()
         {
-            return CommonParallel.Aggregate(0, Count, i => At(i).Magnitude, Math.Max, 0d);
+            return CommonParallel.Aggregate(1, Count + 1, i => At(i).Magnitude, Math.Max, 0d);
         }
 
         /// <summary>
@@ -446,7 +446,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             if (double.IsPositiveInfinity(p)) return InfinityNorm();
 
             double sum = 0d;
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 sum += Math.Pow(At(index).Magnitude, p);
             }
@@ -459,7 +459,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">Target vector</param>
         protected override void DoConjugate(Vector1<Complex> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, At(index).Conjugate());
             }
@@ -471,7 +471,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">Target vector</param>
         protected override void DoNegate(Vector1<Complex> result)
         {
-            for (var index = 0; index < Count; index++)
+            for (var index = 1; index <= Count; index++)
             {
                 result.At(index, -At(index));
             }
