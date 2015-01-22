@@ -126,11 +126,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         public virtual bool Equals(VectorStorage<T> other)
         {
             // Reject equality when the argument is null or has a different shape.
-            if (other == null)
-            {
-                return false;
-            }
-            if (Length != other.Length)
+            if (other == null || Length != other.Length)
             {
                 return false;
             }
@@ -430,6 +426,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 throw new ArgumentException(Resources.ArgumentVectorsSameLength, "target");
             }
 
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
+            }
+
             MapToUnchecked(target, f, zeros, existingData);
         }
 
@@ -455,6 +456,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             if (Length != target.Length)
             {
                 throw new ArgumentException(Resources.ArgumentVectorsSameLength, "target");
+            }
+
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
             }
 
             MapIndexedToUnchecked(target, f, zeros, existingData);
@@ -493,6 +499,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 throw new ArgumentException(Resources.ArgumentVectorsSameLength, "other");
             }
 
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
+            }
+
             Map2ToUnchecked(target, other, f, zeros, existingData);
         }
 
@@ -516,6 +527,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             if (Length != other.Length)
             {
                 throw new ArgumentException(Resources.ArgumentVectorsSameLength, "other");
+            }
+
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
             }
 
             return Fold2Unchecked(other, f, state, zeros);

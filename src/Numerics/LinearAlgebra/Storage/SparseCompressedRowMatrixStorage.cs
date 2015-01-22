@@ -1060,7 +1060,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         {
             if (existingData == ExistingData.Clear)
             {
-                target.ClearUnchecked(targetColumnIndex, columnCount);
+                target.Clear(targetColumnIndex, columnCount);
             }
 
             // Determine bounds in columnIndices array where this item should be searched (using rowIndex)

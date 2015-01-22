@@ -97,7 +97,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         /// </summary>
         public override T At(int row, int column)
         {
-            return row == column ? Data[row] : Zero;
+            return row == column ? Data[row - 1] : Zero;
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         {
             if (row == column)
             {
-                Data[row] = value;
+                Data[row - 1] = value;
             }
             else if (!Zero.Equals(value))
             {
@@ -186,7 +186,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             var endExclusive = Math.Min(rowIndex + rowCount, columnIndex + columnCount);
             if (endExclusive > beginInclusive)
             {
-                Array.Clear(Data, beginInclusive, endExclusive - beginInclusive);
+                Array.Clear(Data, beginInclusive - 1, endExclusive - beginInclusive);
             }
         }
 
@@ -194,7 +194,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         {
             for (int i = 0; i < rowIndices.Length; i++)
             {
-                Data[rowIndices[i]] = Zero;
+                Data[rowIndices[i] - 1] = Zero;
             }
         }
 
@@ -202,7 +202,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         {
             for (int i = 0; i < columnIndices.Length; i++)
             {
-                Data[columnIndices[i]] = Zero;
+                Data[columnIndices[i] - 1] = Zero;
             }
         }
         
@@ -250,7 +250,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             var storage = new DiagonalMatrixStorage<T>(rows, columns);
             for (var i = 0; i < storage.Data.Length; i++)
             {
-                storage.Data[i] = init(i);
+                storage.Data[i] = init(i + 1);
             }
             return storage;
         }
@@ -283,7 +283,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             var storage = new DiagonalMatrixStorage<T>(rows, columns);
             foreach (var item in data)
             {
-                storage.Data[item.Item1] = item.Item2;
+                storage.Data[item.Item1 - 1] = item.Item2;
             }
             return storage;
         }
@@ -320,9 +320,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 target.Clear();
             }
 
-            for (int i = 0; i < Data.Length; i++)
+            for (int i = 1; i <= Data.Length; i++)
             {
-                target.At(i, i, Data[i]);
+                target.At(i, i, Data[i - 1]);
             }
         }
 
@@ -339,9 +339,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 target.Clear();
             }
 
-            for (int i = 0; i < Data.Length; i++)
+            for (int i = 1; i <= Data.Length; i++)
             {
-                target.At(i, i, Data[i]);
+                target.At(i, i, Data[i - 1]);
             }
         }
 
@@ -388,6 +388,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             if (sourceRowIndex == sourceColumnIndex)
             {
+                // adjust sourceRowIndex for 0-based indexing calculation
+                --sourceRowIndex;
                 for (var i = 0; i < Math.Min(columnCount, rowCount); i++)
                 {
                     target.At(targetRowIndex + i, targetColumnIndex + i, Data[sourceRowIndex + i]);
@@ -397,6 +399,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             {
                 // column by column, but skip resulting zero columns at the beginning
                 int columnInit = sourceRowIndex - sourceColumnIndex;
+                // adjust sourceRowIndex for 0-based indexing calculation
+                --sourceRowIndex;
                 for (var i = 0; i < Math.Min(columnCount - columnInit, rowCount); i++)
                 {
                     target.At(targetRowIndex + i, columnInit + targetColumnIndex + i, Data[sourceRowIndex + i]);
@@ -406,6 +410,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             {
                 // row by row, but skip resulting zero rows at the beginning
                 int rowInit = sourceColumnIndex - sourceRowIndex;
+                // adjust sourceColumnIndex for 0-based indexing calculation
+                --sourceColumnIndex;
                 for (var i = 0; i < Math.Min(columnCount, rowCount - rowInit); i++)
                 {
                     target.At(rowInit + targetRowIndex + i, targetColumnIndex + i, Data[sourceColumnIndex + i]);
@@ -433,7 +439,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             if (endExclusive > beginInclusive)
             {
                 var beginTarget = Math.Max(targetRowIndex, targetColumnIndex);
-                Array.Copy(Data, beginInclusive, target.Data, beginTarget, endExclusive - beginInclusive);
+                Array.Copy(Data, beginInclusive - 1, target.Data, beginTarget - 1, endExclusive - beginInclusive);
             }
         }
 
@@ -447,6 +453,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 target.ClearUnchecked(targetRowIndex, rowCount, targetColumnIndex, columnCount);
             }
 
+            // adjust the various Index values for 0-based indexing calculations below
+            --sourceRowIndex;
+            --sourceColumnIndex;
+            --targetRowIndex;
+            --targetColumnIndex;
             if (sourceRowIndex > sourceColumnIndex && sourceColumnIndex + columnCount > sourceRowIndex)
             {
                 // column by column, but skip resulting zero columns at the beginning
@@ -499,9 +510,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 target.Clear(targetColumnIndex, columnCount);
             }
 
-            if (rowIndex >= sourceColumnIndex && rowIndex < sourceColumnIndex + columnCount && rowIndex < Data.Length)
+            if (rowIndex >= sourceColumnIndex && rowIndex < sourceColumnIndex + columnCount && rowIndex <= Data.Length)
             {
-                target.At(rowIndex - sourceColumnIndex + targetColumnIndex, Data[rowIndex]);
+                target.At(rowIndex - sourceColumnIndex + targetColumnIndex, Data[rowIndex - 1]);
             }
         }
 
@@ -516,9 +527,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 target.Clear(targetRowIndex, rowCount);
             }
 
-            if (columnIndex >= sourceRowIndex && columnIndex < sourceRowIndex + rowCount && columnIndex < Data.Length)
+            if (columnIndex >= sourceRowIndex && columnIndex < sourceRowIndex + rowCount && columnIndex <= Data.Length)
             {
-                target.At(columnIndex - sourceRowIndex + targetRowIndex, Data[columnIndex]);
+                target.At(columnIndex - sourceRowIndex + targetRowIndex, Data[columnIndex - 1]);
             }
         }
 
@@ -579,13 +590,13 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public override IEnumerable<Tuple<int, int, T>> EnumerateIndexed()
         {
-            for (int j = 0; j < ColumnCount; j++)
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
                     // PERF: consider to break up loop to avoid branching
                     yield return i == j
-                        ? new Tuple<int, int, T>(i, i, Data[i])
+                        ? new Tuple<int, int, T>(i, i, Data[i - 1])
                         : new Tuple<int, int, T>(i, j, Zero);
                 }
             }
@@ -598,11 +609,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public override IEnumerable<Tuple<int, int, T>> EnumerateNonZeroIndexed()
         {
-            for (int i = 0; i < Data.Length; i++)
+            for (int i = 0, i1 = 1; i < Data.Length; i++, i1++)
             {
                 if (!Zero.Equals(Data[i]))
                 {
-                    yield return new Tuple<int, int, T>(i, i, Data[i]);
+                    yield return new Tuple<int, int, T>(i1, i1, Data[i]);
                 }
             }
         }

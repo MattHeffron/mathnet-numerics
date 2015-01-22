@@ -80,7 +80,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         public override T At(int index)
         {
             // Search if item idex exists in NonZeroIndices array in range "0 - nonzero values count"
-            var itemIndex = Array.BinarySearch(Indices, 0, ValueCount, index);
+            var itemIndex = Array.BinarySearch(Indices, 0, ValueCount, index - 1);
             return itemIndex >= 0 ? Values[itemIndex] : Zero;
         }
 
@@ -89,6 +89,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         /// </summary>
         public override void At(int index, T value)
         {
+            --index;    // adjust for one-based
             // Search if "index" already exists in range "0 - nonzero values count"
             var itemIndex = Array.BinarySearch(Indices, 0, ValueCount, index);
             if (itemIndex >= 0)
@@ -115,6 +116,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             }
         }
 
+        /// <summary>
+        /// Insert a value into the sparse vector
+        /// </summary>
+        /// <remarks>Note: index is a ZERO-BASED index value! (Not the "public" one-based value.)</remarks>
         internal void InsertAtIndexUnchecked(int itemIndex, int index, T value)
         {
             // Check if the storage needs to be increased
@@ -190,6 +195,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public override void Clear(int index, int count)
         {
+            --index;    // adjust for one-based
             if (index == 0 && count == Length)
             {
                 Clear();
@@ -309,14 +315,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 return new SparseVectorStorage<T>(length);
             }
 
-            if (length < 1)
+            if (length < 0)
             {
-                throw new ArgumentOutOfRangeException("length", string.Format(Resources.ArgumentLessThanOne, length));
+                throw new ArgumentOutOfRangeException("length", Resources.ArgumentNotNegative);
             }
 
             var indices = new int[length];
             var values = new T[length];
-            for (int i = 0; i < indices.Length; i++)
+            for (int i = 0; i < length; i++)
             {
                 indices[i] = i;
                 values[i] = value;
@@ -332,9 +338,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public static SparseVectorStorage<T> OfInit(int length, Func<int, T> init)
         {
-            if (length < 1)
+            if (length < 0)
             {
-                throw new ArgumentOutOfRangeException("length", string.Format(Resources.ArgumentLessThanOne, length));
+                throw new ArgumentOutOfRangeException("length", Resources.ArgumentNotNegative);
             }
 
             var indices = new List<int>();
@@ -387,6 +393,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public static SparseVectorStorage<T> OfIndexedEnumerable(int length, IEnumerable<Tuple<int, T>> data)
         {
+            if (length < 0)
+            {
+                throw new ArgumentOutOfRangeException("length", Resources.ArgumentNotNegative);
+            }
+
             if (data == null)
             {
                 throw new ArgumentNullException("data");
@@ -399,7 +410,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 if (!Zero.Equals(item.Item2))
                 {
                     values.Add(item.Item2);
-                    indices.Add(item.Item1);
+                    indices.Add(item.Item1 - 1);        // adjust for the incoming index values being one based
                 }
             }
 
@@ -437,7 +448,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             {
                 for (int i = 0; i < ValueCount; i++)
                 {
-                    target.At(Indices[i], Values[i]);
+                    target.At(Indices[i] + 1, Values[i]);       // adjust for one based
                 }
             }
         }
@@ -482,7 +493,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             for (int i = 0; i < ValueCount; i++)
             {
-                target.At(rowIndex, Indices[i], Values[i]);
+                target.At(rowIndex, Indices[i] + 1, Values[i]);
             }
         }
 
@@ -502,7 +513,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             for (int i = 0; i < ValueCount; i++)
             {
-                target.At(Indices[i], columnIndex, Values[i]);
+                target.At(Indices[i] + 1, columnIndex, Values[i]);
             }
         }
 
@@ -521,10 +532,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             // FALL BACK
 
-            var offset = targetIndex - sourceIndex;
+            var offset = targetIndex - sourceIndex + 1;     // adjust for one based indexing use below
 
-            var sourceFirst = Array.BinarySearch(Indices, 0, ValueCount, sourceIndex);
-            var sourceLast = Array.BinarySearch(Indices, 0, ValueCount, sourceIndex + count - 1);
+            var sourceFirst = Array.BinarySearch(Indices, 0, ValueCount, sourceIndex - 1);
+            var sourceLast = Array.BinarySearch(Indices, 0, ValueCount, sourceIndex + count);
             if (sourceFirst < 0) sourceFirst = ~sourceFirst;
             if (sourceLast < 0) sourceLast = ~sourceLast - 1;
 
@@ -545,8 +556,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         {
             var offset = targetIndex - sourceIndex;
 
-            var sourceFirst = Array.BinarySearch(Indices, 0, ValueCount, sourceIndex);
-            var sourceLast = Array.BinarySearch(Indices, 0, ValueCount, sourceIndex + count - 1);
+            var sourceFirst = Array.BinarySearch(Indices, 0, ValueCount, sourceIndex - 1);
+            var sourceLast = Array.BinarySearch(Indices, 0, ValueCount, sourceIndex + count);
             if (sourceFirst < 0) sourceFirst = ~sourceFirst;
             if (sourceLast < 0) sourceLast = ~sourceLast - 1;
             int sourceCount = sourceLast - sourceFirst + 1;
@@ -568,6 +579,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     Clear(targetIndex, count);
                 }
 
+                ++offset;     // adjust for one based indexing
                 for (int i = sourceFirst; i <= sourceLast; i++)
                 {
                     At(indices[i] + offset, values[i]);
@@ -600,6 +612,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 target.Clear(targetIndex, count);
             }
 
+            ++offset;     // adjust for one based indexing
             for (int i = sourceFirst; i <= sourceLast; i++)
             {
                 target.At(Indices[i] + offset, Values[i]);
@@ -622,11 +635,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         public override IEnumerable<Tuple<int, T>> EnumerateIndexed()
         {
             int k = 0;
-            for (int i = 0; i < Length; i++)
+            for (int i = 0, i1 = 1; i < Length; i++, i1++)
             {
                 yield return k < ValueCount && Indices[k] == i
-                    ? new Tuple<int, T>(i, Values[k++])
-                    : new Tuple<int, T>(i, Zero);
+                    ? new Tuple<int, T>(i1, Values[k++])
+                    : new Tuple<int, T>(i1, Zero);
             }
         }
 
@@ -641,7 +654,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             {
                 if (!Zero.Equals(Values[i]))
                 {
-                    yield return new Tuple<int, T>(Indices[i], Values[i]);
+                    yield return new Tuple<int, T>(Indices[i] + 1, Values[i]);
                 }
             }
         }
@@ -726,17 +739,20 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         internal override void MapIndexedToUnchecked<TU>(VectorStorage<TU> target, Func<int, T, TU> f,
             Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
         {
+            //CONSIDER: is the 2nd term a reasonable test? Since value of f depends on the index, what does this really imply?
+            ////var processZeros = zeros == Zeros.Include || !Zero.Equals(f(1, Zero)))
+            var processZeros = zeros == Zeros.Include;
             var sparseTarget = target as SparseVectorStorage<TU>;
             if (sparseTarget != null)
             {
                 var indices = new List<int>();
                 var values = new List<TU>();
-                if (zeros == Zeros.Include || !Zero.Equals(f(0, Zero)))
+                if (processZeros)
                 {
                     int k = 0;
-                    for (int i = 0; i < Length; i++)
+                    for (int i = 0, i1 = 1; i < Length; i++, i1++)
                     {
-                        var item = k < ValueCount && (Indices[k]) == i ? f(i, Values[k++]) : f(i, Zero);
+                        var item = k < ValueCount && (Indices[k]) == i ? f(i1, Values[k++]) : f(i1, Zero);
                         if (!Zero.Equals(item))
                         {
                             values.Add(item);
@@ -748,7 +764,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 {
                     for (int i = 0; i < ValueCount; i++)
                     {
-                        var item = f(Indices[i], Values[i]);
+                        var item = f(Indices[i] + 1, Values[i]);
                         if (!Zero.Equals(item))
                         {
                             values.Add(item);
@@ -770,14 +786,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     denseTarget.Clear();
                 }
 
-                if (zeros == Zeros.Include || !Zero.Equals(f(0, Zero)))
+                if (processZeros)
                 {
                     int k = 0;
-                    for (int i = 0; i < Length; i++)
+                    for (int i = 0, i1 = 1; i < Length; i++, i1++)
                     {
                         denseTarget.Data[i] = k < ValueCount && (Indices[k]) == i
-                            ? f(i, Values[k++])
-                            : f(i, Zero);
+                            ? f(i1, Values[k++])
+                            : f(i1, Zero);
                     }
                 }
                 else

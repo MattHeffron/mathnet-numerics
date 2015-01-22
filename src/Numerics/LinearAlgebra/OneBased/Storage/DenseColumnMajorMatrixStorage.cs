@@ -97,7 +97,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         /// </summary>
         public override T At(int row, int column)
         {
-            return Data[(column*RowCount) + row];
+            return Data[((column - 1)*RowCount) + row - 1];
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         /// </summary>
         public override void At(int row, int column, T value)
         {
-            Data[(column*RowCount) + row] = value;
+            Data[((column - 1) * RowCount) + row - 1] = value;
         }
 
         // CLEARING
@@ -117,12 +117,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         internal override void ClearUnchecked(int rowIndex, int rowCount, int columnIndex, int columnCount)
         {
-            if (rowIndex == 0 && columnIndex == 0 && rowCount == RowCount && columnCount == ColumnCount)
+            if (rowIndex == 1 && columnIndex == 1 && rowCount == RowCount && columnCount == ColumnCount)
             {
                 Array.Clear(Data, 0, Data.Length);
                 return;
             }
 
+            // adjust columnIndex and rowIndex for 0-based indexing calculation
+            --columnIndex;
+            --rowIndex;
             for (int j = columnIndex; j < columnIndex + columnCount; j++)
             {
                 Array.Clear(Data, j*RowCount + rowIndex, rowCount);
@@ -136,7 +139,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 int offset = j*RowCount;
                 for (var k = 0; k < rowIndices.Length; k++)
                 {
-                    Data[offset + rowIndices[k]] = Zero;
+                    Data[offset + rowIndices[k] - 1] = Zero;
                 }
             }
         }
@@ -145,7 +148,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         {
             for (int k = 0; k < columnIndices.Length; k++)
             {
-                Array.Clear(Data, columnIndices[k]*RowCount, RowCount);
+                Array.Clear(Data, (columnIndices[k] - 1)*RowCount, RowCount);
             }
         }
 
@@ -176,9 +179,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         {
             var storage = new DenseColumnMajorMatrixStorage<T>(rows, columns);
             int index = 0;
-            for (var j = 0; j < columns; j++)
+            for (int j = 1; j <= columns; j++)
             {
-                for (var i = 0; i < rows; i++)
+                for (var i = 1; i <= rows; i++)
                 {
                     storage.Data[index++] = init(i, j);
                 }
@@ -191,7 +194,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             var storage = new DenseColumnMajorMatrixStorage<T>(rows, columns);
             int index = 0;
             int stride = rows + 1;
-            for (var i = 0; i < Math.Min(rows, columns); i++)
+            for (var i = 1; i <= Math.Min(rows, columns); i++)
             {
                 storage.Data[index] = init(i);
                 index += stride;
@@ -260,7 +263,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     int offset = j*rows;
                     for (int i = 0; i < rows; i++)
                     {
-                        array[offset + i] = column.At(i);
+                        array[offset + i] = column.At(i + 1);
                     }
                 }
             }
@@ -272,9 +275,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             int rows = data.Length;
             int columns = data[0].Length;
             var array = new T[rows*columns];
-            for (int j = 0; j < columns; j++)
+            for (int j = 1; j <= columns; j++)
             {
-                int offset = j*rows;
+                int offset = (j - 1)*rows;
                 for (int i = 0; i < rows; i++)
                 {
                     array[offset + i] = data[i].At(j);
@@ -288,7 +291,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             var array = new T[rows*columns];
             foreach (var item in data)
             {
-                array[(item.Item2*rows) + item.Item1] = item.Item3;
+                array[((item.Item2 - 1)*rows) + item.Item1 - 1] = item.Item3;
             }
             return new DenseColumnMajorMatrixStorage<T>(rows, columns, array);
         }
@@ -374,11 +377,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             // FALL BACK
 
-            for (int j = 0, offset = 0; j < ColumnCount; j++, offset += RowCount)
+            for (int j = 1, offset = 0; j <= ColumnCount; j++, offset += RowCount)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
-                    target.At(i, j, Data[i + offset]);
+                    target.At(i, j, Data[i + offset - 1]);
                 }
             }
         }
@@ -405,6 +408,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             // FALL BACK
 
+            // adjust sourceColumnIndex and sourceRowIndex to adjust for use in 0-based index calculation
+            --sourceColumnIndex;
+            --sourceRowIndex;
             for (int j = sourceColumnIndex, jj = targetColumnIndex; j < sourceColumnIndex + columnCount; j++, jj++)
             {
                 int index = sourceRowIndex + j*RowCount;
@@ -419,6 +425,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             int sourceRowIndex, int targetRowIndex, int rowCount,
             int sourceColumnIndex, int targetColumnIndex, int columnCount)
         {
+            // adjust source and target Column and Row indexes to adjust for use in 0-based index calculation
+            --sourceColumnIndex;
+            --targetColumnIndex;
+            --sourceRowIndex;
+            --targetRowIndex;
             for (int j = sourceColumnIndex, jj = targetColumnIndex; j < sourceColumnIndex + columnCount; j++, jj++)
             {
                 //Buffer.BlockCopy(Data, j*RowCount + sourceRowIndex, target.Data, jj*target.RowCount + targetRowIndex, rowCount * System.Runtime.InteropServices.Marshal.SizeOf(typeof(T)));
@@ -434,6 +445,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             var targetDense = target as DenseVectorStorage<T>;
             if (targetDense != null)
             {
+                // adjust source and target Column and Row indexes to adjust for use in 0-based index calculation
+                --sourceColumnIndex;
+                --targetColumnIndex;
+                --rowIndex;
                 for (int j = 0; j < columnCount; j++)
                 {
                     targetDense.Data[j + targetColumnIndex] = Data[(j + sourceColumnIndex)*RowCount + rowIndex];
@@ -443,6 +458,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             // FALL BACK
 
+            // adjust sourceColumnIndex and rowIndex to adjust for use in 0-based index calculation
+            --sourceColumnIndex;
+            --rowIndex;
             for (int j = sourceColumnIndex, jj = targetColumnIndex; j < sourceColumnIndex + columnCount; j++, jj++)
             {
                 target.At(jj, Data[(j*RowCount) + rowIndex]);
@@ -457,13 +475,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             var targetDense = target as DenseVectorStorage<T>;
             if (targetDense != null)
             {
-                Array.Copy(Data, columnIndex*RowCount + sourceRowIndex, targetDense.Data, targetRowIndex, rowCount);
+                Array.Copy(Data, (columnIndex - 1)*RowCount + sourceRowIndex - 1, targetDense.Data, targetRowIndex - 1, rowCount);
                 return;
             }
 
             // FALL BACK
 
-            var offset = columnIndex*RowCount;
+            var offset = (columnIndex - 1)*RowCount;
+            // adjust sourceRowIndex to adjust for use in 0-based index calculation
+            --sourceRowIndex;
             for (int i = sourceRowIndex, ii = targetRowIndex; i < sourceRowIndex + rowCount; i++, ii++)
             {
                 target.At(ii, Data[offset + i]);
@@ -490,11 +510,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             // FALL BACK
 
-            for (int j = 0, offset = 0; j < ColumnCount; j++, offset += RowCount)
+            for (int j = 1, offset = 0; j <= ColumnCount; j++, offset += RowCount)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
-                    target.At(j, i, Data[i + offset]);
+                    target.At(j, i, Data[i + offset - 1]);
                 }
             }
         }
@@ -582,9 +602,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         public override IEnumerable<Tuple<int, int, T>> EnumerateIndexed()
         {
             int index = 0;
-            for (int j = 0; j < ColumnCount; j++)
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
                     yield return new Tuple<int, int, T>(i, j, Data[index]);
                     index++;
@@ -600,9 +620,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         public override IEnumerable<Tuple<int, int, T>> EnumerateNonZeroIndexed()
         {
             int index = 0;
-            for (int j = 0; j < ColumnCount; j++)
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
                     var x = Data[index];
                     if (!Zero.Equals(x))
@@ -618,6 +638,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public override void MapInplace(Func<T, T> f, Zeros zeros = Zeros.AllowSkip)
         {
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
+            }
+
             CommonParallel.For(0, Data.Length, 4096, (a, b) =>
             {
                 for (int i = a; i < b; i++)
@@ -629,12 +654,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public override void MapIndexedInplace(Func<int, int, T, T> f, Zeros zeros = Zeros.AllowSkip)
         {
-            CommonParallel.For(0, ColumnCount, Math.Max(4096/RowCount, 32), (a, b) =>
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
+            }
+
+            CommonParallel.For(0, ColumnCount, Math.Max(4096 / RowCount, 32), (a, b) =>
             {
                 int index = a*RowCount;
-                for (int j = a; j < b; j++)
+                for (int j = a + 1; j <= b; j++)
                 {
-                    for (int i = 0; i < RowCount; i++)
+                    for (int i = 1; i <= RowCount; i++)
                     {
                         Data[index] = f(i, j, Data[index]);
                         index++;
@@ -662,9 +692,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             // FALL BACK
 
             int index = 0;
-            for (int j = 0; j < ColumnCount; j++)
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
                     target.At(i, j, f(Data[index++]));
                 }
@@ -680,9 +710,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 CommonParallel.For(0, ColumnCount, Math.Max(4096/RowCount, 32), (a, b) =>
                 {
                     int index = a*RowCount;
-                    for (int j = a; j < b; j++)
+                    for (int j = a + 1; j <= b; j++)
                     {
-                        for (int i = 0; i < RowCount; i++)
+                        for (int i = 1; i <= RowCount; i++)
                         {
                             denseTarget.Data[index] = f(i, j, Data[index]);
                             index++;
@@ -695,9 +725,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             // FALL BACK
 
             int index2 = 0;
-            for (int j = 0; j < ColumnCount; j++)
+            for (int j = 1; j <= ColumnCount; j++)
             {
-                for (int i = 0; i < RowCount; i++)
+                for (int i = 1; i <= RowCount; i++)
                 {
                     target.At(i, j, f(i, j, Data[index2++]));
                 }
@@ -716,8 +746,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 {
                     for (int j = a; j < b; j++)
                     {
-                        int sourceIndex = sourceRowIndex + (j + sourceColumnIndex)*RowCount;
-                        int targetIndex = targetRowIndex + (j + targetColumnIndex)*target.RowCount;
+                        int sourceIndex = sourceRowIndex - 1 + (j + sourceColumnIndex - 1)*RowCount;
+                        int targetIndex = targetRowIndex - 1 + (j + targetColumnIndex - 1)*target.RowCount;
                         for (int i = 0; i < rowCount; i++)
                         {
                             denseTarget.Data[targetIndex++] = f(targetRowIndex + i, targetColumnIndex + j, Data[sourceIndex++]);
@@ -733,7 +763,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             for (int j = sourceColumnIndex, jj = targetColumnIndex; j < sourceColumnIndex + columnCount; j++, jj++)
             {
-                int index = sourceRowIndex + j*RowCount;
+                int index = sourceRowIndex + (j - 1)*RowCount;
                 for (int ii = targetRowIndex; ii < targetRowIndex + rowCount; ii++)
                 {
                     target.At(ii, jj, f(ii, jj, Data[index++]));

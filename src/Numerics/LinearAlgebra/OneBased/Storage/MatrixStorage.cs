@@ -601,6 +601,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual void MapInplace(Func<T, T> f, Zeros zeros = Zeros.AllowSkip)
         {
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
+            }
+
             for (int i = 1; i <= RowCount; i++)
             {
                 for (int j = 1; j <= ColumnCount; j++)
@@ -612,6 +617,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public virtual void MapIndexedInplace(Func<int, int, T, T> f, Zeros zeros = Zeros.AllowSkip)
         {
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
+            }
+
             for (int i = 1; i <= RowCount; i++)
             {
                 for (int j = 1; j <= ColumnCount; j++)
@@ -634,6 +644,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             {
                 var message = string.Format(Resources.ArgumentMatrixDimensions2, RowCount + "x" + ColumnCount, target.RowCount + "x" + target.ColumnCount);
                 throw new ArgumentException(message, "target");
+            }
+
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
             }
 
             MapToUnchecked(target, f, zeros, existingData);
@@ -667,6 +682,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 throw new ArgumentException(message, "target");
             }
 
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
+            }
+
             MapIndexedToUnchecked(target, f, zeros, existingData);
         }
 
@@ -692,6 +712,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             if (target == null)
             {
                 throw new ArgumentNullException("target");
+            }
+
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
             }
 
             if (rowCount == 0 || columnCount == 0)
@@ -749,6 +774,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 throw new ArgumentException(Resources.ArgumentVectorsSameLength, "state");
             }
 
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
+            }
+
             FoldByRowUnchecked(target, f, finalize, state, zeros);
         }
 
@@ -785,6 +815,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             if (state.Length != ColumnCount)
             {
                 throw new ArgumentException(Resources.ArgumentVectorsSameLength, "state");
+            }
+
+            if (f == null)
+            {
+                throw new ArgumentNullException("f");
             }
 
             FoldByColumnUnchecked(target, f, finalize, state, zeros);
