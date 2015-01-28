@@ -56,12 +56,13 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         /// Returns the decomposed matrix diagonal.
         /// </summary>
         /// <returns>The matrix diagonal.</returns>
+        /// <remarks>Currently, this method is never used!</remarks>
         internal DiagonalMatrix DiagonalEntries()
         {
             var result = new DiagonalMatrix(_inverseDiagonals.Length);
-            for (var i = 0; i < _inverseDiagonals.Length; i++)
+            for (var i = 1; i <= _inverseDiagonals.Length; i++)
             {
-                result.At(i, i, 1/_inverseDiagonals[i]);
+                result.At(i, i, _inverseDiagonals[i - 1].Reciprocal());
             }
 
             return result;
@@ -84,7 +85,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
             _inverseDiagonals = new Complex[matrix.RowCount];
             for (var i = 0; i < matrix.RowCount; i++)
             {
-                _inverseDiagonals[i] = 1/matrix.At(i, i);
+                _inverseDiagonals[i - 1] = matrix.At(i, i).Reciprocal();
             }
         }
 
@@ -105,9 +106,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
                 throw new ArgumentException(Resources.ArgumentVectorsSameLength, "rhs");
             }
 
-            for (var i = 0; i < _inverseDiagonals.Length; i++)
+            for (var i = 1; i <= _inverseDiagonals.Length; i++)
             {
-                lhs[i] = rhs[i]*_inverseDiagonals[i];
+                lhs.At(i, rhs.At(i)*_inverseDiagonals[i - 1]);
             }
         }
     }

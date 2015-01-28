@@ -65,11 +65,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         internal Matrix1<Complex> UpperTriangle()
         {
             var result = new SparseMatrix(_decompositionLU.RowCount);
-            for (var i = 0; i < _decompositionLU.RowCount; i++)
+            for (var i = 1; i <= _decompositionLU.RowCount; i++)
             {
-                for (var j = i; j < _decompositionLU.ColumnCount; j++)
+                for (var j = i; j <= _decompositionLU.ColumnCount; j++)
                 {
-                    result[i, j] = _decompositionLU[i, j];
+                    result.At(i, j, _decompositionLU.At(i, j));
                 }
             }
 
@@ -83,17 +83,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         internal Matrix1<Complex> LowerTriangle()
         {
             var result = new SparseMatrix(_decompositionLU.RowCount);
-            for (var i = 0; i < _decompositionLU.RowCount; i++)
+            for (var i = 1; i <= _decompositionLU.RowCount; i++)
             {
-                for (var j = 0; j <= i; j++)
+                for (var j = 1; j <= i; j++)
                 {
                     if (i == j)
                     {
-                        result[i, j] = 1.0;
+                        result.At(i, j, Complex.One);
                     }
                     else
                     {
-                        result[i, j] = _decompositionLU[i, j];
+                        result.At(i, j, _decompositionLU.At(i, j));
                     }
                 }
             }
@@ -134,29 +134,29 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
             //         end
             //     end
             // end
-            for (var i = 0; i < _decompositionLU.RowCount; i++)
+            for (var i = 1; i <= _decompositionLU.RowCount; i++)
             {
-                for (var k = 0; k < i; k++)
+                for (var k = 1; k <= i; k++)
                 {
-                    if (_decompositionLU[i, k] != 0.0)
+                    if (_decompositionLU.At(i, k) != Complex.Zero)
                     {
-                        var t = _decompositionLU[i, k]/_decompositionLU[k, k];
-                        _decompositionLU[i, k] = t;
-                        if (_decompositionLU[k, i] != 0.0)
+                        var t = _decompositionLU.At(i, k)/_decompositionLU.At(k, k);
+                        _decompositionLU.At(i, k, t);
+                        if (_decompositionLU.At(k, i) != Complex.Zero)
                         {
-                            _decompositionLU[i, i] = _decompositionLU[i, i] - (t*_decompositionLU[k, i]);
+                            _decompositionLU.At(i, i, _decompositionLU.At(i, i) - (t*_decompositionLU.At(k, i)));
                         }
 
-                        for (var j = k + 1; j < _decompositionLU.RowCount; j++)
+                        for (var j = k + 1; j <= _decompositionLU.RowCount; j++)
                         {
                             if (j == i)
                             {
                                 continue;
                             }
 
-                            if (_decompositionLU[i, j] != 0.0)
+                            if (_decompositionLU.At(i, j) != Complex.Zero)
                             {
-                                _decompositionLU[i, j] = _decompositionLU[i, j] - (t*_decompositionLU[k, j]);
+                                _decompositionLU.At(i, j, _decompositionLU.At(i, j) - (t*_decompositionLU.At(k, j)));
                             }
                         }
                     }
@@ -189,20 +189,20 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
             //     z_i = l_ii^-1 * (y_i - SUM_(j<i) l_ij * z_j)
             // }
             // NOTE: l_ii should be 1 because u_ii has to be the value
-            var rowValues = new DenseVector(_decompositionLU.RowCount);
-            for (var i = 0; i < _decompositionLU.RowCount; i++)
+            var rowValues = new DenseVector(_decompositionLU.ColumnCount);
+            for (var i = 1; i <= _decompositionLU.RowCount; i++)
             {
                 // Clear the rowValues 
                 rowValues.Clear();
                 _decompositionLU.Row(i, rowValues);
 
                 var sum = Complex.Zero;
-                for (var j = 0; j < i; j++)
+                for (var j = 1; j <= i; j++)
                 {
                     sum += rowValues[j]*lhs[j];
                 }
 
-                lhs[i] = rhs[i] - sum;
+                lhs.At(i, rhs.At(i) - sum);
             }
 
             // Solve:
@@ -212,17 +212,17 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
             // {
             //     x_i = u_ii^-1 * (z_i - SUM_(j > i) u_ij * x_j)
             // }
-            for (var i = _decompositionLU.RowCount - 1; i > -1; i--)
+            for (var i = _decompositionLU.RowCount; i > 0; i--)
             {
                 _decompositionLU.Row(i, rowValues);
 
                 var sum = Complex.Zero;
-                for (var j = _decompositionLU.RowCount - 1; j > i; j--)
+                for (var j = _decompositionLU.RowCount; j > i; j--)
                 {
-                    sum += rowValues[j]*lhs[j];
+                    sum += rowValues.At(j)*lhs.At(j);
                 }
 
-                lhs[i] = 1/rowValues[i]*(lhs[i] - sum);
+                lhs.At(i, rowValues[i].Reciprocal()*(lhs.At(i) - sum));
             }
         }
     }

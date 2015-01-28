@@ -175,16 +175,26 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
             var distribution = new Normal();
 
             var matrix = new DenseMatrix(numberOfVariables, count);
-            for (var i = 0; i < matrix.ColumnCount; i++)
+            for (var i = 1; i <= matrix.ColumnCount; i++)
             {
                 var samples = new Complex[matrix.RowCount];
-                var samplesRe = distribution.Samples().Take(matrix.RowCount).ToArray();
-                var samplesIm = distribution.Samples().Take(matrix.RowCount).ToArray();
-                for (int j = 0; j < matrix.RowCount; j++)
-                {
-                    samples[j] = new Complex(samplesRe[j], samplesIm[j]);
-                }
+                ////var samplesRe = distribution.Samples().Take(matrix.RowCount).ToArray();
+                ////var samplesIm = distribution.Samples().Take(matrix.RowCount).ToArray();
+                ////for (int j = 0; j < samples.Length; j++)
+                ////{
+                ////    samples[j] = new Complex(samplesRe[j], samplesIm[j]);
+                ////}
 
+                // This is more efficient than the above (both space and time)
+                var sampleEnumerator = distribution.Samples().GetEnumerator();
+                for (int j = 0; j < samples.Length; j++)
+                {
+                    sampleEnumerator.MoveNext();    // this is a "infinite" enumerator, so shouldn't need to check result
+                    var re = sampleEnumerator.Current;
+                    sampleEnumerator.MoveNext();
+                    var im = sampleEnumerator.Current;
+                    samples[j] = new Complex(re, im);
+                }
                 // Set the column
                 matrix.SetColumn(i, samples);
             }
@@ -197,10 +207,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
             var result = new List<Vector1<Complex>>();
             for (var i = 0; i < orthogonalMatrix.ColumnCount; i++)
             {
-                result.Add(orthogonalMatrix.Column(i));
+                var resultColumn = orthogonalMatrix.Column(i);
 
                 // Normalize the result vector
-                result[i].Multiply(1 / result[i].L2Norm(), result[i]);
+                resultColumn.Multiply(1 / resultColumn.L2Norm(), resultColumn);
+                result.Add(resultColumn);
             }
 
             return result;
@@ -215,7 +226,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         static Vector1<Complex>[] CreateVectorArray(int arraySize, int vectorSize)
         {
             var result = new Vector1<Complex>[arraySize];
-            for (var i = 0; i < result.Length; i++)
+            for (var i = 0; i < arraySize; i++)
             {
                 result[i] = new DenseVector(vectorSize);
             }
@@ -368,7 +379,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
                 // So set rho to 1.0 because in the next step it will turn to zero.
                 if (rho.Real.AlmostEqualNumbersBetween(0, 1) && rho.Imaginary.AlmostEqualNumbersBetween(0, 1))
                 {
-                    rho = 1.0;
+                    rho = Complex.One;
                 }
 
                 rho = -u.ConjugateDotProduct(temp)/rho;
