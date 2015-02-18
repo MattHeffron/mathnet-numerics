@@ -170,7 +170,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <summary>
         /// Returns a reference to the internal data structure.
         /// </summary>
-        /// <param name="vector">The <c>DenseVector1</c> whose internal data we are
+        /// <param name="vector">The <c>DenseVector</c> whose internal data we are
         /// returning.</param>
         /// <returns>
         /// A reference to the internal date of the given vector.
@@ -188,9 +188,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <summary>
         /// Returns a vector bound directly to a reference of the provided array.
         /// </summary>
-        /// <param name="array">The array to bind to the <c>DenseVector1</c> object.</param>
+        /// <param name="array">The array to bind to the <c>DenseVector</c> object.</param>
         /// <returns>
-        /// A <c>DenseVector1</c> whose values are bound to the given array.
+        /// A <c>DenseVector</c> whose values are bound to the given array.
         /// </returns>
         public static implicit operator DenseVector(int[] array)
         {
@@ -671,7 +671,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         public override double L2Norm()
         {
             // TODO: native provider
-            return _values.Cast<double>().Aggregate(0.0, SpecialFunctions.Hypotenuse);
+            double normL2 = 0.0;
+            foreach (var v in _values)
+            {
+                double dv = v;
+                normL2 += dv * dv;
+            }
+            normL2 = Math.Sqrt(normL2);
+            return normL2;
         }
 
         /// <summary>

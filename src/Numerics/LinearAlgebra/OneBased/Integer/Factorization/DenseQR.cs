@@ -40,6 +40,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
     /// (its columns are orthogonal unit vectors meaning QTQ = I) and R is an upper triangular matrix 
     /// (also called right triangular matrix).</para>
     /// </summary>
+    /// <exception cref="NotSupportedException">at construction: Not Supported For Integer Matrices</exception>
     /// <remarks>
     /// The computation of the QR decomposition is done at construction time by Householder transformation.
     /// </remarks>

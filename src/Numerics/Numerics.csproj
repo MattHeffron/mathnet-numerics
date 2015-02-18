@@ -263,6 +263,7 @@
     <Compile Include="LinearAlgebra\OneBased\Integer\Factorization\UserLU.cs" />
     <Compile Include="LinearAlgebra\OneBased\Integer\Factorization\UserQR.cs" />
     <Compile Include="LinearAlgebra\OneBased\Integer\Factorization\UserSvd.cs" />
+    <Compile Include="LinearAlgebra\OneBased\Integer\IndexingExtensionMethods.cs" />
     <Compile Include="LinearAlgebra\OneBased\Integer\Matrix.cs" />
     <Compile Include="LinearAlgebra\OneBased\Integer\Solvers\BiCgStab.cs" />
     <Compile Include="LinearAlgebra\OneBased\Integer\Solvers\CompositeSolver.cs" />
