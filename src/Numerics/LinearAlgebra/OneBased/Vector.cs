@@ -40,7 +40,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
     /// <summary>
     /// Defines the generic class for <c>Vector1</c> classes.
     /// </summary>
-    /// <typeparam name="T">Supported data types are double, single, <see cref="Complex"/>, and <see cref="Complex32"/>.</typeparam>
+    /// <typeparam name="T">Supported data types are double, single, integer(Int32), <see cref="Complex"/>, and <see cref="Complex32"/>.</typeparam>
     [Serializable]
     public abstract partial class Vector1<T> :
         IFormattable, IEquatable<Vector1<T>>, IList, IList<T>
