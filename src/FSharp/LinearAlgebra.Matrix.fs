@@ -42,6 +42,12 @@ module Matrix =
     /// Transform a matrix into a 2D array.
     let inline toArray2 (A: #Matrix<_>) = A.ToArray()
 
+    /// Transform a matrix into an array of column arrays.
+    let inline toColArrays (m: #Matrix<_>) = m.ToColumnArrays()
+
+    /// Transform a matrix into an array of row arrays.
+    let inline toRowArrays (m: #Matrix<_>) = m.ToRowArrays()
+
 
     /// Transform a matrix into a sequence.
     let inline toSeq (m: #Matrix<_>) = m.Enumerate(Zeros.Include)
@@ -288,7 +294,7 @@ module Matrix =
     let inline inplaceAssign f (A: #Matrix<_>) =
         A.MapIndexedInplace((fun i j x -> f i j), Zeros.Include)
 
-        /// Fold all columns into one row vector.
+    /// Fold all columns into one row vector.
     let inline foldByCol f acc (A: #Matrix<'T>) =
         let v = Vector<'T>.Build.SameAs(A, A.ColumnCount)
         for k=0 to A.ColumnCount-1 do
@@ -308,6 +314,15 @@ module Matrix =
             v.At(k, macc)
         v :> _ Vector
 
+
+    let inline insertRow rowIndex (rowVector: #Vector<_>) (matrix: #Matrix<_>) = matrix.InsertRow(rowIndex, rowVector)
+    let inline insertCol columnIndex (columnVector: #Vector<_>) (matrix: #Matrix<_>) = matrix.InsertColumn(columnIndex, columnVector)
+
+    let inline appendRow (rowVector: #Vector<_>) (matrix: #Matrix<_>) = matrix.InsertRow(matrix.RowCount, rowVector)
+    let inline appendCol (columnVector: #Vector<_>) (matrix: #Matrix<_>) = matrix.InsertColumn(matrix.ColumnCount, columnVector)
+
+    let inline prependRow (rowVector: #Vector<_>) (matrix: #Matrix<_>) = matrix.InsertRow(0, rowVector)
+    let inline prependCol (columnVector: #Vector<_>) (matrix: #Matrix<_>) = matrix.InsertColumn(0, columnVector)
 
 
     /// In-place matrix addition.
@@ -427,6 +442,9 @@ module DenseMatrix =
     /// Create a matrix from a 2D array of matrices.
     let inline ofMatrixArray2 array = Matrix<'T>.Build.DenseOfMatrixArray(array)
 
+    /// Create a matrix from a list of matrix lists forming a 2D grid.
+    let inline ofMatrixList2 (matrices: Matrix<'T> list list) = Matrix<'T>.Build.DenseOfMatrixArray(array2D matrices)
+
     /// Create a matrix from a list of row vectors.
     let inline ofRows (rows: Vector<'T> list) = Matrix<'T>.Build.DenseOfRowVectors(Array.ofList rows)
 
@@ -475,6 +493,12 @@ module DenseMatrix =
     /// Create a matrix with the array elements on the diagonal.
     let inline ofDiagArray2 (rows: int) (cols: int) (array: 'T array) = Matrix<'T>.Build.DenseOfDiagonalArray(rows, cols, array)
 
+    /// Create a matrix by appending a list of matrices horizontally, the first matrix on the left.
+    let inline append matrices = ofMatrixList2 [matrices]
+
+    /// Create a matrix by stacking a list of matrices vertically, the first matrix on the top.
+    let inline stack matrices = matrices |> List.map (fun x -> [x]) |> ofMatrixList2
+
 
 /// A module which helps constructing generic sparse matrices.
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -521,6 +545,9 @@ module SparseMatrix =
 
     /// Create a matrix from a 2D array of matrices.
     let inline ofMatrixArray2 array = Matrix<'T>.Build.SparseOfMatrixArray(array)
+
+    /// Create a matrix from a list of matrix lists forming a 2D grid.
+    let inline ofMatrixList2 (matrices: Matrix<'T> list list) = Matrix<'T>.Build.SparseOfMatrixArray(array2D matrices)
 
     /// Create a matrix from a list of row vectors.
     let inline ofRows (rows: Vector<'T> list) = Matrix<'T>.Build.SparseOfRowVectors(Array.ofList rows)
@@ -569,6 +596,12 @@ module SparseMatrix =
 
     /// Create a matrix with the array elements on the diagonal.
     let inline ofDiagArray2 (rows: int) (cols: int) (array: 'T array) = Matrix<'T>.Build.SparseOfDiagonalArray(rows, cols, array)
+
+    /// Create a matrix by appending a list of matrices horizontally, the first matrix on the left.
+    let inline append matrices = ofMatrixList2 [matrices]
+
+    /// Create a matrix by stacking a list of matrices vertically, the first matrix on the top.
+    let inline stack matrices = matrices |> List.map (fun x -> [x]) |> ofMatrixList2
 
 
 /// A module which helps constructing generic diagonal matrices.

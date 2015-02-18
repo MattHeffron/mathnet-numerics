@@ -205,7 +205,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
                 Data[columnIndices[i]] = Zero;
             }
         }
-        
+
         // INITIALIZATION
 
         public static DiagonalMatrixStorage<T> OfMatrix(MatrixStorage<T> matrix)
@@ -549,6 +549,34 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             for (int i = 0; i < Data.Length; i++)
             {
                 ret[i*stride] = Data[i];
+            }
+            return ret;
+        }
+
+        public override T[][] ToRowArrays()
+        {
+            var ret = new T[RowCount][];
+            for (int i = 0; i < RowCount; i++)
+            {
+                ret[i] = new T[ColumnCount];
+            }
+            for (int i = 0; i < Data.Length; i++)
+            {
+                ret[i][i] = Data[i];
+            }
+            return ret;
+        }
+
+        public override T[][] ToColumnArrays()
+        {
+            var ret = new T[ColumnCount][];
+            for (int j = 0; j < ColumnCount; j++)
+            {
+                ret[j] = new T[RowCount];
+            }
+            for (int i = 0; i < Data.Length; i++)
+            {
+                ret[i][i] = Data[i];
             }
             return ret;
         }
