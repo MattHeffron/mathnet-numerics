@@ -84,47 +84,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="rowsQ">Number of rows in <see cref="Matrix{T}"/> Q.</param>
         /// <param name="columnsQ">Number of columns in <see cref="Matrix{T}"/> Q.</param>
         /// <param name="r">On exit is filled by <see cref="Matrix{T}"/> R.</param>
-        private static void Factorize(Complex[] q, int rowsQ, int columnsQ, Complex[] r)
+        /// <remarks>Changed from private to internal for consistency with zero-based class. It doesn't need to be.</remarks>
+        internal static void Factorize(Complex[] q, int rowsQ, int columnsQ, Complex[] r)
         {
-            for (var k = 0; k < columnsQ; k++)
-            {
-                var norm = 0.0;
-                for (var i = 0; i < rowsQ; i++)
-                {
-                    norm += q[(k * rowsQ) + i].Magnitude * q[(k * rowsQ) + i].Magnitude;
-                }
-
-                norm = Math.Sqrt(norm);
-                if (norm == 0.0)
-                {
-                    throw new ArgumentException(Resources.ArgumentMatrixNotRankDeficient);
-                }
-
-                r[(k * columnsQ) + k] = norm;
-                for (var i = 0; i < rowsQ; i++)
-                {
-                    q[(k * rowsQ) + i] /= norm;
-                }
-
-                for (var j = k + 1; j < columnsQ; j++)
-                {
-                    var k1 = k;
-                    var j1 = j;
-
-                    var dot = Complex.Zero;
-                    for (var index = 0; index < rowsQ; index++)
-                    {
-                        dot += q[(k1 * rowsQ) + index].Conjugate() * q[(j1 * rowsQ) + index];
-                    } 
-
-                    r[(j * columnsQ) + k] = dot;
-                    for (var i = 0; i < rowsQ; i++)
-                    {
-                        var value = q[(j * rowsQ) + i] - (q[(k * rowsQ) + i] * dot);
-                        q[(j * rowsQ) + i] = value;
-                    }
-                }
-            }
+            // Since there is no dependence on the zero-based/one-based differences for this, use the same implementation for both
+            // This protects against possible version skew if it is ever changed.
+            LinearAlgebra.Complex.Factorization.DenseGramSchmidt.Factorize(q, rowsQ, columnsQ, r);
         }
 
         /// <summary>

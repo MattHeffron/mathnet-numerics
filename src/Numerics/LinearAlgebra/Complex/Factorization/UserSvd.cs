@@ -615,7 +615,8 @@ namespace MathNet.Numerics.LinearAlgebra.Complex.Factorization
         /// <param name="z1">Complex value z1</param>
         /// <param name="z2">Complex value z2</param>
         /// <returns>Result multiplication of signum function and absolute value</returns>
-        static Complex Csign(Complex z1, Complex z2)
+        /// <remarks>Changed from private to internal so it can be used in corresponding OneBased class</remarks>
+        internal static Complex Csign(Complex z1, Complex z2)
         {
             return z1.Magnitude*(z2/z2.Magnitude);
         }

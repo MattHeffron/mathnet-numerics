@@ -62,33 +62,6 @@ namespace MathNet.Numerics.LinearAlgebra.Complex.Solvers
     public sealed class TFQMR : IIterativeSolver<Complex>
     {
         /// <summary>
-        /// Calculates the <c>true</c> residual of the matrix equation Ax = b according to: residual = b - Ax
-        /// </summary>
-        /// <param name="matrix">Instance of the <see cref="Matrix"/> A.</param>
-        /// <param name="residual">Residual values in <see cref="Vector"/>.</param>
-        /// <param name="x">Instance of the <see cref="Vector"/> x.</param>
-        /// <param name="b">Instance of the <see cref="Vector"/> b.</param>
-        static void CalculateTrueResidual(Matrix<Complex> matrix, Vector<Complex> residual, Vector<Complex> x, Vector<Complex> b)
-        {
-            // -Ax = residual
-            matrix.Multiply(x, residual);
-            residual.Multiply(-1, residual);
-
-            // residual + b
-            residual.Add(b, residual);
-        }
-
-        /// <summary>
-        /// Is <paramref name="number"/> even?
-        /// </summary>
-        /// <param name="number">Number to check</param>
-        /// <returns><c>true</c> if <paramref name="number"/> even, otherwise <c>false</c></returns>
-        static bool IsEven(int number)
-        {
-            return number % 2 == 0;
-        }
-
-        /// <summary>
         /// Solves the matrix equation Ax = b, where A is the coefficient matrix, b is the
         /// solution vector and x is the unknown vector.
         /// </summary>
@@ -163,7 +136,7 @@ namespace MathNet.Numerics.LinearAlgebra.Complex.Solvers
             while (iterator.DetermineStatus(iterationNumber, result, input, pseudoResiduals) == IterationStatus.Continue)
             {
                 // First part of the step, the even bit
-                if (IsEven(iterationNumber))
+                if (iterationNumber.IsEven())
                 {
                     // sigma = (v, r)
                     var sigma = r.ConjugateDotProduct(v);
@@ -191,8 +164,8 @@ namespace MathNet.Numerics.LinearAlgebra.Complex.Solvers
                 // The intermediate step which is equal for both even and
                 // odd iteration steps.
                 // Select the correct vector
-                var uinternal = IsEven(iterationNumber) ? ueven : uodd;
-                var yinternal = IsEven(iterationNumber) ? yeven : yodd;
+                var uinternal = iterationNumber.IsEven() ? ueven : uodd;
+                var yinternal = iterationNumber.IsEven() ? yeven : yodd;
 
                 // pseudoResiduals = pseudoResiduals - alpha * uOdd
                 uinternal.Multiply(-alpha, temp1);
@@ -227,7 +200,7 @@ namespace MathNet.Numerics.LinearAlgebra.Complex.Solvers
                     // Calculate the true residual. Use the temp vector for that
                     // so that we don't pollute the pseudoResidual vector for no
                     // good reason.
-                    CalculateTrueResidual(matrix, temp, result, input);
+                    SolverUtility.CalculateTrueResidual(matrix, temp, result, input);
 
                     // Now recheck the convergence
                     if (iterator.DetermineStatus(iterationNumber, result, input, temp) != IterationStatus.Continue)
@@ -238,7 +211,7 @@ namespace MathNet.Numerics.LinearAlgebra.Complex.Solvers
                 }
 
                 // The odd step
-                if (!IsEven(iterationNumber))
+                if (!iterationNumber.IsEven())
                 {
                     if (rho.Real.AlmostEqualNumbersBetween(0, 1) && rho.Imaginary.AlmostEqualNumbersBetween(0, 1))
                     {

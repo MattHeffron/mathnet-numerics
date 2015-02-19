@@ -137,8 +137,9 @@ namespace MathNet.Numerics.LinearAlgebra.Complex.Factorization
         /// <remarks>This is derived from the Algol procedures HTRIDI by 
         /// Smith, Boyle, Dongarra, Garbow, Ikebe, Klema, Moler, and Wilkinson, Handbook for 
         /// Auto. Comp., Vol.ii-Linear Algebra, and the corresponding 
-        /// Fortran subroutine in EISPACK.</remarks>
-        static void SymmetricTridiagonalize(Complex[,] matrixA, double[] d, double[] e, Complex[] tau, int order)
+        /// Fortran subroutine in EISPACK.<br/>
+        /// Changed from private to internal so it can be used in corresponding OneBased class</remarks>
+        internal static void SymmetricTridiagonalize(Complex[,] matrixA, double[] d, double[] e, Complex[] tau, int order)
         {
             double hh;
             tau[order - 1] = Complex.One;

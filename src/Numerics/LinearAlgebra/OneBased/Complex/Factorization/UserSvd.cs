@@ -39,6 +39,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
 #else
     using System.Numerics;
 #endif
+    using UserSvd0 = LinearAlgebra.Complex.Factorization.UserSvd;
 
     /// <summary>
     /// <para>A class which encapsulates the functionality of the singular value decomposition (SVD) for <see cref="Matrix{T}"/>.</para>
@@ -99,7 +100,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                     {
                         if (matrixCopy.At(l, l).Magnitude != 0.0)
                         {
-                            s[l] = Csign(s[l], matrixCopy.At(l, l));
+                            s[l] = UserSvd0.Csign(s[l], matrixCopy.At(l, l));
                         }
 
                         CscalColumn(matrixCopy, matrixCopy.RowCount, l, l, 1.0/s[l]);
@@ -153,7 +154,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 {
                     if (e[lp1].Magnitude != 0.0)
                     {
-                        e[l] = Csign(e[l], e[lp1]);
+                        e[l] = UserSvd0.Csign(e[l], e[lp1]);
                     }
 
                     CscalVector(e, lp1, 1.0/e[l]);
@@ -609,16 +610,18 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         {
         }
 
-        /// <summary>
-        /// Calculates absolute value of <paramref name="z1"/> multiplied on signum function of <paramref name="z2"/>
-        /// </summary>
-        /// <param name="z1">Complex value z1</param>
-        /// <param name="z2">Complex value z2</param>
-        /// <returns>Result multiplication of signum function and absolute value</returns>
-        static Complex Csign(Complex z1, Complex z2)
-        {
-            return z1.Magnitude*(z2/z2.Magnitude);
-        }
+        ////// Since there is no dependence on the zero-based/one-based differences for this, use the same implementation for both
+        ////// This protects against possible version skew if it is ever changed.
+        /////// <summary>
+        /////// Calculates absolute value of <paramref name="z1"/> multiplied on signum function of <paramref name="z2"/>
+        /////// </summary>
+        /////// <param name="z1">Complex value z1</param>
+        /////// <param name="z2">Complex value z2</param>
+        /////// <returns>Result multiplication of signum function and absolute value</returns>
+        ////static Complex Csign(Complex z1, Complex z2)
+        ////{
+        ////    return z1.Magnitude * (z2 / z2.Magnitude);
+        ////}
 
         /// <summary>
         /// Interchanges two vectors  <paramref name="columnA"/>  and  <paramref name="columnB"/>

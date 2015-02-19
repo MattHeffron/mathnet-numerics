@@ -131,9 +131,11 @@ namespace MathNet.Numerics
         /// </summary>
         /// <param name="number">The number to very whether it's even.</param>
         /// <returns>True if and only if it is an even number.</returns>
+        /// <remarks>This depends on this being a 2s-compliment architecture. Otherwise use commented expression.</remarks>
         public static bool IsEven(this int number)
         {
             return (number & 0x1) == 0x0;
+            //return number % 2 == 0;
         }
 
         /// <summary>
@@ -141,9 +143,11 @@ namespace MathNet.Numerics
         /// </summary>
         /// <param name="number">The number to very whether it's even.</param>
         /// <returns>True if and only if it is an even number.</returns>
+        /// <remarks>This depends on this being a 2s-compliment architecture. Otherwise use commented expression.</remarks>
         public static bool IsEven(this long number)
         {
             return (number & 0x1) == 0x0;
+            //return number % 2 == 0;
         }
 
         /// <summary>

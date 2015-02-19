@@ -66,25 +66,6 @@ namespace MathNet.Numerics.LinearAlgebra.Double.Solvers
     public sealed class BiCgStab : IIterativeSolver<double>
     {
         /// <summary>
-        /// Calculates the <c>true</c> residual of the matrix equation Ax = b according to: residual = b - Ax
-        /// </summary>
-        /// <param name="matrix">Instance of the <see cref="Matrix"/> A.</param>
-        /// <param name="residual">Residual values in <see cref="Vector"/>.</param>
-        /// <param name="x">Instance of the <see cref="Vector"/> x.</param>
-        /// <param name="b">Instance of the <see cref="Vector"/> b.</param>
-        static void CalculateTrueResidual(Matrix<double> matrix, Vector<double> residual, Vector<double> x, Vector<double> b)
-        {
-            // -Ax = residual
-            matrix.Multiply(x, residual);
-
-            // Do not use residual = residual.Negate() because it creates another object
-            residual.Multiply(-1, residual);
-
-            // residual + b
-            residual.Add(b, residual);
-        }
-
-        /// <summary>
         /// Solves the matrix equation Ax = b, where A is the coefficient matrix, b is the
         /// solution vector and x is the unknown vector.
         /// </summary>
@@ -126,7 +107,7 @@ namespace MathNet.Numerics.LinearAlgebra.Double.Solvers
             // In this case we take x_0 = vector
             // This is basically a SAXPY so it could be made a lot faster
             var residuals = new DenseVector(matrix.RowCount);
-            CalculateTrueResidual(matrix, residuals, result, input);
+            SolverUtility.CalculateTrueResidual(matrix, residuals, result, input);
 
             // Choose r~ (for example, r~ = r_0)
             var tempResiduals = residuals.Clone();
@@ -213,7 +194,7 @@ namespace MathNet.Numerics.LinearAlgebra.Double.Solvers
                     temp.CopyTo(result);
 
                     // Calculate the true residual
-                    CalculateTrueResidual(matrix, residuals, result, input);
+                    SolverUtility.CalculateTrueResidual(matrix, residuals, result, input);
 
                     // Now recheck the convergence
                     if (iterator.DetermineStatus(iterationNumber, result, input, residuals) != IterationStatus.Continue)
@@ -264,7 +245,7 @@ namespace MathNet.Numerics.LinearAlgebra.Double.Solvers
                     // The residual calculation based on omega_i * s can be off by a factor 10. So here
                     // we calculate the real residual (which can be expensive) but we only do it if we're
                     // sufficiently close to the finish.
-                    CalculateTrueResidual(matrix, residuals, result, input);
+                    SolverUtility.CalculateTrueResidual(matrix, residuals, result, input);
                 }
 
                 iterationNumber++;

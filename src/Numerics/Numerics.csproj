@@ -330,6 +330,7 @@
     <Compile Include="LinearAlgebra\OneBased\Solvers\Iterator.cs" />
     <Compile Include="LinearAlgebra\OneBased\Solvers\ResidualStopCriterion.cs" />
     <Compile Include="LinearAlgebra\OneBased\Solvers\SolverSetup.cs" />
+    <Compile Include="LinearAlgebra\OneBased\Solvers\SolverUtility.cs" />
     <Compile Include="LinearAlgebra\OneBased\Solvers\UnitPreconditioner.cs" />
     <Compile Include="LinearAlgebra\OneBased\Storage\DenseColumnMajorMatrixStorage.cs" />
     <Compile Include="LinearAlgebra\OneBased\Storage\DenseVectorStorage.cs" />
@@ -346,6 +347,7 @@
     <Compile Include="LinearAlgebra\OneBased\Vector.Operators.cs" />
     <Compile Include="LinearAlgebra\Options.cs" />
     <Compile Include="LinearAlgebra\Solvers\DelegateStopCriterion.cs" />
+    <Compile Include="LinearAlgebra\Solvers\SolverUtility.cs" />
     <Compile Include="LinearRegression\Options.cs" />
     <Compile Include="Precision.Comparison.cs" />
     <Compile Include="Precision.Equality.cs" />

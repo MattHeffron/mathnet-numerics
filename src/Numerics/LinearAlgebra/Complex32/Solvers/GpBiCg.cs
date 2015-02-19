@@ -114,23 +114,6 @@ namespace MathNet.Numerics.LinearAlgebra.Complex32.Solvers
         }
 
         /// <summary>
-        /// Calculates the <c>true</c> residual of the matrix equation Ax = b according to: residual = b - Ax
-        /// </summary>
-        /// <param name="matrix">Instance of the <see cref="Matrix"/> A.</param>
-        /// <param name="residual">Residual values in <see cref="Vector"/>.</param>
-        /// <param name="x">Instance of the <see cref="Vector"/> x.</param>
-        /// <param name="b">Instance of the <see cref="Vector"/> b.</param>
-        static void CalculateTrueResidual(Matrix<Numerics.Complex32> matrix, Vector<Numerics.Complex32> residual, Vector<Numerics.Complex32> x, Vector<Numerics.Complex32> b)
-        {
-            // -Ax = residual
-            matrix.Multiply(x, residual);
-            residual.Multiply(-1, residual);
-
-            // residual + b
-            residual.Add(b, residual);
-        }
-
-        /// <summary>
         /// Decide if to do steps with BiCgStab
         /// </summary>
         /// <param name="iterationNumber">Number of iteration</param>
@@ -192,7 +175,7 @@ namespace MathNet.Numerics.LinearAlgebra.Complex32.Solvers
             // r_0 = b - Ax_0
             // This is basically a SAXPY so it could be made a lot faster
             var residuals = new DenseVector(matrix.RowCount);
-            CalculateTrueResidual(matrix, residuals, xtemp, input);
+            SolverUtility.CalculateTrueResidual(matrix, residuals, xtemp, input);
 
             // Define the temporary scalars
             Numerics.Complex32 beta = 0;
@@ -367,7 +350,7 @@ namespace MathNet.Numerics.LinearAlgebra.Complex32.Solvers
                 {
                     // Recalculate the residuals and go round again. This is done to ensure that
                     // we have the proper residuals.
-                    CalculateTrueResidual(matrix, residuals, result, input);
+                    SolverUtility.CalculateTrueResidual(matrix, residuals, result, input);
                 }
 
                 // Next iteration.

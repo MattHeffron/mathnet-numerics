@@ -235,23 +235,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         }
 
         /// <summary>
-        /// Calculates the <c>true</c> residual of the matrix equation Ax = b according to: residual = b - Ax
-        /// </summary>
-        /// <param name="matrix">Source <see cref="Matrix"/>A.</param>
-        /// <param name="residual">Residual <see cref="Vector"/> data.</param>
-        /// <param name="x">x <see cref="Vector"/> data.</param>
-        /// <param name="b">b <see cref="Vector"/> data.</param>
-        static void CalculateTrueResidual(Matrix1<Complex> matrix, Vector1<Complex> residual, Vector1<Complex> x, Vector1<Complex> b)
-        {
-            // -Ax = residual
-            matrix.Multiply(x, residual);
-            residual.Multiply(-1, residual);
-
-            // residual + b
-            residual.Add(b, residual);
-        }
-
-        /// <summary>
         /// Solves the matrix equation Ax = b, where A is the coefficient matrix, b is the
         /// solution vector and x is the unknown vector.
         /// </summary>
@@ -316,7 +299,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
             // r_0 = b - Ax_0
             // This is basically a SAXPY so it could be made a lot faster
             var residuals = new DenseVector(matrix.RowCount);
-            CalculateTrueResidual(matrix, residuals, xtemp, input);
+            SolverUtility.CalculateTrueResidual(matrix, residuals, xtemp, input);
 
             // Define the temporary values
             var c = new Complex[k];
@@ -405,7 +388,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
                 if (iterator.DetermineStatus(iterationNumber, xtemp, input, residuals) != IterationStatus.Continue)
                 {
                     // Calculate the true residual
-                    CalculateTrueResidual(matrix, residuals, xtemp, input);
+                    SolverUtility.CalculateTrueResidual(matrix, residuals, xtemp, input);
 
                     // Now recheck the convergence
                     if (iterator.DetermineStatus(iterationNumber, xtemp, input, residuals) != IterationStatus.Continue)
@@ -541,7 +524,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
                         {
                             // Recalculate the residuals and go round again. This is done to ensure that
                             // we have the proper residuals.
-                            CalculateTrueResidual(matrix, residuals, xtemp, input);
+                            SolverUtility.CalculateTrueResidual(matrix, residuals, xtemp, input);
                         }
                     }
                 } // END ITERATION OVER i

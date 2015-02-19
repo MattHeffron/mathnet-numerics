@@ -137,116 +137,13 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <remarks>This is derived from the Algol procedures HTRIDI by 
         /// Smith, Boyle, Dongarra, Garbow, Ikebe, Klema, Moler, and Wilkinson, Handbook for 
         /// Auto. Comp., Vol.ii-Linear Algebra, and the corresponding 
-        /// Fortran subroutine in EISPACK.</remarks>
-        static void SymmetricTridiagonalize(Complex[,] matrixA, double[] d, double[] e, Complex[] tau, int order)
+        /// Fortran subroutine in EISPACK.<br/>
+        /// Changed from private to internal for consistency with zero-based class. It doesn't need to be.</remarks>
+        internal static void SymmetricTridiagonalize(Complex[,] matrixA, double[] d, double[] e, Complex[] tau, int order)
         {
-            double hh;
-            tau[order - 1] = Complex.One;
-
-            for (var i = 0; i < order; i++)
-            {
-                d[i] = matrixA[i, i].Real;
-            }
-
-            // Householder reduction to tridiagonal form.
-            for (var i = order - 1; i > 0; i--)
-            {
-                // Scale to avoid under/overflow.
-                var scale = 0.0;
-                var h = 0.0;
-
-                for (var k = 0; k < i; k++)
-                {
-                    scale = scale + Math.Abs(matrixA[i, k].Real) + Math.Abs(matrixA[i, k].Imaginary);
-                }
-
-                if (scale == 0.0)
-                {
-                    tau[i - 1] = Complex.One;
-                    e[i] = 0.0;
-                }
-                else
-                {
-                    for (var k = 0; k < i; k++)
-                    {
-                        matrixA[i, k] /= scale;
-                        h += matrixA[i, k].MagnitudeSquared();
-                    }
-
-                    Complex g = Math.Sqrt(h);
-                    e[i] = scale*g.Real;
-
-                    Complex temp;
-                    var f = matrixA[i, i - 1];
-                    if (f.Magnitude != 0)
-                    {
-                        temp = -(matrixA[i, i - 1].Conjugate()*tau[i].Conjugate())/f.Magnitude;
-                        h += f.Magnitude*g.Real;
-                        g = 1.0 + (g/f.Magnitude);
-                        matrixA[i, i - 1] *= g;
-                    }
-                    else
-                    {
-                        temp = -tau[i].Conjugate();
-                        matrixA[i, i - 1] = g;
-                    }
-
-                    if ((f.Magnitude == 0) || (i != 1))
-                    {
-                        f = Complex.Zero;
-                        for (var j = 0; j < i; j++)
-                        {
-                            var tmp = Complex.Zero;
-
-                            // Form element of A*U.
-                            for (var k = 0; k <= j; k++)
-                            {
-                                tmp += matrixA[j, k]*matrixA[i, k].Conjugate();
-                            }
-
-                            for (var k = j + 1; k <= i - 1; k++)
-                            {
-                                tmp += matrixA[k, j].Conjugate()*matrixA[i, k].Conjugate();
-                            }
-
-                            // Form element of P
-                            tau[j] = tmp/h;
-                            f += (tmp/h)*matrixA[i, j];
-                        }
-
-                        hh = f.Real/(h + h);
-
-                        // Form the reduced A.
-                        for (var j = 0; j < i; j++)
-                        {
-                            f = matrixA[i, j].Conjugate();
-                            g = tau[j] - (hh*f);
-                            tau[j] = g.Conjugate();
-
-                            for (var k = 0; k <= j; k++)
-                            {
-                                matrixA[j, k] -= (f*tau[k]) + (g*matrixA[i, k]);
-                            }
-                        }
-                    }
-
-                    for (var k = 0; k < i; k++)
-                    {
-                        matrixA[i, k] *= scale;
-                    }
-
-                    tau[i - 1] = temp.Conjugate();
-                }
-
-                hh = d[i];
-                d[i] = matrixA[i, i].Real;
-                matrixA[i, i] = new Complex(hh, scale*Math.Sqrt(h));
-            }
-
-            hh = d[0];
-            d[0] = matrixA[0, 0].Real;
-            matrixA[0, 0] = hh;
-            e[0] = 0.0;
+            // Since there is no dependence on the zero-based/one-based differences for this, use the same implementation for both
+            // This protects against possible version skew if it is ever changed.
+            LinearAlgebra.Complex.Factorization.UserEvd.SymmetricTridiagonalize(matrixA, d, e, tau, order);
         }
 
         /// <summary>
