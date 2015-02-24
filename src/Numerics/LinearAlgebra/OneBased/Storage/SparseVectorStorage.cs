@@ -739,9 +739,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         internal override void MapIndexedToUnchecked<TU>(VectorStorage<TU> target, Func<int, T, TU> f,
             Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
         {
-            //CONSIDER: is the 2nd term a reasonable test? Since value of f depends on the index, what does this really imply?
-            ////var processZeros = zeros == Zeros.Include || !Zero.Equals(f(1, Zero)))
-            var processZeros = zeros == Zeros.Include;
+            bool processZeros = zeros == Zeros.Include || !Zero.Equals(f(1, Zero));
             var sparseTarget = target as SparseVectorStorage<TU>;
             if (sparseTarget != null)
             {

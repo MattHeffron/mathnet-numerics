@@ -68,18 +68,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        /////// <summary>
-        /////// Indicates the number of <c>BiCGStab</c> steps should be taken 
-        /////// before switching.
-        /////// </summary>
-        ////int _numberOfBiCgStabSteps = 1;
-
-        /////// <summary>
-        /////// Indicates the number of <c>GPBiCG</c> steps should be taken 
-        /////// before switching.
-        /////// </summary>
-        ////int _numberOfGpbiCgSteps = 4;
-
         /// <summary>
         /// Gets or sets the number of steps taken with the <c>BiCgStab</c> algorithm
         /// before switching over to the <c>GPBiCG</c> algorithm.
@@ -90,19 +78,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
             {
                 // Shouldn't be possible as this cannot be constructed
                 throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-                ////return _numberOfBiCgStabSteps;
             }
 
             set
             {
                 // Shouldn't be possible as this cannot be constructed
                 throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-                ////if (value < 0)
-                ////{
-                ////    throw new ArgumentOutOfRangeException("value");
-                ////}
-
-                ////_numberOfBiCgStabSteps = value;
             }
         }
 
@@ -116,19 +97,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
             {
                 // Shouldn't be possible as this cannot be constructed
                 throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-                ////return _numberOfGpbiCgSteps;
             }
 
             set
             {
                 // Shouldn't be possible as this cannot be constructed
                 throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-                ////if (value < 0)
-                ////{
-                ////    throw new ArgumentOutOfRangeException("value");
-                ////}
-
-                ////_numberOfGpbiCgSteps = value;
             }
         }
 

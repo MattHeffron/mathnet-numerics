@@ -67,21 +67,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        /////// <summary>
-        /////// The default number of starting vectors.
-        /////// </summary>
-        ////const int DefaultNumberOfStartingVectors = 50;
-
-        /////// <summary>
-        /////// The collection of starting vectors which are used as the basis for the Krylov sub-space.
-        /////// </summary>
-        ////IList<Vector1<int>> _startingVectors;
-
-        /////// <summary>
-        /////// The number of starting vectors used by the algorithm
-        /////// </summary>
-        ////int _numberOfStartingVectors = DefaultNumberOfStartingVectors;
-
         /// <summary>
         /// Gets or sets the number of starting vectors.
         /// </summary>
@@ -96,7 +81,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
             {
                 // Shouldn't be possible as this cannot be constructed
                 throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-                //return _numberOfStartingVectors;
             }
 
             [DebuggerStepThrough]
@@ -104,12 +88,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
             {
                 // Shouldn't be possible as this cannot be constructed
                 throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-                ////if (value <= 1)
-                ////{
-                ////    throw new ArgumentOutOfRangeException("value");
-                ////}
-
-                ////_numberOfStartingVectors = value;
             }
         }
 
@@ -120,7 +98,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-            //_numberOfStartingVectors = DefaultNumberOfStartingVectors;
         }
 
         /// <summary>
@@ -134,7 +111,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
             {
                 // Shouldn't be possible as this cannot be constructed
                 throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-                //return _startingVectors;
             }
 
             [DebuggerStepThrough]

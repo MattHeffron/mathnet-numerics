@@ -71,8 +71,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             Matrix1<Complex> q;
             Matrix1<Complex> r;
 
+            //CONSIDER: the dimension check above, guarantees that ColumnCount == the minimum, so .Min here is unnecessary
             ////var minmn = Math.Min(matrix.RowCount, matrix.ColumnCount);
-            var minmn = matrix.ColumnCount;         //CONSIDER: the dimension check above, guarantees that ColumnCount == the minimum
+            var minmn = matrix.ColumnCount;
             var u = new Complex[minmn + 1][];       // Simplify indexing below, just allocate one extra element and "waste" the 0 position
 
             if (method == QRMethod.Full)

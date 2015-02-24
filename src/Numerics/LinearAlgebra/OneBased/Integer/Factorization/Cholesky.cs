@@ -61,14 +61,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             {
                 // Shouldn't be possible as this cannot be constructed
                 throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-                ////var det = 1.0f;
-                ////  for (var j = 0; j < Factor.RowCount; j++)
-                ////  {
-                ////      var d = Factor.At(j, j);
-                ////      det *= d*d;
-                ////  }
-
-                ////  return det;
             }
         }
 
@@ -81,14 +73,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             {
                 // Shouldn't be possible as this cannot be constructed
                 throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
-                ////var det = 0.0f;
-                ////  for (var j = 0; j < Factor.RowCount; j++)
-                ////  {
-                ////      det += 2.0f*Convert.ToSingle(Math.Log(Factor.At(j, j)));
-                ////  }
-
-                ////  return det;
-            }
+           }
         }
     }
 }

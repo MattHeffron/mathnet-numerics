@@ -180,7 +180,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             }
             else
             {
-                ////base.DoAdd(scalar, result);
                 for (var index = 1; index <= Count; index++)
                 {
                     result.At(index, At(index) + scalar);

@@ -726,12 +726,13 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         internal override void MapIndexedToUnchecked<TU>(VectorStorage<TU> target, Func<int, T, TU> f,
             Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
         {
+            bool processZeros = zeros == Zeros.Include || !Zero.Equals(f(0, Zero));
             var sparseTarget = target as SparseVectorStorage<TU>;
             if (sparseTarget != null)
             {
                 var indices = new List<int>();
                 var values = new List<TU>();
-                if (zeros == Zeros.Include || !Zero.Equals(f(0, Zero)))
+                if (processZeros)
                 {
                     int k = 0;
                     for (int i = 0; i < Length; i++)
@@ -770,7 +771,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
                     denseTarget.Clear();
                 }
 
-                if (zeros == Zeros.Include || !Zero.Equals(f(0, Zero)))
+                if (processZeros)
                 {
                     int k = 0;
                     for (int i = 0; i < Length; i++)

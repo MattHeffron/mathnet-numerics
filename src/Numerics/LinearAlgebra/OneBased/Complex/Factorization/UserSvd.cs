@@ -610,19 +610,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         {
         }
 
-        ////// Since there is no dependence on the zero-based/one-based differences for this, use the same implementation for both
-        ////// This protects against possible version skew if it is ever changed.
-        /////// <summary>
-        /////// Calculates absolute value of <paramref name="z1"/> multiplied on signum function of <paramref name="z2"/>
-        /////// </summary>
-        /////// <param name="z1">Complex value z1</param>
-        /////// <param name="z2">Complex value z2</param>
-        /////// <returns>Result multiplication of signum function and absolute value</returns>
-        ////static Complex Csign(Complex z1, Complex z2)
-        ////{
-        ////    return z1.Magnitude * (z2 / z2.Magnitude);
-        ////}
-
         /// <summary>
         /// Interchanges two vectors  <paramref name="columnA"/>  and  <paramref name="columnB"/>
         /// </summary>

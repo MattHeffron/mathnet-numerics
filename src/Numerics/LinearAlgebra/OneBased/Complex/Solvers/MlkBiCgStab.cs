@@ -185,7 +185,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
                 ////    samples[j] = new Complex(samplesRe[j], samplesIm[j]);
                 ////}
 
-                // This is more efficient than the above (both space and time)
+                //CONSIDER: This statement and loop is more efficient than the above (both space and time)
                 var sampleEnumerator = distribution.Samples().GetEnumerator();
                 for (int j = 0; j < samples.Length; j++)
                 {
