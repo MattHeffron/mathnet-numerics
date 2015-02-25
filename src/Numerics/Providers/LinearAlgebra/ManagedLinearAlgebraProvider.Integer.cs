@@ -899,7 +899,7 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
         /// <summary>
         /// Solves A*X=B for X using a previously factored A matrix.
         /// </summary>
-        /// <param name="a">The square, positive definite matrix A.</param>
+        /// <param name="a">The square, positive definite matrix A. Has to be different than <paramref name="b"/>.</param>
         /// <param name="orderA">The number of rows and columns in A.</param>
         /// <param name="b">On entry the B matrix; on exit the X matrix.</param>
         /// <param name="columnsB">The number of columns in the B matrix.</param>
@@ -964,7 +964,7 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
         }
 
         /// <summary>
-        /// Computes the QR factorization of A where M &gt; N.
+        /// Computes the thin QR factorization of A where M &gt; N.
         /// </summary>
         /// <param name="a">On entry, it is the M by N A matrix to factor. On exit,
         /// it is overwritten with the Q matrix of the QR factorization.</param>

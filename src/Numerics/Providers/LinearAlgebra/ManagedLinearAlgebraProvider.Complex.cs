@@ -532,7 +532,7 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
                 throw new ArgumentNullException("b");
             }
 
-            if ((int) transposeA > 111 && (int) transposeB > 111)
+            if (transposeA > Transpose.DontTranspose && transposeB > Transpose.DontTranspose)
             {
                 if (rowsA != columnsB)
                 {
@@ -548,7 +548,7 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
                 n = rowsB;
                 k = rowsA;
             }
-            else if ((int) transposeA > 111)
+            else if (transposeA > Transpose.DontTranspose)
             {
                 if (rowsA != rowsB)
                 {
@@ -564,7 +564,7 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
                 n = columnsB;
                 k = rowsA;
             }
-            else if ((int) transposeB > 111)
+            else if (transposeB > Transpose.DontTranspose)
             {
                 if (columnsA != columnsB)
                 {
@@ -669,9 +669,9 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
         {
             if (m + n <= Control.ParallelizeOrder)
             {
-                if ((int) transposeA > 111 && (int) transposeB > 111)
+                if (transposeA > Transpose.DontTranspose && transposeB > Transpose.DontTranspose)
                 {
-                    if ((int) transposeA > 112 && (int) transposeB > 112)
+                    if (transposeA > Transpose.Transpose && transposeB > Transpose.Transpose)
                     {
                         for (var m1 = 0; m1 < m; m1++)
                         {
@@ -691,7 +691,7 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
                             }
                         }
                     }
-                    else if ((int) transposeA > 112)
+                    else if (transposeA > Transpose.Transpose)
                     {
                         for (var m1 = 0; m1 < m; m1++)
                         {
@@ -711,7 +711,7 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
                             }
                         }
                     }
-                    else if ((int) transposeB > 112)
+                    else if (transposeB > Transpose.Transpose)
                     {
                         for (var m1 = 0; m1 < m; m1++)
                         {
@@ -752,9 +752,9 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
                         }
                     }
                 }
-                else if ((int) transposeA > 111)
+                else if (transposeA > Transpose.DontTranspose)
                 {
-                    if ((int) transposeA > 112)
+                    if (transposeA > Transpose.Transpose)
                     {
                         for (var m1 = 0; m1 < m; m1++)
                         {
@@ -795,9 +795,9 @@ namespace MathNet.Numerics.Providers.LinearAlgebra
                         }
                     }
                 }
-                else if ((int) transposeB > 111)
+                else if (transposeB > Transpose.DontTranspose)
                 {
-                    if ((int) transposeB > 112)
+                    if (transposeB > Transpose.Transpose)
                     {
                         for (var m1 = 0; m1 < m; m1++)
                         {
