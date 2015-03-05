@@ -47,26 +47,26 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
     public abstract class LU<T> : ISolver<T>
         where T : struct, IEquatable<T>, IFormattable
     {
-        static readonly T One = BuilderInstance<T>.Matrix1.One;
+        static readonly T One = BuilderInstance<T>.Matrix.One;
 
-        readonly Lazy<Matrix1<T>> _lazyL;
-        readonly Lazy<Matrix1<T>> _lazyU;
+        readonly Lazy<Matrix<T>> _lazyL;
+        readonly Lazy<Matrix<T>> _lazyU;
         readonly Lazy<Permutation> _lazyP;
 
-        protected readonly Matrix1<T> Factors;
+        protected readonly Matrix<T> Factors;
         protected readonly int[] Pivots;
 
-        protected LU(Matrix1<T> factors, int[] pivots)
+        protected LU(Matrix<T> factors, int[] pivots)
         {
             Factors = factors;
             Pivots = pivots;
 
-            _lazyL = new Lazy<Matrix1<T>>(ComputeL);
-            _lazyU = new Lazy<Matrix1<T>>(Factors.UpperTriangle);
+            _lazyL = new Lazy<Matrix<T>>(ComputeL);
+            _lazyU = new Lazy<Matrix<T>>(Factors.UpperTriangle);
             _lazyP = new Lazy<Permutation>(() => Permutation.FromInversions(Pivots));
         }
 
-        Matrix1<T> ComputeL()
+        Matrix<T> ComputeL()
         {
             var result = Factors.LowerTriangle();
             for (var i = 0; i < result.RowCount; i++)
@@ -79,7 +79,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// <summary>
         /// Gets the lower triangular factor.
         /// </summary>
-        public Matrix1<T> L
+        public Matrix<T> L
         {
             get { return _lazyL.Value; }
         }
@@ -87,7 +87,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// <summary>
         /// Gets the upper triangular factor.
         /// </summary>
-        public Matrix1<T> U
+        public Matrix<T> U
         {
             get { return _lazyU.Value; }
         }
@@ -110,9 +110,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <returns>The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</returns>
-        public virtual Matrix1<T> Solve(Matrix1<T> input)
+        public virtual Matrix<T> Solve(Matrix<T> input)
         {
-            var x = Matrix1<T>.Build.SameAs(input, input.RowCount, input.ColumnCount);
+            var x = Matrix<T>.Build.SameAs(input, input.RowCount, input.ColumnCount);
             Solve(input, x);
             return x;
         }
@@ -122,16 +122,16 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public abstract void Solve(Matrix1<T> input, Matrix1<T> result);
+        public abstract void Solve(Matrix<T> input, Matrix<T> result);
 
         /// <summary>
         /// Solves a system of linear equations, <b>Ax = b</b>, with A LU factorized.
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <returns>The left hand side <see cref="Vector{T}"/>, <b>x</b>.</returns>
-        public virtual Vector1<T> Solve(Vector1<T> input)
+        public virtual Vector<T> Solve(Vector<T> input)
         {
-            var x = Vector1<T>.Build.SameAs(input, input.Count);
+            var x = Vector<T>.Build.SameAs(input, input.Count);
             Solve(input, x);
             return x;
         }
@@ -141,12 +141,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public abstract void Solve(Vector1<T> input, Vector1<T> result);
+        public abstract void Solve(Vector<T> input, Vector<T> result);
 
         /// <summary>
         /// Returns the inverse of this matrix. The inverse is calculated using LU decomposition.
         /// </summary>
         /// <returns>The inverse of this matrix.</returns>
-        public abstract Matrix1<T> Inverse();
+        public abstract Matrix<T> Inverse();
     }
 }

@@ -123,7 +123,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// The matrix to copy from must be diagonal as well.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static DiagonalMatrix OfMatrix(Matrix1<double> matrix)
+        public static DiagonalMatrix OfMatrix(Matrix<double> matrix)
         {
             return new DiagonalMatrix(DiagonalMatrixStorage<double>.OfMatrix(matrix.Storage));
         }
@@ -188,7 +188,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// Negate each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the negation.</param>
-        protected override void DoNegate(Matrix1<double> result)
+        protected override void DoNegate(Matrix<double> result)
         {
             var diagResult = result as DiagonalMatrix;
             if (diagResult != null)
@@ -211,7 +211,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="other">The matrix to add to this matrix.</param>
         /// <param name="result">The matrix to store the result of the addition.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoAdd(Matrix1<double> other, Matrix1<double> result)
+        protected override void DoAdd(Matrix<double> other, Matrix<double> result)
         {
             // diagonal + diagonal = diagonal
             var diagOther = other as DiagonalMatrix;
@@ -236,7 +236,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="other">The matrix to subtract.</param>
         /// <param name="result">The matrix to store the result of the subtraction.</param>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoSubtract(Matrix1<double> other, Matrix1<double> result)
+        protected override void DoSubtract(Matrix<double> other, Matrix<double> result)
         {
             // diagonal - diagonal = diagonal
             var diagOther = other as DiagonalMatrix;
@@ -261,7 +261,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        protected override void DoMultiply(double scalar, Matrix1<double> result)
+        protected override void DoMultiply(double scalar, Matrix<double> result)
         {
             if (scalar == 0.0)
             {
@@ -291,7 +291,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Vector1<double> rightSide, Vector1<double> result)
+        protected override void DoMultiply(Vector<double> rightSide, Vector<double> result)
         {
             var d = Math.Min(ColumnCount, RowCount);
             if (d <= RowCount)
@@ -322,7 +322,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Matrix1<double> other, Matrix1<double> result)
+        protected override void DoMultiply(Matrix<double> other, Matrix<double> result)
         {
             var diagonalOther = other as DiagonalMatrix;
             var diagonalResult = result as DiagonalMatrix;
@@ -376,7 +376,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeAndMultiply(Matrix1<double> other, Matrix1<double> result)
+        protected override void DoTransposeAndMultiply(Matrix<double> other, Matrix<double> result)
         {
             var diagonalOther = other as DiagonalMatrix;
             var diagonalResult = result as DiagonalMatrix;
@@ -421,7 +421,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Matrix1<double> other, Matrix1<double> result)
+        protected override void DoTransposeThisAndMultiply(Matrix<double> other, Matrix<double> result)
         {
             var diagonalOther = other as DiagonalMatrix;
             var diagonalResult = result as DiagonalMatrix;
@@ -474,7 +474,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeThisAndMultiply(Vector1<double> rightSide, Vector1<double> result)
+        protected override void DoTransposeThisAndMultiply(Vector<double> rightSide, Vector<double> result)
         {
             var d = Math.Min(ColumnCount, RowCount);
             if (d <= ColumnCount)
@@ -504,7 +504,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="divisor">The scalar to divide the matrix with.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivide(double divisor, Matrix1<double> result)
+        protected override void DoDivide(double divisor, Matrix<double> result)
         {
             if (divisor == 1.0)
             {
@@ -532,7 +532,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="dividend">The scalar to add.</param>
         /// <param name="result">The matrix to store the result of the division.</param>
-        protected override void DoDivideByThis(double dividend, Matrix1<double> result)
+        protected override void DoDivideByThis(double dividend, Matrix<double> result)
         {
             var diagResult = result as DiagonalMatrix;
             if (diagResult != null)
@@ -576,7 +576,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <returns>The elements of the diagonal.</returns>
         /// <remarks>For non-square matrices, the method returns Min(Rows, Columns) elements where
         /// i == j (i is the row index, and j is the column index).</remarks>
-        public override Vector1<double> Diagonal()
+        public override Vector<double> Diagonal()
         {
             return new DenseVector(_data).Clone();
         }
@@ -609,7 +609,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// equal Min(Rows, Columns).</exception>
         /// <remarks>For non-square matrices, the elements of <paramref name="source"/> are copied to
         /// this[i,i].</remarks>
-        public override void SetDiagonal(Vector1<double> source)
+        public override void SetDiagonal(Vector<double> source)
         {
             var denseSource = source as DenseVector;
             if (denseSource == null)
@@ -673,7 +673,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <exception cref="ArgumentException">If <see cref="DiagonalMatrix"/> is not a square matrix.</exception>
         /// <exception cref="ArgumentException">If <see cref="DiagonalMatrix"/> is singular.</exception>
         /// <returns>The inverse of this matrix.</returns>
-        public override Matrix1<double> Inverse()
+        public override Matrix<double> Inverse()
         {
             if (RowCount != ColumnCount)
             {
@@ -700,7 +700,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// Returns a new matrix containing the lower triangle of this matrix.
         /// </summary>
         /// <returns>The lower triangle of this matrix.</returns>
-        public override Matrix1<double> LowerTriangle()
+        public override Matrix<double> LowerTriangle()
         {
             return Clone();
         }
@@ -710,7 +710,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void LowerTriangle(Matrix1<double> result)
+        public override void LowerTriangle(Matrix<double> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -735,7 +735,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// does not contain the diagonal elements of this matrix.
         /// </summary>
         /// <returns>The lower triangle of this matrix.</returns>
-        public override Matrix1<double> StrictlyLowerTriangle()
+        public override Matrix<double> StrictlyLowerTriangle()
         {
             return new DiagonalMatrix(RowCount, ColumnCount);
         }
@@ -745,7 +745,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void StrictlyLowerTriangle(Matrix1<double> result)
+        public override void StrictlyLowerTriangle(Matrix<double> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -759,7 +759,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// Returns a new matrix containing the upper triangle of this matrix.
         /// </summary>
         /// <returns>The upper triangle of this matrix.</returns>
-        public override Matrix1<double> UpperTriangle()
+        public override Matrix<double> UpperTriangle()
         {
             return Clone();
         }
@@ -769,7 +769,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void UpperTriangle(Matrix1<double> result)
+        public override void UpperTriangle(Matrix<double> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -789,7 +789,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// does not contain the diagonal elements of this matrix.
         /// </summary>
         /// <returns>The upper triangle of this matrix.</returns>
-        public override Matrix1<double> StrictlyUpperTriangle()
+        public override Matrix<double> StrictlyUpperTriangle()
         {
             return new DiagonalMatrix(RowCount, ColumnCount);
         }
@@ -799,7 +799,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void StrictlyUpperTriangle(Matrix1<double> result)
+        public override void StrictlyUpperTriangle(Matrix<double> result)
         {
             if (result.RowCount != RowCount || result.ColumnCount != ColumnCount)
             {
@@ -825,10 +825,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <item><c>(rowIndex + rowLength - 1) &gt; Rows</c></item></list></exception>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowCount"/> or <paramref name="columnCount"/>
         /// is not positive.</exception>
-        public override Matrix1<double> SubMatrix(int rowIndex, int rowCount, int columnIndex, int columnCount)
+        public override Matrix<double> SubMatrix(int rowIndex, int rowCount, int columnIndex, int columnCount)
         {
             var target = rowIndex == columnIndex
-                ? (Matrix1<double>)new DiagonalMatrix(rowCount, columnCount)
+                ? (Matrix<double>)new DiagonalMatrix(rowCount, columnCount)
                 : new SparseMatrix(rowCount, columnCount);
 
             Storage.CopySubMatrixTo(target.Storage, rowIndex, 1, rowCount, columnIndex, 1, columnCount, ExistingData.AssumeZeros);
@@ -871,7 +871,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override void DoModulus(double divisor, Matrix1<double> result)
+        protected override void DoModulus(double divisor, Matrix<double> result)
         {
             var diagonalResult = result as DiagonalMatrix;
             if (diagonalResult == null)
@@ -896,7 +896,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoModulusByThis(double dividend, Matrix1<double> result)
+        protected override void DoModulusByThis(double dividend, Matrix<double> result)
         {
             var diagonalResult = result as DiagonalMatrix;
             if (diagonalResult == null)
@@ -921,7 +921,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">Matrix to store the results in.</param>
-        protected override void DoRemainder(double divisor, Matrix1<double> result)
+        protected override void DoRemainder(double divisor, Matrix<double> result)
         {
             var diagonalResult = result as DiagonalMatrix;
             if (diagonalResult == null)
@@ -946,7 +946,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoRemainderByThis(double dividend, Matrix1<double> result)
+        protected override void DoRemainderByThis(double dividend, Matrix<double> result)
         {
             var diagonalResult = result as DiagonalMatrix;
             if (diagonalResult == null)

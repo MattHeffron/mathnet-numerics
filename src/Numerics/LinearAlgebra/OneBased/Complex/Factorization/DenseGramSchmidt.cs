@@ -58,7 +58,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> row count is less then column count</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is rank deficient</exception>
-        public static DenseGramSchmidt Create(Matrix1<Complex> matrix)
+        public static DenseGramSchmidt Create(Matrix<Complex> matrix)
         {
             if (matrix.RowCount < matrix.ColumnCount)
             {
@@ -72,7 +72,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             return new DenseGramSchmidt(q, r);
         }
 
-        DenseGramSchmidt(Matrix1<Complex> q, Matrix1<Complex> rFull)
+        DenseGramSchmidt(Matrix<Complex> q, Matrix<Complex> rFull)
             : base(q, rFull)
         {
         }
@@ -97,7 +97,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<Complex> input, Matrix1<Complex> result)
+        public override void Solve(Matrix<Complex> input, Matrix<Complex> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -137,7 +137,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<Complex> input, Vector1<Complex> result)
+        public override void Solve(Vector<Complex> input, Vector<Complex> result)
         {
             // Ax=b where A is an m x n matrix
             // Check that b is a column vector with m entries

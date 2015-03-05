@@ -46,7 +46,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
     public abstract class Cholesky<T> : ISolver<T>
         where T : struct, IEquatable<T>, IFormattable
     {
-        protected Cholesky(Matrix1<T> factor)
+        protected Cholesky(Matrix<T> factor)
         {
             Factor = factor;
         }
@@ -54,7 +54,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// <summary>
         /// Gets the lower triangular form of the Cholesky matrix.
         /// </summary>
-        public Matrix1<T> Factor { get; private set; }
+        public Matrix<T> Factor { get; private set; }
 
         /// <summary>
         /// Gets the determinant of the matrix for which the Cholesky matrix was computed.
@@ -71,9 +71,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <returns>The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</returns>
-        public virtual Matrix1<T> Solve(Matrix1<T> input)
+        public virtual Matrix<T> Solve(Matrix<T> input)
         {
-            var x = Matrix1<T>.Build.SameAs(input, input.RowCount, input.ColumnCount);
+            var x = Matrix<T>.Build.SameAs(input, input.RowCount, input.ColumnCount);
             Solve(input, x);
             return x;
         }
@@ -83,16 +83,16 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public abstract void Solve(Matrix1<T> input, Matrix1<T> result);
+        public abstract void Solve(Matrix<T> input, Matrix<T> result);
 
         /// <summary>
         /// Solves a system of linear equations, <b>Ax = b</b>, with A Cholesky factorized.
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <returns>The left hand side <see cref="Vector{T}"/>, <b>x</b>.</returns>
-        public virtual Vector1<T> Solve(Vector1<T> input)
+        public virtual Vector<T> Solve(Vector<T> input)
         {
-            var x = Vector1<T>.Build.SameAs(input, input.Count);
+            var x = Vector<T>.Build.SameAs(input, input.Count);
             Solve(input, x);
             return x;
         }
@@ -102,6 +102,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public abstract void Solve(Vector1<T> input, Vector1<T> result);
+        public abstract void Solve(Vector<T> input, Vector<T> result);
     }
 }

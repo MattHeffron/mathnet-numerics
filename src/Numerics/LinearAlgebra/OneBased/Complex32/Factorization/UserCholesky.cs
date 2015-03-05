@@ -55,7 +55,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not positive definite.</exception>
-        public static UserCholesky Create(Matrix1<Complex32> matrix)
+        public static UserCholesky Create(Matrix<Complex32> matrix)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {
@@ -103,7 +103,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             return new UserCholesky(factor);
         }
 
-        UserCholesky(Matrix1<Complex32> factor)
+        UserCholesky(Matrix<Complex32> factor)
             : base(factor)
         {
         }
@@ -117,7 +117,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// <param name="colLimit">Total columns</param>
         /// <param name="multipliers">Multipliers calculated previously</param>
         /// <param name="availableCores">Number of available processors</param>
-        static void DoCholeskyStep(Matrix1<Complex32> data, int rowDim, int firstCol, int colLimit, Complex32[] multipliers, int availableCores)
+        static void DoCholeskyStep(Matrix<Complex32> data, int rowDim, int firstCol, int colLimit, Complex32[] multipliers, int availableCores)
         {
             var tmpColCount = colLimit - firstCol;
 
@@ -148,7 +148,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<Complex32> input, Matrix1<Complex32> result)
+        public override void Solve(Matrix<Complex32> input, Matrix<Complex32> result)
         {
             if (result.RowCount != input.RowCount)
             {
@@ -202,7 +202,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<Complex32> input, Vector1<Complex32> result)
+        public override void Solve(Vector<Complex32> input, Vector<Complex32> result)
         {
             if (input.Count != result.Count)
             {

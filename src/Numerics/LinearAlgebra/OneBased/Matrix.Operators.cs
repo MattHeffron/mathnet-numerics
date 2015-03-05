@@ -34,17 +34,17 @@ using System.Runtime.CompilerServices;
 namespace MathNet.Numerics.LinearAlgebra.OneBased
 {
     /// <summary>
-    /// Defines the base class for <c>Matrix1</c> classes.
+    /// Defines the base class for <c>Matrix</c> classes.
     /// </summary>
-    public abstract partial class Matrix1<T>
+    public abstract partial class Matrix<T>
     {
         /// <summary>
-        /// Returns a <strong>Matrix1</strong> containing the same values of <paramref name="rightSide"/>.
+        /// Returns a <strong>Matrix</strong> containing the same values of <paramref name="rightSide"/>.
         /// </summary>
         /// <param name="rightSide">The matrix to get the values from.</param>
         /// <returns>A matrix containing a the same values as <paramref name="rightSide"/>.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator +(Matrix1<T> rightSide)
+        public static Matrix<T> operator +(Matrix<T> rightSide)
         {
             return rightSide.Clone();
         }
@@ -55,7 +55,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="rightSide">The matrix to negate.</param>
         /// <returns>A matrix containing the negated values.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator -(Matrix1<T> rightSide)
+        public static Matrix<T> operator -(Matrix<T> rightSide)
         {
             return rightSide.Negate();
         }
@@ -71,7 +71,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <returns>The result of the addition.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="leftSide"/> and <paramref name="rightSide"/> don't have the same dimensions.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="leftSide"/> or <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator +(Matrix1<T> leftSide, Matrix1<T> rightSide)
+        public static Matrix<T> operator +(Matrix<T> leftSide, Matrix<T> rightSide)
         {
             return leftSide.Add(rightSide);
         }
@@ -85,7 +85,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="rightSide">The scalar value to add.</param>
         /// <returns>The result of the addition.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="leftSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator +(Matrix1<T> leftSide, T rightSide)
+        public static Matrix<T> operator +(Matrix<T> leftSide, T rightSide)
         {
             return leftSide.Add(rightSide);
         }
@@ -99,7 +99,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="rightSide">The right matrix to add.</param>
         /// <returns>The result of the addition.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator +(T leftSide, Matrix1<T> rightSide)
+        public static Matrix<T> operator +(T leftSide, Matrix<T> rightSide)
         {
             return rightSide.Add(leftSide);
         }
@@ -115,7 +115,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <returns>The result of the subtraction.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="leftSide"/> and <paramref name="rightSide"/> don't have the same dimensions.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="leftSide"/> or <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator -(Matrix1<T> leftSide, Matrix1<T> rightSide)
+        public static Matrix<T> operator -(Matrix<T> leftSide, Matrix<T> rightSide)
         {
             return leftSide.Subtract(rightSide);
         }
@@ -130,7 +130,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <returns>The result of the subtraction.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="leftSide"/> and <paramref name="rightSide"/> don't have the same dimensions.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="leftSide"/> or <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator -(Matrix1<T> leftSide, T rightSide)
+        public static Matrix<T> operator -(Matrix<T> leftSide, T rightSide)
         {
             return leftSide.Subtract(rightSide);
         }
@@ -145,31 +145,31 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <returns>The result of the subtraction.</returns>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="leftSide"/> and <paramref name="rightSide"/> don't have the same dimensions.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="leftSide"/> or <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator -(T leftSide, Matrix1<T> rightSide)
+        public static Matrix<T> operator -(T leftSide, Matrix<T> rightSide)
         {
             return rightSide.SubtractFrom(leftSide);
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
         /// <returns>The result of the multiplication.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="leftSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator *(Matrix1<T> leftSide, T rightSide)
+        public static Matrix<T> operator *(Matrix<T> leftSide, T rightSide)
         {
             return leftSide.Multiply(rightSide);
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
         /// <returns>The result of the multiplication.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator *(T leftSide, Matrix1<T> rightSide)
+        public static Matrix<T> operator *(T leftSide, Matrix<T> rightSide)
         {
             return rightSide.Multiply(leftSide);
         }
@@ -185,31 +185,31 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <returns>The result of multiplication.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="leftSide"/> or <paramref name="rightSide"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If the dimensions of <paramref name="leftSide"/> or <paramref name="rightSide"/> don't conform.</exception>
-        public static Matrix1<T> operator *(Matrix1<T> leftSide, Matrix1<T> rightSide)
+        public static Matrix<T> operator *(Matrix<T> leftSide, Matrix<T> rightSide)
         {
             return leftSide.Multiply(rightSide);
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix1</strong> and a Vector.
+        /// Multiplies a <strong>Matrix</strong> and a Vector.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The vector to multiply.</param>
         /// <returns>The result of multiplication.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="leftSide"/> or <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Vector1<T> operator *(Matrix1<T> leftSide, Vector1<T> rightSide)
+        public static Vector<T> operator *(Matrix<T> leftSide, Vector<T> rightSide)
         {
             return leftSide.Multiply(rightSide);
         }
 
         /// <summary>
-        /// Multiplies a Vector and a <strong>Matrix1</strong>.
+        /// Multiplies a Vector and a <strong>Matrix</strong>.
         /// </summary>
         /// <param name="leftSide">The vector to multiply.</param>
         /// <param name="rightSide">The matrix to multiply.</param>
         /// <returns>The result of multiplication.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="leftSide"/> or <paramref name="rightSide"/> is <see langword="null" />.</exception>
-        public static Vector1<T> operator *(Vector1<T> leftSide, Matrix1<T> rightSide)
+        public static Vector<T> operator *(Vector<T> leftSide, Matrix<T> rightSide)
         {
             return rightSide.LeftMultiply(leftSide);
         }
@@ -221,7 +221,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="divisor">The matrix.</param>
         /// <returns>The result of the division.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="divisor"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator /(T dividend, Matrix1<T> divisor)
+        public static Matrix<T> operator /(T dividend, Matrix<T> divisor)
         {
             return divisor.DivideByThis(dividend);
         }
@@ -233,7 +233,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="divisor">The scalar value.</param>
         /// <returns>The result of the division.</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="dividend"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator /(Matrix1<T> dividend, T divisor)
+        public static Matrix<T> operator /(Matrix<T> dividend, T divisor)
         {
             return dividend.Divide(divisor);
         }
@@ -246,7 +246,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="divisor">The divisor to use.</param>
         /// <returns>The result of the calculation</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="dividend"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator %(Matrix1<T> dividend, T divisor)
+        public static Matrix<T> operator %(Matrix<T> dividend, T divisor)
         {
             return dividend.Remainder(divisor);
         }
@@ -259,7 +259,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="divisor">The matrix whose elements we want to use as divisor.</param>
         /// <returns>The result of the calculation</returns>
         /// <exception cref="ArgumentNullException">If <paramref name="divisor"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator %(T dividend, Matrix1<T> divisor)
+        public static Matrix<T> operator %(T dividend, Matrix<T> divisor)
         {
             return divisor.RemainderByThis(dividend);
         }
@@ -272,25 +272,25 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="divisor">The divisor to use.</param>
         /// <exception cref="ArgumentException">If <paramref name="dividend"/> and <paramref name="divisor"/> are not the same size.</exception>
         /// <exception cref="ArgumentNullException">If <paramref name="dividend"/> is <see langword="null" />.</exception>
-        public static Matrix1<T> operator %(Matrix1<T> dividend, Matrix1<T> divisor)
+        public static Matrix<T> operator %(Matrix<T> dividend, Matrix<T> divisor)
         {
             return dividend.PointwiseRemainder(divisor);
         }
 
         [SpecialName]
-        public static Matrix1<T> op_DotMultiply(Matrix1<T> x, Matrix1<T> y)
+        public static Matrix<T> op_DotMultiply(Matrix<T> x, Matrix<T> y)
         {
             return x.PointwiseMultiply(y);
         }
 
         [SpecialName]
-        public static Matrix1<T> op_DotDivide(Matrix1<T> dividend, Matrix1<T> divisor)
+        public static Matrix<T> op_DotDivide(Matrix<T> dividend, Matrix<T> divisor)
         {
             return dividend.PointwiseDivide(divisor);
         }
 
         [SpecialName]
-        public static Matrix1<T> op_DotPercent(Matrix1<T> dividend, Matrix1<T> divisor)
+        public static Matrix<T> op_DotPercent(Matrix<T> dividend, Matrix<T> divisor)
         {
             return dividend.PointwiseRemainder(divisor);
         }

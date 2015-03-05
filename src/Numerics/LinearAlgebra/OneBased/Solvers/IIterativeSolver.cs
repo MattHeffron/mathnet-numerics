@@ -47,6 +47,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
         /// <param name="result">The result vector, <c>x</c></param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        void Solve(Matrix1<T> matrix, Vector1<T> input, Vector1<T> result, Iterator<T> iterator, IPreconditioner<T> preconditioner);
+        void Solve(Matrix<T> matrix, Vector<T> input, Vector<T> result, Iterator<T> iterator, IPreconditioner<T> preconditioner);
     }
 }

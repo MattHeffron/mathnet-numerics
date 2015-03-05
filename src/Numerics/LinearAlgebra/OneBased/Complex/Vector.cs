@@ -45,7 +45,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
     /// <c>Complex</c> version of the <see cref="Vector{T}"/> class.
     /// </summary>
     [Serializable]
-    public abstract class Vector : Vector1<Complex>
+    public abstract class Vector : Vector<Complex>
     {
         /// <summary>
         /// Initializes a new instance of the Vector class.
@@ -72,7 +72,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Complex scalar, Vector1<Complex> result)
+        protected override void DoAdd(Complex scalar, Vector<Complex> result)
         {
             for (var index = 1; index <= Count; index++)
             {
@@ -89,7 +89,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Vector1<Complex> other, Vector1<Complex> result)
+        protected override void DoAdd(Vector<Complex> other, Vector<Complex> result)
         {
             for (var index = 1; index <= Count; index++)
             {
@@ -106,7 +106,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Complex scalar, Vector1<Complex> result)
+        protected override void DoSubtract(Complex scalar, Vector<Complex> result)
         {
             DoAdd(-scalar, result);
         }
@@ -120,7 +120,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Vector1<Complex> other, Vector1<Complex> result)
+        protected override void DoSubtract(Vector<Complex> other, Vector<Complex> result)
         {
             for (var index = 1; index <= Count; index++)
             {
@@ -137,7 +137,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the multiplication.
         /// </param>
-        protected override void DoMultiply(Complex scalar, Vector1<Complex> result)
+        protected override void DoMultiply(Complex scalar, Vector<Complex> result)
         {
             for (var index = 1; index <= Count; index++)
             {
@@ -154,7 +154,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">
         /// The vector to store the result of the division.
         /// </param>
-        protected override void DoDivide(Complex divisor, Vector1<Complex> result)
+        protected override void DoDivide(Complex divisor, Vector<Complex> result)
         {
             DoMultiply(1 / divisor, result);
         }
@@ -164,7 +164,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="dividend">The scalar to divide.</param>
         /// <param name="result">The vector to store the result of the division.</param>
-        protected override void DoDivideByThis(Complex dividend, Vector1<Complex> result)
+        protected override void DoDivideByThis(Complex dividend, Vector<Complex> result)
         {
             for (var index = 1; index <= Count; index++)
             {
@@ -177,7 +177,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The vector to pointwise multiply with this one.</param>
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Vector1<Complex> other, Vector1<Complex> result)
+        protected override void DoPointwiseMultiply(Vector<Complex> other, Vector<Complex> result)
         {
             for (var index = 1; index <= Count; index++)
             {
@@ -190,7 +190,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="divisor">The vector to pointwise divide this one by.</param>
         /// <param name="result">The vector to store the result of the pointwise division.</param>
-        protected override void DoPointwiseDivide(Vector1<Complex> divisor, Vector1<Complex> result)
+        protected override void DoPointwiseDivide(Vector<Complex> divisor, Vector<Complex> result)
         {
             for (var index = 1; index <= Count; index++)
             {
@@ -203,7 +203,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="exponent">The exponent to raise this vector values to.</param>
         /// <param name="result">The vector to store the result of the pointwise power.</param>
-        protected override void DoPointwisePower(Complex exponent, Vector1<Complex> result)
+        protected override void DoPointwisePower(Complex exponent, Vector<Complex> result)
         {
             Map(x => x.Power(exponent), result, Zeros.AllowSkip);
         }
@@ -214,7 +214,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="divisor">The pointwise denominator vector to use.</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override sealed void DoPointwiseModulus(Vector1<Complex> divisor, Vector1<Complex> result)
+        protected override sealed void DoPointwiseModulus(Vector<Complex> divisor, Vector<Complex> result)
         {
             throw new NotSupportedException();
         }
@@ -225,7 +225,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="divisor">The pointwise denominator vector to use.</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override sealed void DoPointwiseRemainder(Vector1<Complex> divisor, Vector1<Complex> result)
+        protected override sealed void DoPointwiseRemainder(Vector<Complex> divisor, Vector<Complex> result)
         {
             throw new NotSupportedException();
         }
@@ -234,7 +234,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Pointwise applies the exponential function to each value and stores the result into the result vector.
         /// </summary>
         /// <param name="result">The vector to store the result.</param>
-        protected override void DoPointwiseExp(Vector1<Complex> result)
+        protected override void DoPointwiseExp(Vector<Complex> result)
         {
             Map(Complex.Exp, result, Zeros.Include);
         }
@@ -243,7 +243,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Pointwise applies the natural logarithm function to each value and stores the result into the result vector.
         /// </summary>
         /// <param name="result">The vector to store the result.</param>
-        protected override void DoPointwiseLog(Vector1<Complex> result)
+        protected override void DoPointwiseLog(Vector<Complex> result)
         {
             Map(Complex.Log, result, Zeros.Include);
         }
@@ -253,7 +253,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of a[i]*b[i] for all i.</returns>
-        protected override Complex DoDotProduct(Vector1<Complex> other)
+        protected override Complex DoDotProduct(Vector<Complex> other)
         {
             var dot = Complex.Zero;
             for (var i = 1; i <= Count; i++)
@@ -268,7 +268,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of conj(a[i])*b[i] for all i.</returns>
-        protected override Complex DoConjugateDotProduct(Vector1<Complex> other)
+        protected override Complex DoConjugateDotProduct(Vector<Complex> other)
         {
             var dot = Complex.Zero;
             for (var i = 1; i <= Count; i++)
@@ -284,7 +284,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoModulus(Complex divisor, Vector1<Complex> result)
+        protected override sealed void DoModulus(Complex divisor, Vector<Complex> result)
         {
             throw new NotSupportedException();
         }
@@ -295,7 +295,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoModulusByThis(Complex dividend, Vector1<Complex> result)
+        protected override sealed void DoModulusByThis(Complex dividend, Vector<Complex> result)
         {
             throw new NotSupportedException();
         }
@@ -306,7 +306,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoRemainder(Complex divisor, Vector1<Complex> result)
+        protected override sealed void DoRemainder(Complex divisor, Vector<Complex> result)
         {
             throw new NotSupportedException();
         }
@@ -317,7 +317,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoRemainderByThis(Complex dividend, Vector1<Complex> result)
+        protected override sealed void DoRemainderByThis(Complex dividend, Vector<Complex> result)
         {
             throw new NotSupportedException();
         }
@@ -457,7 +457,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Conjugates vector and save result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoConjugate(Vector1<Complex> result)
+        protected override void DoConjugate(Vector<Complex> result)
         {
             for (var index = 1; index <= Count; index++)
             {
@@ -469,7 +469,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Negates vector and saves result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoNegate(Vector1<Complex> result)
+        protected override void DoNegate(Vector<Complex> result)
         {
             for (var index = 1; index <= Count; index++)
             {
@@ -504,7 +504,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <returns>
         /// This vector normalized to a unit vector with respect to the p-norm.
         /// </returns>
-        public override Vector1<Complex> Normalize(double p)
+        public override Vector<Complex> Normalize(double p)
         {
             if (p < 0d)
             {

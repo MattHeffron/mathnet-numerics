@@ -57,7 +57,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="matrix">The matrix to factor.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
-        public static UserLU Create(Matrix1<Complex> matrix)
+        public static UserLU Create(Matrix<Complex> matrix)
         {
             if (matrix == null)
             {
@@ -144,7 +144,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             return new UserLU(factors, pivots);
         }
 
-        UserLU(Matrix1<Complex> factors, int[] pivots)
+        UserLU(Matrix<Complex> factors, int[] pivots)
             : base(factors, pivots)
         {
         }
@@ -154,7 +154,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <c>B</c>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <c>X</c>.</param>
-        public override void Solve(Matrix1<Complex> input, Matrix1<Complex> result)
+        public override void Solve(Matrix<Complex> input, Matrix<Complex> result)
         {
             // Check for proper arguments.
             if (input == null)
@@ -243,7 +243,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <c>b</c>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <c>x</c>.</param>
-        public override void Solve(Vector1<Complex> input, Vector1<Complex> result)
+        public override void Solve(Vector<Complex> input, Vector<Complex> result)
         {
             // Check for proper arguments.
             if (input == null)
@@ -311,10 +311,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// Returns the inverse of this matrix. The inverse is calculated using LU decomposition.
         /// </summary>
         /// <returns>The inverse of this matrix.</returns>
-        public override Matrix1<Complex> Inverse()
+        public override Matrix<Complex> Inverse()
         {
             var order = Factors.RowCount;
-            var inverse = Matrix1<Complex>.Build.SameAs(Factors, order, order);
+            var inverse = Matrix<Complex>.Build.SameAs(Factors, order, order);
             for (var i = 1; i <= order; i++)
             {
                 inverse.At(i, i, Complex.One);

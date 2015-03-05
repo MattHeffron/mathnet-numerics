@@ -54,12 +54,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not positive definite.</exception>
-        public static UserCholesky Create(Matrix1<int> matrix)
+        public static UserCholesky Create(Matrix<int> matrix)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        UserCholesky(Matrix1<int> factor)
+        UserCholesky(Matrix<int> factor)
             : base(factor)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -70,7 +70,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<int> input, Matrix1<int> result)
+        public override void Solve(Matrix<int> input, Matrix<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -81,7 +81,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<int> input, Vector1<int> result)
+        public override void Solve(Vector<int> input, Vector<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);

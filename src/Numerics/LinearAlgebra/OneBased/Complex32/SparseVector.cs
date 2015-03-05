@@ -84,7 +84,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// This new vector will be independent from the other vector.
         /// A new memory block will be allocated for storing the vector.
         /// </summary>
-        public static SparseVector OfVector(Vector1<Complex32> vector)
+        public static SparseVector OfVector(Vector<Complex32> vector)
         {
             return new SparseVector(SparseVectorStorage<Complex32>.OfVector(vector.Storage));
         }
@@ -137,7 +137,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Complex32 scalar, Vector1<Complex32> result)
+        protected override void DoAdd(Complex32 scalar, Vector<Complex32> result)
         {
             if (scalar == Complex32.Zero)
             {
@@ -192,7 +192,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Vector1<Complex32> other, Vector1<Complex32> result)
+        protected override void DoAdd(Vector<Complex32> other, Vector<Complex32> result)
         {
             var otherSparse = other as SparseVector;
             if (otherSparse == null)
@@ -277,7 +277,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Complex32 scalar, Vector1<Complex32> result)
+        protected override void DoSubtract(Complex32 scalar, Vector<Complex32> result)
         {
             DoAdd(-scalar, result);
         }
@@ -291,7 +291,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Vector1<Complex32> other, Vector1<Complex32> result)
+        protected override void DoSubtract(Vector<Complex32> other, Vector<Complex32> result)
         {
             if (ReferenceEquals(this, other))
             {
@@ -377,7 +377,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Negates vector and saves result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoNegate(Vector1<Complex32> result)
+        protected override void DoNegate(Vector<Complex32> result)
         {
             var sparseResult = result as SparseVector;
             if (sparseResult == null)
@@ -406,7 +406,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Conjugates vector and save result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoConjugate(Vector1<Complex32> result)
+        protected override void DoConjugate(Vector<Complex32> result)
         {
             var sparseResult = result as SparseVector;
             if (sparseResult != null)
@@ -440,7 +440,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the multiplication.
         /// </param>
-        protected override void DoMultiply(Complex32 scalar, Vector1<Complex32> result)
+        protected override void DoMultiply(Complex32 scalar, Vector<Complex32> result)
         {
             var sparseResult = result as SparseVector;
             if (sparseResult == null)
@@ -471,7 +471,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of a[i]*b[i] for all i.</returns>
-        protected override Complex32 DoDotProduct(Vector1<Complex32> other)
+        protected override Complex32 DoDotProduct(Vector<Complex32> other)
         {
             var result = Complex32.Zero;
             if (ReferenceEquals(this, other))
@@ -496,7 +496,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of conj(a[i])*b[i] for all i.</returns>
-        protected override Complex32 DoConjugateDotProduct(Vector1<Complex32> other)
+        protected override Complex32 DoConjugateDotProduct(Vector<Complex32> other)
         {
             var result = Complex32.Zero;
             if (ReferenceEquals(this, other))
@@ -535,7 +535,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         }
 
         /// <summary>
-        /// Returns a <strong>Vector1</strong> containing the negated values of <paramref name="rightSide"/>.
+        /// Returns a <strong>Vector</strong> containing the negated values of <paramref name="rightSide"/>.
         /// </summary>
         /// <param name="rightSide">The vector to get the values from.</param>
         /// <returns>A vector containing the negated values as <paramref name="rightSide"/>.</returns>
@@ -776,7 +776,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The vector to pointwise multiply with this one.</param>
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Vector1<Complex32> other, Vector1<Complex32> result)
+        protected override void DoPointwiseMultiply(Vector<Complex32> other, Vector<Complex32> result)
         {
             if (ReferenceEquals(this, other))
             {
@@ -800,7 +800,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The vector to pointwise multiply with this one.</param>
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseDivide(Vector1<Complex32> divisor, Vector1<Complex32> result)
+        protected override void DoPointwiseDivide(Vector<Complex32> divisor, Vector<Complex32> result)
         {
             if (ReferenceEquals(this, divisor))
             {

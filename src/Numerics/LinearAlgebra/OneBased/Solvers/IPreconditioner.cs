@@ -56,13 +56,13 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
         /// Initializes the preconditioner and loads the internal data structures.
         /// </summary>
         /// <param name="matrix">The matrix on which the preconditioner is based.</param>
-        void Initialize(Matrix1<T> matrix);
+        void Initialize(Matrix<T> matrix);
 
         /// <summary>
         /// Approximates the solution to the matrix equation <b>Mx = b</b>.
         /// </summary>
         /// <param name="rhs">The right hand side vector.</param>
         /// <param name="lhs">The left hand side vector. Also known as the result vector.</param>
-        void Approximate(Vector1<T> rhs, Vector1<T> lhs);
+        void Approximate(Vector<T> rhs, Vector<T> lhs);
     }
 }

@@ -37,11 +37,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
         /// <summary>
         /// Calculates the <c>true</c> residual of the matrix equation Ax = b according to: residual = b - Ax
         /// </summary>
-        /// <param name="matrix">Instance of the <see cref="Matrix1"/> A.</param>
-        /// <param name="residual">Residual values in <see cref="Vector1"/>.</param>
-        /// <param name="x">Instance of the <see cref="Vector1"/> x.</param>
-        /// <param name="b">Instance of the <see cref="Vector1"/> b.</param>
-        internal static void CalculateTrueResidual<T>(Matrix1<T> matrix, Vector1<T> residual, Vector1<T> x, Vector1<T> b) where T : struct, IEquatable<T>, IFormattable
+        /// <param name="matrix">Instance of the <see cref="Matrix"/> A.</param>
+        /// <param name="residual">Residual values in <see cref="Vector"/>.</param>
+        /// <param name="x">Instance of the <see cref="Vector"/> x.</param>
+        /// <param name="b">Instance of the <see cref="Vector"/> b.</param>
+        internal static void CalculateTrueResidual<T>(Matrix<T> matrix, Vector<T> residual, Vector<T> x, Vector<T> b) where T : struct, IEquatable<T>, IFormattable
         {
             // -Ax = residual
             matrix.Multiply(x, residual);

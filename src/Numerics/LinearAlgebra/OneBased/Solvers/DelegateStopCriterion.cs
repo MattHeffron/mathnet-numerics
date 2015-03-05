@@ -38,14 +38,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
     public class DelegateStopCriterion<T> : IIterationStopCriterion<T>
         where T : struct, IEquatable<T>, IFormattable
     {
-        readonly Func<int, Vector1<T>, Vector1<T>, Vector1<T>, IterationStatus> _determine;
+        readonly Func<int, Vector<T>, Vector<T>, Vector<T>, IterationStatus> _determine;
         IterationStatus _status = IterationStatus.Continue;
 
         /// <summary>
         /// Create a new instance of this criterion with a custom implementation.
         /// </summary>
         /// <param name="determine">Custom implementation with the same signature and semantics as the DetermineStatus method.</param>
-        public DelegateStopCriterion(Func<int, Vector1<T>, Vector1<T>, Vector1<T>, IterationStatus> determine)
+        public DelegateStopCriterion(Func<int, Vector<T>, Vector<T>, Vector<T>, IterationStatus> determine)
         {
             _determine = determine;
         }
@@ -63,7 +63,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Solvers
         /// on the invocation of this method. Therefore this method should only be called if the 
         /// calculation has moved forwards at least one step.
         /// </remarks>
-        public IterationStatus DetermineStatus(int iterationNumber, Vector1<T> solutionVector, Vector1<T> sourceVector, Vector1<T> residualVector)
+        public IterationStatus DetermineStatus(int iterationNumber, Vector<T> solutionVector, Vector<T> sourceVector, Vector<T> residualVector)
         {
             return _status = _determine(iterationNumber, solutionVector, sourceVector, residualVector);
         }

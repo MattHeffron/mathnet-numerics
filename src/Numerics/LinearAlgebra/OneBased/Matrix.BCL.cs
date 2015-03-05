@@ -37,7 +37,7 @@ using System.Text;
 namespace MathNet.Numerics.LinearAlgebra.OneBased
 {
     [DebuggerDisplay("Matrix {RowCount}x{ColumnCount}")]
-    public abstract partial class Matrix1<T>
+    public abstract partial class Matrix<T>
     {
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -48,7 +48,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <returns>
         /// <c>true</c> if the current object is equal to the <paramref name="other"/> parameter; otherwise, <c>false</c>.
         /// </returns>
-        public bool Equals(Matrix1<T> other)
+        public bool Equals(Matrix<T> other)
         {
             return other != null && Storage.Equals(other.Storage);
         }
@@ -62,7 +62,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </returns>
         public override bool Equals(object obj)
         {
-            var other = obj as Matrix1<T>;
+            var other = obj as Matrix<T>;
             return other != null && Storage.Equals(other.Storage);
         }
 

@@ -70,7 +70,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Solvers
         /// <summary>
         /// The collection of starting vectors which are used as the basis for the Krylov sub-space.
         /// </summary>
-        IList<Vector1<float>> _startingVectors;
+        IList<Vector<float>> _startingVectors;
 
         /// <summary>
         /// The number of starting vectors used by the algorithm
@@ -116,7 +116,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Solvers
         /// Gets or sets a series of orthonormal vectors which will be used as basis for the 
         /// Krylov sub-space.
         /// </summary>
-        public IList<Vector1<float>> StartingVectors
+        public IList<Vector<float>> StartingVectors
         {
             [DebuggerStepThrough]
             get
@@ -161,7 +161,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Solvers
         ///  the <paramref name="numberOfVariables"/> is smaller than 
         ///  the <paramref name="maximumNumberOfStartingVectors"/>.
         /// </returns>
-        static IList<Vector1<float>> CreateStartingVectors(int maximumNumberOfStartingVectors, int numberOfVariables)
+        static IList<Vector<float>> CreateStartingVectors(int maximumNumberOfStartingVectors, int numberOfVariables)
         {
             // Create no more starting vectors than the size of the problem - 1
             // Get random values and then orthogonalize them with
@@ -190,7 +190,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Solvers
             var orthogonalMatrix = gs.Q;
 
             // Now transfer this to vectors
-            var result = new List<Vector1<float>>();
+            var result = new List<Vector<float>>();
             for (var i = 0; i < orthogonalMatrix.ColumnCount; i++)
             {
                 result.Add(orthogonalMatrix.Column(i));
@@ -208,9 +208,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Solvers
         /// <param name="arraySize">Number of vectors</param>
         /// <param name="vectorSize">Size of each vector</param>
         /// <returns>Array of random vectors</returns>
-        static Vector1<float>[] CreateVectorArray(int arraySize, int vectorSize)
+        static Vector<float>[] CreateVectorArray(int arraySize, int vectorSize)
         {
-            var result = new Vector1<float>[arraySize];
+            var result = new Vector<float>[arraySize];
             for (var i = 0; i < result.Length; i++)
             {
                 result[i] = new DenseVector(vectorSize);
@@ -228,7 +228,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Solvers
         /// <param name="result">The result vector, <c>x</c></param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public void Solve(Matrix1<float> matrix, Vector1<float> input, Vector1<float> result, Iterator<float> iterator, IPreconditioner<float> preconditioner)
+        public void Solve(Matrix<float> matrix, Vector<float> input, Vector<float> result, Iterator<float> iterator, IPreconditioner<float> preconditioner)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {

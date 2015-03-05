@@ -56,15 +56,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// <param name="matrix">The matrix to factor.</param>
         /// <param name="method">The QR factorization method to use.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
-        public static UserQR Create(Matrix1<Complex32> matrix, QRMethod method = QRMethod.Full)
+        public static UserQR Create(Matrix<Complex32> matrix, QRMethod method = QRMethod.Full)
         {
             if (matrix.RowCount < matrix.ColumnCount)
             {
                 throw Matrix.DimensionsDontMatch<ArgumentException>(matrix);
             }
 
-            Matrix1<Complex32> q;
-            Matrix1<Complex32> r;
+            Matrix<Complex32> q;
+            Matrix<Complex32> r;
 
             var minmn = Math.Min(matrix.RowCount, matrix.ColumnCount);
             var u = new Complex32[minmn][];
@@ -72,7 +72,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             if (method == QRMethod.Full)
             {
                 r = matrix.Clone();
-                q = Matrix1<Complex32>.Build.SameAs(matrix, matrix.RowCount, matrix.RowCount);
+                q = Matrix<Complex32>.Build.SameAs(matrix, matrix.RowCount, matrix.RowCount);
 
                 for (var i = 0; i < matrix.RowCount; i++)
                 {
@@ -117,7 +117,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             return new UserQR(q, r, method);
         }
 
-        UserQR(Matrix1<Complex32> q, Matrix1<Complex32> rFull, QRMethod method)
+        UserQR(Matrix<Complex32> q, Matrix<Complex32> rFull, QRMethod method)
             : base(q, rFull, method)
         {
         }
@@ -129,7 +129,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// <param name="row">The first row</param>
         /// <param name="column">Column index</param>
         /// <returns>Generated vector</returns>
-        static Complex32[] GenerateColumn(Matrix1<Complex32> a, int row, int column)
+        static Complex32[] GenerateColumn(Matrix<Complex32> a, int row, int column)
         {
             var ru = a.RowCount - row;
             var u = new Complex32[ru];
@@ -183,7 +183,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// <param name="columnStart">The first column</param>
         /// <param name="columnDim">The last column</param>
         /// <param name="availableCores">Number of available CPUs</param>
-        static void ComputeQR(Complex32[] u, Matrix1<Complex32> a, int rowStart, int rowDim, int columnStart, int columnDim, int availableCores)
+        static void ComputeQR(Complex32[] u, Matrix<Complex32> a, int rowStart, int rowDim, int columnStart, int columnDim, int availableCores)
         {
             if (rowDim < rowStart || columnDim < columnStart)
             {
@@ -224,7 +224,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<Complex32> input, Matrix1<Complex32> result)
+        public override void Solve(Matrix<Complex32> input, Matrix<Complex32> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -298,7 +298,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<Complex32> input, Vector1<Complex32> result)
+        public override void Solve(Vector<Complex32> input, Vector<Complex32> result)
         {
             // Ax=b where A is an m x n matrix
             // Check that b is a column vector with m entries

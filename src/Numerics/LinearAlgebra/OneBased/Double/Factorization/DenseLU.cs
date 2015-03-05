@@ -72,7 +72,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
             return new DenseLU(factors, pivots);
         }
 
-        DenseLU(Matrix1<double> factors, int[] pivots)
+        DenseLU(Matrix<double> factors, int[] pivots)
             : base(factors, pivots)
         {
         }
@@ -82,7 +82,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <c>B</c>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <c>X</c>.</param>
-        public override void Solve(Matrix1<double> input, Matrix1<double> result)
+        public override void Solve(Matrix<double> input, Matrix<double> result)
         {
             // Check for proper arguments.
             if (input == null)
@@ -136,7 +136,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <c>b</c>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <c>x</c>.</param>
-        public override void Solve(Vector1<double> input, Vector1<double> result)
+        public override void Solve(Vector<double> input, Vector<double> result)
         {
             // Check for proper arguments.
             if (input == null)
@@ -184,7 +184,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// Returns the inverse of this matrix. The inverse is calculated using LU decomposition.
         /// </summary>
         /// <returns>The inverse of this matrix.</returns>
-        public override Matrix1<double> Inverse()
+        public override Matrix<double> Inverse()
         {
             var result = (DenseMatrix) Factors.Clone();
             Control.LinearAlgebraProvider.LUInverseFactored(result.Values, result.RowCount, Pivots);

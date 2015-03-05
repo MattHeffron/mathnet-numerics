@@ -99,7 +99,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             return new DenseEvd(eigenVectors, eigenValues, blockDiagonal, isSymmetric);
         }
 
-        DenseEvd(Matrix1<Complex32> eigenVectors, Vector1<Complex> eigenValues, Matrix1<Complex32> blockDiagonal, bool isSymmetric)
+        DenseEvd(Matrix<Complex32> eigenVectors, Vector<Complex> eigenValues, Matrix<Complex32> blockDiagonal, bool isSymmetric)
             : base(eigenVectors, eigenValues, blockDiagonal, isSymmetric)
         {
         }
@@ -827,7 +827,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<Complex32> input, Matrix1<Complex32> result)
+        public override void Solve(Matrix<Complex32> input, Matrix<Complex32> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -893,7 +893,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<Complex32> input, Vector1<Complex32> result)
+        public override void Solve(Vector<Complex32> input, Vector<Complex32> result)
         {
             // Ax=b where A is an m x m matrix
             // Check that b is a column vector with m entries

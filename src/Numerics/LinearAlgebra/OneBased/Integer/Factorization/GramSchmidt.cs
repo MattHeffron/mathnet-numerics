@@ -44,7 +44,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
     /// </remarks>
     internal abstract class GramSchmidt : GramSchmidt<int>
     {
-        protected GramSchmidt(Matrix1<int> q, Matrix1<int> rFull)
+        protected GramSchmidt(Matrix<int> q, Matrix<int> rFull)
             : base(q, rFull)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

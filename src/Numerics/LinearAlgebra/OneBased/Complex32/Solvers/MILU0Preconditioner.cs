@@ -82,7 +82,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Solvers
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square or is not an
         /// instance of SparseCompressedRowMatrixStorage.</exception>
-        public void Initialize(Matrix1<Complex32> matrix)
+        public void Initialize(Matrix<Complex32> matrix)
         {
             var csr = matrix.Storage as SparseCompressedRowMatrixStorage<Complex32>;
             if (csr == null)
@@ -121,7 +121,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Solvers
         /// </summary>
         /// <param name="input">The right hand side vector b.</param>
         /// <param name="result">The left hand side vector x.</param>
-        public void Approximate(Vector1<Complex32> input, Vector1<Complex32> result)
+        public void Approximate(Vector<Complex32> input, Vector<Complex32> result)
         {
             if (_alu == null)
             {

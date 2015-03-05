@@ -139,7 +139,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Solvers
         /// <param name="result">The result vector, <c>x</c></param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public void Solve(Matrix1<Numerics.Complex32> matrix, Vector1<Numerics.Complex32> input, Vector1<Numerics.Complex32> result, Iterator<Numerics.Complex32> iterator, IPreconditioner<Numerics.Complex32> preconditioner)
+        public void Solve(Matrix<Numerics.Complex32> matrix, Vector<Numerics.Complex32> input, Vector<Numerics.Complex32> result, Iterator<Numerics.Complex32> iterator, IPreconditioner<Numerics.Complex32> preconditioner)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {

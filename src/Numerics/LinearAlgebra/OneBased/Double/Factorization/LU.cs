@@ -44,7 +44,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
     /// </remarks>
     internal abstract class LU : LU<double>
     {
-        protected LU(Matrix1<double> factors, int[] pivots)
+        protected LU(Matrix<double> factors, int[] pivots)
             : base(factors, pivots)
         {
         }

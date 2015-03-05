@@ -100,7 +100,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// This new matrix will be independent from the other matrix.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfMatrix(Matrix1<Complex> matrix)
+        public static SparseMatrix OfMatrix(Matrix<Complex> matrix)
         {
             return new SparseMatrix(SparseCompressedRowMatrixStorage<Complex>.OfMatrix(matrix.Storage));
         }
@@ -197,7 +197,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfColumnVectors(params Vector1<Complex>[] columns)
+        public static SparseMatrix OfColumnVectors(params Vector<Complex>[] columns)
         {
             var storage = new VectorStorage<Complex>[columns.Length];
             for (int i = 0; i < columns.Length; i++)
@@ -212,7 +212,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfColumnVectors(IEnumerable<Vector1<Complex>> columns)
+        public static SparseMatrix OfColumnVectors(IEnumerable<Vector<Complex>> columns)
         {
             return new SparseMatrix(SparseCompressedRowMatrixStorage<Complex>.OfColumnVectors(columns.Select(c => c.Storage).ToArray()));
         }
@@ -264,7 +264,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfRowVectors(params Vector1<Complex>[] rows)
+        public static SparseMatrix OfRowVectors(params Vector<Complex>[] rows)
         {
             var storage = new VectorStorage<Complex>[rows.Length];
             for (int i = 0; i < rows.Length; i++)
@@ -279,7 +279,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// This new matrix will be independent from the vectors.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfRowVectors(IEnumerable<Vector1<Complex>> rows)
+        public static SparseMatrix OfRowVectors(IEnumerable<Vector<Complex>> rows)
         {
             return new SparseMatrix(SparseCompressedRowMatrixStorage<Complex>.OfRowVectors(rows.Select(r => r.Storage).ToArray()));
         }
@@ -289,7 +289,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// This new matrix will be independent from the vector.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfDiagonalVector(Vector1<Complex> diagonal)
+        public static SparseMatrix OfDiagonalVector(Vector<Complex> diagonal)
         {
             var m = new SparseMatrix(diagonal.Count, diagonal.Count);
             m.SetDiagonal(diagonal);
@@ -301,7 +301,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// This new matrix will be independent from the vector.
         /// A new memory block will be allocated for storing the matrix.
         /// </summary>
-        public static SparseMatrix OfDiagonalVector(int rows, int columns, Vector1<Complex> diagonal)
+        public static SparseMatrix OfDiagonalVector(int rows, int columns, Vector<Complex> diagonal)
         {
             var m = new SparseMatrix(rows, columns);
             m.SetDiagonal(diagonal);
@@ -378,7 +378,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Returns a new matrix containing the lower triangle of this matrix.
         /// </summary>
         /// <returns>The lower triangle of this matrix.</returns>
-        public override Matrix1<Complex> LowerTriangle()
+        public override Matrix<Complex> LowerTriangle()
         {
             var result = Build.SameAs(this);
             LowerTriangleImpl(result);
@@ -391,7 +391,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="result"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void LowerTriangle(Matrix1<Complex> result)
+        public override void LowerTriangle(Matrix<Complex> result)
         {
             if (result == null)
             {
@@ -420,7 +420,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Puts the lower triangle of this matrix into the result matrix.
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
-        private void LowerTriangleImpl(Matrix1<Complex> result)
+        private void LowerTriangleImpl(Matrix<Complex> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -443,7 +443,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Returns a new matrix containing the upper triangle of this matrix.
         /// </summary>
         /// <returns>The upper triangle of this matrix.</returns>
-        public override Matrix1<Complex> UpperTriangle()
+        public override Matrix<Complex> UpperTriangle()
         {
             var result = Build.SameAs(this);
             UpperTriangleImpl(result);
@@ -456,7 +456,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="result"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void UpperTriangle(Matrix1<Complex> result)
+        public override void UpperTriangle(Matrix<Complex> result)
         {
             if (result == null)
             {
@@ -485,7 +485,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Puts the upper triangle of this matrix into the result matrix.
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
-        private void UpperTriangleImpl(Matrix1<Complex> result)
+        private void UpperTriangleImpl(Matrix<Complex> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -509,7 +509,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// does not contain the diagonal elements of this matrix.
         /// </summary>
         /// <returns>The lower triangle of this matrix.</returns>
-        public override Matrix1<Complex> StrictlyLowerTriangle()
+        public override Matrix<Complex> StrictlyLowerTriangle()
         {
             var result = Build.SameAs(this);
             StrictlyLowerTriangleImpl(result);
@@ -522,7 +522,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="result"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void StrictlyLowerTriangle(Matrix1<Complex> result)
+        public override void StrictlyLowerTriangle(Matrix<Complex> result)
         {
             if (result == null)
             {
@@ -551,7 +551,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Puts the strictly lower triangle of this matrix into the result matrix.
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
-        private void StrictlyLowerTriangleImpl(Matrix1<Complex> result)
+        private void StrictlyLowerTriangleImpl(Matrix<Complex> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -575,7 +575,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// does not contain the diagonal elements of this matrix.
         /// </summary>
         /// <returns>The upper triangle of this matrix.</returns>
-        public override Matrix1<Complex> StrictlyUpperTriangle()
+        public override Matrix<Complex> StrictlyUpperTriangle()
         {
             var result = Build.SameAs(this);
             StrictlyUpperTriangleImpl(result);
@@ -588,7 +588,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">Where to store the lower triangle.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="result"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If the result matrix's dimensions are not the same as this matrix.</exception>
-        public override void StrictlyUpperTriangle(Matrix1<Complex> result)
+        public override void StrictlyUpperTriangle(Matrix<Complex> result)
         {
             if (result == null)
             {
@@ -617,7 +617,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Puts the strictly upper triangle of this matrix into the result matrix.
         /// </summary>
         /// <param name="result">Where to store the lower triangle.</param>
-        private void StrictlyUpperTriangleImpl(Matrix1<Complex> result)
+        private void StrictlyUpperTriangleImpl(Matrix<Complex> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -640,7 +640,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// Negate each element of this matrix and place the results into the result matrix.
         /// </summary>
         /// <param name="result">The result of the negation.</param>
-        protected override void DoNegate(Matrix1<Complex> result)
+        protected override void DoNegate(Matrix<Complex> result)
         {
             CopyTo(result);
             DoMultiply(-1, result);
@@ -707,7 +707,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The matrix to store the result of the addition.</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoAdd(Matrix1<Complex> other, Matrix1<Complex> result)
+        protected override void DoAdd(Matrix<Complex> other, Matrix<Complex> result)
         {
             var sparseOther = other as SparseMatrix;
             var sparseResult = result as SparseMatrix;
@@ -764,7 +764,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <param name="result">The matrix to store the result of subtraction.</param>
         /// <exception cref="ArgumentNullException">If the other matrix is <see langword="null"/>.</exception>
         /// <exception cref="ArgumentOutOfRangeException">If the two matrices don't have the same dimensions.</exception>
-        protected override void DoSubtract(Matrix1<Complex> other, Matrix1<Complex> result)
+        protected override void DoSubtract(Matrix<Complex> other, Matrix<Complex> result)
         {
             var sparseOther = other as SparseMatrix;
             var sparseResult = result as SparseMatrix;
@@ -827,7 +827,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="scalar">The scalar to multiply the matrix with.</param>
         /// <param name="result">The matrix to store the result of the multiplication.</param>
-        protected override void DoMultiply(Complex scalar, Matrix1<Complex> result)
+        protected override void DoMultiply(Complex scalar, Matrix<Complex> result)
         {
             if (scalar == 1.0)
             {
@@ -883,7 +883,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
+        protected override void DoMultiply(Matrix<Complex> other, Matrix<Complex> result)
         {
             var sparseOther = other as SparseMatrix;
             var sparseResult = result as SparseMatrix;
@@ -1033,7 +1033,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="rightSide">The vector to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoMultiply(Vector1<Complex> rightSide, Vector1<Complex> result)
+        protected override void DoMultiply(Vector<Complex> rightSide, Vector<Complex> result)
         {
             var rowPointers = _storage.RowPointers;
             var columnIndices = _storage.ColumnIndices;
@@ -1067,7 +1067,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The matrix to multiply with.</param>
         /// <param name="result">The result of the multiplication.</param>
-        protected override void DoTransposeAndMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
+        protected override void DoTransposeAndMultiply(Matrix<Complex> other, Matrix<Complex> result)
         {
             var otherSparse = other as SparseMatrix;
             var resultSparse = result as SparseMatrix;
@@ -1127,7 +1127,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="other">The matrix to pointwise multiply with this one.</param>
         /// <param name="result">The matrix to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Matrix1<Complex> other, Matrix1<Complex> result)
+        protected override void DoPointwiseMultiply(Matrix<Complex> other, Matrix<Complex> result)
         {
             result.Clear();
 
@@ -1154,7 +1154,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// </summary>
         /// <param name="divisor">The matrix to pointwise divide this one by.</param>
         /// <param name="result">The matrix to store the result of the pointwise division.</param>
-        protected override void DoPointwiseDivide(Matrix1<Complex> divisor, Matrix1<Complex> result)
+        protected override void DoPointwiseDivide(Matrix<Complex> divisor, Matrix<Complex> result)
         {
             result.Clear();
 
@@ -1175,7 +1175,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             }
         }
 
-        public override void KroneckerProduct(Matrix1<Complex> other, Matrix1<Complex> result)
+        public override void KroneckerProduct(Matrix<Complex> other, Matrix<Complex> result)
         {
             if (other == null)
             {
@@ -1315,7 +1315,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         }
 
         /// <summary>
-        /// Returns a <strong>Matrix1</strong> containing the same values of <paramref name="rightSide"/>.
+        /// Returns a <strong>Matrix</strong> containing the same values of <paramref name="rightSide"/>.
         /// </summary>
         /// <param name="rightSide">The matrix to get the values from.</param>
         /// <returns>A matrix containing a the same values as <paramref name="rightSide"/>.</returns>
@@ -1378,7 +1378,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
@@ -1395,7 +1395,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>
@@ -1443,7 +1443,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix1</strong> and a Vector.
+        /// Multiplies a <strong>Matrix</strong> and a Vector.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The vector to multiply.</param>
@@ -1460,7 +1460,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         }
 
         /// <summary>
-        /// Multiplies a Vector and a <strong>Matrix1</strong>.
+        /// Multiplies a Vector and a <strong>Matrix</strong>.
         /// </summary>
         /// <param name="leftSide">The vector to multiply.</param>
         /// <param name="rightSide">The matrix to multiply.</param>
@@ -1477,7 +1477,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         }
 
         /// <summary>
-        /// Multiplies a <strong>Matrix1</strong> by a constant and returns the result.
+        /// Multiplies a <strong>Matrix</strong> by a constant and returns the result.
         /// </summary>
         /// <param name="leftSide">The matrix to multiply.</param>
         /// <param name="rightSide">The constant to multiply the matrix by.</param>

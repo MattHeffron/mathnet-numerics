@@ -68,7 +68,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
             return new DenseSvd(s, u, vt, computeVectors);
         }
 
-        DenseSvd(Vector1<float> s, Matrix1<float> u, Matrix1<float> vt, bool vectorsComputed)
+        DenseSvd(Vector<float> s, Matrix<float> u, Matrix<float> vt, bool vectorsComputed)
             : base(s, u, vt, vectorsComputed)
         {
         }
@@ -78,7 +78,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<float> input, Matrix1<float> result)
+        public override void Solve(Matrix<float> input, Matrix<float> result)
         {
             if (!VectorsComputed)
             {
@@ -123,7 +123,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<float> input, Vector1<float> result)
+        public override void Solve(Vector<float> input, Vector<float> result)
         {
             if (!VectorsComputed)
             {

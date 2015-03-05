@@ -146,7 +146,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
         /// <param name="result">The result vector, <c>x</c></param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public void Solve(Matrix1<Complex> matrix, Vector1<Complex> input, Vector1<Complex> result, Iterator<Complex> iterator, IPreconditioner<Complex> preconditioner)
+        public void Solve(Matrix<Complex> matrix, Vector<Complex> input, Vector<Complex> result, Iterator<Complex> iterator, IPreconditioner<Complex> preconditioner)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {

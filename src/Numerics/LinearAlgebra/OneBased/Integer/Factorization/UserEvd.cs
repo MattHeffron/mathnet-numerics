@@ -65,12 +65,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// <param name="symmetricity">If it is known whether the matrix is symmetric or not the routine can skip checking it itself.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If EVD algorithm failed to converge with matrix <paramref name="matrix"/>.</exception>
-        public static UserEvd Create(Matrix1<int> matrix, Symmetricity symmetricity)
+        public static UserEvd Create(Matrix<int> matrix, Symmetricity symmetricity)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        UserEvd(Matrix1<int> eigenVectors, Vector1<Complex> eigenValues, Matrix1<int> blockDiagonal, bool isSymmetric)
+        UserEvd(Matrix<int> eigenVectors, Vector<Complex> eigenValues, Matrix<int> blockDiagonal, bool isSymmetric)
             : base(eigenVectors, eigenValues, blockDiagonal, isSymmetric)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -81,7 +81,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<int> input, Matrix1<int> result)
+        public override void Solve(Matrix<int> input, Matrix<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -92,7 +92,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<int> input, Vector1<int> result)
+        public override void Solve(Vector<int> input, Vector<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);

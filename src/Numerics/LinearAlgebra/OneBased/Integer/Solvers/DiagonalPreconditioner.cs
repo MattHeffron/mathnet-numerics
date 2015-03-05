@@ -45,13 +45,13 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        public void Initialize(Matrix1<int> matrix)
+        public void Initialize(Matrix<int> matrix)
         {
             // Not possible since this cannot be constructed.
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        public void Approximate(Vector1<int> rhs, Vector1<int> lhs)
+        public void Approximate(Vector<int> rhs, Vector<int> lhs)
         {
             // Not possible since this cannot be constructed.
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

@@ -58,7 +58,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        DenseCholesky(Matrix1<int> factor)
+        DenseCholesky(Matrix<int> factor)
             : base(factor)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -69,7 +69,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<int> input, Matrix1<int> result)
+        public override void Solve(Matrix<int> input, Matrix<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -80,7 +80,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<int> input, Vector1<int> result)
+        public override void Solve(Vector<int> input, Vector<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

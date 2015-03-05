@@ -87,19 +87,19 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// Initializes the preconditioner and loads the internal data structures.
         /// </summary>
         /// <param name="matrix">
-        /// The <see cref="Matrix1"/> upon which this preconditioner is based. Note that the 
+        /// The <see cref="Matrix"/> upon which this preconditioner is based. Note that the 
         /// method takes a general matrix type. However internally the data is stored 
         /// as a sparse matrix. Therefore it is not recommended to pass a dense matrix.
         /// </param>
         /// <exception cref="ArgumentNullException"> If <paramref name="matrix"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
-        public void Initialize(Matrix1<int> matrix)
+        public void Initialize(Matrix<int> matrix)
         {
             // Not possible since this cannot be constructed.
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        public void Approximate(Vector1<int> rhs, Vector1<int> lhs)
+        public void Approximate(Vector<int> rhs, Vector<int> lhs)
         {
             // Not possible since this cannot be constructed.
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -123,7 +123,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// <param name="upperBound">The stopping index.</param>
         /// <param name="sortedIndices">An array that will contain the sorted indices once the algorithm finishes.</param>
         /// <param name="values">The <see cref="Vector"/> that contains the values that need to be sorted.</param>
-        public static void SortDoubleIndicesDecreasing(int lowerBound, int upperBound, int[] sortedIndices, Vector1<int> values)
+        public static void SortDoubleIndicesDecreasing(int lowerBound, int upperBound, int[] sortedIndices, Vector<int> values)
         {
             // Move all the indices that we're interested in to the beginning of the
             // array. Ignore the rest of the indices.
@@ -149,7 +149,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// <param name="upperBound">The stopping index.</param>
         /// <param name="sortedIndices">An array that will contain the sorted indices once the algorithm finishes.</param>
         /// <param name="values">The <see cref="Vector"/> that contains the values that need to be sorted.</param>
-        private static void HeapSortDoublesIndices(int lowerBound, int upperBound, int[] sortedIndices, Vector1<int> values)
+        private static void HeapSortDoublesIndices(int lowerBound, int upperBound, int[] sortedIndices, Vector<int> values)
         {
             var start = ((upperBound - lowerBound + 1) / 2) - 1 + lowerBound;
             var end = (upperBound - lowerBound + 1) - 1 + lowerBound;
@@ -171,7 +171,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// <param name="count">Length of <paramref name="values"/></param>
         /// <param name="sortedIndices">Indicies of <paramref name="values"/></param>
         /// <param name="values">Target <see cref="Vector"/></param>
-        private static void BuildDoubleIndexHeap(int start, int count, int[] sortedIndices, Vector1<int> values)
+        private static void BuildDoubleIndexHeap(int start, int count, int[] sortedIndices, Vector<int> values)
         {
             while (start >= 0)
             {
@@ -187,7 +187,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// <param name="values">Target <see cref="Vector"/></param>
         /// <param name="begin">Root position</param>
         /// <param name="count">Length of <paramref name="values"/></param>
-        private static void SiftDoubleIndices(int[] sortedIndices, Vector1<int> values, int begin, int count)
+        private static void SiftDoubleIndices(int[] sortedIndices, Vector<int> values, int begin, int count)
         {
             var root = begin;
 

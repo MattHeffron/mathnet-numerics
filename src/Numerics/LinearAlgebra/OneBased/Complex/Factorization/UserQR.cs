@@ -61,15 +61,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="matrix">The matrix to factor.</param>
         /// <param name="method">The QR factorization method to use.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
-        public static UserQR Create(Matrix1<Complex> matrix, QRMethod method = QRMethod.Full)
+        public static UserQR Create(Matrix<Complex> matrix, QRMethod method = QRMethod.Full)
         {
             if (matrix.RowCount < matrix.ColumnCount)
             {
                 throw Matrix.DimensionsDontMatch<ArgumentException>(matrix);
             }
 
-            Matrix1<Complex> q;
-            Matrix1<Complex> r;
+            Matrix<Complex> q;
+            Matrix<Complex> r;
 
             //CONSIDER: the dimension check above, guarantees that ColumnCount == the minimum, so .Min here is unnecessary
             ////var minmn = Math.Min(matrix.RowCount, matrix.ColumnCount);
@@ -80,7 +80,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             {
                 r = matrix.Clone();
                 int qDim = matrix.RowCount;
-                q = Matrix1<Complex>.Build.SameAs(matrix, qDim, qDim);
+                q = Matrix<Complex>.Build.SameAs(matrix, qDim, qDim);
 
                 for (var i = 1; i <= qDim; i++)
                 {
@@ -125,7 +125,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             return new UserQR(q, r, method);
         }
 
-        UserQR(Matrix1<Complex> q, Matrix1<Complex> rFull, QRMethod method)
+        UserQR(Matrix<Complex> q, Matrix<Complex> rFull, QRMethod method)
             : base(q, rFull, method)
         {
         }
@@ -137,7 +137,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="row">The first row</param>
         /// <param name="column">Column index</param>
         /// <returns>Generated vector</returns>
-        static Complex[] GenerateColumn(Matrix1<Complex> a, int row, int column)
+        static Complex[] GenerateColumn(Matrix<Complex> a, int row, int column)
         {
             var ru = a.RowCount - row + 1;      // correct this count (ru) since row parameter is one based
             var u = new Complex[ru];
@@ -191,7 +191,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// <param name="columnStart">The first column</param>
         /// <param name="columnEnd">The last column</param>
         /// <param name="availableCores">Number of available CPUs</param>
-        static void ComputeQR(Complex[] u, Matrix1<Complex> a, int rowStart, int rowEnd, int columnStart, int columnEnd, int availableCores)
+        static void ComputeQR(Complex[] u, Matrix<Complex> a, int rowStart, int rowEnd, int columnStart, int columnEnd, int availableCores)
         {
             if (rowEnd <= rowStart || columnEnd <= columnStart)
             {
@@ -232,7 +232,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<Complex> input, Matrix1<Complex> result)
+        public override void Solve(Matrix<Complex> input, Matrix<Complex> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -308,7 +308,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<Complex> input, Vector1<Complex> result)
+        public override void Solve(Vector<Complex> input, Vector<Complex> result)
         {
             // Ax=b where A is an m x n matrix
             // Check that b is a column vector with m entries

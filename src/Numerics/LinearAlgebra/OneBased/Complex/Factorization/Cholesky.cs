@@ -50,7 +50,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
     /// </remarks>
     internal abstract class Cholesky : Cholesky<Complex>
     {
-        protected Cholesky(Matrix1<Complex> factor)
+        protected Cholesky(Matrix<Complex> factor)
             : base(factor)
         {
         }

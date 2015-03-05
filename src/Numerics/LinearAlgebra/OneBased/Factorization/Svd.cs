@@ -52,12 +52,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
     public abstract class Svd<T> : ISolver<T>
         where T : struct, IEquatable<T>, IFormattable
     {
-        readonly Lazy<Matrix1<T>> _lazyW;
+        readonly Lazy<Matrix<T>> _lazyW;
 
         /// <summary>Indicating whether U and VT matrices have been computed during SVD factorization.</summary>
         protected readonly bool VectorsComputed;
 
-        protected Svd(Vector1<T> s, Matrix1<T> u, Matrix1<T> vt, bool vectorsComputed)
+        protected Svd(Vector<T> s, Matrix<T> u, Matrix<T> vt, bool vectorsComputed)
         {
             S = s;
             U = u;
@@ -65,14 +65,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
 
             VectorsComputed = vectorsComputed;
 
-            _lazyW = new Lazy<Matrix1<T>>(ComputeW);
+            _lazyW = new Lazy<Matrix<T>>(ComputeW);
         }
 
-        Matrix1<T> ComputeW()
+        Matrix<T> ComputeW()
         {
             var rows = U.RowCount;
             var columns = VT.ColumnCount;
-            var result = Matrix1<T>.Build.SameAs(U, rows, columns);
+            var result = Matrix<T>.Build.SameAs(U, rows, columns);
             for (var i = 0; i < rows; i++)
             {
                 for (var j = 0; j < columns; j++)
@@ -90,23 +90,23 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// <summary>
         /// Gets the singular values (Σ) of matrix in ascending value.
         /// </summary>
-        public Vector1<T> S { get; private set; }
+        public Vector<T> S { get; private set; }
 
         /// <summary>
         /// Gets the left singular vectors (U - m-by-m unitary matrix)
         /// </summary>
-        public Matrix1<T> U { get; private set; }
+        public Matrix<T> U { get; private set; }
 
         /// <summary>
         /// Gets the transpose right singular vectors (transpose of V, an n-by-n unitary matrix)
         /// </summary>
-        public Matrix1<T> VT { get; private set; }
+        public Matrix<T> VT { get; private set; }
 
         /// <summary>
         /// Returns the singular values as a diagonal <see cref="Matrix{T}"/>.
         /// </summary>
         /// <returns>The singular values as a diagonal <see cref="Matrix{T}"/>.</returns>
-        public Matrix1<T> W
+        public Matrix<T> W
         {
             get { return _lazyW.Value; }
         }
@@ -139,14 +139,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <returns>The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</returns>
-        public virtual Matrix1<T> Solve(Matrix1<T> input)
+        public virtual Matrix<T> Solve(Matrix<T> input)
         {
             if (!VectorsComputed)
             {
                 throw new InvalidOperationException(Resources.SingularVectorsNotComputed);
             }
 
-            var x = Matrix1<T>.Build.SameAs(U, VT.ColumnCount, input.ColumnCount);
+            var x = Matrix<T>.Build.SameAs(U, VT.ColumnCount, input.ColumnCount);
             Solve(input, x);
             return x;
         }
@@ -156,21 +156,21 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public abstract void Solve(Matrix1<T> input, Matrix1<T> result);
+        public abstract void Solve(Matrix<T> input, Matrix<T> result);
 
         /// <summary>
         /// Solves a system of linear equations, <b>Ax = b</b>, with A SVD factorized.
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <returns>The left hand side <see cref="Vector{T}"/>, <b>x</b>.</returns>
-        public virtual Vector1<T> Solve(Vector1<T> input)
+        public virtual Vector<T> Solve(Vector<T> input)
         {
             if (!VectorsComputed)
             {
                 throw new InvalidOperationException(Resources.SingularVectorsNotComputed);
             }
 
-            var x = Vector1<T>.Build.SameAs(U, VT.ColumnCount);
+            var x = Vector<T>.Build.SameAs(U, VT.ColumnCount);
             Solve(input, x);
             return x;
         }
@@ -180,6 +180,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public abstract void Solve(Vector1<T> input, Vector1<T> result);
+        public abstract void Solve(Vector<T> input, Vector<T> result);
     }
 }

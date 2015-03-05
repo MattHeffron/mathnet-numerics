@@ -497,7 +497,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 int[] otherIndices = sparseOther.Indices;
                 TOther[] otherValues = sparseOther.Values;
                 int otherValueCount = sparseOther.ValueCount;
-                TOther otherZero = BuilderInstance<TOther>.Vector1.Zero;
+                TOther otherZero = BuilderInstance<TOther>.Vector.Zero;
 
                 int k = 0;
                 for (int i = 0; i < Data.Length; i++)

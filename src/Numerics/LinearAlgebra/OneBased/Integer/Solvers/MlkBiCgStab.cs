@@ -104,7 +104,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// Gets or sets a series of orthonormal vectors which will be used as basis for the 
         /// Krylov sub-space.
         /// </summary>
-        public IList<Vector1<int>> StartingVectors
+        public IList<Vector<int>> StartingVectors
         {
             [DebuggerStepThrough]
             get
@@ -130,7 +130,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Solvers
         /// <param name="result">The result vector, <c>x</c></param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public void Solve(Matrix1<int> matrix, Vector1<int> input, Vector1<int> result, Iterator<int> iterator, IPreconditioner<int> preconditioner)
+        public void Solve(Matrix<int> matrix, Vector<int> input, Vector<int> result, Iterator<int> iterator, IPreconditioner<int> preconditioner)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

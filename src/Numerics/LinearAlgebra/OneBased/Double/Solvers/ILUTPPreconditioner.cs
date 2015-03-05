@@ -244,7 +244,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// This method is used for debugging purposes only and should normally not be used.
         /// </remarks>
         /// <returns>A new matrix containing the upper triagonal elements.</returns>
-        internal Matrix1<double> UpperTriangle()
+        internal Matrix<double> UpperTriangle()
         {
             return _upper.Clone();
         }
@@ -256,7 +256,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// This method is used for debugging purposes only and should normally not be used.
         /// </remarks>
         /// <returns>A new matrix containing the lower triagonal elements.</returns>
-        internal Matrix1<double> LowerTriangle()
+        internal Matrix<double> LowerTriangle()
         {
             return _lower.Clone();
         }
@@ -290,7 +290,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// </param>
         /// <exception cref="ArgumentNullException"> If <paramref name="matrix"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square matrix.</exception>
-        public void Initialize(Matrix1<double> matrix)
+        public void Initialize(Matrix<double> matrix)
         {
             if (matrix == null)
             {
@@ -519,7 +519,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// Pivot elements in the <paramref name="row"/> according to internal pivot array
         /// </summary>
         /// <param name="row">Row <see cref="Vector"/> to pivot in</param>
-        void PivotRow(Vector1<double> row)
+        void PivotRow(Vector<double> row)
         {
             var knownPivots = new Dictionary<int, int>();
 
@@ -571,7 +571,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// <param name="matrix">Source <see cref="Matrix"/>.</param>
         /// <param name="firstColumn">First column index to swap</param>
         /// <param name="secondColumn">Second column index to swap</param>
-        static void SwapColumns(Matrix1<double> matrix, int firstColumn, int secondColumn)
+        static void SwapColumns(Matrix<double> matrix, int firstColumn, int secondColumn)
         {
             for (var i = 0; i < matrix.RowCount; i++)
             {
@@ -588,7 +588,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// <param name="upperBound">Sort till upper bound</param>
         /// <param name="sortedIndices">Array with sorted vector indicies</param>
         /// <param name="values">Source <see cref="Vector"/></param>
-        static void FindLargestItems(int lowerBound, int upperBound, int[] sortedIndices, Vector1<double> values)
+        static void FindLargestItems(int lowerBound, int upperBound, int[] sortedIndices, Vector<double> values)
         {
             // Copy the indices for the values into the array
             for (var i = 0; i < upperBound + 1 - lowerBound; i++)
@@ -613,7 +613,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// </summary>
         /// <param name="rhs">The right hand side vector.</param>
         /// <param name="lhs">The left hand side vector. Also known as the result vector.</param>
-        public void Approximate(Vector1<double> rhs, Vector1<double> lhs)
+        public void Approximate(Vector<double> rhs, Vector<double> lhs)
         {
             if (_upper == null)
             {
@@ -668,7 +668,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// </summary>
         /// <param name="vector">Source <see cref="Vector"/>.</param>
         /// <param name="result">Result <see cref="Vector"/> after pivoting.</param>
-        void Pivot(Vector1<double> vector, Vector1<double> result)
+        void Pivot(Vector<double> vector, Vector<double> result)
         {
             for (var i = 0; i < _pivots.Length; i++)
             {
@@ -694,7 +694,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// <param name="upperBound">The stopping index.</param>
         /// <param name="sortedIndices">An array that will contain the sorted indices once the algorithm finishes.</param>
         /// <param name="values">The <see cref="Vector"/> that contains the values that need to be sorted.</param>
-        public static void SortDoubleIndicesDecreasing(int lowerBound, int upperBound, int[] sortedIndices, Vector1<double> values)
+        public static void SortDoubleIndicesDecreasing(int lowerBound, int upperBound, int[] sortedIndices, Vector<double> values)
         {
             // Move all the indices that we're interested in to the beginning of the
             // array. Ignore the rest of the indices.
@@ -720,7 +720,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// <param name="upperBound">The stopping index.</param>
         /// <param name="sortedIndices">An array that will contain the sorted indices once the algorithm finishes.</param>
         /// <param name="values">The <see cref="Vector"/> that contains the values that need to be sorted.</param>
-        private static void HeapSortDoublesIndices(int lowerBound, int upperBound, int[] sortedIndices, Vector1<double> values)
+        private static void HeapSortDoublesIndices(int lowerBound, int upperBound, int[] sortedIndices, Vector<double> values)
         {
             var start = ((upperBound - lowerBound + 1) / 2) - 1 + lowerBound;
             var end = (upperBound - lowerBound + 1) - 1 + lowerBound;
@@ -742,7 +742,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// <param name="count">Length of <paramref name="values"/></param>
         /// <param name="sortedIndices">Indicies of <paramref name="values"/></param>
         /// <param name="values">Target <see cref="Vector"/></param>
-        private static void BuildDoubleIndexHeap(int start, int count, int[] sortedIndices, Vector1<double> values)
+        private static void BuildDoubleIndexHeap(int start, int count, int[] sortedIndices, Vector<double> values)
         {
             while (start >= 0)
             {
@@ -758,7 +758,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// <param name="values">Target <see cref="Vector"/></param>
         /// <param name="begin">Root position</param>
         /// <param name="count">Length of <paramref name="values"/></param>
-        private static void SiftDoubleIndices(int[] sortedIndices, Vector1<double> values, int begin, int count)
+        private static void SiftDoubleIndices(int[] sortedIndices, Vector<double> values, int begin, int count)
         {
             var root = begin;
 

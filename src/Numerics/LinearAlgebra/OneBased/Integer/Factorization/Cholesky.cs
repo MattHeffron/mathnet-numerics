@@ -46,7 +46,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
     /// </remarks>
     internal abstract class Cholesky : Cholesky<int>
     {
-        protected Cholesky(Matrix1<int> factor)
+        protected Cholesky(Matrix<int> factor)
             : base(factor)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

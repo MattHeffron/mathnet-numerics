@@ -43,7 +43,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
     /// </remarks>
     internal abstract class GramSchmidt : GramSchmidt<double>
     {
-        protected GramSchmidt(Matrix1<double> q, Matrix1<double> rFull)
+        protected GramSchmidt(Matrix<double> q, Matrix<double> rFull)
             : base(q,rFull)
         {
         }

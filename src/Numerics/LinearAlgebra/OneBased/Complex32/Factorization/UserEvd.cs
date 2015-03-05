@@ -64,7 +64,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// <param name="symmetricity">If it is known whether the matrix is symmetric or not the routine can skip checking it itself.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="ArgumentException">If EVD algorithm failed to converge with matrix <paramref name="matrix"/>.</exception>
-        public static UserEvd Create(Matrix1<Complex32> matrix, Symmetricity symmetricity)
+        public static UserEvd Create(Matrix<Complex32> matrix, Symmetricity symmetricity)
         {
             if (matrix.RowCount != matrix.ColumnCount)
             {
@@ -75,7 +75,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
 
             // Initialize matricies for eigenvalues and eigenvectors
             var eigenVectors = DenseMatrix.CreateIdentity(order);
-            var blockDiagonal = Matrix1<Complex32>.Build.SameAs(matrix, order, order);
+            var blockDiagonal = Matrix<Complex32>.Build.SameAs(matrix, order, order);
 			var eigenValues = new LinearAlgebra.OneBased.Complex.DenseVector(order);
 
             bool isSymmetric;
@@ -123,7 +123,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             return new UserEvd(eigenVectors, eigenValues, blockDiagonal, isSymmetric);
         }
 
-        UserEvd(Matrix1<Complex32> eigenVectors, Vector1<Complex> eigenValues, Matrix1<Complex32> blockDiagonal, bool isSymmetric)
+        UserEvd(Matrix<Complex32> eigenVectors, Vector<Complex> eigenValues, Matrix<Complex32> blockDiagonal, bool isSymmetric)
             : base(eigenVectors, eigenValues, blockDiagonal, isSymmetric)
         {
         }
@@ -263,7 +263,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
         /// Fortran subroutine in EISPACK.</remarks>
         /// <exception cref="NonConvergenceException"></exception>
-        static void SymmetricDiagonalize(Matrix1<Complex32> eigenVectors, float[] d, float[] e, int order)
+        static void SymmetricDiagonalize(Matrix<Complex32> eigenVectors, float[] d, float[] e, int order)
         {
             const int maxiter = 1000;
 
@@ -409,7 +409,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// by Smith, Boyle, Dongarra, Garbow, Ikebe, Klema, Moler, and Wilkinson, Handbook for
         /// Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
         /// Fortran subroutine in EISPACK.</remarks>
-        static void SymmetricUntridiagonalize(Matrix1<Complex32> eigenVectors, Complex32[,] matrixA, Complex32[] tau, int order)
+        static void SymmetricUntridiagonalize(Matrix<Complex32> eigenVectors, Complex32[,] matrixA, Complex32[] tau, int order)
         {
             for (var i = 0; i < order; i++)
             {
@@ -454,7 +454,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// by Martin and Wilkinson, Handbook for Auto. Comp.,
         /// Vol.ii-Linear Algebra, and the corresponding
         /// Fortran subroutines in EISPACK.</remarks>
-        static void NonsymmetricReduceToHessenberg(Matrix1<Complex32> eigenVectors, Complex32[,] matrixH, int order)
+        static void NonsymmetricReduceToHessenberg(Matrix<Complex32> eigenVectors, Complex32[,] matrixH, int order)
         {
             var ort = new Complex32[order];
 
@@ -601,7 +601,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// by Martin and Wilkinson, Handbook for Auto. Comp.,
         /// Vol.ii-Linear Algebra, and the corresponding
         /// Fortran subroutine in EISPACK.</remarks>
-        static void NonsymmetricReduceHessenberToRealSchur(Matrix1<Complex32> eigenVectors, Vector1<Complex> eigenValues, Complex32[,] matrixH, int order)
+        static void NonsymmetricReduceHessenberToRealSchur(Matrix<Complex32> eigenVectors, Vector<Complex> eigenValues, Complex32[,] matrixH, int order)
         {
             // Initialize
             var n = order - 1;
@@ -823,7 +823,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<Complex32> input, Matrix1<Complex32> result)
+        public override void Solve(Matrix<Complex32> input, Matrix<Complex32> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -889,7 +889,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<Complex32> input, Vector1<Complex32> result)
+        public override void Solve(Vector<Complex32> input, Vector<Complex32> result)
         {
             // Ax=b where A is an m x m matrix
             // Check that b is a column vector with m entries

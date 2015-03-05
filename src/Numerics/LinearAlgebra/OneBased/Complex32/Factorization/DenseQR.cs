@@ -68,8 +68,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             }
 
             var tau = new Complex32[Math.Min(matrix.RowCount, matrix.ColumnCount)];
-            Matrix1<Complex32> q;
-            Matrix1<Complex32> r;
+            Matrix<Complex32> q;
+            Matrix<Complex32> r;
 
             if (method == QRMethod.Full)
             {
@@ -87,7 +87,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             return new DenseQR(q, r, method, tau);
         }
 
-        DenseQR(Matrix1<Complex32> q, Matrix1<Complex32> rFull, QRMethod method, Complex32[] tau)
+        DenseQR(Matrix<Complex32> q, Matrix<Complex32> rFull, QRMethod method, Complex32[] tau)
             : base(q, rFull, method)
         {
             Tau = tau;
@@ -98,7 +98,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<Complex32> input, Matrix1<Complex32> result)
+        public override void Solve(Matrix<Complex32> input, Matrix<Complex32> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -138,7 +138,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<Complex32> input, Vector1<Complex32> result)
+        public override void Solve(Vector<Complex32> input, Vector<Complex32> result)
         {
             // Ax=b where A is an m x n matrix
             // Check that b is a column vector with m entries

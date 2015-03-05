@@ -40,7 +40,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
     /// <c>Complex32</c> version of the <see cref="Vector{T}"/> class.
     /// </summary>
     [Serializable]
-    public abstract class Vector : Vector1<Complex32>
+    public abstract class Vector : Vector<Complex32>
     {
         /// <summary>
         /// Initializes a new instance of the Vector class.
@@ -67,7 +67,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Complex32 scalar, Vector1<Complex32> result)
+        protected override void DoAdd(Complex32 scalar, Vector<Complex32> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -84,7 +84,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Vector1<Complex32> other, Vector1<Complex32> result)
+        protected override void DoAdd(Vector<Complex32> other, Vector<Complex32> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -101,7 +101,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Complex32 scalar, Vector1<Complex32> result)
+        protected override void DoSubtract(Complex32 scalar, Vector<Complex32> result)
         {
             DoAdd(-scalar, result);
         }
@@ -115,7 +115,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Vector1<Complex32> other, Vector1<Complex32> result)
+        protected override void DoSubtract(Vector<Complex32> other, Vector<Complex32> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -132,7 +132,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the multiplication.
         /// </param>
-        protected override void DoMultiply(Complex32 scalar, Vector1<Complex32> result)
+        protected override void DoMultiply(Complex32 scalar, Vector<Complex32> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -149,7 +149,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <param name="result">
         /// The vector to store the result of the division.
         /// </param>
-        protected override void DoDivide(Complex32 divisor, Vector1<Complex32> result)
+        protected override void DoDivide(Complex32 divisor, Vector<Complex32> result)
         {
             DoMultiply(1 / divisor, result);
         }
@@ -159,7 +159,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="dividend">The scalar to divide.</param>
         /// <param name="result">The vector to store the result of the division.</param>
-        protected override void DoDivideByThis(Complex32 dividend, Vector1<Complex32> result)
+        protected override void DoDivideByThis(Complex32 dividend, Vector<Complex32> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -172,7 +172,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The vector to pointwise multiply with this one.</param>
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Vector1<Complex32> other, Vector1<Complex32> result)
+        protected override void DoPointwiseMultiply(Vector<Complex32> other, Vector<Complex32> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -185,7 +185,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The vector to pointwise divide this one by.</param>
         /// <param name="result">The vector to store the result of the pointwise division.</param>
-        protected override void DoPointwiseDivide(Vector1<Complex32> divisor, Vector1<Complex32> result)
+        protected override void DoPointwiseDivide(Vector<Complex32> divisor, Vector<Complex32> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -198,7 +198,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="exponent">The exponent to raise this vector values to.</param>
         /// <param name="result">The vector to store the result of the pointwise power.</param>
-        protected override void DoPointwisePower(Complex32 exponent, Vector1<Complex32> result)
+        protected override void DoPointwisePower(Complex32 exponent, Vector<Complex32> result)
         {
             Map(x => x.Power(exponent), result, Zeros.AllowSkip);
         }
@@ -209,7 +209,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The pointwise denominator vector to use.</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override sealed void DoPointwiseModulus(Vector1<Complex32> divisor, Vector1<Complex32> result)
+        protected override sealed void DoPointwiseModulus(Vector<Complex32> divisor, Vector<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -220,7 +220,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The pointwise denominator vector to use.</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override sealed void DoPointwiseRemainder(Vector1<Complex32> divisor, Vector1<Complex32> result)
+        protected override sealed void DoPointwiseRemainder(Vector<Complex32> divisor, Vector<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -229,7 +229,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Pointwise applies the exponential function to each value and stores the result into the result vector.
         /// </summary>
         /// <param name="result">The vector to store the result.</param>
-        protected override void DoPointwiseExp(Vector1<Complex32> result)
+        protected override void DoPointwiseExp(Vector<Complex32> result)
         {
             Map(Complex32.Exp, result, Zeros.Include);
         }
@@ -238,7 +238,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Pointwise applies the natural logarithm function to each value and stores the result into the result vector.
         /// </summary>
         /// <param name="result">The vector to store the result.</param>
-        protected override void DoPointwiseLog(Vector1<Complex32> result)
+        protected override void DoPointwiseLog(Vector<Complex32> result)
         {
             Map(Complex32.Log, result, Zeros.Include);
         }
@@ -248,7 +248,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of a[i]*b[i] for all i.</returns>
-        protected override Complex32 DoDotProduct(Vector1<Complex32> other)
+        protected override Complex32 DoDotProduct(Vector<Complex32> other)
         {
             var dot = Complex32.Zero;
             for (var i = 0; i < Count; i++)
@@ -263,7 +263,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of conj(a[i])*b[i] for all i.</returns>
-        protected override Complex32 DoConjugateDotProduct(Vector1<Complex32> other)
+        protected override Complex32 DoConjugateDotProduct(Vector<Complex32> other)
         {
             var dot = Complex32.Zero;
             for (var i = 0; i < Count; i++)
@@ -279,7 +279,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoModulus(Complex32 divisor, Vector1<Complex32> result)
+        protected override sealed void DoModulus(Complex32 divisor, Vector<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -290,7 +290,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoModulusByThis(Complex32 dividend, Vector1<Complex32> result)
+        protected override sealed void DoModulusByThis(Complex32 dividend, Vector<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -301,7 +301,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoRemainder(Complex32 divisor, Vector1<Complex32> result)
+        protected override sealed void DoRemainder(Complex32 divisor, Vector<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -312,7 +312,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override sealed void DoRemainderByThis(Complex32 dividend, Vector1<Complex32> result)
+        protected override sealed void DoRemainderByThis(Complex32 dividend, Vector<Complex32> result)
         {
             throw new NotSupportedException();
         }
@@ -452,7 +452,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Conjugates vector and save result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoConjugate(Vector1<Complex32> result)
+        protected override void DoConjugate(Vector<Complex32> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -464,7 +464,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// Negates vector and saves result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoNegate(Vector1<Complex32> result)
+        protected override void DoNegate(Vector<Complex32> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -499,7 +499,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
         /// <returns>
         /// This vector normalized to a unit vector with respect to the p-norm.
         /// </returns>
-        public override Vector1<Complex32> Normalize(double p)
+        public override Vector<Complex32> Normalize(double p)
         {
             if (p < 0d)
             {

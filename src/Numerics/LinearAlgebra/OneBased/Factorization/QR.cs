@@ -67,29 +67,29 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
     public abstract class QR<T> : ISolver<T>
         where T : struct, IEquatable<T>, IFormattable
     {
-        readonly Lazy<Matrix1<T>> _lazyR;
+        readonly Lazy<Matrix<T>> _lazyR;
 
-        protected readonly Matrix1<T> FullR;
+        protected readonly Matrix<T> FullR;
         protected readonly QRMethod Method;
 
-        protected QR(Matrix1<T> q, Matrix1<T> rFull, QRMethod method)
+        protected QR(Matrix<T> q, Matrix<T> rFull, QRMethod method)
         {
             Q = q;
             FullR = rFull;
             Method = method;
 
-            _lazyR = new Lazy<Matrix1<T>>(FullR.UpperTriangle);
+            _lazyR = new Lazy<Matrix<T>>(FullR.UpperTriangle);
         }
 
         /// <summary>
         /// Gets or sets orthogonal Q matrix
         /// </summary>
-        public Matrix1<T> Q { get; private set; }
+        public Matrix<T> Q { get; private set; }
 
         /// <summary>
         /// Gets the upper triangular factor R.
         /// </summary>
-        public Matrix1<T> R
+        public Matrix<T> R
         {
             get { return _lazyR.Value; }
         }
@@ -110,9 +110,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <returns>The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</returns>
-        public virtual Matrix1<T> Solve(Matrix1<T> input)
+        public virtual Matrix<T> Solve(Matrix<T> input)
         {
-            var x = Matrix1<T>.Build.SameAs(input, FullR.ColumnCount, input.ColumnCount);
+            var x = Matrix<T>.Build.SameAs(input, FullR.ColumnCount, input.ColumnCount);
             Solve(input, x);
             return x;
         }
@@ -122,16 +122,16 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public abstract void Solve(Matrix1<T> input, Matrix1<T> result);
+        public abstract void Solve(Matrix<T> input, Matrix<T> result);
 
         /// <summary>
         /// Solves a system of linear equations, <b>Ax = b</b>, with A QR factorized.
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <returns>The left hand side <see cref="Vector{T}"/>, <b>x</b>.</returns>
-        public virtual Vector1<T> Solve(Vector1<T> input)
+        public virtual Vector<T> Solve(Vector<T> input)
         {
-            var x = Vector1<T>.Build.SameAs(input, FullR.ColumnCount);
+            var x = Vector<T>.Build.SameAs(input, FullR.ColumnCount);
             Solve(input, x);
             return x;
         }
@@ -141,6 +141,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public abstract void Solve(Vector1<T> input, Vector1<T> result);
+        public abstract void Solve(Vector<T> input, Vector<T> result);
     }
 }

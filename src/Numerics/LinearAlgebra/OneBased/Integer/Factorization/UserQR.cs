@@ -55,12 +55,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// <param name="matrix">The matrix to factor.</param>
         /// <param name="method">The QR factorization method to use.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
-        public static UserQR Create(Matrix1<int> matrix, QRMethod method = QRMethod.Full)
+        public static UserQR Create(Matrix<int> matrix, QRMethod method = QRMethod.Full)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        UserQR(Matrix1<int> q, Matrix1<int> rFull, QRMethod method)
+        UserQR(Matrix<int> q, Matrix<int> rFull, QRMethod method)
             : base(q, rFull, method)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -71,7 +71,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<int> input, Matrix1<int> result)
+        public override void Solve(Matrix<int> input, Matrix<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -82,7 +82,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<int> input, Vector1<int> result)
+        public override void Solve(Vector<int> input, Vector<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);

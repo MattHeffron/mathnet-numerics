@@ -53,7 +53,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
     /// </remarks>
     internal abstract class Svd : Svd<Complex32>
     {
-        protected Svd(Vector1<Complex32> s, Matrix1<Complex32> u, Matrix1<Complex32> vt, bool vectorsComputed)
+        protected Svd(Vector<Complex32> s, Matrix<Complex32> u, Matrix<Complex32> vt, bool vectorsComputed)
             : base(s, u, vt, vectorsComputed)
         {
         }

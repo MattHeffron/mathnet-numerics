@@ -1739,7 +1739,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             var rowOffset = targetRowIndex - sourceRowIndex;
             var columnOffset = targetColumnIndex - sourceColumnIndex;
-            var zero = Matrix1<TU>.Zero;
+            var zero = Matrix<TU>.Zero;
             sourceRowIndex--;       // adjust for 0-based usage
 
             // special case for empty target - much faster

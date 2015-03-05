@@ -80,7 +80,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <see langword="null" />.</exception>
         /// <exception cref="ArgumentException">If <paramref name="matrix"/> is not a square or is not an
         /// instance of SparseCompressedRowMatrixStorage.</exception>
-        public void Initialize(Matrix1<double> matrix)
+        public void Initialize(Matrix<double> matrix)
         {
             var csr = matrix.Storage as SparseCompressedRowMatrixStorage<double>;
             if (csr == null)
@@ -119,7 +119,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// </summary>
         /// <param name="input">The right hand side vector b.</param>
         /// <param name="result">The left hand side vector x.</param>
-        public void Approximate(Vector1<double> input, Vector1<double> result)
+        public void Approximate(Vector<double> input, Vector<double> result)
         {
             if (_alu == null)
             {

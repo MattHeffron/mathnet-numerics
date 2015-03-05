@@ -50,7 +50,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
     /// </remarks>
     internal abstract class GramSchmidt : GramSchmidt<Complex>
     {
-        protected GramSchmidt(Matrix1<Complex> q, Matrix1<Complex> rFull)
+        protected GramSchmidt(Matrix<Complex> q, Matrix<Complex> rFull)
             : base(q, rFull)
         {
         }

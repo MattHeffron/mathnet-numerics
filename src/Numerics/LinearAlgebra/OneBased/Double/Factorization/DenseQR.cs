@@ -66,8 +66,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
             }
 
             var tau = new double[Math.Min(matrix.RowCount, matrix.ColumnCount)];
-            Matrix1<double> q;
-            Matrix1<double> r;
+            Matrix<double> q;
+            Matrix<double> r;
 
             if (method == QRMethod.Full)
             {
@@ -85,7 +85,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
             return new DenseQR(q, r, method, tau);
         }
 
-        DenseQR(Matrix1<double> q, Matrix1<double> rFull, QRMethod method, double[] tau)
+        DenseQR(Matrix<double> q, Matrix<double> rFull, QRMethod method, double[] tau)
             : base(q, rFull, method)
         {
             Tau = tau;
@@ -96,7 +96,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<double> input, Matrix1<double> result)
+        public override void Solve(Matrix<double> input, Matrix<double> result)
         {
             // The solution X should have the same number of columns as B
             if (input.ColumnCount != result.ColumnCount)
@@ -136,7 +136,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<double> input, Vector1<double> result)
+        public override void Solve(Vector<double> input, Vector<double> result)
         {
             // Ax=b where A is an m x n matrix
             // Check that b is a column vector with m entries

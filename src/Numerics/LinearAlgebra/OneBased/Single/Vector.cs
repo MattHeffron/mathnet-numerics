@@ -38,7 +38,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
     /// <c>float</c> version of the <see cref="Vector{T}"/> class.
     /// </summary>
     [Serializable]
-    public abstract class Vector : Vector1<float>
+    public abstract class Vector : Vector<float>
     {
         /// <summary>
         /// Initializes a new instance of the Vector class.
@@ -65,7 +65,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(float scalar, Vector1<float> result)
+        protected override void DoAdd(float scalar, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -82,7 +82,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">
         /// The vector to store the result of the addition.
         /// </param>
-        protected override void DoAdd(Vector1<float> other, Vector1<float> result)
+        protected override void DoAdd(Vector<float> other, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -99,7 +99,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(float scalar, Vector1<float> result)
+        protected override void DoSubtract(float scalar, Vector<float> result)
         {
             DoAdd(-scalar, result);
         }
@@ -113,7 +113,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">
         /// The vector to store the result of the subtraction.
         /// </param>
-        protected override void DoSubtract(Vector1<float> other, Vector1<float> result)
+        protected override void DoSubtract(Vector<float> other, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -130,7 +130,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">
         /// The vector to store the result of the multiplication.
         /// </param>
-        protected override void DoMultiply(float scalar, Vector1<float> result)
+        protected override void DoMultiply(float scalar, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -147,7 +147,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <param name="result">
         /// The vector to store the result of the division.
         /// </param>
-        protected override void DoDivide(float divisor, Vector1<float> result)
+        protected override void DoDivide(float divisor, Vector<float> result)
         {
             DoMultiply(1 / divisor, result);
         }
@@ -157,7 +157,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="dividend">The scalar to divide.</param>
         /// <param name="result">The vector to store the result of the division.</param>
-        protected override void DoDivideByThis(float dividend, Vector1<float> result)
+        protected override void DoDivideByThis(float dividend, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -170,7 +170,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The vector to pointwise multiply with this one.</param>
         /// <param name="result">The vector to store the result of the pointwise multiplication.</param>
-        protected override void DoPointwiseMultiply(Vector1<float> other, Vector1<float> result)
+        protected override void DoPointwiseMultiply(Vector<float> other, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -183,7 +183,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The vector to pointwise divide this one by.</param>
         /// <param name="result">The vector to store the result of the pointwise division.</param>
-        protected override void DoPointwiseDivide(Vector1<float> divisor, Vector1<float> result)
+        protected override void DoPointwiseDivide(Vector<float> divisor, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -196,7 +196,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="exponent">The exponent to raise this vector values to.</param>
         /// <param name="result">The vector to store the result of the pointwise power.</param>
-        protected override void DoPointwisePower(float exponent, Vector1<float> result)
+        protected override void DoPointwisePower(float exponent, Vector<float> result)
         {
             Map(x => (float)Math.Pow(x, exponent), result, Zeros.AllowSkip);
         }
@@ -207,7 +207,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The pointwise denominator vector to use.</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override void DoPointwiseModulus(Vector1<float> divisor, Vector1<float> result)
+        protected override void DoPointwiseModulus(Vector<float> divisor, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -221,7 +221,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The pointwise denominator vector to use.</param>
         /// <param name="result">The result of the modulus.</param>
-        protected override void DoPointwiseRemainder(Vector1<float> divisor, Vector1<float> result)
+        protected override void DoPointwiseRemainder(Vector<float> divisor, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -233,7 +233,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Pointwise applies the exponential function to each value and stores the result into the result vector.
         /// </summary>
         /// <param name="result">The vector to store the result.</param>
-        protected override void DoPointwiseExp(Vector1<float> result)
+        protected override void DoPointwiseExp(Vector<float> result)
         {
             Map(x => (float)Math.Exp(x), result, Zeros.Include);
         }
@@ -242,7 +242,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Pointwise applies the natural logarithm function to each value and stores the result into the result vector.
         /// </summary>
         /// <param name="result">The vector to store the result.</param>
-        protected override void DoPointwiseLog(Vector1<float> result)
+        protected override void DoPointwiseLog(Vector<float> result)
         {
             Map(x => (float)Math.Log(x), result, Zeros.Include);
         }
@@ -252,7 +252,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of a[i]*b[i] for all i.</returns>
-        protected override float DoDotProduct(Vector1<float> other)
+        protected override float DoDotProduct(Vector<float> other)
         {
             var dot = 0.0f;
             for (var i = 0; i < Count; i++)
@@ -267,7 +267,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="other">The other vector.</param>
         /// <returns>The sum of conj(a[i])*b[i] for all i.</returns>
-        protected override sealed float DoConjugateDotProduct(Vector1<float> other)
+        protected override sealed float DoConjugateDotProduct(Vector<float> other)
         {
             return DoDotProduct(other);
         }
@@ -278,7 +278,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoModulus(float divisor, Vector1<float> result)
+        protected override void DoModulus(float divisor, Vector<float> result)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -292,7 +292,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoModulusByThis(float dividend, Vector1<float> result)
+        protected override void DoModulusByThis(float dividend, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -306,7 +306,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="divisor">The scalar denominator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoRemainder(float divisor, Vector1<float> result)
+        protected override void DoRemainder(float divisor, Vector<float> result)
         {
             for (int i = 0; i < Count; i++)
             {
@@ -320,7 +320,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// </summary>
         /// <param name="dividend">The scalar numerator to use.</param>
         /// <param name="result">A vector to store the results in.</param>
-        protected override void DoRemainderByThis(float dividend, Vector1<float> result)
+        protected override void DoRemainderByThis(float dividend, Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -463,7 +463,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Conjugates vector and save result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoConjugate(Vector1<float> result)
+        protected override void DoConjugate(Vector<float> result)
         {
             if (ReferenceEquals(this, result))
             {
@@ -477,7 +477,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// Negates vector and saves result to <paramref name="result"/>
         /// </summary>
         /// <param name="result">Target vector</param>
-        protected override void DoNegate(Vector1<float> result)
+        protected override void DoNegate(Vector<float> result)
         {
             for (var index = 0; index < Count; index++)
             {
@@ -536,7 +536,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
         /// <returns>
         /// This vector normalized to a unit vector with respect to the p-norm.
         /// </returns>
-        public override Vector1<float> Normalize(double p)
+        public override Vector<float> Normalize(double p)
         {
             if (p < 0d)
             {

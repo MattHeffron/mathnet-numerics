@@ -35,9 +35,9 @@ using MathNet.Numerics.LinearAlgebra.OneBased.Solvers;
 namespace MathNet.Numerics.LinearAlgebra.OneBased
 {
     /// <summary>
-    /// Defines the base class for <c>Matrix1</c> classes.
+    /// Defines the base class for <c>Matrix</c> classes.
     /// </summary>
-    public abstract partial class Matrix1<T>
+    public abstract partial class Matrix<T>
     {
 
         // Factorizations
@@ -89,7 +89,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public void Solve(Vector1<T> input, Vector1<T> result)
+        public void Solve(Vector<T> input, Vector<T> result)
         {
             if (ColumnCount == RowCount)
             {
@@ -105,7 +105,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public void Solve(Matrix1<T> input, Matrix1<T> result)
+        public void Solve(Matrix<T> input, Matrix<T> result)
         {
             if (ColumnCount == RowCount)
             {
@@ -125,7 +125,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <returns>The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</returns>
-        public Matrix1<T> Solve(Matrix1<T> input)
+        public Matrix<T> Solve(Matrix<T> input)
         {
             var x = Build.SameAs(this, ColumnCount, input.ColumnCount);
             Solve(input, x);
@@ -138,9 +138,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <returns>The left hand side <see cref="Vector{T}"/>, <b>x</b>.</returns>
-        public Vector1<T> Solve(Vector1<T> input)
+        public Vector<T> Solve(Vector<T> input)
         {
-            var x = Vector1<T>.Build.SameAs(this, ColumnCount);
+            var x = Vector<T>.Build.SameAs(this, ColumnCount);
             Solve(input, x);
             return x;
         }
@@ -157,7 +157,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="solver">The iterative solver to use.</param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public IterationStatus TrySolveIterative(Vector1<T> input, Vector1<T> result, IIterativeSolver<T> solver, Iterator<T> iterator = null, IPreconditioner<T> preconditioner = null)
+        public IterationStatus TrySolveIterative(Vector<T> input, Vector<T> result, IIterativeSolver<T> solver, Iterator<T> iterator = null, IPreconditioner<T> preconditioner = null)
         {
             if (iterator == null)
             {
@@ -182,7 +182,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="solver">The iterative solver to use.</param>
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public IterationStatus TrySolveIterative(Matrix1<T> input, Matrix1<T> result, IIterativeSolver<T> solver, Iterator<T> iterator = null, IPreconditioner<T> preconditioner = null)
+        public IterationStatus TrySolveIterative(Matrix<T> input, Matrix<T> result, IIterativeSolver<T> solver, Iterator<T> iterator = null, IPreconditioner<T> preconditioner = null)
         {
             if (RowCount != input.RowCount || input.RowCount != result.RowCount || input.ColumnCount != result.ColumnCount)
             {
@@ -201,7 +201,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
             for (var column = 1; column <= input.ColumnCount; column++)
             {
-                var solution = Vector1<T>.Build.Dense(RowCount);
+                var solution = Vector<T>.Build.Dense(RowCount);
 
                 solver.Solve(this, input.Column(column), solution, iterator, preconditioner);
 
@@ -223,7 +223,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="solver">The iterative solver to use.</param>
         /// <param name="stopCriteria">Criteria to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public IterationStatus TrySolveIterative(Vector1<T> input, Vector1<T> result, IIterativeSolver<T> solver, IPreconditioner<T> preconditioner, params IIterationStopCriterion<T>[] stopCriteria)
+        public IterationStatus TrySolveIterative(Vector<T> input, Vector<T> result, IIterativeSolver<T> solver, IPreconditioner<T> preconditioner, params IIterationStopCriterion<T>[] stopCriteria)
         {
             var iterator = new Iterator<T>(stopCriteria.Length == 0 ? Build.IterativeSolverStopCriteria() : stopCriteria);
             return TrySolveIterative(input, result, solver, iterator, preconditioner);
@@ -237,7 +237,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="solver">The iterative solver to use.</param>
         /// <param name="stopCriteria">Criteria to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
-        public IterationStatus TrySolveIterative(Matrix1<T> input, Matrix1<T> result, IIterativeSolver<T> solver, IPreconditioner<T> preconditioner, params IIterationStopCriterion<T>[] stopCriteria)
+        public IterationStatus TrySolveIterative(Matrix<T> input, Matrix<T> result, IIterativeSolver<T> solver, IPreconditioner<T> preconditioner, params IIterationStopCriterion<T>[] stopCriteria)
         {
             var iterator = new Iterator<T>(stopCriteria.Length == 0 ? Build.IterativeSolverStopCriteria() : stopCriteria);
             return TrySolveIterative(input, result, solver, iterator, preconditioner);
@@ -250,7 +250,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result vector <c>x</c>.</param>
         /// <param name="solver">The iterative solver to use.</param>
         /// <param name="stopCriteria">Criteria to control when to stop iterating.</param>
-        public IterationStatus TrySolveIterative(Vector1<T> input, Vector1<T> result, IIterativeSolver<T> solver, params IIterationStopCriterion<T>[] stopCriteria)
+        public IterationStatus TrySolveIterative(Vector<T> input, Vector<T> result, IIterativeSolver<T> solver, params IIterationStopCriterion<T>[] stopCriteria)
         {
             var iterator = new Iterator<T>(stopCriteria.Length == 0 ? Build.IterativeSolverStopCriteria() : stopCriteria);
             return TrySolveIterative(input, result, solver, iterator);
@@ -263,7 +263,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="result">The result matrix <c>X</c></param>
         /// <param name="solver">The iterative solver to use.</param>
         /// <param name="stopCriteria">Criteria to control when to stop iterating.</param>
-        public IterationStatus TrySolveIterative(Matrix1<T> input, Matrix1<T> result, IIterativeSolver<T> solver, params IIterationStopCriterion<T>[] stopCriteria)
+        public IterationStatus TrySolveIterative(Matrix<T> input, Matrix<T> result, IIterativeSolver<T> solver, params IIterationStopCriterion<T>[] stopCriteria)
         {
             var iterator = new Iterator<T>(stopCriteria.Length == 0 ? Build.IterativeSolverStopCriteria() : stopCriteria);
             return TrySolveIterative(input, result, solver, iterator);
@@ -281,9 +281,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
         /// <returns>The result vector <c>x</c>.</returns>
-        public Vector1<T> SolveIterative(Vector1<T> input, IIterativeSolver<T> solver, Iterator<T> iterator = null, IPreconditioner<T> preconditioner = null)
+        public Vector<T> SolveIterative(Vector<T> input, IIterativeSolver<T> solver, Iterator<T> iterator = null, IPreconditioner<T> preconditioner = null)
         {
-            var result = Vector1<T>.Build.Dense(RowCount);
+            var result = Vector<T>.Build.Dense(RowCount);
             TrySolveIterative(input, result, solver, iterator, preconditioner);
             return result;
         }
@@ -296,7 +296,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="iterator">The iterator to use to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
         /// <returns>The result matrix <c>X</c>.</returns>
-        public Matrix1<T> SolveIterative(Matrix1<T> input, IIterativeSolver<T> solver, Iterator<T> iterator = null, IPreconditioner<T> preconditioner = null)
+        public Matrix<T> SolveIterative(Matrix<T> input, IIterativeSolver<T> solver, Iterator<T> iterator = null, IPreconditioner<T> preconditioner = null)
         {
             var result = Build.Dense(input.RowCount, input.ColumnCount);
             TrySolveIterative(input, result, solver, iterator, preconditioner);
@@ -311,9 +311,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="stopCriteria">Criteria to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
         /// <returns>The result vector <c>x</c>.</returns>
-        public Vector1<T> SolveIterative(Vector1<T> input, IIterativeSolver<T> solver, IPreconditioner<T> preconditioner, params IIterationStopCriterion<T>[] stopCriteria)
+        public Vector<T> SolveIterative(Vector<T> input, IIterativeSolver<T> solver, IPreconditioner<T> preconditioner, params IIterationStopCriterion<T>[] stopCriteria)
         {
-            var result = Vector1<T>.Build.Dense(RowCount);
+            var result = Vector<T>.Build.Dense(RowCount);
             TrySolveIterative(input, result, solver, preconditioner, stopCriteria);
             return result;
         }
@@ -326,7 +326,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="stopCriteria">Criteria to control when to stop iterating.</param>
         /// <param name="preconditioner">The preconditioner to use for approximations.</param>
         /// <returns>The result matrix <c>X</c>.</returns>
-        public Matrix1<T> SolveIterative(Matrix1<T> input, IIterativeSolver<T> solver, IPreconditioner<T> preconditioner, params IIterationStopCriterion<T>[] stopCriteria)
+        public Matrix<T> SolveIterative(Matrix<T> input, IIterativeSolver<T> solver, IPreconditioner<T> preconditioner, params IIterationStopCriterion<T>[] stopCriteria)
         {
             var result = Build.Dense(input.RowCount, input.ColumnCount);
             TrySolveIterative(input, result, solver, preconditioner, stopCriteria);
@@ -340,9 +340,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="solver">The iterative solver to use.</param>
         /// <param name="stopCriteria">Criteria to control when to stop iterating.</param>
         /// <returns>The result vector <c>x</c>.</returns>
-        public Vector1<T> SolveIterative(Vector1<T> input, IIterativeSolver<T> solver, params IIterationStopCriterion<T>[] stopCriteria)
+        public Vector<T> SolveIterative(Vector<T> input, IIterativeSolver<T> solver, params IIterationStopCriterion<T>[] stopCriteria)
         {
-            var result = Vector1<T>.Build.Dense(RowCount);
+            var result = Vector<T>.Build.Dense(RowCount);
             TrySolveIterative(input, result, solver, stopCriteria);
             return result;
         }
@@ -354,7 +354,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <param name="solver">The iterative solver to use.</param>
         /// <param name="stopCriteria">Criteria to control when to stop iterating.</param>
         /// <returns>The result matrix <c>X</c>.</returns>
-        public Matrix1<T> SolveIterative(Matrix1<T> input, IIterativeSolver<T> solver, params IIterationStopCriterion<T>[] stopCriteria)
+        public Matrix<T> SolveIterative(Matrix<T> input, IIterativeSolver<T> solver, params IIterationStopCriterion<T>[] stopCriteria)
         {
             var result = Build.Dense(input.RowCount, input.ColumnCount);
             TrySolveIterative(input, result, solver, stopCriteria);

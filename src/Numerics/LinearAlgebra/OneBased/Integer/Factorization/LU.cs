@@ -47,7 +47,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
     /// </remarks>
     internal abstract class LU : LU<int>
     {
-        protected LU(Matrix1<int> factors, int[] pivots)
+        protected LU(Matrix<int> factors, int[] pivots)
             : base(factors, pivots)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);

@@ -58,12 +58,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// <param name="computeVectors">Compute the singular U and VT vectors or not.</param>
         /// <exception cref="ArgumentNullException">If <paramref name="matrix"/> is <c>null</c>.</exception>
         /// <exception cref="NonConvergenceException"></exception>
-        public static UserSvd Create(Matrix1<int> matrix, bool computeVectors)
+        public static UserSvd Create(Matrix<int> matrix, bool computeVectors)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
         }
 
-        UserSvd(Vector1<int> s, Matrix1<int> u, Matrix1<int> vt, bool vectorsComputed)
+        UserSvd(Vector<int> s, Matrix<int> u, Matrix<int> vt, bool vectorsComputed)
             : base(s, u, vt, vectorsComputed)
         {
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -74,7 +74,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side <see cref="Matrix{T}"/>, <b>B</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>X</b>.</param>
-        public override void Solve(Matrix1<int> input, Matrix1<int> result)
+        public override void Solve(Matrix<int> input, Matrix<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerMatrices);
@@ -85,7 +85,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer.Factorization
         /// </summary>
         /// <param name="input">The right hand side vector, <b>b</b>.</param>
         /// <param name="result">The left hand side <see cref="Matrix{T}"/>, <b>x</b>.</param>
-        public override void Solve(Vector1<int> input, Vector1<int> result)
+        public override void Solve(Vector<int> input, Vector<int> result)
         {
             // Shouldn't be possible as this cannot be constructed
             throw new NotSupportedException(Resources.NotSupportedForIntegerVectors);
