@@ -46,15 +46,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         // Matrix stored in Modified Sparse Row (MSR) format containing the L and U
         // factors together.
 
-        // The diagonal (stored in alu(0:n-1) ) is inverted. Each i-th row of the matrix
+        // The diagonal (stored in alu(1:n) ignore position 0) is inverted. Each i-th row of the matrix
         // contains the i-th row of L (excluding the diagonal entry = 1) followed by
         // the i-th row of U.
         private double[] _alu;
 
-        // The row pointers (stored in jlu(0:n) ) and column indices to off-diagonal elements.
+        // The row pointers (stored in jlu(1:n+1) ignore position 0 ) and column indices to off-diagonal elements.
         private int[] _jlu;
 
-        // Pointer to the diagonal elements in MSR storage (for faster LU solving).
+        // Pointer to the diagonal elements in MSR storage (for faster LU solving) (ignore position 0).
         private int[] _diag;
 
         /// <param name="modified">Use modified or standard ILU(0)</param>
@@ -99,13 +99,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
             double[] a = csr.Values;
             int[] ja = csr.ColumnIndices;
             int[] ia = csr.RowPointers;
+            int vc = csr.ValueCount;
 
-            _alu = new double[ia[n] + 1];
-            _jlu = new int[ia[n] + 1];
-            _diag = new int[n];
+            _alu = new double[vc + 2];
+            _jlu = new int[vc + 2];
+            _diag = new int[n + 1];
 
             int code = Compute(n, a, ja, ia, _alu, _jlu, _diag, UseModified);
-            if (code > -1)
+            if (code > 0)
             {
                 throw new NumericalBreakdownException("Zero pivot encountered on row " + code + " during ILU process");
             }
@@ -125,31 +126,35 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
                 throw new ArgumentException(Resources.ArgumentMatrixDoesNotExist);
             }
 
-            if ((result.Count != input.Count) || (result.Count != _diag.Length))
+            int n = _diag.Length - 1;       // bacause _diag has "wasted" position 0
+
+            if ((result.Count != input.Count) || (result.Count != n))
             {
                 throw new ArgumentException(Resources.ArgumentVectorsSameLength);
             }
 
-            int n = _diag.Length;
-
             // Forward solve.
-            for (int i = 0; i < n; i++)
+            for (int i = 1; i <= n; i++)
             {
-                result[i] = input[i];
+                var inpi = input.At(i);
                 for (int k = _jlu[i]; k < _diag[i]; k++)
                 {
-                    result[i] = result[i] - _alu[k] * result[_jlu[k]];
+                    int jluk = _jlu[k];
+                    inpi -= _alu[k] * jluk == i ? inpi : result.At(jluk);
                 }
+                result.At(i, inpi);
             }
 
             // Backward solve.
-            for (int i = n - 1; i >= 0; i--)
+            for (int i = n; i > 0; i--)
             {
-                for (int k = _diag[i]; k < _jlu[i + 1]; k++)
+                var inpi = input.At(i);
+                for (int k = _diag[i]; k <= _jlu[i + 1]; k++)
                 {
-                    result[i] = result[i] - _alu[k] * result[_jlu[k]];
+                    int jluk = _jlu[k];
+                    inpi -= _alu[k] * jluk == i ? inpi : result.At(jluk);
                 }
-                result[i] = _alu[i] * result[i];
+                result.At(i, _alu[i] * inpi);
             }
         }
 
@@ -167,21 +172,23 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
         /// <returns>Returns 0 on success or k > 0 if a zero pivot was encountered at step k.</returns>
         private int Compute(int n, double[] a, int[] ja, int[] ia, double[] alu, int[] jlu, int[] ju, bool modified)
         {
-            var iw = new int[n];
+            var iw = new int[n + 1];
             int i;
 
             // Set initial pointer value.
-            int p = n + 1;
-            jlu[0] = p;
+            int p = n + 2;
+            jlu[1] = p;
 
+            //CONSIDER: since 0 is not a valid index, and .NET guarantees the new iw is already full of 0; this loop is redundant.
+            // (A really good optimizer will know this and eliminate this loop...)
             // Initialize work vector.
             for (i = 0; i < n; i++)
             {
-                iw[i] = -1;
+                iw[i] = 0;
             }
 
             // The main loop.
-            for (i = 0; i < n; i++)
+            for (i = 1; i <= n; i++)
             {
                 int pold = p;
 
@@ -222,7 +229,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
                     for (k = ju[jrow]; k < jlu[jrow + 1]; k++)
                     {
                         int jw = iw[jlu[k]];
-                        if (jw != -1)
+                        if (jw != 0)
                         {
                             alu[jw] = alu[jw] - tl * alu[k];
                         }
@@ -241,7 +248,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
 
                 if (alu[i] == 0.0)
                 {
-                    return i;
+                    return i - 1;       // convert from row index [1..n] to step counter
                 }
 
                 // Invert and store diagonal element.
@@ -251,7 +258,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double.Solvers
                 iw[i] = -1;
                 for (k = pold; k < p; k++)
                 {
-                    iw[jlu[k]] = -1;
+                    iw[jlu[k]] = 0;
                 }
             }
 

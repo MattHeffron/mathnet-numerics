@@ -43,7 +43,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
     /// </summary>
     /// <remarks>The sparse vector is not thread safe.</remarks>
     [Serializable]
-    [DebuggerDisplay("SparseVector {Count}-Double {NonZerosCount}-NonZero")]
+    [DebuggerDisplay("SparseVector[1] {Count}-Double {NonZerosCount}-NonZero")]
     public class SparseVector : Vector
     {
         readonly SparseVectorStorage<double> _storage;
@@ -72,9 +72,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// <summary>
         /// Create a new sparse vector with the given length.
         /// All cells of the vector will be initialized to zero.
-        /// Zero-length vectors are not supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If length is less than one.</exception>
+        /// <exception cref="ArgumentException">If length is less than zero.</exception>
         public SparseVector(int length)
             : this(new SparseVectorStorage<double>(length))
         {
@@ -157,7 +156,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 var vnonZeroIndices = new int[Count];
                 for (int index = 0; index < Count; index++)
                 {
-                    vnonZeroIndices[index] = index;
+                    vnonZeroIndices[index] = index + 1;     // these are 1-based indices
                     vnonZeroValues[index] = scalar;
                 }
 
@@ -166,7 +165,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 var values = _storage.Values;
                 for (int j = 0; j < _storage.ValueCount; j++)
                 {
-                    vnonZeroValues[indices[j]] = values[j] + scalar;
+                    vnonZeroValues[indices[j] - 1] = values[j] + scalar;
+                    // TODO: result can be zero, remove?
                 }
 
                 // assign this vectors array to the new arrays.
@@ -176,7 +176,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
             }
             else
             {
-                for (var index = 0; index < Count; index++)
+                for (var index = 1; index <= Count; index++)
                 {
                     result.At(index, At(index) + scalar);
                 }
@@ -248,6 +248,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                         if (next != last)
                         {
                             last = next;
+                            ++next;     // adjust for one based indexing (.At)
                             result.At(next, _storage.Values[i] + otherSparse.At(next));
                         }
                         i++;
@@ -258,6 +259,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                         if (next != last)
                         {
                             last = next;
+                            ++next;     // adjust for one based indexing (.At)
                             result.At(next, At(next) + otherStorage.Values[j]);
                         }
                         j++;
@@ -351,6 +353,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                         if (next != last)
                         {
                             last = next;
+                            ++next;     // adjust for one based indexing (.At)
                             result.At(next, _storage.Values[i] - otherSparse.At(next));
                         }
                         i++;
@@ -361,6 +364,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                         if (next != last)
                         {
                             last = next;
+                            ++next;     // adjust for one based indexing (.At)
                             result.At(next, At(next) - otherStorage.Values[j]);
                         }
                         j++;
@@ -678,6 +682,33 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
         /// Returns the index of the absolute maximum element.
         /// </summary>
         /// <returns>The index of absolute maximum element.</returns>
+        public override int AbsoluteMaximumIndex()
+        {
+            if (_storage.ValueCount == 0)
+            {
+                // No non-zero elements. Return 0
+                return 0;
+            }
+
+            var index = 0;
+            var max = Math.Abs(_storage.Values[index]);
+            for (var i = 1; i < _storage.ValueCount; i++)
+            {
+                var test = Math.Abs(_storage.Values[i]);
+                if (test > max)
+                {
+                    index = i;
+                    max = test;
+                }
+            }
+
+            return _storage.Indices[index];
+        }
+
+        /// <summary>
+        /// Returns the index of the maximum element.
+        /// </summary>
+        /// <returns>The index of maximum element.</returns>
         public override int MaximumIndex()
         {
             if (_storage.ValueCount == 0)
@@ -953,7 +984,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
 
         public override string ToTypeString()
         {
-            return string.Format("SparseVector {0}-Double {1:P2} Filled", Count, NonZerosCount / (double)Count);
+            return string.Format("SparseVector[1] {0}-Double {1:P2} Filled", Count, NonZerosCount / (double)Count);
         }
     }
 }

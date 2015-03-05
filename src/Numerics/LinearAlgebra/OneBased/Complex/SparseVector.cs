@@ -161,7 +161,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 var vnonZeroIndices = new int[Count];
                 for (int index = 0; index < Count; index++)
                 {
-                    vnonZeroIndices[index] = index;
+                    vnonZeroIndices[index] = index + 1;     // these are 1-based indices
                     vnonZeroValues[index] = scalar;
                 }
 
@@ -170,7 +170,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 var values = _storage.Values;
                 for (int j = 0; j < _storage.ValueCount; j++)
                 {
-                    vnonZeroValues[indices[j]] = values[j] + scalar;
+                    vnonZeroValues[indices[j] - 1] = values[j] + scalar;
                     // TODO: result can be zero, remove?
                 }
                 //assign this vectors arrary to the new arrays.
@@ -389,7 +389,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 result.Clear();
                 for (var index = 0; index < _storage.ValueCount; index++)
                 {
-                    result.At(_storage.Indices[index] + 1, -_storage.Values[index]);
+                    result.At(_storage.Indices[index], -_storage.Values[index]);
                 }
                 return;
             }
@@ -431,7 +431,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             result.Clear();
             for (var index = 0; index < _storage.ValueCount; index++)
             {
-                result.At(_storage.Indices[index] + 1, _storage.Values[index].Conjugate());
+                result.At(_storage.Indices[index], _storage.Values[index].Conjugate());
             }
         }
 
@@ -452,7 +452,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 result.Clear();
                 for (var index = 0; index < _storage.ValueCount; index++)
                 {
-                    result.At(_storage.Indices[index] + 1, scalar * _storage.Values[index]);
+                    result.At(_storage.Indices[index], scalar * _storage.Values[index]);
                 }
             }
             else
@@ -489,7 +489,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 for (var i = 0; i < _storage.ValueCount; i++)
                 {
-                    result += _storage.Values[i] * other.At(_storage.Indices[i] + 1);
+                    result += _storage.Values[i] * other.At(_storage.Indices[i]);
                 }
             }
             return result;
@@ -514,7 +514,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 for (var i = 0; i < _storage.ValueCount; i++)
                 {
-                    result += _storage.Values[i].Conjugate() * other.At(_storage.Indices[i] + 1);
+                    result += _storage.Values[i].Conjugate() * other.At(_storage.Indices[i]);
                 }
             }
             return result;
@@ -682,7 +682,34 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
                 }
             }
 
-            return _storage.Indices[index] + 1;
+            return _storage.Indices[index];
+        }
+
+        /// <summary>
+        /// Returns the index of the absolute maximum element.
+        /// </summary>
+        /// <returns>The index of absolute maximum element.</returns>
+        public override int AbsoluteMaximumIndex()
+        {
+            if (_storage.ValueCount == 0)
+            {
+                // No non-zero elements. Return 0
+                return 0;
+            }
+
+            var index = 0;
+            var max = _storage.Values[index].Magnitude;
+            for (var i = 1; i < _storage.ValueCount; i++)
+            {
+                var test = _storage.Values[i].Magnitude;
+                if (test > max)
+                {
+                    index = i;
+                    max = test;
+                }
+            }
+
+            return _storage.Indices[index];
         }
 
         /// <summary>
@@ -766,7 +793,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 for (var i = 0; i < _storage.ValueCount; i++)
                 {
-                    var index = _storage.Indices[i] + 1;
+                    var index = _storage.Indices[i];
                     result.At(index, other.At(index) * _storage.Values[i]);
                 }
             }
@@ -790,7 +817,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             {
                 for (var i = 0; i < _storage.ValueCount; i++)
                 {
-                    var index = _storage.Indices[i] + 1;
+                    var index = _storage.Indices[i];
                     result.At(index, _storage.Values[i] / divisor.At(index));
                 }
             }

@@ -42,7 +42,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
     /// <a href="http://en.wikipedia.org/wiki/Sparse_matrix#Compressed_sparse_row_.28CSR_or_CRS.29">Wikipedia - CSR</a>.
     /// </summary>
     [Serializable]
-    [DebuggerDisplay("SparseMatrix {RowCount}x{ColumnCount}-Integer {NonZerosCount}-NonZero")]
+    [DebuggerDisplay("SparseMatrix[1] {RowCount}x{ColumnCount}-Integer {NonZerosCount}-NonZero")]
     public class SparseMatrix : Matrix
     {
         readonly SparseCompressedRowMatrixStorage<int> _storage;
@@ -71,9 +71,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <summary>
         /// Create a new square sparse matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the order is less than one.</exception>
+        /// <exception cref="ArgumentException">If the order is less than zero.</exception>
         public SparseMatrix(int order)
             : this(order, order)
         {
@@ -82,9 +81,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <summary>
         /// Create a new sparse matrix with the given number of rows and columns.
         /// All cells of the matrix will be initialized to zero.
-        /// Zero-length matrices are not supported.
         /// </summary>
-        /// <exception cref="ArgumentException">If the row or column count is less than one.</exception>
+        /// <exception cref="ArgumentException">If the row or column count is less than zero.</exception>
         public SparseMatrix(int rows, int columns)
             : this(new SparseCompressedRowMatrixStorage<int>(rows, columns))
         {
@@ -421,14 +419,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var row = 0; row < result.RowCount; row++)
+            for (int row = 0, row1 = 1; row < result.RowCount; row++, row1++)
             {
-                var endIndex = rowPointers[row + 1];
+                var endIndex = rowPointers[row1];
                 for (var j = rowPointers[row]; j < endIndex; j++)
                 {
                     if (row >= columnIndices[j])
                     {
-                        result.At(row, columnIndices[j], values[j]);
+                        result.At(row1, columnIndices[j], values[j]);
                     }
                 }
             }
@@ -486,14 +484,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var row = 0; row < result.RowCount; row++)
+            for (int row = 0, row1 = 1; row < result.RowCount; row++, row1++)
             {
-                var endIndex = rowPointers[row + 1];
+                var endIndex = rowPointers[row1];
                 for (var j = rowPointers[row]; j < endIndex; j++)
                 {
                     if (row <= columnIndices[j])
                     {
-                        result.At(row, columnIndices[j], values[j]);
+                        result.At(row1, columnIndices[j], values[j]);
                     }
                 }
             }
@@ -552,14 +550,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var row = 0; row < result.RowCount; row++)
+            for (int row = 0, row1 = 1; row < result.RowCount; row++, row1++)
             {
-                var endIndex = rowPointers[row + 1];
+                var endIndex = rowPointers[row1];
                 for (var j = rowPointers[row]; j < endIndex; j++)
                 {
                     if (row > columnIndices[j])
                     {
-                        result.At(row, columnIndices[j], values[j]);
+                        result.At(row1, columnIndices[j], values[j]);
                     }
                 }
             }
@@ -618,14 +616,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var row = 0; row < result.RowCount; row++)
+            for (int row = 0, row1 = 1; row < result.RowCount; row++, row1++)
             {
-                var endIndex = rowPointers[row + 1];
+                var endIndex = rowPointers[row1];
                 for (var j = rowPointers[row]; j < endIndex; j++)
                 {
                     if (row < columnIndices[j])
                     {
-                        result.At(row, columnIndices[j], values[j]);
+                        result.At(row1, columnIndices[j], values[j]);
                     }
                 }
             }
@@ -746,14 +744,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             }
 
             var leftStorage = left._storage;
-            for (var i = 0; i < leftStorage.RowCount; i++)
+            for (int i = 0, i1 = 1; i < leftStorage.RowCount; i++, i1++)
             {
                 var endIndex = leftStorage.RowPointers[i + 1];
                 for (var j = leftStorage.RowPointers[i]; j < endIndex; j++)
                 {
                     var columnIndex = leftStorage.ColumnIndices[j];
-                    var resVal = leftStorage.Values[j] + result.At(i, columnIndex);
-                    result.At(i, columnIndex, resVal);
+                    var resVal = leftStorage.Values[j] + result.At(i1, columnIndex);
+                    result.At(i1, columnIndex, resVal);
                 }
             }
         }
@@ -786,14 +784,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 
             if (ReferenceEquals(this, sparseResult))
             {
-                for (var i = 0; i < otherStorage.RowCount; i++)
+                for (int i = 0, i1 = 1; i < otherStorage.RowCount; i++, i1++)
                 {
                     var endIndex = otherStorage.RowPointers[i + 1];
                     for (var j = otherStorage.RowPointers[i]; j < endIndex; j++)
                     {
                         var columnIndex = otherStorage.ColumnIndices[j];
-                        var resVal = sparseResult.At(i, columnIndex) - otherStorage.Values[j];
-                        result.At(i, columnIndex, resVal);
+                        var resVal = sparseResult.At(i1, columnIndex) - otherStorage.Values[j];
+                        result.At(i1, columnIndex, resVal);
                     }
                 }
             }
@@ -810,14 +808,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                 var columnIndices = _storage.ColumnIndices;
                 var values = _storage.Values;
 
-                for (var i = 0; i < RowCount; i++)
+                for (int i = 0, i1 = 1; i < RowCount; i++, i1++)
                 {
                     var endIndex = rowPointers[i + 1];
                     for (var j = rowPointers[i]; j < endIndex; j++)
                     {
                         var columnIndex = columnIndices[j];
-                        var resVal = sparseResult.At(i, columnIndex) + values[j];
-                        result.At(i, columnIndex, resVal);
+                        var resVal = sparseResult.At(i1, columnIndex) + values[j];
+                        result.At(i1, columnIndex, resVal);
                     }
                 }
             }
@@ -851,10 +849,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                 var columnIndices = _storage.ColumnIndices;
                 var values = _storage.Values;
 
-                for (var row = 0; row < RowCount; row++)
+                for (int row = 0, row1 = 1; row < RowCount; row++, row1++)
                 {
                     var start = rowPointers[row];
-                    var end = rowPointers[row + 1];
+                    var end = rowPointers[row1];
 
                     if (start == end)
                     {
@@ -864,7 +862,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                     for (var index = start; index < end; index++)
                     {
                         var column = columnIndices[index];
-                        result.At(row, column, values[index] * scalar);
+                        result.At(row1, column, values[index] * scalar);
                     }
                 }
             }
@@ -900,12 +898,12 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                 var diagonal = diagonalOther.Data;
                 if (other.ColumnCount == other.RowCount)
                 {
-                    Storage.MapIndexedTo(result.Storage, (i, j, x) => x*diagonal[j], Zeros.AllowSkip, ExistingData.Clear);
+                    Storage.MapIndexedTo(result.Storage, (i, j, x) => x*diagonal[j - 1], Zeros.AllowSkip, ExistingData.Clear);
                 }
                 else
                 {
                     result.Storage.Clear();
-                    Storage.MapSubMatrixIndexedTo(result.Storage, (i, j, x) => x*diagonal[j], 0, 0, RowCount, 0, 0, ColumnCount, Zeros.AllowSkip, ExistingData.AssumeZeros);
+                    Storage.MapSubMatrixIndexedTo(result.Storage, (i, j, x) => x*diagonal[j - 1], 1, 1, RowCount, 1, 1, ColumnCount, Zeros.AllowSkip, ExistingData.AssumeZeros);
                 }
                 return;
             }
@@ -917,10 +915,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var row = 0; row < RowCount; row++)
+            for (int row = 0, row1 = 1; row < RowCount; row++, row1++)
             {
                 var startIndex = rowPointers[row];
-                var endIndex = rowPointers[row + 1];
+                var endIndex = rowPointers[row1];
 
                 if (startIndex == endIndex)
                 {
@@ -938,7 +936,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                         sum += values[index] * columnVector[columnIndices[index]];
                     }
 
-                    result.At(row, column, sum);
+                    result.At(row1, column, sum);
                 }
             }
         }
@@ -973,10 +971,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                 for (int j = ap[i]; j < ap[i + 1]; j++)
                 {
                     // Row number to be added
-                    int a = ai[j];
+                    int a = ai[j] - 1;
                     for (int k = bp[a]; k < bp[a + 1]; k++)
                     {
-                        int b = bi[k];
+                        int b = bi[k] - 1;
                         if (marker[b] != i)
                         {
                             marker[b] = i;
@@ -1003,16 +1001,16 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                 int rowStart = cp[i];
                 for (int j = ap[i]; j < ap[i + 1]; j++)
                 {
-                    int a = ai[j];
+                    int a = ai[j] - 1;
                     int aEntry = ax[j];
                     for (int k = bp[a]; k < bp[a + 1]; k++)
                     {
-                        int b = bi[k];
+                        int b = bi[k] - 1;
                         int bEntry = bx[k];
                         if (marker[b] < rowStart)
                         {
                             marker[b] = count;
-                            ci[marker[b]] = b;
+                            ci[marker[b]] = b + 1;
                             cx[marker[b]] = aEntry * bEntry;
                             count++;
                         }
@@ -1040,10 +1038,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var row = 0; row < RowCount; row++)
+            for (int row = 0, row1 = 1; row < RowCount; row++, row1++)
             {
                 var startIndex = rowPointers[row];
-                var endIndex = rowPointers[row + 1];
+                var endIndex = rowPointers[row1];
 
                 if (startIndex == endIndex)
                 {
@@ -1051,12 +1049,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                 }
 
                 var sum = 0;
+                // CONSIDER: indexing into rightSide and result should be safe to use .At() since all of the calls to DoMultiply have verified appropriate shape Vectors
                 for (var index = startIndex; index < endIndex; index++)
                 {
-                    sum += values[index] * rightSide[columnIndices[index]];
+                    ////sum += values[index] * rightSide[columnIndices[index]];
+                    sum += values[index] * rightSide.At(columnIndices[index]);
                 }
 
-                result[row] = sum;
+                ////result[row1] = sum;
+                result.At(row1, sum);
             }
         }
 
@@ -1083,22 +1084,22 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 
             var otherStorage = otherSparse._storage;
 
-            for (var j = 0; j < RowCount; j++)
+            for (int j = 0, j1 = 1; j < RowCount; j++, j1++)
             {
                 var startIndexOther = otherStorage.RowPointers[j];
-                var endIndexOther = otherStorage.RowPointers[j + 1];
+                var endIndexOther = otherStorage.RowPointers[j1];
 
                 if (startIndexOther == endIndexOther)
                 {
                     continue;
                 }
 
-                for (var i = 0; i < RowCount; i++)
+                for (int i = 0, i1 = 1; i < RowCount; i++, i1++)
                 {
                     // Multiply row of matrix A on row of matrix B
  
                     var startIndexThis = rowPointers[i];
-                    var endIndexThis = rowPointers[i + 1];
+                    var endIndexThis = rowPointers[i1];
 
                     if (startIndexThis == endIndexThis)
                     {
@@ -1108,14 +1109,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                     var sum = 0;
                     for (var index = startIndexOther; index < endIndexOther; index++)
                     {
-                        var ind = _storage.FindItem(i, otherStorage.ColumnIndices[index]);
+                        var ind = _storage.FindItem(i1, otherStorage.ColumnIndices[index]);
                         if (ind >= 0)
                         {
-                            sum += otherStorage.Values[index]*values[ind];
+                            sum += otherStorage.Values[index] * values[ind];
                         }
                     }
 
-                    resultSparse._storage.At(i, j, sum + result.At(i, j));
+                    resultSparse._storage.At(i1, j1, sum + result.At(i1, j1));
                 }
             }
         }
@@ -1133,15 +1134,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var i = 0; i < RowCount; i++)
+            for (int i = 0, i1 = 1; i < RowCount; i++, i1++)
             {
-                var endIndex = rowPointers[i + 1];
+                var endIndex = rowPointers[i1];
                 for (var j = rowPointers[i]; j < endIndex; j++)
                 {
-                    var resVal = values[j]*other.At(i, columnIndices[j]);
+                    var resVal = values[j]*other.At(i1, columnIndices[j]);
                     if (resVal != 0)
                     {
-                        result.At(i, columnIndices[j], resVal);
+                        result.At(i1, columnIndices[j], resVal);
                     }
                 }
             }
@@ -1160,14 +1161,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var i = 0; i < RowCount; i++)
+            for (int i = 0, i1 = 1; i < RowCount; i++, i1++)
             {
-                var endIndex = rowPointers[i + 1];
+                var endIndex = rowPointers[i1];
                 for (var j = rowPointers[i]; j < endIndex; j++)
                 {
                     if (values[j] != 0)
                     {
-                        result.At(i, columnIndices[j], values[j]/divisor.At(i, columnIndices[j]));
+                        result.At(i1, columnIndices[j], values[j]/divisor.At(i1, columnIndices[j]));
                     }
                 }
             }
@@ -1194,14 +1195,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var i = 0; i < RowCount; i++)
+            for (int i = 0, i1 = 1; i < RowCount; i++, i1++)
             {
-                var endIndex = rowPointers[i + 1];
+                var endIndex = rowPointers[i1];
                 for (var j = rowPointers[i]; j < endIndex; j++)
                 {
                     if (values[j] != 0)
                     {
-                        result.SetSubMatrix(i*other.RowCount, other.RowCount, columnIndices[j]*other.ColumnCount, other.ColumnCount, values[j]*other);
+                        result.SetSubMatrix(i1*other.RowCount, other.RowCount, columnIndices[j]*other.ColumnCount, other.ColumnCount, values[j]*other);
                     }
                 }
             }
@@ -1275,10 +1276,10 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
             var columnIndices = _storage.ColumnIndices;
             var values = _storage.Values;
 
-            for (var row = 0; row < RowCount; row++)
+            for (int row = 0, row1 = 1; row < RowCount; row++, row1++)
             {
                 var start = rowPointers[row];
-                var end = rowPointers[row + 1];
+                var end = rowPointers[row1];
 
                 if (start == end)
                 {
@@ -1288,7 +1289,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
                 for (var index = start; index < end; index++)
                 {
                     var column = columnIndices[index];
-                    if (!values[index].Equals(At(column, row)))
+                    var opposite = At(column, row1);
+                    if (!values[index].Equals(opposite))
                     {
                         return false;
                     }
@@ -1370,7 +1372,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 
             if (leftSide.RowCount != rightSide.RowCount || leftSide.ColumnCount != rightSide.ColumnCount)
             {
-                throw DimensionsDontMatch<ArgumentException>(leftSide, rightSide);
+                throw DimensionsDontMatch<ArgumentOutOfRangeException>(leftSide, rightSide);
             }
 
             return (SparseMatrix)leftSide.Subtract(rightSide);
@@ -1510,7 +1512,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 
         public override string ToTypeString()
         {
-            return string.Format("SparseMatrix {0}x{1}-Integer {2:P2} Filled", RowCount, ColumnCount, NonZerosCount / (RowCount * (double)ColumnCount));
+            return string.Format("SparseMatrix[1] {0}x{1}-Integer {2:P2} Filled", RowCount, ColumnCount, NonZerosCount / (RowCount * (double)ColumnCount));
         }
     }
 }
