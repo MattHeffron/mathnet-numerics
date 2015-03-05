@@ -1,5 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Integer;
+﻿using MathNet.Numerics.LinearAlgebra.OneBased;
+using MathNet.Numerics.LinearAlgebra.OneBased.Integer;
 using NUnit.Framework;
 
 namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer

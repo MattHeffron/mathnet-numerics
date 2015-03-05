@@ -216,6 +216,14 @@ namespace MathNet.Numerics
         /// <summary>
         /// Chebyshev Distance, i.e. the Infinity-norm of the difference.
         /// </summary>
+        public static double Chebyshev<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> a, MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> b) where T : struct, IEquatable<T>, IFormattable
+        {
+            return (a - b).InfinityNorm();
+        }
+
+        /// <summary>
+        /// Chebyshev Distance, i.e. the Infinity-norm of the difference.
+        /// </summary>
         public static double Chebyshev(double[] a, double[] b)
         {
             if (a.Length != b.Length) throw new ArgumentOutOfRangeException("b");

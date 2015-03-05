@@ -1,5 +1,5 @@
-﻿using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Complex;
+﻿using MathNet.Numerics.LinearAlgebra.OneBased;
+using MathNet.Numerics.LinearAlgebra.OneBased.Complex;
 using NUnit.Framework;
 
 namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex

@@ -28,7 +28,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
 {
     using System;
     using System.Collections.Generic;
-    using MathNet.Numerics.LinearAlgebra;
+    using MathNet.Numerics.LinearAlgebra.OneBased;
     using NUnit.Framework;
 
     /// <summary>
