@@ -189,25 +189,25 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         {
             var sortedIndices = new int[10];
             Vector<Complex> values = new DenseVector(10);
-            values[0] = 0;
-            values[1] = 1;
-            values[2] = 2;
-            values[3] = 3;
-            values[4] = 4;
-            values[5] = 5;
-            values[6] = 6;
-            values[7] = 7;
-            values[8] = 8;
-            values[9] = 9;
+            values[1] = 0;
+            values[2] = 1;
+            values[3] = 2;
+            values[4] = 3;
+            values[5] = 4;
+            values[6] = 5;
+            values[7] = 6;
+            values[8] = 7;
+            values[9] = 8;
+            values[10] = 9;
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 1, sortedIndices, values);
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                Assert.AreEqual(sortedIndices.Length - 1 - i, sortedIndices[i], "#01-" + i);
+                Assert.AreEqual(sortedIndices.Length - i, sortedIndices[i], "#01-" + i);
             }
         }
 
@@ -219,25 +219,25 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         {
             var sortedIndices = new int[10];
             Vector<Complex> values = new DenseVector(10);
-            values[0] = 9;
-            values[1] = 8;
-            values[2] = 7;
-            values[3] = 6;
-            values[4] = 5;
-            values[5] = 4;
-            values[6] = 3;
-            values[7] = 2;
-            values[8] = 1;
-            values[9] = 0;
+            values[1] = 9;
+            values[2] = 8;
+            values[3] = 7;
+            values[4] = 6;
+            values[5] = 5;
+            values[6] = 4;
+            values[7] = 3;
+            values[8] = 2;
+            values[9] = 1;
+            values[10] = 0;
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 1, sortedIndices, values);
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                Assert.AreEqual(i, sortedIndices[i], "#01-" + i);
+                Assert.AreEqual(i + 1, sortedIndices[i], "#01-" + i);
             }
         }
 
@@ -249,7 +249,6 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         {
             var sortedIndices = new int[10];
             Vector<Complex> values = new DenseVector(10);
-            values[0] = 5;
             values[1] = 2;
             values[2] = 8;
             values[3] = 6;
@@ -259,9 +258,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             values[7] = 7;
             values[8] = 3;
             values[9] = 9;
+            values[10] = 5;
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 1, sortedIndices, values);
@@ -282,7 +282,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
                         Assert.AreEqual(3, sortedIndices[i], "#01-" + i);
                         break;
                     case 4:
-                        Assert.AreEqual(0, sortedIndices[i], "#01-" + i);
+                        Assert.AreEqual(10, sortedIndices[i], "#01-" + i);
                         break;
                     case 5:
                         Assert.AreEqual(5, sortedIndices[i], "#01-" + i);
@@ -311,20 +311,20 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         {
             var sortedIndices = new int[10];
             Vector<Complex> values = new DenseVector(10);
-            values[0] = 1;
             values[1] = 1;
             values[2] = 1;
             values[3] = 1;
-            values[4] = 2;
+            values[4] = 1;
             values[5] = 2;
             values[6] = 2;
             values[7] = 2;
-            values[8] = 3;
-            values[9] = 4;
+            values[8] = 2;
+            values[9] = 3;
+            values[10] = 4;
 
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 1, sortedIndices, values);
@@ -332,32 +332,32 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             {
                 if (i == 0)
                 {
-                    Assert.AreEqual(9, sortedIndices[i], "#01-" + i);
+                    Assert.AreEqual(10, sortedIndices[i], "#01-" + i);
                 }
                 else
                 {
                     if (i == 1)
                     {
-                        Assert.AreEqual(8, sortedIndices[i], "#01-" + i);
+                        Assert.AreEqual(9, sortedIndices[i], "#01-" + i);
                     }
                     else
                     {
                         if (i < 6)
                         {
-                            if ((sortedIndices[i] != 4) &&
-                                (sortedIndices[i] != 5) &&
+                            if ((sortedIndices[i] != 5) &&
                                 (sortedIndices[i] != 6) &&
-                                (sortedIndices[i] != 7))
+                                (sortedIndices[i] != 7) &&
+                                (sortedIndices[i] != 8))
                             {
                                 Assert.Fail("#01-" + i);
                             }
                         }
                         else
                         {
-                            if ((sortedIndices[i] != 0) &&
-                                (sortedIndices[i] != 1) &&
+                            if ((sortedIndices[i] != 1) &&
                                 (sortedIndices[i] != 2) &&
-                                (sortedIndices[i] != 3))
+                                (sortedIndices[i] != 3) &&
+                                (sortedIndices[i] != 4))
                             {
                                 Assert.Fail("#01-" + i);
                             }
@@ -375,7 +375,6 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         {
             var sortedIndices = new int[10];
             Vector<Complex> values = new DenseVector(10);
-            values[0] = 0;
             values[1] = 0;
             values[2] = 0;
             values[3] = 0;
@@ -385,9 +384,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             values[7] = 0;
             values[8] = 0;
             values[9] = 0;
+            values[10] = 0;
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 1, sortedIndices, values);
@@ -400,7 +400,31 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
                 }
             }
 
-            values[0] = 1;
+            values[1] = 1;
+            values[2] = 0;
+            values[3] = 0;
+            values[4] = 0;
+            values[5] = 0;
+            values[6] = 0;
+            values[7] = 0;
+            values[8] = 0;
+            values[9] = 0;
+            values[10] = 0;
+            for (var i = 0; i < sortedIndices.Length; i++)
+            {
+                sortedIndices[i] = i + 1;
+            }
+
+            ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 1, sortedIndices, values);
+            for (var i = 0; i < sortedIndices.Length; i++)
+            {
+                if (i == 0)
+                {
+                    Assert.AreEqual(1, sortedIndices[i], "#02-" + i);
+                    break;
+                }
+            }
+
             values[1] = 0;
             values[2] = 0;
             values[3] = 0;
@@ -410,9 +434,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             values[7] = 0;
             values[8] = 0;
             values[9] = 0;
+            values[10] = 1;
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 1, sortedIndices, values);
@@ -420,49 +445,24 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             {
                 if (i == 0)
                 {
-                    Assert.AreEqual(0, sortedIndices[i], "#02-" + i);
+                    Assert.AreEqual(10, sortedIndices[i], "#03-" + i);
                     break;
                 }
             }
 
-            values[0] = 0;
-            values[1] = 0;
-            values[2] = 0;
-            values[3] = 0;
-            values[4] = 0;
-            values[5] = 0;
-            values[6] = 0;
-            values[7] = 0;
-            values[8] = 0;
-            values[9] = 1;
-            for (var i = 0; i < sortedIndices.Length; i++)
-            {
-                sortedIndices[i] = i;
-            }
-
-            ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 1, sortedIndices, values);
-            for (var i = 0; i < sortedIndices.Length; i++)
-            {
-                if (i == 0)
-                {
-                    Assert.AreEqual(9, sortedIndices[i], "#03-" + i);
-                    break;
-                }
-            }
-
-            values[0] = 1;
             values[1] = 1;
             values[2] = 1;
-            values[3] = 0;
-            values[4] = 1;
+            values[3] = 1;
+            values[4] = 0;
             values[5] = 1;
             values[6] = 1;
             values[7] = 1;
             values[8] = 1;
             values[9] = 1;
+            values[10] = 1;
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 1, sortedIndices, values);
@@ -470,7 +470,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             {
                 if (i == 9)
                 {
-                    Assert.AreEqual(3, sortedIndices[i], "#04-" + i);
+                    Assert.AreEqual(4, sortedIndices[i], "#04-" + i);
                     break;
                 }
             }
@@ -484,25 +484,25 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         {
             var sortedIndices = new int[10];
             Vector<Complex> values = new DenseVector(10);
-            values[0] = 0;
-            values[1] = 1;
-            values[2] = 2;
-            values[3] = 3;
-            values[4] = 4;
-            values[5] = 5;
-            values[6] = 6;
-            values[7] = 7;
-            values[8] = 8;
-            values[9] = 9;
+            values[1] = 0;
+            values[2] = 1;
+            values[3] = 2;
+            values[4] = 3;
+            values[5] = 4;
+            values[6] = 5;
+            values[7] = 6;
+            values[8] = 7;
+            values[9] = 8;
+            values[10] = 9;
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(4, sortedIndices.Length - 1, sortedIndices, values);
             for (var i = 0; i < sortedIndices.Length - 4; i++)
             {
-                Assert.AreEqual(sortedIndices.Length - 1 - i, sortedIndices[i], "#01-" + i);
+                Assert.AreEqual(sortedIndices.Length - i, sortedIndices[i], "#01-" + i);
             }
         }
 
@@ -514,25 +514,25 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         {
             var sortedIndices = new int[10];
             Vector<Complex> values = new DenseVector(10);
-            values[0] = 0;
-            values[1] = 1;
-            values[2] = 2;
-            values[3] = 3;
-            values[4] = 4;
-            values[5] = 5;
-            values[6] = 6;
-            values[7] = 7;
-            values[8] = 8;
-            values[9] = 9;
+            values[1] = 0;
+            values[2] = 1;
+            values[3] = 2;
+            values[4] = 3;
+            values[5] = 4;
+            values[6] = 5;
+            values[7] = 6;
+            values[8] = 7;
+            values[9] = 8;
+            values[10] = 9;
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(0, sortedIndices.Length - 5, sortedIndices, values);
             for (var i = 0; i < sortedIndices.Length - 5; i++)
             {
-                Assert.AreEqual(sortedIndices.Length - 5 - i, sortedIndices[i], "#01-" + i);
+                Assert.AreEqual(sortedIndices.Length - 5 - i + 1, sortedIndices[i], "#01-" + i);
             }
         }
 
@@ -544,25 +544,25 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         {
             var sortedIndices = new int[10];
             Vector<Complex> values = new DenseVector(10);
-            values[0] = 0;
-            values[1] = 1;
-            values[2] = 2;
-            values[3] = 3;
-            values[4] = 4;
-            values[5] = 5;
-            values[6] = 6;
-            values[7] = 7;
-            values[8] = 8;
-            values[9] = 9;
+            values[1] = 0;
+            values[2] = 1;
+            values[3] = 2;
+            values[4] = 3;
+            values[5] = 4;
+            values[6] = 5;
+            values[7] = 6;
+            values[8] = 7;
+            values[9] = 8;
+            values[10] = 9;
             for (var i = 0; i < sortedIndices.Length; i++)
             {
-                sortedIndices[i] = i;
+                sortedIndices[i] = i + 1;
             }
 
             ILUTPElementSorter.SortDoubleIndicesDecreasing(2, sortedIndices.Length - 3, sortedIndices, values);
             for (var i = 0; i < sortedIndices.Length - 4; i++)
             {
-                Assert.AreEqual(sortedIndices.Length - 3 - i, sortedIndices[i], "#01-" + i);
+                Assert.AreEqual(sortedIndices.Length - 3 - i + 1, sortedIndices[i], "#01-" + i);
             }
         }
     }

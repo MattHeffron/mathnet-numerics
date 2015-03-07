@@ -97,7 +97,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         {
             var data = new[] {new Complex(1.0, 1), new Complex(1.0, 1), new Complex(1.0, 1), new Complex(1.0, 1), new Complex(1.0, 1), new Complex(1.0, 1), new Complex(2.0, 1), new Complex(2.0, 1), new Complex(2.0, 1)};
             var matrix = new DenseMatrix(3, 3, data);
-            matrix[0, 0] = new Complex(10.0, 1);
+            matrix[1, 1] = new Complex(10.0, 1);
             Assert.AreEqual(new Complex(10.0, 1), data[0]);
         }
 
@@ -108,7 +108,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void MatrixFrom2DArrayIsCopy()
         {
             var matrix = DenseMatrix.OfArray(TestData2D["Singular3x3"]);
-            matrix[0, 0] = 10.0;
+            matrix[1, 1] = 10.0;
             Assert.AreEqual(new Complex(1.0, 1), TestData2D["Singular3x3"][0, 0]);
         }
 
@@ -129,7 +129,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             {
                 for (var j = 0; j < TestData2D[name].GetLength(1); j++)
                 {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i, j]);
+                    Assert.AreEqual(TestData2D[name][i, j], matrix[i + 1, j + 1]);
                 }
             }
         }
@@ -141,9 +141,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateMatrixWithUniformValues()
         {
             var matrix = DenseMatrix.Create(10, 10, new Complex(10.0, 1));
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     Assert.AreEqual(matrix[i, j], new Complex(10.0, 1));
                 }
@@ -157,9 +157,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateIdentity()
         {
             var matrix = DenseMatrix.CreateIdentity(5);
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     Assert.AreEqual(i == j ? Complex.One : Complex.Zero, matrix[i, j]);
                 }
@@ -170,7 +170,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         /// Identity with wrong order throws <c>ArgumentOutOfRangeException</c>.
         /// </summary>
         /// <param name="order">The size of the square matrix</param>
-        [TestCase(0)]
+        //[TestCase(0)]     // Matlab allows for an empty "identity" matrix
         [TestCase(-1)]
         public void IdentityWithWrongOrderThrowsArgumentOutOfRangeException(int order)
         {

@@ -67,7 +67,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector = new DenseVector(data.Count);
             for (var index = 0; index < data.Count; index++)
             {
-                vector[index] = data[index];
+                vector[index + 1] = data[index];
             }
 
             return vector;
@@ -85,10 +85,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             for (var i = 0; i < data.Length; i++)
             {
-                Assert.AreEqual(data[i], vector[i]);
+                Assert.AreEqual(data[i], vector[i + 1]);
             }
 
-            vector[0] = new Complex(10.0, 1);
+            vector[1] = new Complex(10.0, 1);
             Assert.AreEqual(new Complex(10.0, 1), data[0]);
         }
 
@@ -102,7 +102,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var other = DenseVector.OfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 0; i < Data.Length; i++)
+            for (var i = 1; i <= Data.Length; i++)
             {
                 Assert.AreEqual(vector[i], other[i]);
             }
@@ -118,7 +118,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var other = DenseVector.OfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 0; i < Data.Length; i++)
+            for (var i = 1; i <= Data.Length; i++)
             {
                 Assert.AreEqual(vector[i], other[i]);
             }
@@ -133,7 +133,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector = new UserDefinedVector(Data);
             var other = DenseVector.OfVector(vector);
 
-            for (var i = 0; i < Data.Length; i++)
+            for (var i = 1; i <= Data.Length; i++)
             {
                 Assert.AreEqual(vector[i], other[i]);
             }

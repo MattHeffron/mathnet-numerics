@@ -58,9 +58,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             var matrixL = factorLU.L;
             Assert.AreEqual(matrixI.RowCount, matrixL.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, matrixL.ColumnCount);
-            for (var i = 0; i < matrixL.RowCount; i++)
+            for (var i = 1; i <= matrixL.RowCount; i++)
             {
-                for (var j = 0; j < matrixL.ColumnCount; j++)
+                for (var j = 1; j <= matrixL.ColumnCount; j++)
                 {
                     Assert.AreEqual(i == j ? Complex.One : Complex.Zero, matrixL[i, j]);
                 }
@@ -70,9 +70,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             var matrixU = factorLU.U;
             Assert.AreEqual(matrixI.RowCount, matrixU.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, matrixU.ColumnCount);
-            for (var i = 0; i < matrixU.RowCount; i++)
+            for (var i = 1; i <= matrixU.RowCount; i++)
             {
-                for (var j = 0; j < matrixU.ColumnCount; j++)
+                for (var j = 1; j <= matrixU.ColumnCount; j++)
                 {
                     Assert.AreEqual(i == j ? Complex.One : Complex.Zero, matrixU[i, j]);
                 }
@@ -127,19 +127,19 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             Assert.AreEqual(order, matrixU.ColumnCount);
 
             // Make sure the L factor is lower triangular.
-            for (var i = 0; i < matrixL.RowCount; i++)
+            for (var i = 1; i <= matrixL.RowCount; i++)
             {
                 Assert.AreEqual(Complex.One, matrixL[i, i]);
-                for (var j = i + 1; j < matrixL.ColumnCount; j++)
+                for (var j = i + 1; j <= matrixL.ColumnCount; j++)
                 {
                     Assert.AreEqual(Complex.Zero, matrixL[i, j]);
                 }
             }
 
             // Make sure the U factor is upper triangular.
-            for (var i = 0; i < matrixL.RowCount; i++)
+            for (var i = 1; i <= matrixL.RowCount; i++)
             {
-                for (var j = 0; j < i; j++)
+                for (var j = 1; j < i; j++)
                 {
                     Assert.AreEqual(Complex.Zero, matrixU[i, j]);
                 }
@@ -149,9 +149,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             var matrixXfromLU = matrixL * matrixU;
             var permutationInverse = factorLU.P.Inverse();
             matrixXfromLU.PermuteRows(permutationInverse);
-            for (var i = 0; i < matrixXfromLU.RowCount; i++)
+            for (var i = 1; i <= matrixXfromLU.RowCount; i++)
             {
-                for (var j = 0; j < matrixXfromLU.ColumnCount; j++)
+                for (var j = 1; j <= matrixXfromLU.ColumnCount; j++)
                 {
                     AssertHelpers.AlmostEqualRelative(matrixX[i, j], matrixXfromLU[i, j], 9);
                 }
@@ -182,15 +182,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             var matrixBReconstruct = matrixA * resultx;
 
             // Check the reconstruction.
-            for (var i = 0; i < order; i++)
+            for (var i = 1; i <= order; i++)
             {
                 AssertHelpers.AlmostEqual(vectorb[i], matrixBReconstruct[i], 10);
             }
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
+            for (var i = 1; i <= matrixA.RowCount; i++)
             {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
+                for (var j = 1; j <= matrixA.ColumnCount; j++)
                 {
                     Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
                 }
@@ -225,18 +225,18 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            for (var i = 0; i < matrixB.RowCount; i++)
+            for (var i = 1; i <= matrixB.RowCount; i++)
             {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
+                for (var j = 1; j <= matrixB.ColumnCount; j++)
                 {
                     AssertHelpers.AlmostEqual(matrixB[i, j], matrixBReconstruct[i, j], 10);
                 }
             }
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
+            for (var i = 1; i <= matrixA.RowCount; i++)
             {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
+                for (var j = 1; j <= matrixA.ColumnCount; j++)
                 {
                     Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
                 }
@@ -268,22 +268,22 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             var matrixBReconstruct = matrixA * resultx;
 
             // Check the reconstruction.
-            for (var i = 0; i < vectorb.Count; i++)
+            for (var i = 1; i <= vectorb.Count; i++)
             {
                 AssertHelpers.AlmostEqual(vectorb[i], matrixBReconstruct[i], 10);
             }
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
+            for (var i = 1; i <= matrixA.RowCount; i++)
             {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
+                for (var j = 1; j <= matrixA.ColumnCount; j++)
                 {
                     Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
                 }
             }
 
             // Make sure b didn't change.
-            for (var i = 0; i < vectorb.Count; i++)
+            for (var i = 1; i <= vectorb.Count; i++)
             {
                 Assert.AreEqual(vectorbCopy[i], vectorb[i]);
             }
@@ -320,27 +320,27 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            for (var i = 0; i < matrixB.RowCount; i++)
+            for (var i = 1; i <= matrixB.RowCount; i++)
             {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
+                for (var j = 1; j <= matrixB.ColumnCount; j++)
                 {
                     AssertHelpers.AlmostEqual(matrixB[i, j], matrixBReconstruct[i, j], 10);
                 }
             }
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
+            for (var i = 1; i <= matrixA.RowCount; i++)
             {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
+                for (var j = 1; j <= matrixA.ColumnCount; j++)
                 {
                     Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
                 }
             }
 
             // Make sure B didn't change.
-            for (var i = 0; i < matrixB.RowCount; i++)
+            for (var i = 1; i <= matrixB.RowCount; i++)
             {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
+                for (var j = 1; j <= matrixB.ColumnCount; j++)
                 {
                     Assert.AreEqual(matrixBCopy[i, j], matrixB[i, j]);
                 }
@@ -372,16 +372,16 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             var matrixIdentity = matrixA * matrixAInverse;
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
+            for (var i = 1; i <= matrixA.RowCount; i++)
             {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
+                for (var j = 1; j <= matrixA.ColumnCount; j++)
                 {
                     Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
                 }
             }
 
             // Check if multiplication of A and AI produced identity matrix.
-            for (var i = 0; i < matrixIdentity.RowCount; i++)
+            for (var i = 1; i <= matrixIdentity.RowCount; i++)
             {
                 AssertHelpers.AlmostEqualRelative(matrixIdentity[i, i], Complex.One, 9);
             }

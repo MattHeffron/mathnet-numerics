@@ -60,7 +60,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         internal SparseMatrix CreateUnitMatrix(int size)
         {
             var matrix = new SparseMatrix(size);
-            for (var i = 0; i < size; i++)
+            for (var i = 1; i <= size; i++)
             {
                 matrix[i, i] = 2;
             }
@@ -76,9 +76,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         protected DenseVector CreateStandardBcVector(int size)
         {
             var vector = new DenseVector(size);
-            for (var i = 0; i < size; i++)
+            for (var i = 1; i <= size; i++)
             {
-                vector[i] = i + 1;
+                vector[i] = i;
             }
 
             return vector;

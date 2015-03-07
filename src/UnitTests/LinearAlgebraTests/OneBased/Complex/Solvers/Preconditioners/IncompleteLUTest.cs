@@ -117,7 +117,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             var product = new DenseVector(result.Count);
             matrix.Multiply(result, product);
 
-            for (var i = 0; i < product.Count; i++)
+            for (var i = 1; i <= product.Count; i++)
             {
                 Assert.IsTrue(vector[i].Real.AlmostEqualNumbersBetween(product[i].Real, -Epsilon.Magnitude()), "#02-" + i);
                 Assert.IsTrue(vector[i].Imaginary.AlmostEqualNumbersBetween(product[i].Imaginary, -Epsilon.Magnitude()), "#03-" + i);
@@ -131,22 +131,22 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         public void CompareWithOriginalSparseMatrix()
         {
             var sparseMatrix = new SparseMatrix(3);
-            sparseMatrix[0, 0] = -1;
-            sparseMatrix[0, 1] = 5;
-            sparseMatrix[0, 2] = 6;
-            sparseMatrix[1, 0] = 3;
-            sparseMatrix[1, 1] = -6;
-            sparseMatrix[1, 2] = 1;
-            sparseMatrix[2, 0] = 6;
-            sparseMatrix[2, 1] = 8;
-            sparseMatrix[2, 2] = 9;
+            sparseMatrix[1, 1] = -1;
+            sparseMatrix[1, 2] = 5;
+            sparseMatrix[1, 3] = 6;
+            sparseMatrix[2, 1] = 3;
+            sparseMatrix[2, 2] = -6;
+            sparseMatrix[2, 3] = 1;
+            sparseMatrix[3, 1] = 6;
+            sparseMatrix[3, 2] = 8;
+            sparseMatrix[3, 3] = 9;
             var ilu = new ILU0Preconditioner();
             ilu.Initialize(sparseMatrix);
             var original = GetLowerTriangle(ilu).Multiply(GetUpperTriangle(ilu));
 
-            for (var i = 0; i < sparseMatrix.RowCount; i++)
+            for (var i = 1; i <= sparseMatrix.RowCount; i++)
             {
-                for (var j = 0; j < sparseMatrix.ColumnCount; j++)
+                for (var j = 1; j <= sparseMatrix.ColumnCount; j++)
                 {
                     Assert.IsTrue(sparseMatrix[i, j].Real.AlmostEqualNumbersBetween(original[i, j].Real, -Epsilon.Magnitude()), "#01-" + i + "-" + j);
                     Assert.IsTrue(sparseMatrix[i, j].Imaginary.AlmostEqualNumbersBetween(original[i, j].Imaginary, -Epsilon.Magnitude()), "#02-" + i + "-" + j);

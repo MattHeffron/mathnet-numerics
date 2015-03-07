@@ -597,8 +597,7 @@ namespace MathNet.Numerics.UnitTests
             }
         }
 
-#region OneBased
-        //MathNet.Numerics.LinearAlgebra.OneBased.
+        #region OneBased
         public static void AlmostEqual(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<double> expected, MathNet.Numerics.LinearAlgebra.OneBased.Matrix<double> actual, int decimalPlaces)
         {
             if (expected.ColumnCount != actual.ColumnCount || expected.RowCount != actual.RowCount)
@@ -913,6 +912,6 @@ namespace MathNet.Numerics.UnitTests
                 }
             }
         }	
-#endregion
+        #endregion
     }
 }

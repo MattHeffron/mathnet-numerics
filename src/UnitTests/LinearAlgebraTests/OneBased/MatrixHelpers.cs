@@ -99,5 +99,59 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
                 }
             }
         }
+
+        /// <summary>
+        /// Forces a matrix elements to symmetric. Copies the lower triangle to the upper triangle.
+        /// </summary>
+        /// <typeparam name="T">The matrix type.</typeparam>
+        /// <param name="matrix">The matrix to make symmetric.</param>
+        static public Matrix<T> MakePoissonTestMatrix<T>() where T : struct, IEquatable<T>, IFormattable
+        {
+            // Create the matrix
+            var matrix = Matrix<T>.Build.Sparse(100, 100);
+
+            // Assemble the matrix. We assume we're solving the Poisson equation
+            // on a rectangular 10 x 10 grid
+            const int GridSize = 10;
+
+            // This is a big HACK to get around the fact that I can't constrain T to be convertable from int
+            // But since we know HOW this is being used in testing...
+            T minusOne = (T)(object)-1;
+            T four = (T)(object)4;
+
+            // The pattern is:
+            // 0 .... 0 -1 0 0 0 0 0 0 0 0 -1 4 -1 0 0 0 0 0 0 0 0 -1 0 0 ... 0
+            for (var i = 1; i <= matrix.RowCount; i++)
+            {
+                // Insert the first set of -1's
+                if (i > GridSize)
+                {
+                    matrix[i, i - GridSize + 1] = minusOne;
+                }
+
+                // Insert the second set of -1's
+                if (i > 1)
+                {
+                    matrix[i, i - 1] = minusOne;
+                }
+
+                // Insert the centerline values
+                matrix[i, i] = four;
+
+                // Insert the first trailing set of -1's
+                if (i < matrix.RowCount)
+                {
+                    matrix[i, i + 1] = minusOne;
+                }
+
+                // Insert the second trailing set of -1's
+                if (i < matrix.RowCount - GridSize + 1)
+                {
+                    matrix[i, i + GridSize - 1] = minusOne;
+                }
+            }
+
+            return matrix;
+        }
     }
 }

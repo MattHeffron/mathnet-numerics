@@ -69,7 +69,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             Assert.AreEqual(typeof(UnitPreconditioner<Complex>), preconditioner.GetType(), "#01");
 
             // Unit preconditioner is doing nothing. Vector and result should be equal
-            for (var i = 0; i < vector.Count; i++)
+            for (var i = 1; i <= vector.Count; i++)
             {
                 Assert.IsTrue(vector[i] == result[i], "#02-" + i);
             }
