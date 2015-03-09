@@ -431,4 +431,10 @@
     <value>Vector length must not exceed corresponding {0}Matrix dimension</value>
     <comment>Note that there is no whitespace after the {0} (to allow for string.Empty there), so any value formatted into that position should include appropriate trailing whitespace.</comment>
   </data>
+  <data name="MatrixCanNotBeEmpty" xml:space="preserve">
+    <value>Matrices can not be empty and must have at least one row and column.</value>
+  </data>
+  <data name="VectorCanNotBeEmpty" xml:space="preserve">
+    <value>Vectors can not be empty and must have at least one element.</value>
+  </data>
 </root>

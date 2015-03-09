@@ -4,7 +4,7 @@
 // http://github.com/mathnet/mathnet-numerics
 // http://mathnetnumerics.codeplex.com
 //
-// Copyright (c) 2009-2014 Math.NET
+// Copyright (c) 2009-2015 Math.NET
 //
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -288,54 +288,6 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         }
 
         /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="other">
-        /// An object to compare with this object.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if the current object is equal to the <paramref name="other"/> parameter; otherwise, <c>false</c>.
-        /// </returns>
-        public override bool Equals(MatrixStorage<T> other)
-        {
-            // Reject equality when the argument is null or has a different shape.
-            if (other == null || ColumnCount != other.ColumnCount || RowCount != other.RowCount)
-            {
-                return false;
-            }
-
-            // Accept if the argument is the same object as this.
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            var sparse = other as SparseCompressedRowMatrixStorage<T>;
-            if (sparse == null)
-            {
-                return base.Equals(other);
-            }
-
-            if (ValueCount != sparse.ValueCount)
-            {
-                // TODO: this is only correct if normalized
-                return false;
-            }
-
-            // If all else fails, perform element wise comparison.
-            for (var index = 0; index < ValueCount; index++)
-            {
-                // TODO: AlmostEquals
-                if (!Values[index].Equals(sparse.Values[index]) || ColumnIndices[index] != sparse.ColumnIndices[index])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
@@ -564,6 +516,11 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
 
         public static SparseCompressedRowMatrixStorage<T> OfRowArrays(T[][] data)
         {
+            if (data.Length <= 0)
+            {
+                throw new ArgumentOutOfRangeException("data", Resources.MatrixCanNotBeEmpty);
+            }
+
             var storage = new SparseCompressedRowMatrixStorage<T>(data.Length, data[0].Length);
             var rowPointers = storage.RowPointers;
             var columnIndices = new List<int>();
@@ -591,6 +548,11 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
 
         public static SparseCompressedRowMatrixStorage<T> OfColumnArrays(T[][] data)
         {
+            if (data.Length <= 0)
+            {
+                throw new ArgumentOutOfRangeException("data", Resources.MatrixCanNotBeEmpty);
+            }
+
             var storage = new SparseCompressedRowMatrixStorage<T>(data[0].Length, data.Length);
             var rowPointers = storage.RowPointers;
             var columnIndices = new List<int>();
@@ -618,6 +580,11 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
 
         public static SparseCompressedRowMatrixStorage<T> OfRowVectors(VectorStorage<T>[] data)
         {
+            if (data.Length <= 0)
+            {
+                throw new ArgumentOutOfRangeException("data", Resources.MatrixCanNotBeEmpty);
+            }
+
             var storage = new SparseCompressedRowMatrixStorage<T>(data.Length, data[0].Length);
             var rowPointers = storage.RowPointers;
             var columnIndices = new List<int>();
@@ -647,6 +614,11 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
 
         public static SparseCompressedRowMatrixStorage<T> OfColumnVectors(VectorStorage<T>[] data)
         {
+            if (data.Length <= 0)
+            {
+                throw new ArgumentOutOfRangeException("data", Resources.MatrixCanNotBeEmpty);
+            }
+
             var storage = new SparseCompressedRowMatrixStorage<T>(data[0].Length, data.Length);
             var rowPointers = storage.RowPointers;
             var columnIndices = new List<int>();
@@ -864,7 +836,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
 
         // MATRIX COPY
 
-        internal override void CopyToUnchecked(MatrixStorage<T> target, ExistingData existingData = ExistingData.Clear)
+        internal override void CopyToUnchecked(MatrixStorage<T> target, ExistingData existingData)
         {
             var sparseTarget = target as SparseCompressedRowMatrixStorage<T>;
             if (sparseTarget != null)
@@ -940,7 +912,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         internal override void CopySubMatrixToUnchecked(MatrixStorage<T> target,
             int sourceRowIndex, int targetRowIndex, int rowCount,
             int sourceColumnIndex, int targetColumnIndex, int columnCount,
-            ExistingData existingData = ExistingData.Clear)
+            ExistingData existingData)
         {
             if (target == null)
             {
@@ -1055,8 +1027,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         // ROW COPY
 
         internal override void CopySubRowToUnchecked(VectorStorage<T> target, int rowIndex,
-            int sourceColumnIndex, int targetColumnIndex, int columnCount,
-            ExistingData existingData = ExistingData.Clear)
+            int sourceColumnIndex, int targetColumnIndex, int columnCount, ExistingData existingData)
         {
             if (existingData == ExistingData.Clear)
             {
@@ -1082,7 +1053,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
 
         // TRANSPOSE
 
-        internal override void TransposeToUnchecked(MatrixStorage<T> target, ExistingData existingData = ExistingData.Clear)
+        internal override void TransposeToUnchecked(MatrixStorage<T> target, ExistingData existingData)
         {
             var sparseTarget = target as SparseCompressedRowMatrixStorage<T>;
             if (sparseTarget != null)
@@ -1329,6 +1300,193 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             }
         }
 
+        // FIND
+
+        public override Tuple<int, int, T> Find(Func<T, bool> predicate, Zeros zeros)
+        {
+            for (int row = 0; row < RowCount; row++)
+            {
+                var startIndex = RowPointers[row];
+                var endIndex = RowPointers[row + 1];
+                for (var j = startIndex; j < endIndex; j++)
+                {
+                    if (predicate(Values[j]))
+                    {
+                        return new Tuple<int, int, T>(row, ColumnIndices[j], Values[j]);
+                    }
+                }
+            }
+            if (zeros == Zeros.Include && ValueCount < (RowCount * ColumnCount))
+            {
+                if (predicate(Zero))
+                {
+                    int k = 0;
+                    for (int row = 0; row < RowCount; row++)
+                    {
+                        for (int col = 0; col < ColumnCount; col++)
+                        {
+                            if (k < RowPointers[row + 1] && ColumnIndices[k] == col)
+                            {
+                                k++;
+                            }
+                            else
+                            {
+                                return new Tuple<int, int, T>(row, col, Zero);
+                            }
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        internal override Tuple<int, int, T, TOther> Find2Unchecked<TOther>(MatrixStorage<TOther> other, Func<T, TOther, bool> predicate, Zeros zeros)
+        {
+            var denseOther = other as DenseColumnMajorMatrixStorage<TOther>;
+            if (denseOther != null)
+            {
+                TOther[] otherData = denseOther.Data;
+                int k = 0;
+                for (int row = 0; row < RowCount; row++)
+                {
+                    for (int col = 0; col < ColumnCount; col++)
+                    {
+                        bool available = k < RowPointers[row + 1] && ColumnIndices[k] == col;
+                        if (predicate(available ? Values[k++] : Zero, otherData[col*RowCount + row]))
+                        {
+                            return new Tuple<int, int, T, TOther>(row, col, available ? Values[k - 1] : Zero, otherData[col*RowCount + row]);
+                        }
+                    }
+                }
+                return null;
+            }
+
+            var diagonalOther = other as DiagonalMatrixStorage<TOther>;
+            if (diagonalOther != null)
+            {
+                TOther[] otherData = diagonalOther.Data;
+                TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
+
+                if (zeros == Zeros.Include)
+                {
+                    int k = 0;
+                    for (int row = 0; row < RowCount; row++)
+                    {
+                        for (int col = 0; col < ColumnCount; col++)
+                        {
+                            bool available = k < RowPointers[row + 1] && ColumnIndices[k] == col;
+                            if (predicate(available ? Values[k++] : Zero, row == col ? otherData[row] : otherZero))
+                            {
+                                return new Tuple<int, int, T, TOther>(row, col, available ? Values[k - 1] : Zero, row == col ? otherData[row] : otherZero);
+                            }
+                        }
+                    }
+                    return null;
+                }
+
+                for (int row = 0; row < RowCount; row++)
+                {
+                    bool diagonal = false;
+                    var startIndex = RowPointers[row];
+                    var endIndex = RowPointers[row + 1];
+                    for (var j = startIndex; j < endIndex; j++)
+                    {
+                        if (ColumnIndices[j] == row)
+                        {
+                            diagonal = true;
+                            if (predicate(Values[j], otherData[row]))
+                            {
+                                return new Tuple<int, int, T, TOther>(row, row, Values[j], otherData[row]);
+                            }
+                        }
+                        else
+                        {
+                            if (predicate(Values[j], otherZero))
+                            {
+                                return new Tuple<int, int, T, TOther>(row, ColumnIndices[j], Values[j], otherZero);
+                            }
+                        }
+                    }
+                    if (!diagonal && row < ColumnCount)
+                    {
+                        if (predicate(Zero, otherData[row]))
+                        {
+                            return new Tuple<int, int, T, TOther>(row, row, Zero, otherData[row]);
+                        }
+                    }
+                }
+                return null;
+            }
+
+            var sparseOther = other as SparseCompressedRowMatrixStorage<TOther>;
+            if (sparseOther != null)
+            {
+                int[] otherRowPointers = sparseOther.RowPointers;
+                int[] otherColumnIndices = sparseOther.ColumnIndices;
+                TOther[] otherValues = sparseOther.Values;
+                TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
+
+                if (zeros == Zeros.Include)
+                {
+                    int k = 0, otherk = 0;
+                    for (int row = 0; row < RowCount; row++)
+                    {
+                        for (int col = 0; col < ColumnCount; col++)
+                        {
+                            bool available = k < RowPointers[row + 1] && ColumnIndices[k] == col;
+                            bool otherAvailable = otherk < otherRowPointers[row + 1] && otherColumnIndices[otherk] == col;
+                            if (predicate(available ? Values[k++] : Zero, otherAvailable ? otherValues[otherk++] : otherZero))
+                            {
+                                return new Tuple<int, int, T, TOther>(row, col, available ? Values[k - 1] : Zero, otherAvailable ? otherValues[otherk - 1] : otherZero);
+                            }
+                        }
+                    }
+                    return null;
+                }
+
+                for (int row = 0; row < RowCount; row++)
+                {
+                    var startIndex = RowPointers[row];
+                    var endIndex = RowPointers[row + 1];
+                    var otherStartIndex = otherRowPointers[row];
+                    var otherEndIndex = otherRowPointers[row + 1];
+
+                    var j1 = startIndex;
+                    var j2 = otherStartIndex;
+
+                    while (j1 < endIndex || j2 < otherEndIndex)
+                    {
+                        if (j1 == endIndex || j2 < otherEndIndex && ColumnIndices[j1] > otherColumnIndices[j2])
+                        {
+                            if (predicate(Zero, otherValues[j2++]))
+                            {
+                                return new Tuple<int, int, T, TOther>(row, otherColumnIndices[j2 - 1], Zero, otherValues[j2 - 1]);
+                            }
+                        }
+                        else if (j2 == otherEndIndex || ColumnIndices[j1] < otherColumnIndices[j2])
+                        {
+                            if (predicate(Values[j1++], otherZero))
+                            {
+                                return new Tuple<int, int, T, TOther>(row, ColumnIndices[j1 - 1], Values[j1 - 1], otherZero);
+                            }
+                        }
+                        else
+                        {
+                            if (predicate(Values[j1++], otherValues[j2++]))
+                            {
+                                return new Tuple<int, int, T, TOther>(row, ColumnIndices[j1 - 1], Values[j1 - 1], otherValues[j2 - 1]);
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+
+            // FALL BACK
+
+            return base.Find2Unchecked(other, predicate, zeros);
+        }
+
         // FUNCTIONAL COMBINATORS: MAP
 
         public override void MapInplace(Func<T, T> f, Zeros zeros = Zeros.AllowSkip)
@@ -1437,8 +1595,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             }
         }
 
-        internal override void MapToUnchecked<TU>(MatrixStorage<TU> target, Func<T, TU> f,
-            Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
+        internal override void MapToUnchecked<TU>(MatrixStorage<TU> target, Func<T, TU> f, Zeros zeros, ExistingData existingData)
         {
             var processZeros = zeros == Zeros.Include || !Zero.Equals(f(Zero));
 
@@ -1532,8 +1689,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             }
         }
 
-        internal override void MapIndexedToUnchecked<TU>(MatrixStorage<TU> target, Func<int, int, T, TU> f,
-            Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
+        internal override void MapIndexedToUnchecked<TU>(MatrixStorage<TU> target, Func<int, int, T, TU> f, Zeros zeros, ExistingData existingData)
         {
             var processZeros = zeros == Zeros.Include || !Zero.Equals(f(0, 1, Zero));
 
@@ -1630,7 +1786,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         internal override void MapSubMatrixIndexedToUnchecked<TU>(MatrixStorage<TU> target, Func<int, int, T, TU> f,
             int sourceRowIndex, int targetRowIndex, int rowCount,
             int sourceColumnIndex, int targetColumnIndex, int columnCount,
-            Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
+            Zeros zeros, ExistingData existingData)
         {
             var sparseTarget = target as SparseCompressedRowMatrixStorage<TU>;
             if (sparseTarget != null)
@@ -1839,7 +1995,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
 
         // FUNCTIONAL COMBINATORS: FOLD
 
-        internal override void FoldByRowUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros = Zeros.AllowSkip)
+        internal override void FoldByRowUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros)
         {
             if (zeros == Zeros.AllowSkip)
             {
@@ -1879,7 +2035,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             }
         }
 
-        internal override void FoldByColumnUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros = Zeros.AllowSkip)
+        internal override void FoldByColumnUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros)
         {
             if (!ReferenceEquals(state, target))
             {
@@ -1928,6 +2084,128 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
                     target[j] = finalize(target[j], RowCount);
                 }
             }
+        }
+
+        internal override TState Fold2Unchecked<TOther, TState>(MatrixStorage<TOther> other, Func<TState, T, TOther, TState> f, TState state, Zeros zeros)
+        {
+            var denseOther = other as DenseColumnMajorMatrixStorage<TOther>;
+            if (denseOther != null)
+            {
+                TOther[] otherData = denseOther.Data;
+                int k = 0;
+                for (int row = 0; row < RowCount; row++)
+                {
+                    for (int col = 0; col < ColumnCount; col++)
+                    {
+                        bool available = k < RowPointers[row + 1] && ColumnIndices[k] == col;
+                        state = f(state, available ? Values[k++] : Zero, otherData[col*RowCount + row]);
+                    }
+                }
+                return state;
+            }
+
+            var diagonalOther = other as DiagonalMatrixStorage<TOther>;
+            if (diagonalOther != null)
+            {
+                TOther[] otherData = diagonalOther.Data;
+                TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
+
+                if (zeros == Zeros.Include)
+                {
+                    int k = 0;
+                    for (int row = 0; row < RowCount; row++)
+                    {
+                        for (int col = 0; col < ColumnCount; col++)
+                        {
+                            bool available = k < RowPointers[row + 1] && ColumnIndices[k] == col;
+                            state = f(state, available ? Values[k++] : Zero, row == col ? otherData[row] : otherZero);
+                        }
+                    }
+                    return state;
+                }
+
+                for (int row = 0; row < RowCount; row++)
+                {
+                    bool diagonal = false;
+
+                    var startIndex = RowPointers[row];
+                    var endIndex = RowPointers[row + 1];
+                    for (var j = startIndex; j < endIndex; j++)
+                    {
+                        if (ColumnIndices[j] == row)
+                        {
+                            diagonal = true;
+                            state = f(state, Values[j], otherData[row]);
+                        }
+                        else
+                        {
+                            state = f(state, Values[j], otherZero);
+                        }
+                    }
+
+                    if (!diagonal && row < ColumnCount)
+                    {
+                        state = f(state, Zero, otherData[row]);
+                    }
+                }
+                return state;
+            }
+
+            var sparseOther = other as SparseCompressedRowMatrixStorage<TOther>;
+            if (sparseOther != null)
+            {
+                int[] otherRowPointers = sparseOther.RowPointers;
+                int[] otherColumnIndices = sparseOther.ColumnIndices;
+                TOther[] otherValues = sparseOther.Values;
+                TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
+
+                if (zeros == Zeros.Include)
+                {
+                    int k = 0, otherk = 0;
+                    for (int row = 0; row < RowCount; row++)
+                    {
+                        for (int col = 0; col < ColumnCount; col++)
+                        {
+                            bool available = k < RowPointers[row + 1] && ColumnIndices[k] == col;
+                            bool otherAvailable = otherk < otherRowPointers[row + 1] && otherColumnIndices[otherk] == col;
+                            state = f(state, available ? Values[k++] : Zero, otherAvailable ? otherValues[otherk++] : otherZero);
+                        }
+                    }
+                    return state;
+                }
+
+                for (int row = 0; row < RowCount; row++)
+                {
+                    var startIndex = RowPointers[row];
+                    var endIndex = RowPointers[row + 1];
+                    var otherStartIndex = otherRowPointers[row];
+                    var otherEndIndex = otherRowPointers[row + 1];
+
+                    var j1 = startIndex;
+                    var j2 = otherStartIndex;
+
+                    while (j1 < endIndex || j2 < otherEndIndex)
+                    {
+                        if (j1 == endIndex || j2 < otherEndIndex && ColumnIndices[j1] > otherColumnIndices[j2])
+                        {
+                            state = f(state, Zero, otherValues[j2++]);
+                        }
+                        else if (j2 == otherEndIndex || ColumnIndices[j1] < otherColumnIndices[j2])
+                        {
+                            state = f(state, Values[j1++], otherZero);
+                        }
+                        else
+                        {
+                            state = f(state, Values[j1++], otherValues[j2++]);
+                        }
+                    }
+                }
+                return state;
+            }
+
+            // FALL BACK
+
+            return base.Fold2Unchecked(other, f, state, zeros);
         }
     }
 }

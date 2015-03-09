@@ -137,7 +137,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         /// <returns>
         /// <c>true</c> if the current object is equal to the <paramref name="other"/> parameter; otherwise, <c>false</c>.
         /// </returns>
-        public virtual bool Equals(MatrixStorage<T> other)
+        public bool Equals(MatrixStorage<T> other)
         {
             // Reject equality when the argument is null or has a different shape.
             if (other == null)
@@ -155,19 +155,8 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
                 return true;
             }
 
-            // If all else fails, perform element wise comparison.
-            for (var row = 0; row < RowCount; row++)
-            {
-                for (var column = 0; column < ColumnCount; column++)
-                {
-                    if (!At(row, column).Equals(other.At(row, column)))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
+            // Perform element wise comparison.
+            return Find2Unchecked(other, (a, b) => !a.Equals(b), Zeros.AllowSkip) == null;
         }
 
         /// <summary>
@@ -331,7 +320,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             CopyToUnchecked(target, existingData);
         }
 
-        internal virtual void CopyToUnchecked(MatrixStorage<T> target, ExistingData existingData = ExistingData.Clear)
+        internal virtual void CopyToUnchecked(MatrixStorage<T> target, ExistingData existingData)
         {
             for (int j = 0; j < ColumnCount; j++)
             {
@@ -373,7 +362,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         internal virtual void CopySubMatrixToUnchecked(MatrixStorage<T> target,
             int sourceRowIndex, int targetRowIndex, int rowCount,
             int sourceColumnIndex, int targetColumnIndex, int columnCount,
-            ExistingData existingData = ExistingData.Clear)
+            ExistingData existingData)
         {
             for (int j = sourceColumnIndex, jj = targetColumnIndex; j < sourceColumnIndex + columnCount; j++, jj++)
             {
@@ -416,8 +405,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         }
 
         internal virtual void CopySubRowToUnchecked(VectorStorage<T> target, int rowIndex,
-            int sourceColumnIndex, int targetColumnIndex, int columnCount,
-            ExistingData existingData = ExistingData.Clear)
+            int sourceColumnIndex, int targetColumnIndex, int columnCount, ExistingData existingData)
         {
             for (int j = sourceColumnIndex, jj = targetColumnIndex; j < sourceColumnIndex + columnCount; j++, jj++)
             {
@@ -457,8 +445,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         }
 
         internal virtual void CopySubColumnToUnchecked(VectorStorage<T> target, int columnIndex,
-            int sourceRowIndex, int targetRowIndex, int rowCount,
-            ExistingData existingData = ExistingData.Clear)
+            int sourceRowIndex, int targetRowIndex, int rowCount, ExistingData existingData)
         {
             for (int i = sourceRowIndex, ii = targetRowIndex; i < sourceRowIndex + rowCount; i++, ii++)
             {
@@ -489,7 +476,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             TransposeToUnchecked(target, existingData);
         }
 
-        internal virtual void TransposeToUnchecked(MatrixStorage<T> target, ExistingData existingData = ExistingData.Clear)
+        internal virtual void TransposeToUnchecked(MatrixStorage<T> target, ExistingData existingData)
         {
             for (int j = 0; j < ColumnCount; j++)
             {
@@ -627,6 +614,59 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             }
         }
 
+        // FIND
+
+        public virtual Tuple<int, int, T> Find(Func<T, bool> predicate, Zeros zeros)
+        {
+            for (int i = 0; i < RowCount; i++)
+            {
+                for (int j = 0; j < ColumnCount; j++)
+                {
+                    var item = At(i, j);
+                    if (predicate(item))
+                    {
+                        return new Tuple<int, int, T>(i, j, item);
+                    }
+                }
+            }
+            return null;
+        }
+
+        public Tuple<int, int, T, TOther> Find2<TOther>(MatrixStorage<TOther> other, Func<T, TOther, bool> predicate, Zeros zeros)
+            where TOther : struct, IEquatable<TOther>, IFormattable
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+
+            if (RowCount != other.RowCount || ColumnCount != other.ColumnCount)
+            {
+                var message = string.Format(Resources.ArgumentMatrixDimensions2, RowCount + "x" + ColumnCount, other.RowCount + "x" + other.ColumnCount);
+                throw new ArgumentException(message, "other");
+            }
+
+            return Find2Unchecked(other, predicate, zeros);
+        }
+
+        internal virtual Tuple<int, int, T, TOther> Find2Unchecked<TOther>(MatrixStorage<TOther> other, Func<T, TOther, bool> predicate, Zeros zeros)
+            where TOther : struct, IEquatable<TOther>, IFormattable
+        {
+            for (int i = 0; i < RowCount; i++)
+            {
+                for (int j = 0; j < ColumnCount; j++)
+                {
+                    var item = At(i, j);
+                    var otherItem = other.At(i, j);
+                    if (predicate(item, otherItem))
+                    {
+                        return new Tuple<int, int, T, TOther>(i, j, item, otherItem);
+                    }
+                }
+            }
+            return null;
+        }
+
         // FUNCTIONAL COMBINATORS: MAP
 
         public virtual void MapInplace(Func<T, T> f, Zeros zeros = Zeros.AllowSkip)
@@ -669,8 +709,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             MapToUnchecked(target, f, zeros, existingData);
         }
 
-        internal virtual void MapToUnchecked<TU>(MatrixStorage<TU> target, Func<T, TU> f,
-            Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
+        internal virtual void MapToUnchecked<TU>(MatrixStorage<TU> target, Func<T, TU> f, Zeros zeros, ExistingData existingData)
             where TU : struct, IEquatable<TU>, IFormattable
         {
             for (int i = 0; i < RowCount; i++)
@@ -700,8 +739,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
             MapIndexedToUnchecked(target, f, zeros, existingData);
         }
 
-        internal virtual void MapIndexedToUnchecked<TU>(MatrixStorage<TU> target, Func<int, int, T, TU> f,
-            Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
+        internal virtual void MapIndexedToUnchecked<TU>(MatrixStorage<TU> target, Func<int, int, T, TU> f, Zeros zeros, ExistingData existingData)
             where TU : struct, IEquatable<TU>, IFormattable
         {
             for (int j = 0; j < ColumnCount; j++)
@@ -744,7 +782,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         internal virtual void MapSubMatrixIndexedToUnchecked<TU>(MatrixStorage<TU> target, Func<int, int, T, TU> f,
             int sourceRowIndex, int targetRowIndex, int rowCount,
             int sourceColumnIndex, int targetColumnIndex, int columnCount,
-            Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
+            Zeros zeros, ExistingData existingData)
             where TU : struct, IEquatable<TU>, IFormattable
         {
             for (int j = sourceColumnIndex, jj = targetColumnIndex; j < sourceColumnIndex + columnCount; j++, jj++)
@@ -783,7 +821,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         }
 
         /// <remarks>The state array will not be modified, unless it is the same instance as the target array (which is allowed).</remarks>
-        internal virtual void FoldByRowUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros = Zeros.AllowSkip)
+        internal virtual void FoldByRowUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros)
         {
             for (int i = 0; i < RowCount; i++)
             {
@@ -821,7 +859,7 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
         }
 
         /// <remarks>The state array will not be modified, unless it is the same instance as the target array (which is allowed).</remarks>
-        internal virtual void FoldByColumnUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros = Zeros.AllowSkip)
+        internal virtual void FoldByColumnUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros)
         {
             for (int j = 0; j < ColumnCount; j++)
             {
@@ -832,6 +870,37 @@ namespace MathNet.Numerics.LinearAlgebra.Storage
                 }
                 target[j] = finalize(s, RowCount);
             }
+        }
+
+        public TState Fold2<TOther, TState>(MatrixStorage<TOther> other, Func<TState, T, TOther, TState> f, TState state, Zeros zeros)
+            where TOther : struct, IEquatable<TOther>, IFormattable
+        {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+
+            if (RowCount != other.RowCount || ColumnCount != other.ColumnCount)
+            {
+                var message = string.Format(Resources.ArgumentMatrixDimensions2, RowCount + "x" + ColumnCount, other.RowCount + "x" + other.ColumnCount);
+                throw new ArgumentException(message, "other");
+            }
+
+            return Fold2Unchecked(other, f, state, zeros);
+        }
+
+        internal virtual TState Fold2Unchecked<TOther, TState>(MatrixStorage<TOther> other, Func<TState, T, TOther, TState> f, TState state, Zeros zeros)
+            where TOther : struct, IEquatable<TOther>, IFormattable
+        {
+            for (int i = 0; i < RowCount; i++)
+            {
+                for (int j = 0; j < ColumnCount; j++)
+                {
+                    state = f(state, At(i, j), other.At(i, j));
+                }
+            }
+
+            return state;
         }
     }
 }

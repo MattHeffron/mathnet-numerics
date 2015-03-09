@@ -1172,7 +1172,10 @@ namespace MathNet.Numerics.Providers.LinearAlgebra.Mkl
                 throw new ArgumentException(Resources.WorkArrayTooSmall, "work");
             }
 
-            SafeNativeMethods.s_svd_factor(computeVectors, rowsA, columnsA, a, s, u, vt, work, work.Length);
+            if (SafeNativeMethods.s_svd_factor(computeVectors, rowsA, columnsA, a, s, u, vt, work, work.Length) > 0)
+            {
+                throw new NonConvergenceException();
+            }
         }
 
         /// <summary>
@@ -1318,7 +1321,7 @@ namespace MathNet.Numerics.Providers.LinearAlgebra.Mkl
         /// <summary>
         /// Computes the eigenvalues and eigenvectors of a matrix.
         /// </summary>
-        /// <param name="isSymmetric">Wether the matrix is symmetric or not.</param>
+        /// <param name="isSymmetric">Whether the matrix is symmetric or not.</param>
         /// <param name="order">The order of the matrix.</param>
         /// <param name="matrix">The matrix to decompose. The lenth of the array must be order * order.</param>
         /// <param name="matrixEv">On output, the matrix contains the eigen vectors. The lenth of the array must be order * order.</param>
@@ -1366,7 +1369,10 @@ namespace MathNet.Numerics.Providers.LinearAlgebra.Mkl
                 throw new ArgumentException(String.Format(Resources.ArgumentArrayWrongLength, order*order), "matrixD");
             }
 
-            SafeNativeMethods.s_eigen(isSymmetric, order, matrix, matrixEv, vectorEv, matrixD);
+            if (SafeNativeMethods.s_eigen(isSymmetric, order, matrix, matrixEv, vectorEv, matrixD) > 0)
+            {
+                throw new NonConvergenceException();
+            }
         }
     }
 }
