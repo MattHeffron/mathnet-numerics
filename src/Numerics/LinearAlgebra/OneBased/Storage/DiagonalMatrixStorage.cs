@@ -116,44 +116,6 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         }
 
         /// <summary>
-        /// Indicates whether the current object is equal to another object of the same type.
-        /// </summary>
-        /// <param name="other">
-        /// An object to compare with this object.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if the current object is equal to the <paramref name="other"/> parameter; otherwise, <c>false</c>.
-        /// </returns>
-        public override bool Equals(MatrixStorage<T> other)
-        {
-            var diagonal = other as DiagonalMatrixStorage<T>;
-            if (diagonal == null)
-            {
-                return base.Equals(other);
-            }
-
-            // Reject equality when the argument is null or has a different shape.
-            if (ColumnCount != other.ColumnCount || RowCount != other.RowCount)
-            {
-                return false;
-            }
-
-            // Accept if the argument is the same object as this.
-            if (ReferenceEquals(this, other))
-            {
-                return true;
-            }
-
-            if (diagonal.Data.Length != Data.Length)
-            {
-                return false;
-            }
-
-            // If all else fails, perform element wise comparison.
-            return !Data.Where((t, i) => !t.Equals(diagonal.Data[i])).Any();
-        }
-
-        /// <summary>
         /// Returns a hash code for this instance.
         /// </summary>
         /// <returns>
@@ -290,7 +252,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         // MATRIX COPY
 
-        internal override void CopyToUnchecked(MatrixStorage<T> target, ExistingData existingData = ExistingData.Clear)
+        internal override void CopyToUnchecked(MatrixStorage<T> target, ExistingData existingData)
         {
             var diagonalTarget = target as DiagonalMatrixStorage<T>;
             if (diagonalTarget != null)
@@ -361,7 +323,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         internal override void CopySubMatrixToUnchecked(MatrixStorage<T> target,
             int sourceRowIndex, int targetRowIndex, int rowCount,
             int sourceColumnIndex, int targetColumnIndex, int columnCount,
-            ExistingData existingData = ExistingData.Clear)
+            ExistingData existingData)
         {
             var denseTarget = target as DenseColumnMajorMatrixStorage<T>;
             if (denseTarget != null)
@@ -502,8 +464,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         // ROW COPY
 
         internal override void CopySubRowToUnchecked(VectorStorage<T> target, int rowIndex,
-            int sourceColumnIndex, int targetColumnIndex, int columnCount,
-            ExistingData existingData = ExistingData.Clear)
+            int sourceColumnIndex, int targetColumnIndex, int columnCount, ExistingData existingData)
         {
             if (existingData == ExistingData.Clear)
             {
@@ -519,8 +480,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         // COLUMN COPY
 
         internal override void CopySubColumnToUnchecked(VectorStorage<T> target, int columnIndex,
-            int sourceRowIndex, int targetRowIndex, int rowCount,
-            ExistingData existingData = ExistingData.Clear)
+            int sourceRowIndex, int targetRowIndex, int rowCount, ExistingData existingData)
         {
             if (existingData == ExistingData.Clear)
             {
@@ -535,7 +495,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         // TRANSPOSE
 
-        internal override void TransposeToUnchecked(MatrixStorage<T> target, ExistingData existingData = ExistingData.Clear)
+        internal override void TransposeToUnchecked(MatrixStorage<T> target, ExistingData existingData)
         {
             CopyToUnchecked(target, existingData);
         }
@@ -646,6 +606,137 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             }
         }
 
+        // FIND
+
+        public override Tuple<int, int, T> Find(Func<T, bool> predicate, Zeros zeros)
+        {
+            for (int i = 0; i < Data.Length; i++)
+            {
+                if (predicate(Data[i]))
+                {
+                    return new Tuple<int, int, T>(i, i, Data[i]);
+                }
+            }
+            if (zeros == Zeros.Include && (RowCount > 1 || ColumnCount > 1))
+            {
+                if (predicate(Zero))
+                {
+                    return new Tuple<int, int, T>(RowCount > 1 ? 1 : 0, RowCount > 1 ? 0 : 1, Zero);
+                }
+            }
+            return null;
+        }
+
+        internal override Tuple<int, int, T, TOther> Find2Unchecked<TOther>(MatrixStorage<TOther> other, Func<T, TOther, bool> predicate, Zeros zeros)
+        {
+            var denseOther = other as DenseColumnMajorMatrixStorage<TOther>;
+            if (denseOther != null)
+            {
+                TOther[] otherData = denseOther.Data;
+                int k = 0;
+                for (int j = 0; j < ColumnCount; j++)
+                {
+                    for (int i = 0; i < RowCount; i++)
+                    {
+                        if (predicate(i == j ? Data[i] : Zero, otherData[k]))
+                        {
+                            return new Tuple<int, int, T, TOther>(i, j, i == j ? Data[i] : Zero, otherData[k]);
+                        }
+                        k++;
+                    }
+                }
+                return null;
+            }
+
+            var diagonalOther = other as DiagonalMatrixStorage<TOther>;
+            if (diagonalOther != null)
+            {
+                TOther[] otherData = diagonalOther.Data;
+                for (int i = 0; i < Data.Length; i++)
+                {
+                    if (predicate(Data[i], otherData[i]))
+                    {
+                        return new Tuple<int, int, T, TOther>(i, i, Data[i], otherData[i]);
+                    }
+                }
+                if (zeros == Zeros.Include && (RowCount > 1 || ColumnCount > 1))
+                {
+                    TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
+                    if (predicate(Zero, otherZero))
+                    {
+                        return new Tuple<int, int, T, TOther>(RowCount > 1 ? 1 : 0, RowCount > 1 ? 0 : 1, Zero, otherZero);
+                    }
+                }
+                return null;
+            }
+
+            var sparseOther = other as SparseCompressedRowMatrixStorage<TOther>;
+            if (sparseOther != null)
+            {
+                int[] otherRowPointers = sparseOther.RowPointers;
+                int[] otherColumnIndices = sparseOther.ColumnIndices;
+                TOther[] otherValues = sparseOther.Values;
+                TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
+                for (int row = 0; row < RowCount; row++)
+                {
+                    bool diagonal = false;
+                    var startIndex = otherRowPointers[row];
+                    var endIndex = otherRowPointers[row + 1];
+                    for (var j = startIndex; j < endIndex; j++)
+                    {
+                        if (otherColumnIndices[j] == row)
+                        {
+                            diagonal = true;
+                            if (predicate(Data[row], otherValues[j]))
+                            {
+                                return new Tuple<int, int, T, TOther>(row, row, Data[row], otherValues[j]);
+                            }
+                        }
+                        else
+                        {
+                            if (predicate(Zero, otherValues[j]))
+                            {
+                                return new Tuple<int, int, T, TOther>(row, otherColumnIndices[j], Zero, otherValues[j]);
+                            }
+                        }
+                    }
+                    if (!diagonal && row < ColumnCount)
+                    {
+                        if (predicate(Data[row], otherZero))
+                        {
+                            return new Tuple<int, int, T, TOther>(row, row, Data[row], otherZero);
+                        }
+                    }
+                }
+                if (zeros == Zeros.Include && sparseOther.ValueCount < (RowCount * ColumnCount))
+                {
+                    if (predicate(Zero, otherZero))
+                    {
+                        int k = 0;
+                        for (int row = 0; row < RowCount; row++)
+                        {
+                            for (int col = 0; col < ColumnCount; col++)
+                            {
+                                if (k < otherRowPointers[row + 1] && otherColumnIndices[k] == col)
+                                {
+                                    k++;
+                                }
+                                else if (row != col)
+                                {
+                                    return new Tuple<int, int, T, TOther>(row, col, Zero, otherZero);
+                                }
+                            }
+                        }
+                    }
+                }
+                return null;
+            }
+
+            // FALL BACK
+
+            return base.Find2Unchecked(other, predicate, zeros);
+        }
+
         // FUNCTIONAL COMBINATORS: MAP
 
         public override void MapInplace(Func<T, T> f, Zeros zeros = Zeros.AllowSkip)
@@ -681,7 +772,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         }
 
         internal override void MapToUnchecked<TU>(MatrixStorage<TU> target, Func<T, TU> f,
-            Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
+            Zeros zeros, ExistingData existingData)
         {
             var processZeros = zeros == Zeros.Include || !Zero.Equals(f(Zero));
 
@@ -730,7 +821,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         }
 
         internal override void MapIndexedToUnchecked<TU>(MatrixStorage<TU> target, Func<int, int, T, TU> f,
-            Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
+            Zeros zeros, ExistingData existingData)
         {
             var processZeros = zeros == Zeros.Include || !Zero.Equals(f(0, 1, Zero));
 
@@ -781,7 +872,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         internal override void MapSubMatrixIndexedToUnchecked<TU>(MatrixStorage<TU> target, Func<int, int, T, TU> f,
             int sourceRowIndex, int targetRowIndex, int rowCount,
             int sourceColumnIndex, int targetColumnIndex, int columnCount,
-            Zeros zeros = Zeros.AllowSkip, ExistingData existingData = ExistingData.Clear)
+            Zeros zeros, ExistingData existingData)
         {
             var diagonalTarget = target as DiagonalMatrixStorage<TU>;
             if (diagonalTarget != null)
@@ -952,7 +1043,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         // FUNCTIONAL COMBINATORS: FOLD
 
-        internal override void FoldByRowUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros = Zeros.AllowSkip)
+        internal override void FoldByRowUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros)
         {
             if (zeros == Zeros.AllowSkip)
             {
@@ -980,7 +1071,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             }
         }
 
-        internal override void FoldByColumnUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros = Zeros.AllowSkip)
+        internal override void FoldByColumnUnchecked<TU>(TU[] target, Func<TU, T, TU> f, Func<TU, int, TU> finalize, TU[] state, Zeros zeros)
         {
             if (zeros == Zeros.AllowSkip)
             {
@@ -1006,6 +1097,108 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     target[j] = finalize(s, RowCount);
                 }
             }
+        }
+
+        internal override TState Fold2Unchecked<TOther, TState>(MatrixStorage<TOther> other, Func<TState, T, TOther, TState> f, TState state, Zeros zeros)
+        {
+            var denseOther = other as DenseColumnMajorMatrixStorage<TOther>;
+            if (denseOther != null)
+            {
+                TOther[] otherData = denseOther.Data;
+                int k = 0;
+                for (int j = 0; j < ColumnCount; j++)
+                {
+                    for (int i = 0; i < RowCount; i++)
+                    {
+                        state = f(state, i == j ? Data[i] : Zero, otherData[k]);
+                        k++;
+                    }
+                }
+                return state;
+            }
+
+            var diagonalOther = other as DiagonalMatrixStorage<TOther>;
+            if (diagonalOther != null)
+            {
+                TOther[] otherData = diagonalOther.Data;
+                for (int i = 0; i < Data.Length; i++)
+                {
+                    state = f(state, Data[i], otherData[i]);
+                }
+
+                // Do we really need to do this?
+                if (zeros == Zeros.Include)
+                {
+                    TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
+                    int count = RowCount*ColumnCount - Data.Length;
+                    for (int i = 0; i < count; i++)
+                    {
+                        state = f(state, Zero, otherZero);
+                    }
+                }
+
+                return state;
+            }
+
+            var sparseOther = other as SparseCompressedRowMatrixStorage<TOther>;
+            if (sparseOther != null)
+            {
+                int[] otherRowPointers = sparseOther.RowPointers;
+                int[] otherColumnIndices = sparseOther.ColumnIndices;
+                TOther[] otherValues = sparseOther.Values;
+                TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
+
+                if (zeros == Zeros.Include)
+                {
+                    int k = 0;
+                    for (int row = 0; row < RowCount; row++)
+                    {
+                        for (int col = 0; col < ColumnCount; col++)
+                        {
+                            if (k < otherRowPointers[row + 1] && otherColumnIndices[k] == col)
+                            {
+                                state = f(state, row == col ? Data[row] : Zero, otherValues[k++]);
+                            }
+                            else
+                            {
+                                state = f(state, row == col ? Data[row] : Zero, otherZero);
+                            }
+                        }
+                    }
+                    return state;
+                }
+
+                for (int row = 0; row < RowCount; row++)
+                {
+                    bool diagonal = false;
+
+                    var startIndex = otherRowPointers[row];
+                    var endIndex = otherRowPointers[row + 1];
+                    for (var j = startIndex; j < endIndex; j++)
+                    {
+                        if (otherColumnIndices[j] == row)
+                        {
+                            diagonal = true;
+                            state = f(state, Data[row], otherValues[j]);
+                        }
+                        else
+                        {
+                            state = f(state, Zero, otherValues[j]);
+                        }
+                    }
+
+                    if (!diagonal && row < ColumnCount)
+                    {
+                        state = f(state, Data[row], otherZero);
+                    }
+                }
+
+                return state;
+            }
+
+            // FALL BACK
+
+            return base.Fold2Unchecked(other, f, state, zeros);
         }
     }
 }

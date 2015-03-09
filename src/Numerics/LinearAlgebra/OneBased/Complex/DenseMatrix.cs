@@ -503,7 +503,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
             var diagonalOther = other.Storage as DiagonalMatrixStorage<Complex>;
             if (diagonalOther != null)
             {
-                Storage.CopyToUnchecked(result.Storage);
+                Storage.CopyToUnchecked(result.Storage, ExistingData.Clear);
                 var diagonal = diagonalOther.Data;
                 for (int i = 1; i <= diagonal.Length; i++)
                 {

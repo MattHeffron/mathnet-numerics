@@ -484,7 +484,7 @@ namespace MathNet.Numerics.LinearAlgebra.Integer
             var diagonalOther = other.Storage as DiagonalMatrixStorage<int>;
             if (diagonalOther != null)
             {
-                Storage.CopyToUnchecked(result.Storage);
+                Storage.CopyToUnchecked(result.Storage, ExistingData.Clear);
                 var diagonal = diagonalOther.Data;
                 for (int i = 0; i < diagonal.Length; i++)
                 {

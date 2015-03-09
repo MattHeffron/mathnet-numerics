@@ -261,7 +261,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             }
 
             var ret = Vector<T>.Build.SameAs(this, ColumnCount);
-            Storage.CopySubRowToUnchecked(ret.Storage, index, 1, 1, ColumnCount);
+            Storage.CopySubRowToUnchecked(ret.Storage, index, 1, 1, ColumnCount, ExistingData.AssumeZeros);
             return ret;
         }
 
@@ -347,7 +347,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             }
 
             var ret = Vector<T>.Build.SameAs(this, RowCount);
-            Storage.CopySubColumnToUnchecked(ret.Storage, index, 1, 1, RowCount);
+            Storage.CopySubColumnToUnchecked(ret.Storage, index, 1, 1, RowCount, ExistingData.AssumeZeros);
             return ret;
         }
 
@@ -912,7 +912,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// Copies the values of a given matrix into a region in this matrix.
         /// </summary>
         /// <param name="rowIndex">The row to start copying to.</param>
-        /// <param name="sorceRowIndex">The row of the sub-matrix to start copying from.</param>
+        /// <param name="sourceRowIndex">The row of the sub-matrix to start copying from.</param>
         /// <param name="rowCount">The number of rows to copy. Must be positive.</param>
         /// <param name="columnIndex">The column to start copying to.</param>
         /// <param name="sourceColumnIndex">The column of the sub-matrix to start copying from.</param>
@@ -927,9 +927,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         /// <item>the size of <paramref name="subMatrix"/> is not at least <paramref name="rowCount"/> x <paramref name="columnCount"/>.</item>
         /// <exception cref="ArgumentOutOfRangeException">If <paramref name="rowCount"/> or <paramref name="columnCount"/>
         /// is not positive.</exception>
-        public void SetSubMatrix(int rowIndex, int sorceRowIndex, int rowCount, int columnIndex, int sourceColumnIndex, int columnCount, Matrix<T> subMatrix)
+        public void SetSubMatrix(int rowIndex, int sourceRowIndex, int rowCount, int columnIndex, int sourceColumnIndex, int columnCount, Matrix<T> subMatrix)
         {
-            subMatrix.Storage.CopySubMatrixTo(Storage, sorceRowIndex, rowIndex, rowCount, sourceColumnIndex, columnIndex, columnCount);
+            subMatrix.Storage.CopySubMatrixTo(Storage, sourceRowIndex, rowIndex, rowCount, sourceColumnIndex, columnIndex, columnCount);
         }
 
         /// <summary>
@@ -1121,8 +1121,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw new ArgumentException(Resources.ArgumentMatrixSameColumnDimension);
             }
 
-            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount);
-            right.Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, right.RowCount, 1, ColumnCount, right.ColumnCount);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount, ExistingData.Clear);
+            right.Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, right.RowCount, 1, ColumnCount, right.ColumnCount, ExistingData.Clear);
         }
 
         /// <summary>
@@ -1183,8 +1183,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw DimensionsDontMatch<ArgumentException>(this, result, "result");
             }
 
-            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount);
-            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, 1, lower.ColumnCount);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount, ExistingData.Clear);
+            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, 1, lower.ColumnCount, ExistingData.Clear);
         }
 
         /// <summary>
@@ -1205,8 +1205,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             }
 
             var result = Build.SameAs(this, lower, RowCount + lower.RowCount, ColumnCount + lower.ColumnCount, RowCount != ColumnCount);
-            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount);
-            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, ColumnCount, lower.ColumnCount);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount, ExistingData.AssumeZeros);
+            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, ColumnCount, lower.ColumnCount, ExistingData.AssumeZeros);
             return result;
         }
 
@@ -1237,8 +1237,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 throw DimensionsDontMatch<ArgumentException>(this, result, "result");
             }
 
-            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount);
-            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, ColumnCount, lower.ColumnCount);
+            Storage.CopySubMatrixToUnchecked(result.Storage, 1, 1, RowCount, 1, 1, ColumnCount, ExistingData.Clear);
+            lower.Storage.CopySubMatrixToUnchecked(result.Storage, 1, RowCount, lower.RowCount, 1, ColumnCount, lower.ColumnCount, ExistingData.Clear);
         }
 
         /// <summary>
@@ -1734,6 +1734,48 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public Vector<T> ReduceColumns(Func<Vector<T>, Vector<T>, Vector<T>> f)
         {
             return EnumerateColumns().Aggregate(f);
+        }
+
+        /// <summary>
+        /// Applies a function to update the status with each value pair of two matrices and returns the resulting status.
+        /// </summary>
+        public TState Fold2<TOther, TState>(Func<TState, T, TOther, TState> f, TState state, Matrix<TOther> other, Zeros zeros = Zeros.AllowSkip)
+            where TOther : struct, IEquatable<TOther>, IFormattable
+        {
+            return Storage.Fold2(other.Storage, f, state, zeros);
+        }
+
+        public Tuple<int, int, T> Find(Func<T, bool> predicate, Zeros zeros = Zeros.AllowSkip)
+        {
+            return Storage.Find(predicate, zeros);
+        }
+
+        public Tuple<int, int, T, TOther> Find2<TOther>(Func<T, TOther, bool> predicate, Matrix<TOther> other, Zeros zeros = Zeros.AllowSkip)
+            where TOther : struct, IEquatable<TOther>, IFormattable
+        {
+            return Storage.Find2(other.Storage, predicate, zeros);
+        }
+
+        public bool Exists(Func<T, bool> predicate, Zeros zeros = Zeros.AllowSkip)
+        {
+            return Storage.Find(predicate, zeros) != null;
+        }
+
+        public bool Exists2<TOther>(Func<T, TOther, bool> predicate, Matrix<TOther> other, Zeros zeros = Zeros.AllowSkip)
+            where TOther : struct, IEquatable<TOther>, IFormattable
+        {
+            return Storage.Find2(other.Storage, predicate, zeros) != null;
+        }
+
+        public bool ForAll(Func<T, bool> predicate, Zeros zeros = Zeros.AllowSkip)
+        {
+            return Storage.Find(x => !predicate(x), zeros) == null;
+        }
+
+        public bool ForAll2<TOther>(Func<T, TOther, bool> predicate, Matrix<TOther> other, Zeros zeros = Zeros.AllowSkip)
+            where TOther : struct, IEquatable<TOther>, IFormattable
+        {
+            return Storage.Find2(other.Storage, (x, y) => !predicate(x, y), zeros) == null;
         }
     }
 }
