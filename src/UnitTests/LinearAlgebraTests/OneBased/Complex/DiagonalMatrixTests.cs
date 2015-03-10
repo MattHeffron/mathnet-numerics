@@ -122,7 +122,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         {
             var data = new[] {new Complex(1.0, 1), new Complex(2.0, 1), new Complex(3.0, 1), new Complex(4.0, 1), new Complex(5.0, 1)};
             var matrix = new DiagonalMatrix(5, 5, data);
-            matrix[0, 0] = new Complex(10.0, 1);
+            matrix[1, 1] = new Complex(10.0, 1);
             Assert.AreEqual(new Complex(10.0, 1), data[0]);
         }
 
@@ -143,7 +143,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             {
                 for (var j = 0; j < TestData2D[name].GetLength(1); j++)
                 {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i, j]);
+                    Assert.AreEqual(TestData2D[name][i, j], matrix[i + 1, j + 1]);
                 }
             }
         }
@@ -155,7 +155,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateMatrixWithUniformValues()
         {
             var matrix = new DiagonalMatrix(10, 10, new Complex(10.0, 1));
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
                 Assert.AreEqual(matrix[i, i], new Complex(10.0, 1));
             }
@@ -168,9 +168,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateIdentity()
         {
             var matrix = DiagonalMatrix.CreateIdentity(5);
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     Assert.AreEqual(i == j ? Complex.One : Complex.Zero, matrix[i, j]);
                 }
@@ -203,9 +203,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
 
-            for (var i = 0; i < matrixC.RowCount; i++)
+            for (var i = 1; i <= matrixC.RowCount; i++)
             {
-                for (var j = 0; j < matrixC.ColumnCount; j++)
+                for (var j = 1; j <= matrixC.ColumnCount; j++)
                 {
                     AssertHelpers.AlmostEqualRelative(matrixA.Row(i)*matrixB.Column(j), matrixC[i, j], 15);
                 }
@@ -245,13 +245,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
                 var result = data.Clone();
                 data.PointwiseDivide(other, result);
                 var min = Math.Min(data.RowCount, data.ColumnCount);
-                for (var i = 0; i < min; i++)
+                for (var i = 1; i <= min; i++)
                 {
                     Assert.AreEqual(data[i, i]/other[i, i], result[i, i]);
                 }
 
                 result = data.PointwiseDivide(other);
-                for (var i = 0; i < min; i++)
+                for (var i = 1; i <= min; i++)
                 {
                     Assert.AreEqual(data[i, i]/other[i, i], result[i, i]);
                 }

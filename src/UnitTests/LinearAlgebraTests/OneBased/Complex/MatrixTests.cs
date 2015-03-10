@@ -50,9 +50,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreNotSame(matrix, transpose);
             Assert.AreEqual(matrix.RowCount, transpose.ColumnCount);
             Assert.AreEqual(matrix.ColumnCount, transpose.RowCount);
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     Assert.AreEqual(matrix[i, j], transpose[j, i]);
                 }
@@ -76,9 +76,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreNotSame(matrix, transpose);
             Assert.AreEqual(matrix.RowCount, transpose.ColumnCount);
             Assert.AreEqual(matrix.ColumnCount, transpose.RowCount);
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     Assert.AreEqual(matrix[i, j], transpose[j, i].Conjugate());
                 }

@@ -197,7 +197,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         {
             var vector = new DenseVector(Data);
             var other = +vector;
-            for (var i = 0; i < Data.Length; i++)
+            for (var i = 1; i <= Data.Length; i++)
             {
                 Assert.AreEqual(vector[i], other[i]);
             }
@@ -217,7 +217,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             for (var i = 0; i < Data.Length; i++)
             {
-                Assert.AreEqual(Data[i]*2.0, result[i]);
+                Assert.AreEqual(Data[i]*2.0, result[i + 1]);
             }
         }
 
@@ -231,7 +231,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var other = -vector;
             for (var i = 0; i < Data.Length; i++)
             {
-                Assert.AreEqual(-Data[i], other[i]);
+                Assert.AreEqual(-Data[i], other[i + 1]);
             }
         }
 
@@ -247,7 +247,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
 
-            for (var i = 0; i < Data.Length; i++)
+            for (var i = 1; i <= Data.Length; i++)
             {
                 Assert.AreEqual(Complex.Zero, result[i]);
             }
@@ -264,13 +264,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             for (var i = 0; i < Data.Length; i++)
             {
-                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i]);
+                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i + 1]);
             }
 
             vector = vector*1.0;
             for (var i = 0; i < Data.Length; i++)
             {
-                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i]);
+                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i + 1]);
             }
 
             vector = new DenseVector(Data);
@@ -278,13 +278,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             for (var i = 0; i < Data.Length; i++)
             {
-                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i]);
+                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i + 1]);
             }
 
             vector = 1.0*vector;
             for (var i = 0; i < Data.Length; i++)
             {
-                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i]);
+                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i + 1]);
             }
         }
 
@@ -299,13 +299,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             for (var i = 0; i < Data.Length; i++)
             {
-                AssertHelpers.AlmostEqualRelative(Data[i]/new Complex(2.0, 1), vector[i], 14);
+                AssertHelpers.AlmostEqualRelative(Data[i]/new Complex(2.0, 1), vector[i + 1], 14);
             }
 
             vector = vector/1.0;
             for (var i = 0; i < Data.Length; i++)
             {
-                AssertHelpers.AlmostEqualRelative(Data[i]/new Complex(2.0, 1), vector[i], 14);
+                AssertHelpers.AlmostEqualRelative(Data[i]/new Complex(2.0, 1), vector[i + 1], 14);
             }
         }
 
@@ -318,9 +318,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector1 = CreateVector(Data);
             var vector2 = CreateVector(Data);
             var m = Vector<Complex>.OuterProduct(vector1, vector2);
-            for (var i = 0; i < vector1.Count; i++)
+            for (var i = 1; i <= vector1.Count; i++)
             {
-                for (var j = 0; j < vector2.Count; j++)
+                for (var j = 1; j <= vector2.Count; j++)
                 {
                     Assert.AreEqual(m[i, j], vector1[i]*vector2[j]);
                 }

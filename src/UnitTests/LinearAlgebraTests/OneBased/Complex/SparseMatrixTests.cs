@@ -98,7 +98,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             // Sparse Matrix copies values from Complex[], but no remember reference. 
             var data = new[] {new Complex(1.0, 1), new Complex(1.0, 1), new Complex(1.0, 1), new Complex(1.0, 1), new Complex(1.0, 1), new Complex(1.0, 1), new Complex(2.0, 1), new Complex(2.0, 1), new Complex(2.0, 1)};
             var matrix = SparseMatrix.OfColumnMajor(3, 3, data);
-            matrix[0, 0] = new Complex(10.0, 1);
+            matrix[1, 1] = new Complex(10.0, 1);
             Assert.AreNotEqual(new Complex(10.0, 1), data[0]);
         }
 
@@ -109,7 +109,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void MatrixFrom2DArrayIsCopy()
         {
             var matrix = SparseMatrix.OfArray(TestData2D["Singular3x3"]);
-            matrix[0, 0] = new Complex(10.0, 1);
+            matrix[1, 1] = new Complex(10.0, 1);
             Assert.AreEqual(new Complex(1.0, 1), TestData2D["Singular3x3"][0, 0]);
         }
 
@@ -130,7 +130,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             {
                 for (var j = 0; j < TestData2D[name].GetLength(1); j++)
                 {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i, j]);
+                    Assert.AreEqual(TestData2D[name][i, j], matrix[i + 1, j + 1]);
                 }
             }
         }
@@ -142,9 +142,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateIdentity()
         {
             var matrix = SparseMatrix.CreateIdentity(5);
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     Assert.AreEqual(i == j ? Complex.One : Complex.Zero, matrix[i, j]);
                 }
@@ -172,9 +172,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var nonzero = 0;
             var rnd = new System.Random(0);
 
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     var value = rnd.Next(10)*rnd.Next(10)*rnd.Next(10)*rnd.Next(10)*rnd.Next(10);
                     if (value != 0)
@@ -287,7 +287,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var matrix = new SparseMatrix(Order);
             Assert.AreEqual(Order, matrix.RowCount);
             Assert.AreEqual(Order, matrix.ColumnCount);
-            Assert.DoesNotThrow(() => matrix[0, 0] = 1);
+            Assert.DoesNotThrow(() => matrix[1, 1] = 1);
         }
     }
 }

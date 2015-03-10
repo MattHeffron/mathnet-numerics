@@ -36,7 +36,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 #endif
 
     /// <summary>
-    /// User-defined vector implementation (internal class for testing purposes)
+    /// User-defined (one based indexing) vector implementation (internal class for testing purposes)
     /// </summary>
     internal class UserDefinedVector : Vector
     {
@@ -63,12 +63,12 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             public override Complex At(int index)
             {
-                return Data[index];
+                return Data[index - 1];
             }
 
             public override void At(int index, Complex value)
             {
-                Data[index] = value;
+                Data[index - 1] = value;
             }
         }
 

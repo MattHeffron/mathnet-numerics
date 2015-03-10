@@ -94,13 +94,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector = CreateVector(Data);
             var other = CreateVector(Data.Length);
 
-            vector.CopySubVectorTo(other, 2, 2, 2);
+            vector.CopySubVectorTo(other, 3, 3, 2);
 
-            AssertHelpers.AlmostEqual(Complex.Zero, other[0]);
             AssertHelpers.AlmostEqual(Complex.Zero, other[1]);
-            AssertHelpers.AlmostEqual(new Complex(3, 1), other[2]);
-            AssertHelpers.AlmostEqual(new Complex(4, 1), other[3]);
-            AssertHelpers.AlmostEqual(Complex.Zero, other[4]);
+            AssertHelpers.AlmostEqual(Complex.Zero, other[2]);
+            AssertHelpers.AlmostEqual(new Complex(3, 1), other[3]);
+            AssertHelpers.AlmostEqual(new Complex(4, 1), other[4]);
+            AssertHelpers.AlmostEqual(Complex.Zero, other[5]);
         }
 
         /// <summary>
@@ -110,13 +110,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCopyPartialVectorToSelf()
         {
             var vector = CreateVector(Data);
-            vector.CopySubVectorTo(vector, 0, 2, 2);
+            vector.CopySubVectorTo(vector, 1, 3, 2);
 
-            AssertHelpers.AlmostEqual(new Complex(1, 1), vector[0]);
-            AssertHelpers.AlmostEqual(new Complex(2, 1), vector[1]);
-            AssertHelpers.AlmostEqual(new Complex(1, 1), vector[2]);
-            AssertHelpers.AlmostEqual(new Complex(2, 1), vector[3]);
-            AssertHelpers.AlmostEqual(new Complex(5, 1), vector[4]);
+            AssertHelpers.AlmostEqual(new Complex(1, 1), vector[1]);
+            AssertHelpers.AlmostEqual(new Complex(2, 1), vector[2]);
+            AssertHelpers.AlmostEqual(new Complex(1, 1), vector[3]);
+            AssertHelpers.AlmostEqual(new Complex(2, 1), vector[4]);
+            AssertHelpers.AlmostEqual(new Complex(5, 1), vector[5]);
         }
 
         /// <summary>
@@ -164,7 +164,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector = CreateVector(Data);
             for (var i = 0; i < Data.Length; i++)
             {
-                Assert.AreEqual(Data[i], vector[i]);
+                Assert.AreEqual(Data[i], vector[i + 1]);
             }
         }
 
@@ -281,9 +281,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(vector.Count, matrix.RowCount);
             Assert.AreEqual(1, matrix.ColumnCount);
 
-            for (var i = 0; i < vector.Count; i++)
+            for (var i = 1; i <= vector.Count; i++)
             {
-                Assert.AreEqual(vector[i], matrix[i, 0]);
+                Assert.AreEqual(vector[i], matrix[i, 1]);
             }
         }
 
@@ -299,9 +299,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(vector.Count, matrix.ColumnCount);
             Assert.AreEqual(1, matrix.RowCount);
 
-            for (var i = 0; i < vector.Count; i++)
+            for (var i = 1; i <= vector.Count; i++)
             {
-                Assert.AreEqual(vector[i], matrix[0, i]);
+                Assert.AreEqual(vector[i], matrix[1, i]);
             }
         }
 
@@ -321,15 +321,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         /// </summary>
         /// <param name="index">The first element to begin copying from.</param>
         /// <param name="length">The number of elements to copy.</param>
-        [TestCase(0, 5)]
-        [TestCase(2, 2)]
-        [TestCase(1, 4)]
+        [TestCase(1, 5)]
+        [TestCase(3, 2)]
+        [TestCase(2, 4)]
         public void CanGetSubVector(int index, int length)
         {
             var vector = CreateVector(Data);
             var sub = vector.SubVector(index, length);
             Assert.AreEqual(length, sub.Count);
-            for (var i = 0; i < length; i++)
+            for (var i = 1; i <= length; i++)
             {
                 Assert.AreEqual(vector[i + index], sub[i]);
             }
@@ -355,7 +355,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanFindAbsoluteMinimumIndex()
         {
             var source = CreateVector(Data);
-            const int Expected = 0;
+            const int Expected = 1;
             var actual = source.AbsoluteMinimumIndex();
             Assert.AreEqual(Expected, actual);
         }
@@ -379,7 +379,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanFindAbsoluteMaximumIndex()
         {
             var source = CreateVector(Data);
-            const int Expected = 4;
+            const int Expected = 5;
             var actual = source.AbsoluteMaximumIndex();
             Assert.AreEqual(Expected, actual);
         }
