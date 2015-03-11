@@ -56,14 +56,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var matrix = TestMatrices["Singular3x3"];
             var clone = matrix.Clone();
             clone = clone.Multiply(value);
-
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j] * value, clone[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrix[i, j] * value, clone[i, j]));
         }
 
         /// <summary>
@@ -151,14 +144,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var value = new Complex(real, 1.0);
             var matrix = TestMatrices["Singular3x3"];
             var clone = value * matrix;
-
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(value * matrix[i, j], clone[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(value * matrix[i, j], clone[i, j]));
         }
 
         /// <summary>
@@ -173,14 +159,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var value = new Complex(real, 1.0);
             var matrix = TestMatrices["Singular3x3"];
             var clone = matrix * value;
-
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j] * value, clone[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrix[i, j] * value, clone[i, j]));
         }
 
         /// <summary>
@@ -196,14 +175,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var matrix = TestMatrices["Singular3x3"];
             var result = matrix.Clone();
             matrix.Multiply(value, result);
-
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j] * value, result[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrix[i, j] * value, result[i, j]));
         }
 
         /// <summary>
@@ -242,13 +214,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             var matrix = matrixA.Clone();
             matrix = matrix.Add(matrixB);
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j], matrixA[i, j] + matrixB[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrixA[i, j] + matrixB[i, j], matrix[i, j]));
         }
 
         /// <summary>
@@ -286,13 +252,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var matrixB = TestMatrices[mtxB];
 
             var result = matrixA + matrixB;
-            for (var i = 1; i <= matrixA.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(result[i, j], matrixA[i, j] + matrixB[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(result, (i, j, v) => Assert.AreEqual(matrixA[i, j] + matrixB[i, j], result[i, j]));
         }
 
         /// <summary>
@@ -331,13 +291,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             var matrix = matrixA.Clone();
             matrix = matrix.Subtract(matrixB);
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j], matrixA[i, j] - matrixB[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrixA[i, j] - matrixB[i, j], matrix[i, j]));
         }
 
         /// <summary>
@@ -375,13 +329,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var matrixB = TestMatrices[mtxB];
 
             var result = matrixA - matrixB;
-            for (var i = 1; i <= matrixA.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(result[i, j], matrixA[i, j] - matrixB[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(result, (i, j, v) => Assert.AreEqual(matrixA[i, j] - matrixB[i, j], result[i, j]));
         }
 
         /// <summary>
@@ -424,14 +372,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
-
-            for (var i = 1; i <= matrixC.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixC.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 12);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 12));
         }
 
         /// <summary>
@@ -451,13 +392,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.RowCount);
 
-            for (var i = 1; i <= matrixC.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixC.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 12);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 12));
         }
 
         /// <summary>
@@ -485,13 +420,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.RowCount);
 
-            for (var i = 1; i <= matrixC.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixC.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 14);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 14));
         }
 
         /// <summary>
@@ -523,13 +452,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.RowCount);
 
-            for (var i = 1; i <= matrixC.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixC.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 12);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 12));
         }
 
         /// <summary>
@@ -563,13 +486,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
 
-            for (var i = 1; i <= matrixC.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixC.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 12);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 12));
         }
 
         /// <summary>
@@ -662,13 +579,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(matrixC.RowCount, matrixA.ColumnCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
 
-            for (var i = 1; i <= matrixC.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixC.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 12);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 12));
         }
 
         /// <summary>
@@ -700,13 +611,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(matrixC.RowCount, matrixA.ColumnCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
 
-            for (var i = 1; i <= matrixC.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixC.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 12);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 12));
         }
 
         /// <summary>
@@ -725,13 +630,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             copy = copy.Negate();
 
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(-matrix[i, j], copy[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(-matrix[i, j], copy[i, j]));
         }
 
         /// <summary>
@@ -746,17 +645,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanNegateIntoResult(string name)
         {
             var matrix = TestMatrices[name];
-            var copy = matrix.Clone();
+            var result = matrix.Clone();
 
-            matrix.Negate(copy);
+            matrix.Negate(result);
 
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(-matrix[i, j], copy[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(-matrix[i, j], result[i, j]));
         }
 
         /// <summary>
@@ -799,7 +692,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
                     {
                         for (var jj = 1; jj <= matrixB.ColumnCount; jj++)
                         {
-                            Assert.AreEqual(result[(i * matrixB.RowCount) + ii, (j * matrixB.ColumnCount) + jj], matrixA[i, j] * matrixB[ii, jj]);
+                            Assert.AreEqual(result[((i - 1) * matrixB.RowCount) + ii, ((j - 1) * matrixB.ColumnCount) + jj], matrixA[i, j] * matrixB[ii, jj]);
                         }
                     }
                 }
@@ -823,7 +716,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
                     {
                         for (var jj = 1; jj <= matrixB.ColumnCount; jj++)
                         {
-                            Assert.AreEqual(result[(i * matrixB.RowCount) + ii, (j * matrixB.ColumnCount) + jj], matrixA[i, j] * matrixB[ii, jj]);
+                            Assert.AreEqual(result[((i - 1) * matrixB.RowCount) + ii, ((j - 1) * matrixB.ColumnCount) + jj], matrixA[i, j] * matrixB[ii, jj]);
                         }
                     }
                 }
@@ -892,26 +785,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
                 var other = data.Clone();
                 var result = data.Clone();
                 data.PointwiseMultiply(other, result);
-                for (var i = 1; i <= data.RowCount; i++)
-                {
-                    for (var j = 1; j <= data.ColumnCount; j++)
-                    {
-                        var value = data[i, j]*other[i, j];
-                        Assert.AreEqual(value.Real, result[i, j].Real, 1e-12);
-                        Assert.AreEqual(value.Imaginary, result[i, j].Imaginary, 1e-12);
-                    }
-                }
+                AssertHelpers.ValuesAssertion(data, (i, j, v) => AssertHelpers.AlmostEqual(data[i, j]*other[i, j], result[i, j], 12));
 
                 result = data.PointwiseMultiply(other);
-                for (var i = 1; i <= data.RowCount; i++)
-                {
-                    for (var j = 1; j <= data.ColumnCount; j++)
-                    {
-                        var value = data[i, j] * other[i, j];
-                        Assert.AreEqual(value.Real, result[i, j].Real, 1e-12);
-                        Assert.AreEqual(value.Imaginary, result[i, j].Imaginary, 1e-12);
-                    }
-                }
+                AssertHelpers.ValuesAssertion(data, (i, j, v) => AssertHelpers.AlmostEqual(data[i, j]*other[i, j], result[i, j], 12));
             }
         }
 
@@ -949,22 +826,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var other = data.Clone();
             var result = data.Clone();
             data.PointwiseDivide(other, result);
-            for (var i = 1; i <= data.RowCount; i++)
-            {
-                for (var j = 1; j <= data.ColumnCount; j++)
-                {
-                    Assert.AreEqual(data[i, j] / other[i, j], result[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(data, (i, j, v) => AssertHelpers.AlmostEqual(data[i, j] / other[i, j], result[i, j], 12));
 
             result = data.PointwiseDivide(other);
-            for (var i = 1; i <= data.RowCount; i++)
-            {
-                for (var j = 1; j <= data.ColumnCount; j++)
-                {
-                    Assert.AreEqual(data[i, j] / other[i, j], result[i, j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(data, (i, j, v) => AssertHelpers.AlmostEqual(data[i, j] / other[i, j], result[i, j], 12));
         }
 
         /// <summary>

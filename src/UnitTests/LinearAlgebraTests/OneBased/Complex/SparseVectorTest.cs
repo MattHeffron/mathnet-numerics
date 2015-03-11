@@ -83,11 +83,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var data = new Complex[Data.Length];
             Array.Copy(Data, data, Data.Length);
             var vector = SparseVector.OfEnumerable(data);
-
-            for (var i = 0; i < data.Length; i++)
-            {
-                Assert.AreEqual(data[i], vector[i + 1]);
-            }
+            AssertHelpers.ValuesAssertion(vector, (index, v) => Assert.AreEqual(data[index - 1], vector[index]));
         }
 
         /// <summary>
@@ -100,10 +96,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var other = SparseVector.OfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 1; i <= Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -116,10 +109,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var other = SparseVector.OfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 1; i <= Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -131,10 +121,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector = new UserDefinedVector(Data);
             var other = SparseVector.OfVector(vector);
 
-            for (var i = 1; i <= Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -158,7 +145,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         {
             var vector = SparseVector.OfEnumerable(Data);
             var array = vector.ToArray();
-            Assert.IsInstanceOf(typeof (Complex[]), array);
+            Assert.IsInstanceOf(typeof(Complex[]), array);
             CollectionAssert.AreEqual(vector, array);
         }
 
@@ -168,10 +155,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         [Test]
         public void CanConvertArrayToSparseVector()
         {
-            var array = new[] {new Complex(1, 1), new Complex(2, 1), new Complex(3, 1), new Complex(4, 1)};
+            var array = new[] { new Complex(1, 1), new Complex(2, 1), new Complex(3, 1), new Complex(4, 1) };
             var vector = SparseVector.OfEnumerable(array);
-            Assert.IsInstanceOf(typeof (SparseVector), vector);
-            CollectionAssert.AreEqual(array, array);
+            Assert.IsInstanceOf(typeof(SparseVector), vector);
+            CollectionAssert.AreEqual(array, vector);
         }
 
         /// <summary>
@@ -181,32 +168,18 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanMultiplySparseVectorByScalarUsingOperators()
         {
             var vector = SparseVector.OfEnumerable(Data);
-            vector = vector*new Complex(2.0, 1);
+            vector = vector * new Complex(2.0, 1);
+            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex(2.0, 1), vector[i]));
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i + 1]);
-            }
-
-            vector = vector*1.0;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i + 1]);
-            }
+            vector = vector * 1.0;
+            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex(2.0, 1), vector[i]));
 
             vector = SparseVector.OfEnumerable(Data);
-            vector = new Complex(2.0, 1)*vector;
+            vector = new Complex(2.0, 1) * vector;
+            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex(2.0, 1), vector[i]));
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i + 1]);
-            }
-
-            vector = 1.0*vector;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*new Complex(2.0, 1), vector[i + 1]);
-            }
+            vector = 1.0 * vector;
+            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex(2.0, 1), vector[i]));
         }
 
         /// <summary>
@@ -216,18 +189,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanDivideSparseVectorByScalarUsingOperators()
         {
             var vector = SparseVector.OfEnumerable(Data);
-            vector = vector/new Complex(2.0, 1);
+            vector = vector / new Complex(2.0, 1);
+            AssertHelpers.ValuesAssertion(vector, (i, v) => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex(2.0, 1), vector[i], 14));
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                AssertHelpers.AlmostEqualRelative(Data[i]/new Complex(2.0, 1), vector[i + 1], 14);
-            }
-
-            vector = vector/1.0;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                AssertHelpers.AlmostEqualRelative(Data[i]/new Complex(2.0, 1), vector[i + 1], 14);
-            }
+            vector = vector / 1.0;
+            AssertHelpers.ValuesAssertion(vector, (i, v) => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex(2.0, 1), vector[i], 14));
         }
 
         /// <summary>
@@ -239,13 +205,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector1 = CreateVector(Data);
             var vector2 = CreateVector(Data);
             var m = Vector<Complex>.OuterProduct(vector1, vector2);
-            for (var i = 1; i <= vector1.Count; i++)
-            {
-                for (var j = 1; j <= vector2.Count; j++)
-                {
-                    Assert.AreEqual(m[i, j], vector1[i]*vector2[j]);
-                }
-            }
+            AssertHelpers.ValuesAssertion(m, (i, j, v) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
         }
 
         /// <summary>
@@ -255,7 +215,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CheckSparseMechanismBySettingValues()
         {
             var vector = new SparseVector(10000);
-            var storage = (SparseVectorStorage<Complex>) vector.Storage;
+            var storage = (SparseVectorStorage<Complex>)vector.Storage;
 
             // Add non-zero elements
             vector[200] = new Complex(1.5, 1);
@@ -270,8 +230,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(new Complex(5.5, 1), vector[800]);
             Assert.AreEqual(3, storage.ValueCount);
 
-            vector[0] = new Complex(7.5, 1);
-            Assert.AreEqual(new Complex(7.5, 1), vector[0]);
+            vector[1] = new Complex(7.5, 1);
+            Assert.AreEqual(new Complex(7.5, 1), vector[1]);
             Assert.AreEqual(4, storage.ValueCount);
 
             // Remove non-zero elements
@@ -287,8 +247,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreEqual(Complex.Zero, vector[800]);
             Assert.AreEqual(1, storage.ValueCount);
 
-            vector[0] = Complex.Zero;
-            Assert.AreEqual(Complex.Zero, vector[0]);
+            vector[1] = Complex.Zero;
+            Assert.AreEqual(Complex.Zero, vector[1]);
             Assert.AreEqual(0, storage.ValueCount);
         }
 
@@ -304,16 +264,16 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             vector[200] = new Complex(1.5, 1);
             vector[500] = new Complex(3.5, 1);
             vector[800] = new Complex(5.5, 1);
-            vector[0] = new Complex(7.5, 1);
+            vector[1] = new Complex(7.5, 1);
 
             // Multiply by 0
             vector *= 0;
 
-            var storage = (SparseVectorStorage<Complex>) vector.Storage;
+            var storage = (SparseVectorStorage<Complex>)vector.Storage;
             Assert.AreEqual(Complex.Zero, vector[200]);
             Assert.AreEqual(Complex.Zero, vector[500]);
             Assert.AreEqual(Complex.Zero, vector[800]);
-            Assert.AreEqual(Complex.Zero, vector[0]);
+            Assert.AreEqual(Complex.Zero, vector[1]);
             Assert.AreEqual(0, storage.ValueCount);
         }
 
@@ -344,19 +304,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         [Test]
         public void CanPointwiseMultiplySparseVector()
         {
-            var zeroArray = new[] {Complex.Zero, new Complex(1.0, 1), Complex.Zero, new Complex(1.0, 1), Complex.Zero};
+            var zeroArray = new[] { Complex.Zero, new Complex(1.0, 1), Complex.Zero, new Complex(1.0, 1), Complex.Zero };
             var vector1 = SparseVector.OfEnumerable(Data);
             var vector2 = SparseVector.OfEnumerable(zeroArray);
             var result = new SparseVector(vector1.Count);
 
             vector1.PointwiseMultiply(vector2, result);
+            AssertHelpers.ValuesAssertion(result, (i, v) => Assert.AreEqual(Data[i - 1] * zeroArray[i - 1], result[i]));
 
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                Assert.AreEqual(Data[i]*zeroArray[i], result[i + 1]);
-            }
-
-            var resultStorage = (SparseVectorStorage<Complex>) result.Storage;
+            var resultStorage = (SparseVectorStorage<Complex>)result.Storage;
             Assert.AreEqual(2, resultStorage.ValueCount);
         }
 

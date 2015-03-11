@@ -61,11 +61,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
 
             Assert.AreEqual(matrixI.ColumnCount, d.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, d.ColumnCount);
-
-            for (var i = 1; i <= eigenValues.Count; i++)
-            {
-                Assert.AreEqual(Complex.One, eigenValues[i]);
-            }
+            AssertHelpers.VectorHasValue(eigenValues, Complex.One);
         }
 
         /// <summary>
@@ -94,14 +90,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             // Make sure the A*V = λ*V 
             var matrixAv = matrixA * eigenVectors;
             var matrixLv = eigenVectors * d;
-
-            for (var i = 1; i <= matrixAv.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixAv.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqualRelative(matrixAv[i, j], matrixLv[i, j], 7);
-                }
-            }
+            AssertHelpers.AlmostEqualRelative(matrixAv, matrixLv, 7);
         }
 
         /// <summary>
@@ -129,14 +118,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
 
             // Make sure the A = V*λ*VT 
             var matrix = eigenVectors * d * eigenVectors.ConjugateTranspose();
-
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqualRelative(matrix[i, j], matrixA[i, j], 7);
-                }
-            }
+            AssertHelpers.AlmostEqualRelative(matrix, matrixA, 7);
         }
 
         /// <summary>

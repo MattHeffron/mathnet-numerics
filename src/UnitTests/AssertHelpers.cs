@@ -24,6 +24,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 // </copyright>
 
+using System;
 using System.Collections.Generic;
 using MathNet.Numerics.LinearAlgebra;
 using NUnit.Framework;
@@ -598,6 +599,210 @@ namespace MathNet.Numerics.UnitTests
         }
 
         #region OneBased
+        #region Full Matrix and Vector checks
+        // These could easily be copied and modified for use outside of OneBased...
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> expected, MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> actual) where T : struct, IEquatable<T>, IFormattable
+        {
+            if (expected.ColumnCount != actual.ColumnCount || expected.RowCount != actual.RowCount)
+            {
+                Assert.Fail("Matrix dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.RowCount; i++)
+            {
+                for (var j = 1; j <= expected.ColumnCount; j++)
+                {
+                    Assert.AreEqual(expected.At(i, j), actual.At(i, j));
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> expected, MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> actual) where T : struct, IEquatable<T>, IFormattable
+        {
+            if (expected.Count != actual.Count)
+            {
+                Assert.Fail("Vector dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.Count; i++)
+            {
+                Assert.AreEqual(expected.At(i), actual.At(i));
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void IsUpperTriangular<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixU, T zero = default(T)) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Everything below the diagonal is zero
+            for (var i = 1; i <= matrixU.RowCount; i++)
+            {
+                for (var j = 1; j < i; j++)
+                {
+                    Assert.AreEqual(zero, matrixU[i, j]);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void IsLowerTriangular<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixL, T zero = default(T)) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Everything above the diagonal is zero
+            for (var i = 1; i <= matrixL.RowCount; i++)
+            {
+                for (var j = i + 1; j <= matrixL.ColumnCount; j++)
+                {
+                    Assert.AreEqual(zero, matrixL[i, j]);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void IsDiagonal<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, T zero = default(T)) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Everything off the diagonal is zero
+            for (var i = 1; i <= matrixD.RowCount; i++)
+            {
+                for (var j = 1; j <= matrixD.ColumnCount; j++)
+                {
+                    if (i != j)
+                    {
+                        Assert.AreEqual(zero, matrixD[i, j]);
+                    }
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void DiagonalHasValue<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, T value) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Everything on the diagonal is value
+            int size = Math.Min(matrixD.RowCount, matrixD.ColumnCount);
+            for (var i = 1; i <= size; i++)
+            {
+                Assert.AreEqual(value, matrixD[i, i]);
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void DiagonalValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, Action<T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Execute the valueAssertion on the diagonal
+            int size = Math.Min(matrixD.RowCount, matrixD.ColumnCount);
+            for (var i = 1; i <= size; i++)
+            {
+                valueAssertion(matrixD[i, i]);
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void DiagonalValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, Action<int, T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Execute the valueAssertion on the diagonal
+            int size = Math.Min(matrixD.RowCount, matrixD.ColumnCount);
+            for (var i = 1; i <= size; i++)
+            {
+                valueAssertion(i, matrixD[i, i]);
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void ValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrix, Action<T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Execute the valueAssertion on all the elements of the matrix
+            for (var i = 1; i <= matrix.RowCount; i++)
+            {
+                for (var j = 1; j <= matrix.ColumnCount; j++)
+                {
+                    valueAssertion(matrix[i, j]);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void ValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrix, Action<int, int, T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Execute the valueAssertion on all the elements of the matrix
+            for (var r = 1; r <= matrix.RowCount; r++)
+            {
+                for (var c = 1; c <= matrix.ColumnCount; c++)
+                {
+                    valueAssertion(r, c, matrix[r, c]);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void VectorHasValue<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, T value) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Everything in the vector is value
+            for (var i = 1; i <= vector.Count; i++)
+            {
+                Assert.AreEqual(value, vector[i]);
+            }
+        }
+
+        /////// <remarks>
+        /////// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /////// </remarks>
+        ////public static void VectorValuesCondition<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, Func<T, bool> valueTest) where T : struct, IEquatable<T>, IFormattable
+        ////{
+        ////    // Everything in the vector meets condition
+        ////    for (var i = 1; i <= vector.Count; i++)
+        ////    {
+        ////        Assert.IsTrue(valueTest(vector[i]));
+        ////    }
+        ////}
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void ValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, Action<T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Everything in the vector meets condition
+            for (var i = 1; i <= vector.Count; i++)
+            {
+                valueAssertion(vector[i]);
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void ValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, Action<int, T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Everything in the vector meets condition
+            for (var i = 1; i <= vector.Count; i++)
+            {
+                valueAssertion(i, vector[i]);
+            }
+        }
+        #endregion
+
         public static void AlmostEqual(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<double> expected, MathNet.Numerics.LinearAlgebra.OneBased.Matrix<double> actual, int decimalPlaces)
         {
             if (expected.ColumnCount != actual.ColumnCount || expected.RowCount != actual.RowCount)
@@ -671,41 +876,6 @@ namespace MathNet.Numerics.UnitTests
                         Assert.Fail("Not equal within {0} places. Expected:{1}; Actual:{2}", decimalPlaces, expected.At(i, j), actual.At(i, j));
                     }
                 }
-            }
-        }
-
-        /// <remarks>
-        /// There's no "Almost" about integer comparisons
-        /// </remarks>
-        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<int> expected, MathNet.Numerics.LinearAlgebra.OneBased.Matrix<int> actual)
-        {
-            if (expected.ColumnCount != actual.ColumnCount || expected.RowCount != actual.RowCount)
-            {
-                Assert.Fail("Matrix dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
-            }
-
-            for (var i = 0; i < expected.RowCount; i++)
-            {
-                for (var j = 0; j < expected.ColumnCount; j++)
-                {
-                    Assert.AreEqual(expected.At(i, j), actual.At(i, j));
-                }
-            }
-        }
-
-        /// <remarks>
-        /// There's no "Almost" about integer comparisons
-        /// </remarks>
-        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Vector<int> expected, MathNet.Numerics.LinearAlgebra.OneBased.Vector<int> actual)
-        {
-            if (expected.Count != actual.Count)
-            {
-                Assert.Fail("Vector dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
-            }
-
-            for (var i = 0; i < expected.Count; i++)
-            {
-                Assert.AreEqual(expected.At(i), actual.At(i));
             }
         }
 
@@ -911,7 +1081,7 @@ namespace MathNet.Numerics.UnitTests
                     Assert.Fail("Not equal within {0} relative places. Expected:{1}; Actual:{2}", decimalPlaces, expected.At(i), actual.At(i));
                 }
             }
-        }	
+        }
         #endregion
     }
 }

@@ -138,14 +138,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         [TestCase("Wide2x3")]
         public void CanCreateMatrixFrom2DArray(string name)
         {
-            var matrix = DiagonalMatrix.OfArray(TestData2D[name]);
-            for (var i = 0; i < TestData2D[name].GetLength(0); i++)
-            {
-                for (var j = 0; j < TestData2D[name].GetLength(1); j++)
-                {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i + 1, j + 1]);
-                }
-            }
+            var sourceTestdata = TestData2D[name];
+            var matrix = DiagonalMatrix.OfArray(sourceTestdata);
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(sourceTestdata[i - 1, j - 1], matrix[i, j]));
         }
 
         /// <summary>
@@ -155,10 +150,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateMatrixWithUniformValues()
         {
             var matrix = new DiagonalMatrix(10, 10, new Complex(10.0, 1));
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                Assert.AreEqual(matrix[i, i], new Complex(10.0, 1));
-            }
+            AssertHelpers.DiagonalHasValue(matrix, new Complex(10.0, 1));
         }
 
         /// <summary>
@@ -168,20 +160,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateIdentity()
         {
             var matrix = DiagonalMatrix.CreateIdentity(5);
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? Complex.One : Complex.Zero, matrix[i, j]);
-                }
-            }
+            AssertHelpers.IsDiagonal(matrix);
+            AssertHelpers.DiagonalHasValue(matrix, Complex.One);
         }
 
         /// <summary>
         /// Identity with wrong order throws <c>ArgumentOutOfRangeException</c>.
         /// </summary>
         /// <param name="order">The size of the square matrix</param>
-        [TestCase(0)]
+        //[TestCase(0)]     // Matlab allows empty matrix
         [TestCase(-1)]
         public void IdentityWithWrongOrderThrowsArgumentOutOfRangeException(int order)
         {
@@ -202,14 +189,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
-
-            for (var i = 1; i <= matrixC.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixC.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqualRelative(matrixA.Row(i)*matrixB.Column(j), matrixC[i, j], 15);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqualRelative(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 15));
         }
 
         /// <summary>

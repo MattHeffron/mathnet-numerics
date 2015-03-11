@@ -125,14 +125,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         [TestCase("Wide2x3")]
         public void CanCreateMatrixFrom2DArray(string name)
         {
-            var matrix = SparseMatrix.OfArray(TestData2D[name]);
-            for (var i = 0; i < TestData2D[name].GetLength(0); i++)
-            {
-                for (var j = 0; j < TestData2D[name].GetLength(1); j++)
-                {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i + 1, j + 1]);
-                }
-            }
+            var sourceTestData = TestData2D[name];
+            var matrix = SparseMatrix.OfArray(sourceTestData);
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(sourceTestData[i - 1, j - 1], matrix[i, j]));
         }
 
         /// <summary>
@@ -142,13 +137,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateIdentity()
         {
             var matrix = SparseMatrix.CreateIdentity(5);
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? Complex.One : Complex.Zero, matrix[i, j]);
-                }
-            }
+            AssertHelpers.IsDiagonal(matrix);
+            AssertHelpers.DiagonalHasValue(matrix, Complex.One);
         }
 
         /// <summary>

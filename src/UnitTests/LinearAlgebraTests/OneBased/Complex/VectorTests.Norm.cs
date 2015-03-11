@@ -106,11 +106,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         {
             var vector = CreateVector(Data);
             var result = vector.Normalize(2);
-            AssertHelpers.AlmostEqualRelative(new Complex(0.129099444873581, 0.129099444873581), result[0], 14);
-            AssertHelpers.AlmostEqualRelative(new Complex(0.258198889747161, 0.129099444873581), result[1], 14);
-            AssertHelpers.AlmostEqualRelative(new Complex(0.387298334620742, 0.129099444873581), result[2], 14);
-            AssertHelpers.AlmostEqualRelative(new Complex(0.516397779494322, 0.129099444873581), result[3], 14);
-            AssertHelpers.AlmostEqualRelative(new Complex(0.645497224367903, 0.129099444873581), result[4], 14);
+            AssertHelpers.AlmostEqualRelative(new Complex(0.129099444873581, 0.129099444873581), result[1], 14);
+            AssertHelpers.AlmostEqualRelative(new Complex(0.258198889747161, 0.129099444873581), result[2], 14);
+            AssertHelpers.AlmostEqualRelative(new Complex(0.387298334620742, 0.129099444873581), result[3], 14);
+            AssertHelpers.AlmostEqualRelative(new Complex(0.516397779494322, 0.129099444873581), result[4], 14);
+            AssertHelpers.AlmostEqualRelative(new Complex(0.645497224367903, 0.129099444873581), result[5], 14);
         }
     }
 }

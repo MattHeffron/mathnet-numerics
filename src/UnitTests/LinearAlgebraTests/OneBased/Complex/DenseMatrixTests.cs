@@ -141,13 +141,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateMatrixWithUniformValues()
         {
             var matrix = DenseMatrix.Create(10, 10, new Complex(10.0, 1));
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j], new Complex(10.0, 1));
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrix, v => Assert.AreEqual(v, new Complex(10.0, 1)));
         }
 
         /// <summary>
@@ -157,13 +151,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         public void CanCreateIdentity()
         {
             var matrix = DenseMatrix.CreateIdentity(5);
-            for (var i = 1; i <= matrix.RowCount; i++)
-            {
-                for (var j = 1; j <= matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? Complex.One : Complex.Zero, matrix[i, j]);
-                }
-            }
+            AssertHelpers.IsDiagonal(matrix);
+            AssertHelpers.DiagonalHasValue(matrix, Complex.One);
         }
 
         /// <summary>

@@ -186,11 +186,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             // compare vector and product. Should be equal
             var product = new DenseVector(result.Count);
             matrix.Multiply(result, product);
-            for (var i = 1; i <= product.Count; i++)
-            {
+            AssertHelpers.ValuesAssertion(product, (i, v) => {
                 Assert.IsTrue(vector[i].Real.AlmostEqualNumbersBetween(product[i].Real, -Epsilon.Magnitude()), "#02-" + i);
                 Assert.IsTrue(vector[i].Imaginary.AlmostEqualNumbersBetween(product[i].Imaginary, -Epsilon.Magnitude()), "#03-" + i);
-            }
+            });
         }
 
         /// <summary>
@@ -261,35 +260,23 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             ilu.Initialize(sparseMatrix);
             var l = GetLowerTriangle(ilu);
 
-            // Assert l is lower triagonal
-            for (var i = 1; i <= l.RowCount; i++)
-            {
-                for (var j = i + 1; j <= l.RowCount; j++)
-                {
-                    Assert.IsTrue(0.0.AlmostEqualNumbersBetween(l[i, j].Magnitude, -Epsilon.Magnitude()), "#01-" + i + "-" + j);
-                }
-            }
+            // Assert l is lower triagonal (with a little "wiggle room")
+            AssertHelpers.ValuesAssertion(l, (i, j, v) => {
+                    Assert.IsTrue(j <= i || 0.0.AlmostEqualNumbersBetween(l[i, j].Magnitude, -Epsilon.Magnitude()), "#01-" + i + "-" + j);
+            });
 
             var u = GetUpperTriangle(ilu);
 
-            // Assert u is upper triagonal
-            for (var i = 1; i <= u.RowCount; i++)
-            {
-                for (var j = 1; j < i; j++)
-                {
-                    Assert.IsTrue(0.0.AlmostEqualNumbersBetween(u[i, j].Magnitude, -Epsilon.Magnitude()), "#02-" + i + "-" + j);
-                }
-            }
+            // Assert u is upper triagonal (with a little "wiggle room")
+            AssertHelpers.ValuesAssertion(u, (i, j, v) => {
+                    Assert.IsTrue(j >= i || 0.0.AlmostEqualNumbersBetween(u[i, j].Magnitude, -Epsilon.Magnitude()), "#02-" + i + "-" + j);
+            });
 
             var original = l.Multiply(u);
-            for (var i = 1; i <= sparseMatrix.RowCount; i++)
-            {
-                for (var j = 1; j <= sparseMatrix.ColumnCount; j++)
-                {
-                    Assert.IsTrue(sparseMatrix[i, j].Real.AlmostEqualNumbersBetween(original[i, j].Real, -Epsilon.Magnitude()), "#03-" + i + "-" + j);
-                    Assert.IsTrue(sparseMatrix[i, j].Imaginary.AlmostEqualNumbersBetween(original[i, j].Imaginary, -Epsilon.Magnitude()), "#04-" + i + "-" + j);
-                }
-            }
+            AssertHelpers.ValuesAssertion(sparseMatrix, (i, j, v) => {
+                Assert.IsTrue(sparseMatrix[i, j].Real.AlmostEqualNumbersBetween(original[i, j].Real, -Epsilon.Magnitude()), "#03-" + i + "-" + j);
+                Assert.IsTrue(sparseMatrix[i, j].Imaginary.AlmostEqualNumbersBetween(original[i, j].Imaginary, -Epsilon.Magnitude()), "#04-" + i + "-" + j);
+            });
         }
 
         /// <summary>
@@ -326,14 +313,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
 
             var temp = l.Multiply(u);
             var original = temp.Multiply(p);
-            for (var i = 1; i <= sparseMatrix.RowCount; i++)
-            {
-                for (var j = 1; j <= sparseMatrix.ColumnCount; j++)
-                {
-                    Assert.IsTrue(sparseMatrix[i, j].Real.AlmostEqualNumbersBetween(original[i, j].Real, -Epsilon.Magnitude()), "#01-" + i + "-" + j);
-                    Assert.IsTrue(sparseMatrix[i, j].Imaginary.AlmostEqualNumbersBetween(original[i, j].Imaginary, -Epsilon.Magnitude()), "#02-" + i + "-" + j);
-                }
-            }
+            AssertHelpers.ValuesAssertion(sparseMatrix, (i, j, v) => {
+                Assert.IsTrue(sparseMatrix[i, j].Real.AlmostEqualNumbersBetween(original[i, j].Real, -Epsilon.Magnitude()), "#01-" + i + "-" + j);
+                Assert.IsTrue(sparseMatrix[i, j].Imaginary.AlmostEqualNumbersBetween(original[i, j].Imaginary, -Epsilon.Magnitude()), "#02-" + i + "-" + j);
+            });
         }
 
         /// <summary>

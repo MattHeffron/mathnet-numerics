@@ -66,7 +66,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             Assert.AreNotSame(vector, clone);
             Assert.AreEqual(vector.Count, clone.Count);
-            CollectionAssert.AreEqual(vector, clone);
+            AssertHelpers.AreEqual(vector, clone);
         }
 
 #if !PORTABLE
@@ -81,7 +81,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             Assert.AreNotSame(vector, clone);
             Assert.AreEqual(vector.Count, clone.Count);
-            CollectionAssert.AreEqual(vector, clone);
+            AssertHelpers.AreEqual(vector, clone);
         }
 #endif
 
@@ -129,7 +129,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var other = CreateVector(Data.Length);
 
             vector.CopyTo(other);
-            CollectionAssert.AreEqual(vector, other);
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -240,7 +240,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector = CreateVector(Data);
             foreach (var pair in vector.EnumerateIndexed())
             {
-                Assert.AreEqual(Data[pair.Item1], pair.Item2);
+                Assert.AreEqual(Data[pair.Item1 - 1], pair.Item2);
             }
         }
 
@@ -253,7 +253,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector = CreateVector(Data);
             foreach (var pair in vector.EnumerateIndexed(Zeros.AllowSkip))
             {
-                Assert.AreEqual(Data[pair.Item1], pair.Item2);
+                Assert.AreEqual(Data[pair.Item1 - 1], pair.Item2);
                 Assert.AreNotEqual(Complex.Zero, pair.Item2);
             }
         }
@@ -280,11 +280,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             Assert.AreEqual(vector.Count, matrix.RowCount);
             Assert.AreEqual(1, matrix.ColumnCount);
-
-            for (var i = 1; i <= vector.Count; i++)
-            {
-                Assert.AreEqual(vector[i], matrix[i, 1]);
-            }
+            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(vector[i], matrix[i, 1]));
         }
 
         /// <summary>
@@ -298,11 +294,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             Assert.AreEqual(vector.Count, matrix.ColumnCount);
             Assert.AreEqual(1, matrix.RowCount);
-
-            for (var i = 1; i <= vector.Count; i++)
-            {
-                Assert.AreEqual(vector[i], matrix[1, i]);
-            }
+            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(vector[i], matrix[1, i]));
         }
 
         /// <summary>
@@ -329,10 +321,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector = CreateVector(Data);
             var sub = vector.SubVector(index, length);
             Assert.AreEqual(length, sub.Count);
-            for (var i = 1; i <= length; i++)
-            {
-                Assert.AreEqual(vector[i + index], sub[i]);
-            }
+            AssertHelpers.ValuesAssertion(sub, (i, v) => Assert.AreEqual(vector[i + index], sub[i]));
         }
 
         /// <summary>
@@ -500,10 +489,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Complex[] testData = { new Complex(-20, -1), new Complex(-10, -1), new Complex(10, 1), new Complex(20, 1), new Complex(30, 1) };
             var vector = CreateVector(testData);
             vector.Clear();
-            foreach (var element in vector)
-            {
-                Assert.AreEqual(Complex.Zero, element);
-            }
+            AssertHelpers.VectorHasValue(vector, Complex.Zero);
         }
 
         /// <summary>

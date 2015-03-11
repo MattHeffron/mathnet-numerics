@@ -227,11 +227,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             var matrixBReconstruct = matrixA*resultx;
 
             // Check the reconstruction.
-            for (var i = 1; i <= order; i++)
-            {
-                Assert.AreEqual(vectorb[i].Real, matrixBReconstruct[i].Real, 1e-5);
-                Assert.AreEqual(vectorb[i].Imaginary, matrixBReconstruct[i].Imaginary, 1e-5);
-            }
+            AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, 5);
         }
 
         /// <summary>
@@ -262,14 +258,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
             var matrixBReconstruct = matrixA*matrixX;
 
             // Check the reconstruction.
-            for (var i = 1; i <= matrixB.RowCount; i++)
-            {
-                for (var j = 1; j <= matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixB[i, j].Real, matrixBReconstruct[i, j].Real, 1.0e-5);
-                    Assert.AreEqual(matrixB[i, j].Imaginary, matrixBReconstruct[i, j].Imaginary, 1.0e-5);
-                }
-            }
+            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 5);
         }
     }
 }
