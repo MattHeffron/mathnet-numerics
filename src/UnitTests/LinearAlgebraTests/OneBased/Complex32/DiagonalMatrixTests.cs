@@ -118,7 +118,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         {
             var data = new[] {new Complex32(1.0f, 1), new Complex32(2.0f, 1), new Complex32(3.0f, 1), new Complex32(4.0f, 1), new Complex32(5.0f, 1)};
             var matrix = new DiagonalMatrix(5, 5, data);
-            matrix[0, 0] = new Complex32(10.0f, 1);
+            matrix[1, 1] = new Complex32(10.0f, 1);
             Assert.AreEqual(new Complex32(10.0f, 1), data[0]);
         }
 
@@ -134,14 +134,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         [TestCase("Wide2x3")]
         public void CanCreateMatrixFrom2DArray(string name)
         {
-            var matrix = DiagonalMatrix.OfArray(TestData2D[name]);
-            for (var i = 0; i < TestData2D[name].GetLength(0); i++)
-            {
-                for (var j = 0; j < TestData2D[name].GetLength(1); j++)
-                {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i, j]);
-                }
-            }
+            var sourceTestdata = TestData2D[name];
+            var matrix = DiagonalMatrix.OfArray(sourceTestdata);
+            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(sourceTestdata[i - 1, j - 1], matrix[i, j]));
         }
 
         /// <summary>
@@ -151,10 +146,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanCreateMatrixWithUniformValues()
         {
             var matrix = new DiagonalMatrix(10, 10, new Complex32(10.0f, 1));
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                Assert.AreEqual(matrix[i, i], new Complex32(10.0f, 1));
-            }
+            AssertHelpers.DiagonalHasValue(matrix, new Complex32(10.0f, 1));
         }
 
         /// <summary>
@@ -164,20 +156,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanCreateIdentity()
         {
             var matrix = DiagonalMatrix.CreateIdentity(5);
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                for (var j = 0; j < matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? Complex32.One : Complex32.Zero, matrix[i, j]);
-                }
-            }
+            AssertHelpers.IsDiagonal(matrix);
+            AssertHelpers.DiagonalHasValue(matrix, Complex32.One);
         }
 
         /// <summary>
         /// Identity with wrong order throws <c>ArgumentOutOfRangeException</c>.
         /// </summary>
         /// <param name="order">The size of the square matrix</param>
-        [TestCase(0)]
+        //[TestCase(0)]     // Matlab allows empty matrix
         [TestCase(-1)]
         public void IdentityWithWrongOrderThrowsArgumentOutOfRangeException(int order)
         {
@@ -198,14 +185,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
-
-            for (var i = 0; i < matrixC.RowCount; i++)
-            {
-                for (var j = 0; j < matrixC.ColumnCount; j++)
-                {
-                    AssertHelpers.AlmostEqualRelative(matrixA.Row(i)*matrixB.Column(j), matrixC[i, j], 15);
-                }
-            }
+            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqualRelative(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 15));
         }
 
         /// <summary>
@@ -241,13 +221,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
                 var result = data.Clone();
                 data.PointwiseDivide(other, result);
                 var min = Math.Min(data.RowCount, data.ColumnCount);
-                for (var i = 0; i < min; i++)
+                for (var i = 1; i <= min; i++)
                 {
                     Assert.AreEqual(data[i, i]/other[i, i], result[i, i]);
                 }
 
                 result = data.PointwiseDivide(other);
-                for (var i = 0; i < min; i++)
+                for (var i = 1; i <= min; i++)
                 {
                     Assert.AreEqual(data[i, i]/other[i, i], result[i, i]);
                 }

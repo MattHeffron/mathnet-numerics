@@ -116,10 +116,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             Assert.IsTrue(monitor.Status == IterationStatus.Converged, "#04");
 
             // Now compare the vectors
-            for (var i = 0; i < y.Count; i++)
-            {
-                Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i);
-            }
+            AssertHelpers.ValuesAssertion(y, (i, v) => Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i));
         }
 
         /// <summary>
@@ -160,10 +157,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             Assert.IsTrue(monitor.Status == IterationStatus.Converged, "#04");
 
             // Now compare the vectors
-            for (var i = 0; i < y.Count; i++)
-            {
-                Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i);
-            }
+            AssertHelpers.ValuesAssertion(y, (i, v) => Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i));
         }
 
         /// <summary>
@@ -173,43 +167,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
         public void SolvePoissonMatrixAndBackMultiply()
         {
             // Create the matrix
-            var matrix = new SparseMatrix(25);
-
-            // Assemble the matrix. We assume we're solving the Poisson equation
-            // on a rectangular 5 x 5 grid
-            const int GridSize = 5;
-
-            // The pattern is:
-            // 0 .... 0 -1 0 0 0 0 0 0 0 0 -1 4 -1 0 0 0 0 0 0 0 0 -1 0 0 ... 0
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                // Insert the first set of -1's
-                if (i > (GridSize - 1))
-                {
-                    matrix[i, i - GridSize] = -1;
-                }
-
-                // Insert the second set of -1's
-                if (i > 0)
-                {
-                    matrix[i, i - 1] = -1;
-                }
-
-                // Insert the centerline values
-                matrix[i, i] = 4;
-
-                // Insert the first trailing set of -1's
-                if (i < matrix.RowCount - 1)
-                {
-                    matrix[i, i + 1] = -1;
-                }
-
-                // Insert the second trailing set of -1's
-                if (i < matrix.RowCount - GridSize)
-                {
-                    matrix[i, i + GridSize] = -1;
-                }
-            }
+            var matrix = MatrixHelpers.MakePoissonTestMatrix<Complex32>();
 
             // Create the y vector
             var y = DenseVector.Create(matrix.RowCount, Complex32.One);
@@ -237,10 +195,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             Assert.IsTrue(monitor.Status == IterationStatus.Converged, "#04");
 
             // Now compare the vectors
-            for (var i = 0; i < y.Count; i++)
-            {
-                Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i);
-            }
+            AssertHelpers.ValuesAssertion(y, (i, v) => Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i));
         }
 
         /// <summary>
@@ -273,11 +228,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
                 var matrixBReconstruct = matrixA*resultx;
 
                 // Check the reconstruction.
-                for (var i = 0; i < order; i++)
-                {
-                    Assert.AreEqual(vectorb[i].Real, matrixBReconstruct[i].Real, (float)Math.Pow(1.0/10.0, iteration - 3));
-                    Assert.AreEqual(vectorb[i].Imaginary, matrixBReconstruct[i].Imaginary, (float)Math.Pow(1.0/10.0, iteration - 3));
-                }
+                AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, iteration - 3);
 
                 return;
             }
@@ -319,14 +270,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
                 var matrixBReconstruct = matrixA*matrixX;
 
                 // Check the reconstruction.
-                for (var i = 0; i < matrixB.RowCount; i++)
-                {
-                    for (var j = 0; j < matrixB.ColumnCount; j++)
-                    {
-                        Assert.AreEqual(matrixB[i, j].Real, matrixBReconstruct[i, j].Real, (float)Math.Pow(1.0/10.0, iteration - 3));
-                        Assert.AreEqual(matrixB[i, j].Imaginary, matrixBReconstruct[i, j].Imaginary, (float)Math.Pow(1.0/10.0, iteration - 3));
-                    }
-                }
+                AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, iteration - 3);
 
                 return;
             }

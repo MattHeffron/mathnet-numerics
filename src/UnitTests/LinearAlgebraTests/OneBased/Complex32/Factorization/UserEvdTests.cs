@@ -63,11 +63,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
 
             Assert.AreEqual(matrixI.ColumnCount, d.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, d.ColumnCount);
-
-            for (var i = 0; i < eigenValues.Count; i++)
-            {
-                Assert.AreEqual(Complex.One, eigenValues[i]);
-            }
+            AssertHelpers.VectorHasValue(eigenValues, Complex32.One);
         }
 
         /// <summary>
@@ -96,15 +92,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             // Make sure the A*V = λ*V 
             var matrixAv = matrixA * eigenVectors;
             var matrixLv = eigenVectors * d;
-
-            for (var i = 0; i < matrixAv.RowCount; i++)
-            {
-                for (var j = 0; j < matrixAv.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixAv[i, j].Real, matrixLv[i, j].Real, 1e-3f);
-                    Assert.AreEqual(matrixAv[i, j].Imaginary, matrixLv[i, j].Imaginary, 1e-3f);
-                }
-            }
+            AssertHelpers.AlmostEqualRelative(matrixAv, matrixLv, 3);
         }
 
         /// <summary>
@@ -127,15 +115,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
 
             // Make sure the A = V*λ*VT 
             var matrix = eigenVectors * d * eigenVectors.ConjugateTranspose();
-
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                for (var j = 0; j < matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j].Real, matrixA[i, j].Real, 1e-3f);
-                    Assert.AreEqual(matrix[i, j].Imaginary, matrixA[i, j].Imaginary, 1e-3f);
-                }
-            }
+            AssertHelpers.AlmostEqualRelative(matrix, matrixA, 3);
         }
 
         /// <summary>
@@ -163,9 +143,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
         public void CanCheckRankOfSquareSingular(int order)
         {
             var matrixA = new UserDefinedMatrix(order, order);
-            matrixA[0, 0] = 1;
-            matrixA[order - 1, order - 1] = 1;
-            for (var i = 1; i < order - 1; i++)
+            matrixA[1, 1] = 1;
+            matrixA[order, order] = 1;
+            for (var i = 2; i < order; i++)
             {
                 matrixA[i, i - 1] = 1;
                 matrixA[i, i + 1] = 1;

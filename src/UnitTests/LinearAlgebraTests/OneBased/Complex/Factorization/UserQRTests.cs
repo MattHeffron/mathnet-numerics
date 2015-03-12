@@ -138,6 +138,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             // Make sure the Q*R is the original matrix.
             var matrixQfromR = q * r;
             AssertHelpers.AlmostEqualRelative(matrixA, matrixQfromR, 9);
+
+            // Make sure the Q is unitary --> (Q*)x(Q) = I
+            var matrixQ?tQ = q.ConjugateTranspose() * q;
+            AssertHelpers.ValuesAssertion(matrixQ?tQ, (i, j, v) => AssertHelpers.AlmostEqual(i == j ? Complex.One : Complex.Zero, matrixQ?tQ[i, j], 9));
         }
 
         /// <summary>

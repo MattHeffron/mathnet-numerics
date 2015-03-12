@@ -62,7 +62,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             Assert.AreNotSame(vector, clone);
             Assert.AreEqual(vector.Count, clone.Count);
-            CollectionAssert.AreEqual(vector, clone);
+            AssertHelpers.AreEqual(vector, clone);
         }
 
 #if !PORTABLE
@@ -77,7 +77,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             Assert.AreNotSame(vector, clone);
             Assert.AreEqual(vector.Count, clone.Count);
-            CollectionAssert.AreEqual(vector, clone);
+            AssertHelpers.AreEqual(vector, clone);
         }
 #endif
 
@@ -90,13 +90,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var vector = CreateVector(Data);
             var other = CreateVector(Data.Length);
 
-            vector.CopySubVectorTo(other, 2, 2, 2);
+            vector.CopySubVectorTo(other, 3, 3, 2);
 
-            AssertHelpers.AlmostEqual(Complex32.Zero, other[0]);
             AssertHelpers.AlmostEqual(Complex32.Zero, other[1]);
-            AssertHelpers.AlmostEqual(new Complex32(3, 1), other[2]);
-            AssertHelpers.AlmostEqual(new Complex32(4, 1), other[3]);
-            AssertHelpers.AlmostEqual(Complex32.Zero, other[4]);
+            AssertHelpers.AlmostEqual(Complex32.Zero, other[2]);
+            AssertHelpers.AlmostEqual(new Complex32(3, 1), other[3]);
+            AssertHelpers.AlmostEqual(new Complex32(4, 1), other[4]);
+            AssertHelpers.AlmostEqual(Complex32.Zero, other[5]);
         }
 
         /// <summary>
@@ -106,13 +106,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanCopyPartialVectorToSelf()
         {
             var vector = CreateVector(Data);
-            vector.CopySubVectorTo(vector, 0, 2, 2);
+            vector.CopySubVectorTo(vector, 1, 3, 2);
 
-            AssertHelpers.AlmostEqual(new Complex32(1, 1), vector[0]);
-            AssertHelpers.AlmostEqual(new Complex32(2, 1), vector[1]);
-            AssertHelpers.AlmostEqual(new Complex32(1, 1), vector[2]);
-            AssertHelpers.AlmostEqual(new Complex32(2, 1), vector[3]);
-            AssertHelpers.AlmostEqual(new Complex32(5, 1), vector[4]);
+            AssertHelpers.AlmostEqual(new Complex32(1, 1), vector[1]);
+            AssertHelpers.AlmostEqual(new Complex32(2, 1), vector[2]);
+            AssertHelpers.AlmostEqual(new Complex32(1, 1), vector[3]);
+            AssertHelpers.AlmostEqual(new Complex32(2, 1), vector[4]);
+            AssertHelpers.AlmostEqual(new Complex32(5, 1), vector[5]);
         }
 
         /// <summary>
@@ -125,7 +125,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var other = CreateVector(Data.Length);
 
             vector.CopyTo(other);
-            CollectionAssert.AreEqual(vector, other);
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var vector = CreateVector(Data);
             for (var i = 0; i < Data.Length; i++)
             {
-                Assert.AreEqual(Data[i], vector[i]);
+                Assert.AreEqual(Data[i], vector[i + 1]);
             }
         }
 
@@ -236,7 +236,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var vector = CreateVector(Data);
             foreach (var pair in vector.EnumerateIndexed())
             {
-                Assert.AreEqual(Data[pair.Item1], pair.Item2);
+                Assert.AreEqual(Data[pair.Item1 - 1], pair.Item2);
             }
         }
 
@@ -249,7 +249,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var vector = CreateVector(Data);
             foreach (var pair in vector.EnumerateIndexed(Zeros.AllowSkip))
             {
-                Assert.AreEqual(Data[pair.Item1], pair.Item2);
+                Assert.AreEqual(Data[pair.Item1 - 1], pair.Item2);
                 Assert.AreNotEqual(Complex32.Zero, pair.Item2);
             }
         }
@@ -276,11 +276,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             Assert.AreEqual(vector.Count, matrix.RowCount);
             Assert.AreEqual(1, matrix.ColumnCount);
-
-            for (var i = 0; i < vector.Count; i++)
-            {
-                Assert.AreEqual(vector[i], matrix[i, 0]);
-            }
+            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(vector[i], matrix[i, 1]));
         }
 
         /// <summary>
@@ -294,11 +290,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             Assert.AreEqual(vector.Count, matrix.ColumnCount);
             Assert.AreEqual(1, matrix.RowCount);
-
-            for (var i = 0; i < vector.Count; i++)
-            {
-                Assert.AreEqual(vector[i], matrix[0, i]);
-            }
+            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(vector[i], matrix[1, i]));
         }
 
         /// <summary>
@@ -317,18 +309,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         /// </summary>
         /// <param name="index">The first element to begin copying from.</param>
         /// <param name="length">The number of elements to copy.</param>
-        [TestCase(0, 5)]
-        [TestCase(2, 2)]
-        [TestCase(1, 4)]
+        [TestCase(1, 5)]
+        [TestCase(3, 2)]
+        [TestCase(2, 4)]
         public void CanGetSubVector(int index, int length)
         {
             var vector = CreateVector(Data);
             var sub = vector.SubVector(index, length);
             Assert.AreEqual(length, sub.Count);
-            for (var i = 0; i < length; i++)
-            {
-                Assert.AreEqual(vector[i + index], sub[i]);
-            }
+            AssertHelpers.ValuesAssertion(sub, (i, v) => Assert.AreEqual(vector[i + index], sub[i]));
         }
 
         /// <summary>
@@ -351,7 +340,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanFindAbsoluteMinimumIndex()
         {
             var source = CreateVector(Data);
-            const int Expected = 0;
+            const int Expected = 1;
             var actual = source.AbsoluteMinimumIndex();
             Assert.AreEqual(Expected, actual);
         }
@@ -375,7 +364,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanFindAbsoluteMaximumIndex()
         {
             var source = CreateVector(Data);
-            const int Expected = 4;
+            const int Expected = 5;
             var actual = source.AbsoluteMaximumIndex();
             Assert.AreEqual(Expected, actual);
         }
@@ -496,10 +485,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             Complex32[] testData = { new Complex32(-20, -1), new Complex32(-10, -1), new Complex32(10, 1), new Complex32(20, 1), new Complex32(30, 1) };
             var vector = CreateVector(testData);
             vector.Clear();
-            foreach (var element in vector)
-            {
-                Assert.AreEqual(Complex32.Zero, element);
-            }
+            AssertHelpers.VectorHasValue(vector, Complex32.Zero);
         }
 
         /// <summary>

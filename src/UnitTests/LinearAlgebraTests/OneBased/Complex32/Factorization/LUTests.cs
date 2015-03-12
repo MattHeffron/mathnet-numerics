@@ -54,25 +54,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixL = factorLU.L;
             Assert.AreEqual(matrixI.RowCount, matrixL.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, matrixL.ColumnCount);
-            for (var i = 0; i < matrixL.RowCount; i++)
-            {
-                for (var j = 0; j < matrixL.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? Complex32.One : Complex32.Zero, matrixL[i, j]);
-                }
-            }
+            AssertHelpers.IsDiagonal(matrixL);
+            AssertHelpers.DiagonalHasValue(matrixL, Complex32.One);
 
             // Check upper triangular part.
             var matrixU = factorLU.U;
             Assert.AreEqual(matrixI.RowCount, matrixU.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, matrixU.ColumnCount);
-            for (var i = 0; i < matrixU.RowCount; i++)
-            {
-                for (var j = 0; j < matrixU.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? Complex32.One : Complex32.Zero, matrixU[i, j]);
-                }
-            }
+            AssertHelpers.IsDiagonal(matrixU);
+            AssertHelpers.DiagonalHasValue(matrixU, Complex32.One);
         }
 
         /// <summary>
@@ -123,36 +113,16 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             Assert.AreEqual(order, matrixU.ColumnCount);
 
             // Make sure the L factor is lower triangular.
-            for (var i = 0; i < matrixL.RowCount; i++)
-            {
-                Assert.AreEqual(Complex32.One, matrixL[i, i]);
-                for (var j = i + 1; j < matrixL.ColumnCount; j++)
-                {
-                    Assert.AreEqual(Complex32.Zero, matrixL[i, j]);
-                }
-            }
+            AssertHelpers.IsLowerTriangular(matrixL);
 
             // Make sure the U factor is upper triangular.
-            for (var i = 0; i < matrixL.RowCount; i++)
-            {
-                for (var j = 0; j < i; j++)
-                {
-                    Assert.AreEqual(Complex32.Zero, matrixU[i, j]);
-                }
-            }
+            AssertHelpers.IsUpperTriangular(matrixU);
 
             // Make sure the LU factor times it's transpose is the original matrix.
             var matrixXfromLU = matrixL * matrixU;
             var permutationInverse = factorLU.P.Inverse();
             matrixXfromLU.PermuteRows(permutationInverse);
-            for (var i = 0; i < matrixXfromLU.RowCount; i++)
-            {
-                for (var j = 0; j < matrixXfromLU.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixX[i, j].Real, matrixXfromLU[i, j].Real, 1e-3f);
-                    Assert.AreEqual(matrixX[i, j].Imaginary, matrixXfromLU[i, j].Imaginary, 1e-3f);
-                }
-            }
+            AssertHelpers.AlmostEqualRelative(matrixX, matrixXfromLU, 3);
         }
 
         /// <summary>
@@ -179,20 +149,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixBReconstruct = matrixA * resultx;
 
             // Check the reconstruction.
-            for (var i = 0; i < order; i++)
-            {
-                Assert.AreEqual(vectorb[i].Real, matrixBReconstruct[i].Real, 1e-3f);
-                Assert.AreEqual(vectorb[i].Imaginary, matrixBReconstruct[i].Imaginary, 1e-3f);
-            }
+            AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, 3);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
         }
 
         /// <summary>
@@ -223,23 +183,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            for (var i = 0; i < matrixB.RowCount; i++)
-            {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixB[i, j].Real, matrixBReconstruct[i, j].Real, 1e-3f);
-                    Assert.AreEqual(matrixB[i, j].Imaginary, matrixBReconstruct[i, j].Imaginary, 1e-3f);
-                }
-            }
+            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 3);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
         }
 
         /// <summary>
@@ -267,26 +214,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixBReconstruct = matrixA * resultx;
 
             // Check the reconstruction.
-            for (var i = 0; i < vectorb.Count; i++)
-            {
-                Assert.AreEqual(vectorb[i].Real, matrixBReconstruct[i].Real, 1e-3f);
-                Assert.AreEqual(vectorb[i].Imaginary, matrixBReconstruct[i].Imaginary, 1e-3f);
-            }
+            AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, 3);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
 
             // Make sure b didn't change.
-            for (var i = 0; i < vectorb.Count; i++)
-            {
-                Assert.AreEqual(vectorbCopy[i], vectorb[i]);
-            }
+            AssertHelpers.AreEqual(vectorbCopy, vectorb);
         }
 
         /// <summary>
@@ -320,32 +254,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            for (var i = 0; i < matrixB.RowCount; i++)
-            {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixB[i, j].Real, matrixBReconstruct[i, j].Real, 1e-3f);
-                    Assert.AreEqual(matrixB[i, j].Imaginary, matrixBReconstruct[i, j].Imaginary, 1e-3f);
-                }
-            }
+            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 3);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
 
             // Make sure B didn't change.
-            for (var i = 0; i < matrixB.RowCount; i++)
-            {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixBCopy[i, j], matrixB[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixBCopy, matrixB);
         }
 
         /// <summary>
@@ -373,20 +288,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixIdentity = matrixA * matrixAInverse;
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
 
             // Check if multiplication of A and AI produced identity matrix.
-            for (var i = 0; i < matrixIdentity.RowCount; i++)
-            {
-                Assert.AreEqual(matrixIdentity[i, i].Real, Complex32.One.Real, 1e-3f);
-                Assert.AreEqual(matrixIdentity[i, i].Imaginary, Complex32.One.Imaginary, 1e-3f);
-            }
+            AssertHelpers.ValuesAssertion(matrixIdentity, (i, j, v) => AssertHelpers.AlmostEqualRelative(i == j ? Complex.One : Complex.Zero, matrixIdentity[i, j], 3));
         }
     }
 }

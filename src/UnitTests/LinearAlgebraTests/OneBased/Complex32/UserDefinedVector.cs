@@ -32,7 +32,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
     using Numerics;
 
     /// <summary>
-    /// User-defined vector implementation (internal class for testing purposes)
+    /// User-defined (one based indexing) vector implementation (internal class for testing purposes)
     /// </summary>
     internal class UserDefinedVector : Vector
     {
@@ -59,12 +59,12 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             public override Complex32 At(int index)
             {
-                return Data[index];
+                return Data[index - 1];
             }
 
             public override void At(int index, Complex32 value)
             {
-                Data[index] = value;
+                Data[index - 1] = value;
             }
         }
 
