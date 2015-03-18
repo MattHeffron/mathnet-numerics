@@ -51,13 +51,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             Assert.AreEqual(matrixI.RowCount, factorC.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, factorC.ColumnCount);
 
-            for (var i = 0; i < factorC.RowCount; i++)
-            {
-                for (var j = 0; j < factorC.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? 1.0 : 0.0, factorC[i, j]);
-                }
-            }
+            AssertHelpers.IsIdentity(factorC);
         }
 
         /// <summary>
@@ -67,7 +61,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
         public void CholeskyFailsWithDiagonalNonPositiveDefiniteMatrix()
         {
             var matrixI = Matrix<double>.Build.DenseIdentity(10);
-            matrixI[3, 3] = -4.0;
+            matrixI[4, 4] = -4.0;
             Assert.That(() => matrixI.Cholesky(), Throws.ArgumentException);
         }
 
@@ -117,23 +111,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             Assert.AreEqual(order, factorC.ColumnCount);
 
             // Make sure the Cholesky factor is lower triangular.
-            for (var i = 0; i < factorC.RowCount; i++)
-            {
-                for (var j = i + 1; j < factorC.ColumnCount; j++)
-                {
-                    Assert.AreEqual(0.0, factorC[i, j]);
-                }
-            }
+            AssertHelpers.IsLowerTriangular(factorC);
 
             // Make sure the cholesky factor times it's transpose is the original matrix.
             var matrixXfromC = factorC * factorC.Transpose();
-            for (var i = 0; i < matrixXfromC.RowCount; i++)
-            {
-                for (var j = 0; j < matrixXfromC.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixX[i, j], matrixXfromC[i, j], 1.0e-11);
-                }
-            }
+            AssertHelpers.AlmostEqualRelative(matrixX, matrixXfromC, 8);
         }
 
         /// <summary>
@@ -159,19 +141,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA * x;
 
             // Check the reconstruction.
-            for (var i = 0; i < order; i++)
-            {
-                Assert.AreEqual(matrixB[i], matrixBReconstruct[i], 1e-9);
-            }
+            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 10);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
         }
 
         /// <summary>
@@ -199,22 +172,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            for (var i = 0; i < matrixB.RowCount; i++)
-            {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixB[i, j], matrixBReconstruct[i, j], 1e-8);
-                }
-            }
+            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 10);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
         }
 
         /// <summary>
@@ -242,25 +203,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA * x;
 
             // Check the reconstruction.
-            for (var i = 0; i < order; i++)
-            {
-                Assert.AreEqual(matrixB[i], matrixBReconstruct[i], 1e-9);
-            }
+            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 10);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
 
-            // Make sure b didn't change.
-            for (var i = 0; i < order; i++)
-            {
-                Assert.AreEqual(matrixBCopy[i], matrixB[i]);
-            }
+            // Make sure B didn't change.
+            AssertHelpers.AreEqual(matrixBCopy, matrixB);
         }
 
         /// <summary>
@@ -290,31 +239,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            for (var i = 0; i < matrixB.RowCount; i++)
-            {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixB[i, j], matrixBReconstruct[i, j], 1e-8);
-                }
-            }
+            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 10);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
 
             // Make sure B didn't change.
-            for (var i = 0; i < matrixB.RowCount; i++)
-            {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixBCopy[i, j], matrixB[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixBCopy, matrixB);
         }
     }
 }

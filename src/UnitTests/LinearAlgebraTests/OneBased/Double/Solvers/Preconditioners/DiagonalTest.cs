@@ -60,16 +60,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Solvers.
         /// <param name="result">Result vector.</param>
         protected override void CheckResult(IPreconditioner<double> preconditioner, SparseMatrix matrix, Vector<double> vector, Vector<double> result)
         {
-            Assert.AreEqual(typeof (DiagonalPreconditioner), preconditioner.GetType(), "#01");
+            Assert.AreEqual(typeof(DiagonalPreconditioner), preconditioner.GetType(), "#01");
 
             // Compute M * result = product
             // compare vector and product. Should be equal
             var product = new DenseVector(result.Count);
             matrix.Multiply(result, product);
-            for (var i = 0; i < product.Count; i++)
-            {
+            AssertHelpers.IndexedAssertion(product, i => {
                 Assert.IsTrue(vector[i].AlmostEqualNumbersBetween(product[i], -Epsilon.Magnitude()), "#02-" + i);
-            }
+            });
         }
     }
 }

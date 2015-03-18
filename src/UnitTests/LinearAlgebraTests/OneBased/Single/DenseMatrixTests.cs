@@ -91,7 +91,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
         {
             var data = new float[] {1, 1, 1, 1, 1, 1, 2, 2, 2};
             var matrix = new DenseMatrix(3, 3, data);
-            matrix[0, 0] = 10.0f;
+            matrix[1, 1] = 10.0f;
             Assert.AreEqual(10.0f, data[0]);
         }
 
@@ -102,7 +102,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
         public void MatrixFrom2DArrayIsCopy()
         {
             var matrix = DenseMatrix.OfArray(TestData2D["Singular3x3"]);
-            matrix[0, 0] = 10.0f;
+            matrix[1, 1] = 10.0f;
             Assert.AreEqual(1.0f, TestData2D["Singular3x3"][0, 0]);
         }
 
@@ -123,7 +123,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             {
                 for (var j = 0; j < TestData2D[name].GetLength(1); j++)
                 {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i, j]);
+                    Assert.AreEqual(TestData2D[name][i, j], matrix[i + 1, j + 1]);
                 }
             }
         }
@@ -135,13 +135,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
         public void CanCreateMatrixWithUniformValues()
         {
             var matrix = DenseMatrix.Create(10, 10, 10.0f);
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                for (var j = 0; j < matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j], 10.0f);
-                }
-            }
+            AssertHelpers.AllMatrixElementsHaveValue(matrix, 10.0f);
         }
 
         /// <summary>
@@ -151,20 +145,14 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
         public void CanCreateIdentity()
         {
             var matrix = DenseMatrix.CreateIdentity(5);
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                for (var j = 0; j < matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? 1.0f : 0.0f, matrix[i, j]);
-                }
-            }
+            AssertHelpers.IsIdentity(matrix);
         }
 
         /// <summary>
         /// Identity with wrong order throws <c>ArgumentOutOfRangeException</c>.
         /// </summary>
         /// <param name="order">The size of the square matrix</param>
-        [TestCase(0)]
+        //[TestCase(0)]     // Matlab allows for an empty "identity" matrix
         [TestCase(-1)]
         public void IdentityWithWrongOrderThrowsArgumentOutOfRangeException(int order)
         {

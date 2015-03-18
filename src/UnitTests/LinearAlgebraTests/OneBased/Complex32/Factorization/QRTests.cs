@@ -137,7 +137,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
 
             // Make sure the Q is unitary --> (Q*)x(Q) = I
             var matrixQсtQ = q.ConjugateTranspose() * q;
-            AssertHelpers.ValuesAssertion(matrixQсtQ, (i, j, v) => AssertHelpers.AlmostEqual(i == j ? Complex.One : Complex.Zero, matrixQсtQ[i, j], 3));
+            AssertHelpers.AlmostEqualRelative(Matrix<Complex32>.Build.DiagonalIdentity(row, column), matrixQсtQ, 9);
         }
 
         /// <summary>
@@ -175,7 +175,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
 
             // Make sure the Q is unitary --> (Q*)x(Q) = I
             var matrixQсtQ = q.ConjugateTranspose() * q;
-            AssertHelpers.ValuesAssertion(matrixQсtQ, (i, j, v) => AssertHelpers.AlmostEqual(i == j ? Complex.One : Complex.Zero, matrixQсtQ[i, j], 3));
+            AssertHelpers.AlmostEqualRelative(Matrix<Complex32>.Build.DiagonalIdentity(row, column), matrixQсtQ, 9);
         }
 
         /// <summary>

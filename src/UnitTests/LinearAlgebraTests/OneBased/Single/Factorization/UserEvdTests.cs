@@ -61,11 +61,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Factoriz
 
             Assert.AreEqual(matrixI.ColumnCount, d.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, d.ColumnCount);
-
-            for (var i = 0; i < eigenValues.Count; i++)
-            {
-                Assert.AreEqual(Complex.One, eigenValues[i]);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(eigenValues, Complex.One);
         }
 
         /// <summary>
@@ -94,14 +90,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Factoriz
             // Make sure the A*V = λ*V 
             var matrixAv = matrixA * eigenVectors;
             var matrixLv = eigenVectors * d;
-
-            for (var i = 0; i < matrixAv.RowCount; i++)
-            {
-                for (var j = 0; j < matrixAv.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixAv[i, j], matrixLv[i, j], 1e-3);
-                }
-            }
+            AssertHelpers.AlmostEqualRelative(matrixAv, matrixLv, 3);
         }
 
         /// <summary>
@@ -124,14 +113,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Factoriz
 
             // Make sure the A = V*λ*VT 
             var matrix = eigenVectors * d * eigenVectors.Transpose();
-
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                for (var j = 0; j < matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j], matrixA[i, j], 1e-3);
-                }
-            }
+            AssertHelpers.AlmostEqualRelative(matrix, matrixA, 3);
         }
 
         /// <summary>
@@ -159,9 +141,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Factoriz
         public void CanCheckRankOfSquareSingular(int order)
         {
             var matrixA = new UserDefinedMatrix(order, order);
-            matrixA[0, 0] = 1;
-            matrixA[order - 1, order - 1] = 1;
-            for (var i = 1; i < order - 1; i++)
+            matrixA[1, 1] = 1;
+            matrixA[order, order] = 1;
+            for (var i = 2; i < order; i++)
             {
                 matrixA[i, i - 1] = 1;
                 matrixA[i, i + 1] = 1;

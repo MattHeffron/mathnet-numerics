@@ -66,11 +66,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
             // compare vector and product. Should be equal
             var product = new DenseVector(result.Count);
             matrix.Multiply(result, product);
-
-            for (var i = 0; i < product.Count; i++)
-            {
-                Assert.IsTrue(((double) vector[i]).AlmostEqualNumbersBetween(product[i], -Epsilon.Magnitude()), "#02-" + i);
-            }
+            AssertHelpers.IndexedAssertion(product, i => {
+                Assert.IsTrue(vector[i].AlmostEqualNumbersBetween(product[i], -Epsilon.Magnitude()), "#02-" + i);
+            });
         }
     }
 }

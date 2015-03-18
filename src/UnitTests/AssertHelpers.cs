@@ -637,12 +637,185 @@ namespace MathNet.Numerics.UnitTests
             }
         }
 
+        public static void AreEqual(Complex expected, Complex actual)
+        {
+            Assert.AreEqual(expected.Real, actual.Real);
+            Assert.AreEqual(expected.Imaginary, actual.Imaginary);
+        }
+
+        public static void AreEqual(Complex32 expected, Complex32 actual)
+        {
+            Assert.AreEqual(expected.Real, actual.Real);
+            Assert.AreEqual(expected.Imaginary, actual.Imaginary);
+        }
+
+        #region Special cases for providing the delta for comparison
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
-        public static void IsUpperTriangular<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixU, T zero = default(T)) where T : struct, IEquatable<T>, IFormattable
+        public static void AreEqual(Complex expected, Complex actual, double delta)
         {
-            // Everything below the diagonal is zero
+            Assert.AreEqual(expected.Real, actual.Real, delta);
+            Assert.AreEqual(expected.Imaginary, actual.Imaginary, delta);
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual(Complex32 expected, Complex32 actual, double delta)
+        {
+            Assert.AreEqual(expected.Real, actual.Real, delta);
+            Assert.AreEqual(expected.Imaginary, actual.Imaginary, delta);
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<double> expected, MathNet.Numerics.LinearAlgebra.OneBased.Matrix<double> actual, double delta)
+        {
+            if (expected.ColumnCount != actual.ColumnCount || expected.RowCount != actual.RowCount)
+            {
+                Assert.Fail("Matrix dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.RowCount; i++)
+            {
+                for (var j = 1; j <= expected.ColumnCount; j++)
+                {
+                    Assert.AreEqual(expected.At(i, j), actual.At(i, j), delta);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Vector<double> expected, MathNet.Numerics.LinearAlgebra.OneBased.Vector<double> actual, double delta)
+        {
+            if (expected.Count != actual.Count)
+            {
+                Assert.Fail("Vector dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.Count; i++)
+            {
+                Assert.AreEqual(expected.At(i), actual.At(i), delta);
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<float> expected, MathNet.Numerics.LinearAlgebra.OneBased.Matrix<float> actual, double delta)
+        {
+            if (expected.ColumnCount != actual.ColumnCount || expected.RowCount != actual.RowCount)
+            {
+                Assert.Fail("Matrix dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.RowCount; i++)
+            {
+                for (var j = 1; j <= expected.ColumnCount; j++)
+                {
+                    Assert.AreEqual(expected.At(i, j), actual.At(i, j), delta);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Vector<float> expected, MathNet.Numerics.LinearAlgebra.OneBased.Vector<float> actual, double delta)
+        {
+            if (expected.Count != actual.Count)
+            {
+                Assert.Fail("Vector dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.Count; i++)
+            {
+                Assert.AreEqual(expected.At(i), actual.At(i), delta);
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<Complex> expected, MathNet.Numerics.LinearAlgebra.OneBased.Matrix<Complex> actual, double delta)
+        {
+            if (expected.ColumnCount != actual.ColumnCount || expected.RowCount != actual.RowCount)
+            {
+                Assert.Fail("Matrix dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.RowCount; i++)
+            {
+                for (var j = 1; j <= expected.ColumnCount; j++)
+                {
+                    AssertHelpers.AreEqual(expected.At(i, j), actual.At(i, j), delta);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Vector<Complex> expected, MathNet.Numerics.LinearAlgebra.OneBased.Vector<Complex> actual, double delta)
+        {
+            if (expected.Count != actual.Count)
+            {
+                Assert.Fail("Vector dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.Count; i++)
+            {
+                AssertHelpers.AreEqual(expected.At(i), actual.At(i), delta);
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<Complex32> expected, MathNet.Numerics.LinearAlgebra.OneBased.Matrix<Complex32> actual, double delta)
+        {
+            if (expected.ColumnCount != actual.ColumnCount || expected.RowCount != actual.RowCount)
+            {
+                Assert.Fail("Matrix dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.RowCount; i++)
+            {
+                for (var j = 1; j <= expected.ColumnCount; j++)
+                {
+                    AssertHelpers.AreEqual(expected.At(i, j), actual.At(i, j), delta);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AreEqual(MathNet.Numerics.LinearAlgebra.OneBased.Vector<Complex32> expected, MathNet.Numerics.LinearAlgebra.OneBased.Vector<Complex32> actual, double delta)
+        {
+            if (expected.Count != actual.Count)
+            {
+                Assert.Fail("Vector dimensions mismatch. Expected: {0}; Actual: {1}", expected.ToTypeString(), actual.ToTypeString());
+            }
+
+            for (var i = 1; i <= expected.Count; i++)
+            {
+                AssertHelpers.AreEqual(expected.At(i), actual.At(i), delta);
+            }
+        }
+        #endregion
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void IsUpperTriangular<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixU) where T : struct, IEquatable<T>, IFormattable
+        {
+            T zero = MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T>.Build.Zero;
+            // Everything below the diagonal == zero
             for (var i = 1; i <= matrixU.RowCount; i++)
             {
                 for (var j = 1; j < i; j++)
@@ -655,9 +828,10 @@ namespace MathNet.Numerics.UnitTests
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
-        public static void IsLowerTriangular<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixL, T zero = default(T)) where T : struct, IEquatable<T>, IFormattable
+        public static void IsLowerTriangular<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixL) where T : struct, IEquatable<T>, IFormattable
         {
-            // Everything above the diagonal is zero
+            T zero = MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T>.Build.Zero;
+            // Everything above the diagonal == zero
             for (var i = 1; i <= matrixL.RowCount; i++)
             {
                 for (var j = i + 1; j <= matrixL.ColumnCount; j++)
@@ -670,9 +844,10 @@ namespace MathNet.Numerics.UnitTests
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
-        public static void IsDiagonal<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, T zero = default(T)) where T : struct, IEquatable<T>, IFormattable
+        public static void IsDiagonal<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD) where T : struct, IEquatable<T>, IFormattable
         {
-            // Everything off the diagonal is zero
+            T zero = MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T>.Build.Zero;
+            // Everything off the diagonal == zero
             for (var i = 1; i <= matrixD.RowCount; i++)
             {
                 for (var j = 1; j <= matrixD.ColumnCount; j++)
@@ -688,9 +863,42 @@ namespace MathNet.Numerics.UnitTests
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
+        public static void IsDiagonalWithValue<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, T value) where T : struct, IEquatable<T>, IFormattable
+        {
+            T zero = MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T>.Build.Zero;
+            // Everything off the diagonal == zero, everything else == value
+            for (var i = 1; i <= matrixD.RowCount; i++)
+            {
+                for (var j = 1; j <= matrixD.ColumnCount; j++)
+                {
+                    Assert.AreEqual((i == j) ? value : zero, matrixD[i, j]);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void IsIdentity<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD) where T : struct, IEquatable<T>, IFormattable
+        {
+            T zero = MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T>.Build.Zero;
+            T one = MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T>.Build.One;
+            // Everything off the diagonal == zero, everything else == one
+            for (var i = 1; i <= matrixD.RowCount; i++)
+            {
+                for (var j = 1; j <= matrixD.ColumnCount; j++)
+                {
+                    Assert.AreEqual((i == j) ? one : zero, matrixD[i, j]);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
         public static void DiagonalHasValue<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, T value) where T : struct, IEquatable<T>, IFormattable
         {
-            // Everything on the diagonal is value
+            // Everything on the diagonal == value
             int size = Math.Min(matrixD.RowCount, matrixD.ColumnCount);
             for (var i = 1; i <= size; i++)
             {
@@ -701,40 +909,40 @@ namespace MathNet.Numerics.UnitTests
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
-        public static void DiagonalValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, Action<T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        public static void DiagonalValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, Action<T> assertion) where T : struct, IEquatable<T>, IFormattable
         {
-            // Execute the valueAssertion on the diagonal
+            // Execute the assertion on the diagonal
             int size = Math.Min(matrixD.RowCount, matrixD.ColumnCount);
             for (var i = 1; i <= size; i++)
             {
-                valueAssertion(matrixD[i, i]);
+                assertion(matrixD[i, i]);
             }
         }
 
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
-        public static void DiagonalValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, Action<int, T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        public static void DiagonalIndexedAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrixD, Action<int> assertion) where T : struct, IEquatable<T>, IFormattable
         {
-            // Execute the valueAssertion on the diagonal
+            // Execute the assertion on the diagonal
             int size = Math.Min(matrixD.RowCount, matrixD.ColumnCount);
             for (var i = 1; i <= size; i++)
             {
-                valueAssertion(i, matrixD[i, i]);
+                assertion(i);
             }
         }
 
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
-        public static void ValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrix, Action<T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        public static void ValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrix, Action<T> assertion) where T : struct, IEquatable<T>, IFormattable
         {
-            // Execute the valueAssertion on all the elements of the matrix
+            // Execute the assertion on all the elements of the matrix
             for (var i = 1; i <= matrix.RowCount; i++)
             {
                 for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
-                    valueAssertion(matrix[i, j]);
+                    assertion(matrix[i, j]);
                 }
             }
         }
@@ -742,14 +950,14 @@ namespace MathNet.Numerics.UnitTests
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
-        public static void ValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrix, Action<int, int, T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        public static void IndexedAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrix, Action<int, int> assertion) where T : struct, IEquatable<T>, IFormattable
         {
-            // Execute the valueAssertion on all the elements of the matrix
+            // Execute the assertion on all the elements of the matrix
             for (var r = 1; r <= matrix.RowCount; r++)
             {
                 for (var c = 1; c <= matrix.ColumnCount; c++)
                 {
-                    valueAssertion(r, c, matrix[r, c]);
+                    assertion(r, c);
                 }
             }
         }
@@ -757,48 +965,39 @@ namespace MathNet.Numerics.UnitTests
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
-        public static void VectorHasValue<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, T value) where T : struct, IEquatable<T>, IFormattable
+        public static void AllMatrixElementsHaveValue<T>(MathNet.Numerics.LinearAlgebra.OneBased.Matrix<T> matrix, T value) where T : struct, IEquatable<T>, IFormattable
         {
-            // Everything in the vector is value
+            // Everything in the matrix == value
+            for (var i = 1; i <= matrix.RowCount; i++)
+            {
+                for (var j = 1; j <= matrix.ColumnCount; j++)
+                {
+                    Assert.AreEqual(value, matrix[i, j]);
+                }
+            }
+        }
+
+        /// <remarks>
+        /// Simplify the unit tests to avoid needing to write the loop structures every time...
+        /// </remarks>
+        public static void AllVectorElementsHaveValue<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, T value) where T : struct, IEquatable<T>, IFormattable
+        {
+            // Everything in the vector == value
             for (var i = 1; i <= vector.Count; i++)
             {
                 Assert.AreEqual(value, vector[i]);
             }
         }
 
-        /////// <remarks>
-        /////// Simplify the unit tests to avoid needing to write the loop structures every time...
-        /////// </remarks>
-        ////public static void VectorValuesCondition<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, Func<T, bool> valueTest) where T : struct, IEquatable<T>, IFormattable
-        ////{
-        ////    // Everything in the vector meets condition
-        ////    for (var i = 1; i <= vector.Count; i++)
-        ////    {
-        ////        Assert.IsTrue(valueTest(vector[i]));
-        ////    }
-        ////}
-
         /// <remarks>
         /// Simplify the unit tests to avoid needing to write the loop structures every time...
         /// </remarks>
-        public static void ValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, Action<T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
+        public static void IndexedAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, Action<int> assertion) where T : struct, IEquatable<T>, IFormattable
         {
-            // Everything in the vector meets condition
+            // Everything in the vector meets assertion
             for (var i = 1; i <= vector.Count; i++)
             {
-                valueAssertion(vector[i]);
-            }
-        }
-
-        /// <remarks>
-        /// Simplify the unit tests to avoid needing to write the loop structures every time...
-        /// </remarks>
-        public static void ValuesAssertion<T>(MathNet.Numerics.LinearAlgebra.OneBased.Vector<T> vector, Action<int, T> valueAssertion) where T : struct, IEquatable<T>, IFormattable
-        {
-            // Everything in the vector meets condition
-            for (var i = 1; i <= vector.Count; i++)
-            {
-                valueAssertion(i, vector[i]);
+                assertion(i);
             }
         }
         #endregion

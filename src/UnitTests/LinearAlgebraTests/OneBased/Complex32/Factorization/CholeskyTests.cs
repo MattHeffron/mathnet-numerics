@@ -53,8 +53,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             Assert.AreEqual(matrixI.RowCount, factorC.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, factorC.ColumnCount);
 
-            AssertHelpers.IsDiagonal(factorC);
-            AssertHelpers.DiagonalHasValue(factorC, Complex32.One);
+            AssertHelpers.IsIdentity(factorC);
         }
 
         /// <summary>

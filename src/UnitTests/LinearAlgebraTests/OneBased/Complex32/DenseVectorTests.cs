@@ -133,7 +133,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanCreateDenseVectorWithConstantValues()
         {
             var vector = DenseVector.Create(5, 5);
-            AssertHelpers.VectorHasValue(vector, new Complex32(5.0f, 0));
+            AssertHelpers.AllVectorElementsHaveValue(vector, new Complex32(5.0f, 0));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var result = vector + other;
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.ValuesAssertion(result, (i, v) => Assert.AreEqual(Data[i - 1]*2.0f, v));
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1]*2.0f, result[i]));
         }
 
         /// <summary>
@@ -206,7 +206,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         {
             var vector = new DenseVector(Data);
             var other = -vector;
-            AssertHelpers.ValuesAssertion(other, (i, v) => Assert.AreEqual(-Data[i - 1], v));
+            AssertHelpers.IndexedAssertion(other, i => Assert.AreEqual(-Data[i - 1], other[i]));
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var result = vector - other;
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.VectorHasValue(result, Complex32.Zero);
+            AssertHelpers.AllVectorElementsHaveValue(result, Complex32.Zero);
         }
 
         /// <summary>
@@ -231,17 +231,17 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         {
             var vector = new DenseVector(Data);
             vector = vector*new Complex32(2.0f, 1);
-AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex(2.0f, 1), v));
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
 
             vector = vector*1.0f;
-            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), v));
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
 
             vector = new DenseVector(Data);
             vector = new Complex32(2.0f, 1)*vector;
-            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), v));
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
 
-            vector = 1.0*vector;
-            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), v));
+            vector = 1.0f*vector;
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
         }
 
         /// <summary>
@@ -252,10 +252,10 @@ AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * ne
         {
             var vector = new DenseVector(Data);
             vector = vector/new Complex32(2.0f, 1);
-            AssertHelpers.ValuesAssertion(vector, (i, v) => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex32(2.0f, 1), v, 6));
+            AssertHelpers.IndexedAssertion(vector, i => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex32(2.0f, 1), vector[i], 6));
 
             vector = vector/1.0f;
-            AssertHelpers.ValuesAssertion(vector, (i, v) => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex32(2.0f, 1), v, 6));
+            AssertHelpers.IndexedAssertion(vector, i => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex32(2.0f, 1), vector[i], 6));
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * ne
             var vector1 = CreateVector(Data);
             var vector2 = CreateVector(Data);
             var m = Vector<Complex32>.OuterProduct(vector1, vector2);
-            AssertHelpers.ValuesAssertion(m, (i, j, v) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
+            AssertHelpers.IndexedAssertion(m, (i, j) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
         }
     }
 }

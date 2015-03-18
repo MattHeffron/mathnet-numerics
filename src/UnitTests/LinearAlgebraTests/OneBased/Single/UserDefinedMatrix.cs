@@ -30,7 +30,7 @@ using MathNet.Numerics.LinearAlgebra.OneBased.Storage;
 namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
 {
     /// <summary>
-    /// User-defined matrix implementation (internal class for testing purposes)
+    /// User-defined (one based indexing) matrix implementation (internal class for testing purposes)
     /// </summary>
     internal class UserDefinedMatrix : Matrix
     {
@@ -67,12 +67,12 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
 
             public override float At(int row, int column)
             {
-                return Data[row, column];
+                return Data[row - 1, column - 1];
             }
 
             public override void At(int row, int column, float value)
             {
-                Data[row, column] = value;
+                Data[row - 1, column - 1] = value;
             }
         }
 
@@ -112,7 +112,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
         public static UserDefinedMatrix Identity(int order)
         {
             var m = new UserDefinedMatrix(order, order);
-            for (var i = 0; i < order; i++)
+            for (var i = 1; i <= order; i++)
             {
                 m[i, i] = 1f;
             }

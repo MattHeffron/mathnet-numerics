@@ -50,13 +50,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             Assert.AreNotSame(matrix, transpose);
             Assert.AreEqual(matrix.RowCount, transpose.ColumnCount);
             Assert.AreEqual(matrix.ColumnCount, transpose.RowCount);
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                for (var j = 0; j < matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrix[i, j], transpose[j, i]);
-                }
-            }
+            AssertHelpers.IndexedAssertion(transpose, (i, j) => Assert.AreEqual(matrix[j, i], transpose[i, j]));
         }
 
         /// <summary>

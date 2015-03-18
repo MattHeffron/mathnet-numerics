@@ -123,7 +123,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         {
             var sourceTestData = TestData2D[name];
             var matrix = SparseMatrix.OfArray(sourceTestData);
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(sourceTestData[i - 1, j - 1], matrix[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(sourceTestData[i - 1, j - 1], matrix[i, j]));
         }
 
         /// <summary>
@@ -133,8 +133,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanCreateIdentity()
         {
             var matrix = SparseMatrix.CreateIdentity(5);
-            AssertHelpers.IsDiagonal(matrix);
-            AssertHelpers.DiagonalHasValue(matrix, Complex32.One);
+            AssertHelpers.IsIdentity(matrix);
         }
 
         /// <summary>

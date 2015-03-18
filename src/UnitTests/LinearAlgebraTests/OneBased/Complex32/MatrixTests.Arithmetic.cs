@@ -52,7 +52,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var matrix = TestMatrices["Singular3x3"];
             var clone = matrix.Clone();
             clone = clone.Multiply(value);
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrix[i, j] * value, clone[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(matrix[i, j] * value, clone[i, j]));
         }
 
         /// <summary>
@@ -140,7 +140,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var value = new Complex32(real, 1.0f);
             var matrix = TestMatrices["Singular3x3"];
             var clone = value * matrix;
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(value * matrix[i, j], clone[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(value * matrix[i, j], clone[i, j]));
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var value = new Complex32(real, 1.0f);
             var matrix = TestMatrices["Singular3x3"];
             var clone = matrix * value;
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrix[i, j] * value, clone[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(matrix[i, j] * value, clone[i, j]));
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var matrix = TestMatrices["Singular3x3"];
             var result = matrix.Clone();
             matrix.Multiply(value, result);
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrix[i, j] * value, result[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(matrix[i, j] * value, result[i, j]));
         }
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             var matrix = matrixA.Clone();
             matrix = matrix.Add(matrixB);
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrixA[i, j] + matrixB[i, j], matrix[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(matrixA[i, j] + matrixB[i, j], matrix[i, j]));
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var matrixB = TestMatrices[mtxB];
 
             var result = matrixA + matrixB;
-            AssertHelpers.ValuesAssertion(result, (i, j, v) => Assert.AreEqual(matrixA[i, j] + matrixB[i, j], result[i, j]));
+            AssertHelpers.IndexedAssertion(result, (i, j) => Assert.AreEqual(matrixA[i, j] + matrixB[i, j], result[i, j]));
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             var matrix = matrixA.Clone();
             matrix = matrix.Subtract(matrixB);
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(matrixA[i, j] - matrixB[i, j], matrix[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(matrixA[i, j] - matrixB[i, j], matrix[i, j]));
         }
 
         /// <summary>
@@ -325,7 +325,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var matrixB = TestMatrices[mtxB];
 
             var result = matrixA - matrixB;
-            AssertHelpers.ValuesAssertion(result, (i, j, v) => Assert.AreEqual(matrixA[i, j] - matrixB[i, j], result[i, j]));
+            AssertHelpers.IndexedAssertion(result, (i, j) => Assert.AreEqual(matrixA[i, j] - matrixB[i, j], result[i, j]));
         }
 
         /// <summary>
@@ -368,7 +368,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
-            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 5));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 5));
         }
 
         /// <summary>
@@ -388,7 +388,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.RowCount);
 
-            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 5));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 5));
         }
 
         /// <summary>
@@ -416,7 +416,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.RowCount);
 
-            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 5));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 5));
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.RowCount);
 
-            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 5));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 5));
         }
 
         /// <summary>
@@ -482,7 +482,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
 
-            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 5));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 5));
         }
 
         /// <summary>
@@ -575,7 +575,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             Assert.AreEqual(matrixC.RowCount, matrixA.ColumnCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
 
-            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 5));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 5));
         }
 
         /// <summary>
@@ -607,7 +607,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             Assert.AreEqual(matrixC.RowCount, matrixA.ColumnCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
 
-            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 5));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 5));
         }
 
         /// <summary>
@@ -626,7 +626,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             copy = copy.Negate();
 
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(-matrix[i, j], copy[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(-matrix[i, j], copy[i, j]));
         }
 
         /// <summary>
@@ -645,7 +645,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             matrix.Negate(result);
 
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(-matrix[i, j], result[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(-matrix[i, j], result[i, j]));
         }
 
         /// <summary>
@@ -781,10 +781,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
                 var other = data.Clone();
                 var result = data.Clone();
                 data.PointwiseMultiply(other, result);
-                AssertHelpers.ValuesAssertion(data, (i, j, v) => Assert.AreEqual(data[i, j]*other[i, j], result[i, j]));
+                AssertHelpers.IndexedAssertion(data, (i, j) => Assert.AreEqual(data[i, j]*other[i, j], result[i, j]));
 
                 result = data.PointwiseMultiply(other);
-                AssertHelpers.ValuesAssertion(data, (i, j, v) => Assert.AreEqual(data[i, j]*other[i, j], result[i, j]));
+                AssertHelpers.IndexedAssertion(data, (i, j) => Assert.AreEqual(data[i, j]*other[i, j], result[i, j]));
             }
         }
 
@@ -822,10 +822,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var other = data.Clone();
             var result = data.Clone();
             data.PointwiseDivide(other, result);
-            AssertHelpers.ValuesAssertion(data, (i, j, v) => Assert.AreEqual(data[i, j] / other[i, j], result[i, j]));
+            AssertHelpers.IndexedAssertion(data, (i, j) => Assert.AreEqual(data[i, j] / other[i, j], result[i, j]));
 
             result = data.PointwiseDivide(other);
-            AssertHelpers.ValuesAssertion(data, (i, j, v) => Assert.AreEqual(data[i, j] / other[i, j], result[i, j]));
+            AssertHelpers.IndexedAssertion(data, (i, j) => Assert.AreEqual(data[i, j] / other[i, j], result[i, j]));
         }
 
         /// <summary>

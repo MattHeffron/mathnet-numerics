@@ -67,10 +67,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
 
             Assert.AreEqual(matrixI.RowCount, q.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, q.ColumnCount);
-            AssertHelpers.IsDiagonal(r);
-            AssertHelpers.DiagonalHasValue(r, Complex.One);
-            AssertHelpers.IsDiagonal(q);
-            AssertHelpers.DiagonalHasValue(q, Complex.One);
+            AssertHelpers.IsIdentity(r);
+            AssertHelpers.IsIdentity(q);
         }
 
         /// <summary>
@@ -122,7 +120,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
 
             // Make sure the Q is unitary --> (Q*)x(Q) = I
             var matrixQсtQ = q.ConjugateTranspose() * q;
-            AssertHelpers.ValuesAssertion(matrixQсtQ, (i, j, v) => AssertHelpers.AlmostEqualRelative(i == j ? Complex.One : Complex.Zero, matrixQсtQ[i, j], 9));
+            AssertHelpers.AlmostEqualRelative(Matrix<Complex>.Build.DiagonalIdentity(row, column), matrixQсtQ, 9);
         }
 
         /// <summary>

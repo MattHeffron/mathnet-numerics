@@ -61,13 +61,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             Assert.AreEqual(matrixI.RowCount, w.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, w.ColumnCount);
 
-            for (var i = 0; i < w.RowCount; i++)
-            {
-                for (var j = 0; j < w.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? 1.0 : 0.0, w[i, j]);
-                }
-            }
+            AssertHelpers.IsIdentity(w);
         }
 
         /// <summary>
@@ -102,14 +96,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             Assert.AreEqual(column, w.ColumnCount);
 
             // Make sure the U*W*VT is the original matrix.
-            var matrix = u*w*vt;
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                for (var j = 0; j < matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixA[i, j], matrix[i, j], 1.0e-11);
-                }
-            }
+            var matrix = u * w * vt;
+            AssertHelpers.AlmostEqualRelative(matrixA, matrix, 11);
         }
 
         /// <summary>
@@ -164,9 +152,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
         public void CanCheckRankOfSquareSingular(int order)
         {
             var matrixA = Matrix<double>.Build.Dense(order, order);
-            matrixA[0, 0] = 1;
-            matrixA[order - 1, order - 1] = 1;
-            for (var i = 1; i < order - 1; i++)
+            matrixA[1, 1] = 1;
+            matrixA[order, order] = 1;
+            for (var i = 2; i < order; i++)
             {
                 matrixA[i, i - 1] = 1;
                 matrixA[i, i + 1] = 1;
@@ -231,19 +219,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA*resultx;
 
             // Check the reconstruction.
-            for (var i = 0; i < vectorb.Count; i++)
-            {
-                Assert.AreEqual(vectorb[i], matrixBReconstruct[i], 1.0e-11);
-            }
+            AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, 11);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
         }
 
         /// <summary>
@@ -275,22 +254,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA*matrixX;
 
             // Check the reconstruction.
-            for (var i = 0; i < matrixB.RowCount; i++)
-            {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixB[i, j], matrixBReconstruct[i, j], 1.0e-11);
-                }
-            }
+            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 11);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
         }
 
         /// <summary>
@@ -317,25 +284,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA*resultx;
 
             // Check the reconstruction.
-            for (var i = 0; i < vectorb.Count; i++)
-            {
-                Assert.AreEqual(vectorb[i], matrixBReconstruct[i], 1.0e-11);
-            }
+            AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, 11);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
 
             // Make sure b didn't change.
-            for (var i = 0; i < vectorb.Count; i++)
-            {
-                Assert.AreEqual(vectorbCopy[i], vectorb[i]);
-            }
+            AssertHelpers.AreEqual(vectorbCopy, vectorb);
         }
 
         /// <summary>
@@ -370,31 +325,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA*matrixX;
 
             // Check the reconstruction.
-            for (var i = 0; i < matrixB.RowCount; i++)
-            {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixB[i, j], matrixBReconstruct[i, j], 1.0e-11);
-                }
-            }
+            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 11);
 
             // Make sure A didn't change.
-            for (var i = 0; i < matrixA.RowCount; i++)
-            {
-                for (var j = 0; j < matrixA.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixACopy[i, j], matrixA[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixACopy, matrixA);
 
             // Make sure B didn't change.
-            for (var i = 0; i < matrixB.RowCount; i++)
-            {
-                for (var j = 0; j < matrixB.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixBCopy[i, j], matrixB[i, j]);
-                }
-            }
+            AssertHelpers.AreEqual(matrixBCopy, matrixB);
         }
     }
 }

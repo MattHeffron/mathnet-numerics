@@ -137,7 +137,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanCreateMatrixWithUniformValues()
         {
             var matrix = DenseMatrix.Create(10, 10, new Complex32(10.0f, 1));
-            AssertHelpers.ValuesAssertion(matrix, v => Assert.AreEqual(v, new Complex32(10.0f, 1)));
+            AssertHelpers.AllMatrixElementsHaveValue(matrix, new Complex32(10.0f, 1));
         }
 
         /// <summary>
@@ -147,8 +147,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanCreateIdentity()
         {
             var matrix = DenseMatrix.CreateIdentity(5);
-            AssertHelpers.IsDiagonal(matrix);
-            AssertHelpers.DiagonalHasValue(matrix, Complex32.One);
+            AssertHelpers.IsIdentity(matrix);
         }
 
         /// <summary>

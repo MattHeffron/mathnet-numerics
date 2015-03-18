@@ -50,7 +50,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreNotSame(matrix, transpose);
             Assert.AreEqual(matrix.RowCount, transpose.ColumnCount);
             Assert.AreEqual(matrix.ColumnCount, transpose.RowCount);
-            AssertHelpers.ValuesAssertion(transpose, (i, j, v) => Assert.AreEqual(matrix[j, i], transpose[i, j]));
+            AssertHelpers.IndexedAssertion(transpose, (i, j) => Assert.AreEqual(matrix[j, i], transpose[i, j]));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Assert.AreNotSame(matrix, transpose);
             Assert.AreEqual(matrix.RowCount, transpose.ColumnCount);
             Assert.AreEqual(matrix.ColumnCount, transpose.RowCount);
-            AssertHelpers.ValuesAssertion(transpose, (i, j, v) => Assert.AreEqual(matrix[j, i].Conjugate(), transpose[i, j]));
+            AssertHelpers.IndexedAssertion(transpose, (i, j) => Assert.AreEqual(matrix[j, i].Conjugate(), transpose[i, j]));
         }
 
         /// <summary>

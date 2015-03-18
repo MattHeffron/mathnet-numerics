@@ -63,7 +63,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
 
             Assert.AreEqual(matrixI.ColumnCount, d.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, d.ColumnCount);
-            AssertHelpers.VectorHasValue(eigenValues, Complex32.One);
+            AssertHelpers.AllVectorElementsHaveValue(eigenValues, Complex.One);
         }
 
         /// <summary>

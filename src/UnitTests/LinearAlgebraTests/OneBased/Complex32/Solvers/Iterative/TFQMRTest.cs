@@ -228,7 +228,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
                 var matrixBReconstruct = matrixA*resultx;
 
                 // Check the reconstruction.
-                AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, iteration - 3);
+                AssertHelpers.AreEqual(vectorb, matrixBReconstruct, (float)Math.Pow(1.0 / 10.0, iteration - 3));
 
                 return;
             }
@@ -270,7 +270,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
                 var matrixBReconstruct = matrixA*matrixX;
 
                 // Check the reconstruction.
-                AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, iteration - 3);
+                AssertHelpers.AreEqual(matrixB, matrixBReconstruct, (float)Math.Pow(1.0 / 10.0, iteration - 3));
 
                 return;
             }

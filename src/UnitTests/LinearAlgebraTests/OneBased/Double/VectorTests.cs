@@ -58,7 +58,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
 
             Assert.AreNotSame(vector, clone);
             Assert.AreEqual(vector.Count, clone.Count);
-            CollectionAssert.AreEqual(vector, clone);
+            AssertHelpers.AreEqual(vector, clone);
         }
 
 #if !PORTABLE
@@ -73,7 +73,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
 
             Assert.AreNotSame(vector, clone);
             Assert.AreEqual(vector.Count, clone.Count);
-            CollectionAssert.AreEqual(vector, clone);
+            AssertHelpers.AreEqual(vector, clone);
         }
 #endif
 
@@ -86,13 +86,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector = CreateVector(Data);
             var other = CreateVector(Data.Length);
 
-            vector.CopySubVectorTo(other, 2, 2, 2);
+            vector.CopySubVectorTo(other, 3, 3, 2);
 
-            Assert.AreEqual(0.0, other[0]);
             Assert.AreEqual(0.0, other[1]);
-            Assert.AreEqual(3.0, other[2]);
-            Assert.AreEqual(4.0, other[3]);
-            Assert.AreEqual(0.0, other[4]);
+            Assert.AreEqual(0.0, other[2]);
+            Assert.AreEqual(3.0, other[3]);
+            Assert.AreEqual(4.0, other[4]);
+            Assert.AreEqual(0.0, other[5]);
         }
 
         /// <summary>
@@ -102,13 +102,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         public void CanCopyPartialVectorToSelf()
         {
             var vector = CreateVector(Data);
-            vector.CopySubVectorTo(vector, 0, 2, 2);
+            vector.CopySubVectorTo(vector, 1, 3, 2);
 
-            Assert.AreEqual(1.0, vector[0]);
-            Assert.AreEqual(2.0, vector[1]);
-            Assert.AreEqual(1.0, vector[2]);
-            Assert.AreEqual(2.0, vector[3]);
-            Assert.AreEqual(5.0, vector[4]);
+            Assert.AreEqual(1.0, vector[1]);
+            Assert.AreEqual(2.0, vector[2]);
+            Assert.AreEqual(1.0, vector[3]);
+            Assert.AreEqual(2.0, vector[4]);
+            Assert.AreEqual(5.0, vector[5]);
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var other = CreateVector(Data.Length);
 
             vector.CopyTo(other);
-            CollectionAssert.AreEqual(vector, other);
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -156,7 +156,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector = CreateVector(Data);
             for (var i = 0; i < Data.Length; i++)
             {
-                Assert.AreEqual(Data[i], vector[i]);
+                Assert.AreEqual(Data[i], vector[i + 1]);
             }
         }
 
@@ -232,7 +232,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector = CreateVector(Data);
             foreach (var pair in vector.EnumerateIndexed())
             {
-                Assert.AreEqual(Data[pair.Item1], pair.Item2);
+                Assert.AreEqual(Data[pair.Item1 - 1], pair.Item2);
             }
         }
 
@@ -245,7 +245,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector = CreateVector(Data);
             foreach (var pair in vector.EnumerateIndexed(Zeros.AllowSkip))
             {
-                Assert.AreEqual(Data[pair.Item1], pair.Item2);
+                Assert.AreEqual(Data[pair.Item1 - 1], pair.Item2);
                 Assert.AreNotEqual(0d, pair.Item2);
             }
         }
@@ -272,11 +272,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
 
             Assert.AreEqual(vector.Count, matrix.RowCount);
             Assert.AreEqual(1, matrix.ColumnCount);
-
-            for (var i = 0; i < vector.Count; i++)
-            {
-                Assert.AreEqual(vector[i], matrix[i, 0]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(vector[i], matrix[i, 1]));
         }
 
         /// <summary>
@@ -290,11 +286,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
 
             Assert.AreEqual(vector.Count, matrix.ColumnCount);
             Assert.AreEqual(1, matrix.RowCount);
-
-            for (var i = 0; i < vector.Count; i++)
-            {
-                Assert.AreEqual(vector[i], matrix[0, i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(vector[i], matrix[1, i]));
         }
 
         /// <summary>
@@ -313,18 +305,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         /// </summary>
         /// <param name="index">The first element to begin copying from.</param>
         /// <param name="length">The number of elements to copy.</param>
-        [TestCase(0, 5)]
-        [TestCase(2, 2)]
-        [TestCase(1, 4)]
+        [TestCase(1, 5)]
+        [TestCase(3, 2)]
+        [TestCase(2, 4)]
         public void CanGetSubVector(int index, int length)
         {
             var vector = CreateVector(Data);
             var sub = vector.SubVector(index, length);
             Assert.AreEqual(length, sub.Count);
-            for (var i = 0; i < length; i++)
-            {
-                Assert.AreEqual(vector[i + index], sub[i]);
-            }
+            AssertHelpers.IndexedAssertion(sub, i => Assert.AreEqual(vector[i + index], sub[i]));
         }
 
         /// <summary>
@@ -347,7 +336,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         public void CanFindAbsoluteMinimumIndex()
         {
             var source = CreateVector(Data);
-            const int Expected = 0;
+            const int Expected = 1;
             var actual = source.AbsoluteMinimumIndex();
             Assert.AreEqual(Expected, actual);
         }
@@ -371,7 +360,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         public void CanFindAbsoluteMaximumIndex()
         {
             var source = CreateVector(Data);
-            const int Expected = 4;
+            const int Expected = 5;
             var actual = source.AbsoluteMaximumIndex();
             Assert.AreEqual(Expected, actual);
         }
@@ -396,7 +385,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
 
-            const int Expected = 4;
+            const int Expected = 5;
             var actual = vector.MaximumIndex();
 
             Assert.AreEqual(Expected, actual);
@@ -424,7 +413,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
 
-            const int Expected = 0;
+            const int Expected = 1;
             var actual = vector.MinimumIndex();
 
             Assert.AreEqual(Expected, actual);
@@ -508,10 +497,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             double[] testData = { -20, -10, 10, 20, 30 };
             var vector = CreateVector(testData);
             vector.Clear();
-            foreach (var element in vector)
-            {
-                Assert.AreEqual(0.0, element);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(vector, 0.0);
         }
 
         /// <summary>

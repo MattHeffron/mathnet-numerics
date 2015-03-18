@@ -59,11 +59,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Factoriz
             Assert.AreEqual(matrix.RowCount, eigenVectors.ColumnCount);
             Assert.AreEqual(matrix.ColumnCount, d.RowCount);
             Assert.AreEqual(matrix.ColumnCount, d.ColumnCount);
-
-            for (var i = 0; i < eigenValues.Count; i++)
-            {
-                Assert.AreEqual(Complex.One, eigenValues[i]);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(eigenValues, Complex.One);
         }
 
         [Test]
@@ -116,9 +112,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Factoriz
         public void CanCheckRankOfSquareSingular([Values(10, 50, 100)] int order)
         {
             var A = new DenseMatrix(order, order);
-            A[0, 0] = 1;
-            A[order - 1, order - 1] = 1;
-            for (var i = 1; i < order - 1; i++)
+            A[1, 1] = 1;
+            A[order, order] = 1;
+            for (var i = 2; i < order; i++)
             {
                 A[i, i - 1] = 1;
                 A[i, i + 1] = 1;

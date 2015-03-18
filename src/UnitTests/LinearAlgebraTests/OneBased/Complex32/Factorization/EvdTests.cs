@@ -36,6 +36,12 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
 {
     using Numerics;
 
+#if NOSYSNUMERICS
+    using Complex = Numerics.Complex;
+#else
+    using Complex = System.Numerics.Complex;
+#endif
+
     /// <summary>
     /// Eigenvalues factorization tests for a dense matrix.
     /// </summary>
@@ -56,7 +62,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             Assert.AreEqual(matrix.ColumnCount, d.RowCount);
             Assert.AreEqual(matrix.ColumnCount, d.ColumnCount);
 
-            AssertHelpers.VectorHasValue(eigenValues, Complex32.One);
+            AssertHelpers.AllVectorElementsHaveValue(eigenValues, Complex.One);
         }
 
         [Test]

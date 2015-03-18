@@ -136,7 +136,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         {
             var sourceTestdata = TestData2D[name];
             var matrix = DiagonalMatrix.OfArray(sourceTestdata);
-            AssertHelpers.ValuesAssertion(matrix, (i, j, v) => Assert.AreEqual(sourceTestdata[i - 1, j - 1], matrix[i, j]));
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(sourceTestdata[i - 1, j - 1], matrix[i, j]));
         }
 
         /// <summary>
@@ -156,8 +156,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         public void CanCreateIdentity()
         {
             var matrix = DiagonalMatrix.CreateIdentity(5);
-            AssertHelpers.IsDiagonal(matrix);
-            AssertHelpers.DiagonalHasValue(matrix, Complex32.One);
+            AssertHelpers.IsIdentity(matrix);
         }
 
         /// <summary>
@@ -185,7 +184,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
-            AssertHelpers.ValuesAssertion(matrixC, (i, j, v) => AssertHelpers.AlmostEqualRelative(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 15));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqualRelative(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j], 15));
         }
 
         /// <summary>

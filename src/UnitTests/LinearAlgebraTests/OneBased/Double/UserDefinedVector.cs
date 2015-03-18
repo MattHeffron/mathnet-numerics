@@ -57,12 +57,12 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
 
             public override double At(int index)
             {
-                return Data[index];
+                return Data[index - 1];
             }
 
             public override void At(int index, double value)
             {
-                Data[index] = value;
+                Data[index - 1] = value;
             }
         }
 

@@ -64,10 +64,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
 
             Assert.AreEqual(matrixI.RowCount, q.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, q.ColumnCount);
-            AssertHelpers.IsDiagonal(r);
-            AssertHelpers.DiagonalHasValue(r, Complex32.One);
-            AssertHelpers.IsDiagonal(q);
-            AssertHelpers.DiagonalHasValue(q, Complex32.One);
+            AssertHelpers.IsIdentity(r);
+            AssertHelpers.IsIdentity(q);
         }
 
         /// <summary>
@@ -119,8 +117,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
 
             // Make sure the Q is unitary --> (Q*)x(Q) = I
             var matrixQсtQ = q.ConjugateTranspose() * q;
-            AssertHelpers.IsDiagonal(matrixQсtQ);
-            AssertHelpers.DiagonalHasValue(matrixQсtQ, Complex32.One);
+            AssertHelpers.AlmostEqualRelative(Matrix<Complex32>.Build.DiagonalIdentity(row, column), matrixQсtQ, 9);
         }
 
         /// <summary>

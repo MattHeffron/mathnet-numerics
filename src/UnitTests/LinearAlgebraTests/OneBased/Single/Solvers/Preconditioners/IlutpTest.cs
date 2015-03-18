@@ -129,9 +129,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
         static SparseMatrix CreateReverseUnitMatrix(int size)
         {
             var matrix = new SparseMatrix(size);
-            for (var i = 0; i < size; i++)
+            for (var i = 1; i <= size; i++)
             {
-                matrix[i, size - 1 - i] = 2;
+                matrix[i, size - i + 1] = 2;
             }
 
             return matrix;
@@ -179,10 +179,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
             // compare vector and product. Should be equal
             var product = new DenseVector(result.Count);
             matrix.Multiply(result, product);
-            for (var i = 0; i < product.Count; i++)
-            {
+            AssertHelpers.IndexedAssertion(product, i => {
                 Assert.IsTrue(((double) vector[i]).AlmostEqualNumbersBetween(product[i], -Epsilon.Magnitude()), "#02-" + i);
-            }
+            });
         }
 
         /// <summary>
@@ -235,15 +234,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
         public void CompareWithOriginalDenseMatrixWithoutPivoting()
         {
             var sparseMatrix = new SparseMatrix(3);
-            sparseMatrix[0, 0] = -1;
-            sparseMatrix[0, 1] = 5;
-            sparseMatrix[0, 2] = 6;
-            sparseMatrix[1, 0] = 3;
-            sparseMatrix[1, 1] = -6;
-            sparseMatrix[1, 2] = 1;
-            sparseMatrix[2, 0] = 6;
-            sparseMatrix[2, 1] = 8;
-            sparseMatrix[2, 2] = 9;
+            sparseMatrix[1, 1] = -1;
+            sparseMatrix[1, 2] = 5;
+            sparseMatrix[1, 3] = 6;
+            sparseMatrix[2, 1] = 3;
+            sparseMatrix[2, 2] = -6;
+            sparseMatrix[2, 3] = 1;
+            sparseMatrix[3, 1] = 6;
+            sparseMatrix[3, 2] = 8;
+            sparseMatrix[3, 3] = 9;
             var ilu = new ILUTPPreconditioner
             {
                 PivotTolerance = 0.0,
@@ -253,34 +252,22 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
             ilu.Initialize(sparseMatrix);
             var l = GetLowerTriangle(ilu);
 
-            // Assert l is lower triagonal
-            for (var i = 0; i < l.RowCount; i++)
-            {
-                for (var j = i + 1; j < l.RowCount; j++)
-                {
-                    Assert.IsTrue(0.0.AlmostEqualNumbersBetween(l[i, j], -Epsilon.Magnitude()), "#01-" + i + "-" + j);
-                }
-            }
+            // Assert l is lower triagonal (with a little "wiggle room")
+            AssertHelpers.IndexedAssertion(l, (i, j) => {
+                Assert.IsTrue(j <= i || 0.0.AlmostEqualNumbersBetween(l[i, j], -Epsilon.Magnitude()), "#01-" + i + "-" + j);
+            });
 
             var u = GetUpperTriangle(ilu);
 
-            // Assert u is upper triagonal
-            for (var i = 0; i < u.RowCount; i++)
-            {
-                for (var j = 0; j < i; j++)
-                {
-                    Assert.IsTrue(0.0.AlmostEqualNumbersBetween(u[i, j], -Epsilon.Magnitude()), "#02-" + i + "-" + j);
-                }
-            }
+            // Assert u is upper triagonal (with a little "wiggle room")
+            AssertHelpers.IndexedAssertion(u, (i, j) => {
+                Assert.IsTrue(j >= i || 0.0.AlmostEqualNumbersBetween(u[i, j], -Epsilon.Magnitude()), "#02-" + i + "-" + j);
+            });
 
             var original = l.Multiply(u);
-            for (var i = 0; i < sparseMatrix.RowCount; i++)
-            {
-                for (var j = 0; j < sparseMatrix.ColumnCount; j++)
-                {
-                    Assert.IsTrue(((double) sparseMatrix[i, j]).AlmostEqualRelative(original[i, j], 5), "#03-" + i + "-" + j);
-                }
-            }
+            AssertHelpers.IndexedAssertion(sparseMatrix, (i, j) => {
+                Assert.IsTrue(((double) sparseMatrix[i, j]).AlmostEqualNumbersBetween(original[i, j], -Epsilon.Magnitude()), "#03-" + i + "-" + j);
+            });
         }
 
         /// <summary>
@@ -290,15 +277,15 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
         public void CompareWithOriginalDenseMatrixWithPivoting()
         {
             var sparseMatrix = new SparseMatrix(3);
-            sparseMatrix[0, 0] = -1;
-            sparseMatrix[0, 1] = 5;
-            sparseMatrix[0, 2] = 6;
-            sparseMatrix[1, 0] = 3;
-            sparseMatrix[1, 1] = -6;
-            sparseMatrix[1, 2] = 1;
-            sparseMatrix[2, 0] = 6;
-            sparseMatrix[2, 1] = 8;
-            sparseMatrix[2, 2] = 9;
+            sparseMatrix[1, 1] = -1;
+            sparseMatrix[1, 2] = 5;
+            sparseMatrix[1, 3] = 6;
+            sparseMatrix[2, 1] = 3;
+            sparseMatrix[2, 2] = -6;
+            sparseMatrix[2, 3] = 1;
+            sparseMatrix[3, 1] = 6;
+            sparseMatrix[3, 2] = 8;
+            sparseMatrix[3, 3] = 9;
             var ilu = new ILUTPPreconditioner
             {
                 PivotTolerance = 1.0,
@@ -310,20 +297,16 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
             var u = GetUpperTriangle(ilu);
             var pivots = GetPivots(ilu);
             var p = new SparseMatrix(l.RowCount);
-            for (var i = 0; i < p.RowCount; i++)
+            for (var i = 1; i <= p.RowCount; i++)
             {
                 p[i, pivots[i]] = 1.0f;
             }
 
             var temp = l.Multiply(u);
             var original = temp.Multiply(p);
-            for (var i = 0; i < sparseMatrix.RowCount; i++)
-            {
-                for (var j = 0; j < sparseMatrix.ColumnCount; j++)
-                {
-                    Assert.IsTrue(((double) sparseMatrix[i, j]).AlmostEqualNumbersBetween(original[i, j], -Epsilon.Magnitude()), "#01-" + i + "-" + j);
-                }
-            }
+            AssertHelpers.IndexedAssertion(sparseMatrix, (i, j) => {
+                Assert.IsTrue(((double) sparseMatrix[i, j]).AlmostEqualNumbersBetween(original[i, j], -Epsilon.Magnitude()), "#01-" + i + "-" + j);
+            });
         }
 
         /// <summary>

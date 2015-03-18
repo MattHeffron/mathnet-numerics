@@ -112,7 +112,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             var product = new DenseVector(result.Count);
             matrix.Multiply(result, product);
 
-            AssertHelpers.ValuesAssertion(product, (i, v) => {
+            AssertHelpers.IndexedAssertion(product, i => {
                 Assert.IsTrue(vector[i].Real.AlmostEqualNumbersBetween(product[i].Real, -Epsilon.Magnitude()), "#02-" + i);
                 Assert.IsTrue(vector[i].Imaginary.AlmostEqualNumbersBetween(product[i].Imaginary, -Epsilon.Magnitude()), "#03-" + i);
             });
@@ -138,7 +138,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             ilu.Initialize(sparseMatrix);
             var original = GetLowerTriangle(ilu).Multiply(GetUpperTriangle(ilu));
 
-            AssertHelpers.ValuesAssertion(sparseMatrix, (i, j, v) => {
+            AssertHelpers.IndexedAssertion(sparseMatrix, (i, j) => {
                     Assert.IsTrue(sparseMatrix[i, j].Real.AlmostEqualNumbersBetween(original[i, j].Real, -Epsilon.Magnitude()), "#01-" + i + "-" + j);
                     Assert.IsTrue(sparseMatrix[i, j].Imaginary.AlmostEqualNumbersBetween(original[i, j].Imaginary, -Epsilon.Magnitude()), "#02-" + i + "-" + j);
             });

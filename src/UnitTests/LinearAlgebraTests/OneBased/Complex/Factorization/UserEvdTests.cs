@@ -61,7 +61,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
 
             Assert.AreEqual(matrixI.ColumnCount, d.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, d.ColumnCount);
-            AssertHelpers.VectorHasValue(eigenValues, Complex.One);
+            AssertHelpers.AllVectorElementsHaveValue(eigenValues, Complex.One);
         }
 
         /// <summary>

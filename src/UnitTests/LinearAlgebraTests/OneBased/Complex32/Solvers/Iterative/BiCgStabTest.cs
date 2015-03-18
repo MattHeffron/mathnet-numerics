@@ -116,7 +116,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             Assert.IsTrue(monitor.Status == IterationStatus.Converged, "#04");
 
             // Now compare the vectors
-            AssertHelpers.ValuesAssertion(y, (i, v) => Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i));
+            AssertHelpers.IndexedAssertion(y, i => Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i));
         }
 
         /// <summary>
@@ -157,7 +157,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             Assert.IsTrue(monitor.Status == IterationStatus.Converged, "#04");
 
             // Now compare the vectors
-            AssertHelpers.ValuesAssertion(y, (i, v) => Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i));
+            AssertHelpers.IndexedAssertion(y, i => Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i));
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             Assert.IsTrue(monitor.Status == IterationStatus.Converged, "#04");
 
             // Now compare the vectors
-            AssertHelpers.ValuesAssertion(y, (i, v) => Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i));
+            AssertHelpers.IndexedAssertion(y, i => Assert.GreaterOrEqual(ConvergenceBoundary, (y[i] - z[i]).Magnitude, "#05-" + i));
         }
 
         /// <summary>
@@ -228,7 +228,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
                 var matrixBReconstruct = matrixA*resultx;
 
                 // Check the reconstruction.
-                AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, iteration - 3);
+                AssertHelpers.AreEqual(vectorb, matrixBReconstruct, (float)Math.Pow(1.0/10.0, iteration - 3));
 
                 return;
             }
@@ -270,7 +270,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
                 var matrixBReconstruct = matrixA*matrixX;
 
                 // Check the reconstruction.
-                AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, iteration - 3);
+                AssertHelpers.AreEqual(matrixB, matrixBReconstruct, (float)Math.Pow(1.0 / 10.0, iteration - 3));
 
                 return;
             }

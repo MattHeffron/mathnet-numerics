@@ -30,12 +30,12 @@
 
 namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
 {
+    using System;
+    using System.Collections.Generic;
     using LinearAlgebra.OneBased;
     using LinearAlgebra.OneBased.Single;
     using LinearAlgebra.OneBased.Storage;
     using NUnit.Framework;
-    using System;
-    using System.Collections.Generic;
 
     /// <summary>
     /// Sparse vector tests.
@@ -62,7 +62,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             var vector = new SparseVector(data.Count);
             for (var index = 0; index < data.Count; index++)
             {
-                vector[index] = data[index];
+                vector[index + 1] = data[index];
             }
 
             return vector;
@@ -77,11 +77,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             var data = new float[Data.Length];
             Array.Copy(Data, data, Data.Length);
             var vector = SparseVector.OfEnumerable(data);
-
-            for (var i = 0; i < data.Length; i++)
-            {
-                Assert.AreEqual(data[i], vector[i]);
-            }
+            CollectionAssert.AreEqual(data, vector);
         }
 
         /// <summary>
@@ -94,10 +90,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             var other = SparseVector.OfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -110,10 +103,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             var other = SparseVector.OfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -125,10 +115,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             var vector = new UserDefinedVector(Data);
             var other = SparseVector.OfVector(vector);
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -165,7 +152,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             var array = new[] {0.0f, 1.0f, 2.0f, 3.0f, 4.0f};
             var vector = SparseVector.OfEnumerable(array);
             Assert.IsInstanceOf(typeof (SparseVector), vector);
-            CollectionAssert.AreEqual(vector, array);
+            CollectionAssert.AreEqual(array, vector);
         }
 
         /// <summary>
@@ -176,31 +163,17 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
         {
             var vector = SparseVector.OfEnumerable(Data);
             vector = vector*2.0f;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2.0f, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0f, vector[i]));
 
             vector = vector*1.0f;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2.0f, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0f, vector[i]));
 
             vector = SparseVector.OfEnumerable(Data);
             vector = 2.0f*vector;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2.0f, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0f, vector[i]));
 
             vector = 1.0f*vector;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2.0f, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0f, vector[i]));
         }
 
         /// <summary>
@@ -211,17 +184,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
         {
             var vector = SparseVector.OfEnumerable(Data);
             vector = vector/2.0f;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]/2.0f, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2.0f, vector[i]));
 
             vector = vector/1.0f;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]/2.0f, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2.0f, vector[i]));
         }
 
         /// <summary>
@@ -233,13 +199,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             var vector1 = CreateVector(Data);
             var vector2 = CreateVector(Data);
             var m = Vector<float>.OuterProduct(vector1, vector2);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                for (var j = 0; j < vector2.Count; j++)
-                {
-                    Assert.AreEqual(m[i, j], vector1[i]*vector2[j]);
-                }
-            }
+            AssertHelpers.IndexedAssertion(m, (i, j) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
         }
 
         /// <summary>
@@ -264,8 +224,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             Assert.AreEqual(5.5f, vector[800]);
             Assert.AreEqual(3, storage.ValueCount);
 
-            vector[0] = 7.5f;
-            Assert.AreEqual(7.5f, vector[0]);
+            vector[1] = 7.5f;
+            Assert.AreEqual(7.5f, vector[1]);
             Assert.AreEqual(4, storage.ValueCount);
 
             // Remove non-zero elements
@@ -281,8 +241,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             Assert.AreEqual(0, vector[800]);
             Assert.AreEqual(1, storage.ValueCount);
 
-            vector[0] = 0;
-            Assert.AreEqual(0, vector[0]);
+            vector[1] = 0;
+            Assert.AreEqual(0, vector[1]);
             Assert.AreEqual(0, storage.ValueCount);
         }
 
@@ -298,7 +258,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             vector[200] = 1.5f;
             vector[500] = 3.5f;
             vector[800] = 5.5f;
-            vector[0] = 7.5f;
+            vector[1] = 7.5f;
 
             // Multiply by 0
             vector *= 0;
@@ -307,7 +267,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             Assert.AreEqual(0, vector[200]);
             Assert.AreEqual(0, vector[500]);
             Assert.AreEqual(0, vector[800]);
-            Assert.AreEqual(0, vector[0]);
+            Assert.AreEqual(0, vector[1]);
             Assert.AreEqual(0, storage.ValueCount);
         }
 
@@ -344,11 +304,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             var result = new SparseVector(vector1.Count);
 
             vector1.PointwiseMultiply(vector2, result);
-
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                Assert.AreEqual(Data[i]*zeroArray[i], result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * zeroArray[i - 1], result[i]));
 
             var resultStorage = (SparseVectorStorage<float>) result.Storage;
             Assert.AreEqual(2, resultStorage.ValueCount);

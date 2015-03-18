@@ -181,7 +181,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             // compare vector and product. Should be equal
             var product = new DenseVector(result.Count);
             matrix.Multiply(result, product);
-            AssertHelpers.ValuesAssertion(product, (i, v) => {
+            AssertHelpers.IndexedAssertion(product, i => {
                 Assert.IsTrue(vector[i].Real.AlmostEqualNumbersBetween(product[i].Real, -Epsilon.Magnitude()), "#02-" + i);
                 Assert.IsTrue(vector[i].Imaginary.AlmostEqualNumbersBetween(product[i].Imaginary, -Epsilon.Magnitude()), "#03-" + i);
             });
@@ -256,19 +256,19 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
             var l = GetLowerTriangle(ilu);
 
             // Assert l is lower triagonal (with a little "wiggle room")
-            AssertHelpers.ValuesAssertion(l, (i, j, v) => {
+            AssertHelpers.IndexedAssertion(l, (i, j) => {
                     Assert.IsTrue(j <= i || 0.0.AlmostEqualNumbersBetween(l[i, j].Magnitude, -Epsilon.Magnitude()), "#01-" + i + "-" + j);
             });
 
             var u = GetUpperTriangle(ilu);
 
             // Assert u is upper triagonal (with a little "wiggle room")
-            AssertHelpers.ValuesAssertion(u, (i, j, v) => {
+            AssertHelpers.IndexedAssertion(u, (i, j) => {
                     Assert.IsTrue(j >= i || 0.0.AlmostEqualNumbersBetween(u[i, j].Magnitude, -Epsilon.Magnitude()), "#02-" + i + "-" + j);
             });
 
             var original = l.Multiply(u);
-            AssertHelpers.ValuesAssertion(sparseMatrix, (i, j, v) => {
+            AssertHelpers.IndexedAssertion(sparseMatrix, (i, j) => {
                     Assert.IsTrue(sparseMatrix[i, j].Real.AlmostEqualNumbersBetween(original[i, j].Real, -Epsilon.Magnitude()), "#03-" + i + "-" + j);
                     Assert.IsTrue(sparseMatrix[i, j].Imaginary.AlmostEqualNumbersBetween(original[i, j].Imaginary, -Epsilon.Magnitude()), "#04-" + i + "-" + j);
             });
@@ -308,7 +308,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Solve
 
             var temp = l.Multiply(u);
             var original = temp.Multiply(p);
-            AssertHelpers.ValuesAssertion(sparseMatrix, (i, j, v) => {
+            AssertHelpers.IndexedAssertion(sparseMatrix, (i, j) => {
                     Assert.IsTrue(sparseMatrix[i, j].Real.AlmostEqualNumbersBetween(original[i, j].Real, -Epsilon.Magnitude()), "#01-" + i + "-" + j);
                     Assert.IsTrue(sparseMatrix[i, j].Imaginary.AlmostEqualNumbersBetween(original[i, j].Imaginary, -Epsilon.Magnitude()), "#02-" + i + "-" + j);
             });

@@ -79,7 +79,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var data = new Complex32[Data.Length];
             Array.Copy(Data, data, Data.Length);
             var vector = SparseVector.OfEnumerable(data);
-            AssertHelpers.ValuesAssertion(vector, (index, v) => Assert.AreEqual(data[index - 1], vector[index]));
+            CollectionAssert.AreEqual(data, vector);
         }
 
         /// <summary>
@@ -165,17 +165,17 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         {
             var vector = SparseVector.OfEnumerable(Data);
             vector = vector * new Complex32(2.0f, 1);
-            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
 
             vector = vector * 1.0f;
-            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
 
             vector = SparseVector.OfEnumerable(Data);
             vector = new Complex32(2.0f, 1) * vector;
-            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
 
             vector = 1.0f * vector;
-            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * new Complex32(2.0f, 1), vector[i]));
         }
 
         /// <summary>
@@ -186,10 +186,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
         {
             var vector = SparseVector.OfEnumerable(Data);
             vector = vector / new Complex32(2.0f, 1);
-            AssertHelpers.ValuesAssertion(vector, (i, v) => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex32(2.0f, 1), vector[i], 14));
+            AssertHelpers.IndexedAssertion(vector, i => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex32(2.0f, 1), vector[i], 14));
 
             vector = vector / 1.0f;
-            AssertHelpers.ValuesAssertion(vector, (i, v) => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex32(2.0f, 1), vector[i], 14));
+            AssertHelpers.IndexedAssertion(vector, i => AssertHelpers.AlmostEqualRelative(Data[i - 1] / new Complex32(2.0f, 1), vector[i], 14));
         }
 
         /// <summary>
@@ -201,7 +201,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var vector1 = CreateVector(Data);
             var vector2 = CreateVector(Data);
             var m = Vector<Complex32>.OuterProduct(vector1, vector2);
-            AssertHelpers.ValuesAssertion(m, (i, j, v) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
+            AssertHelpers.IndexedAssertion(m, (i, j) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
         }
 
         /// <summary>
@@ -306,7 +306,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var result = new SparseVector(vector1.Count);
 
             vector1.PointwiseMultiply(vector2, result);
-            AssertHelpers.ValuesAssertion(result, (i, v) => Assert.AreEqual(Data[i - 1] * zeroArray[i - 1], result[i]));
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * zeroArray[i - 1], result[i]));
 
             var resultStorage = (SparseVectorStorage<Complex32>)result.Storage;
             Assert.AreEqual(2, resultStorage.ValueCount);

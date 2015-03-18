@@ -280,7 +280,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             Assert.AreEqual(vector.Count, matrix.RowCount);
             Assert.AreEqual(1, matrix.ColumnCount);
-            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(vector[i], matrix[i, 1]));
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(vector[i], matrix[i, 1]));
         }
 
         /// <summary>
@@ -294,7 +294,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             Assert.AreEqual(vector.Count, matrix.ColumnCount);
             Assert.AreEqual(1, matrix.RowCount);
-            AssertHelpers.ValuesAssertion(vector, (i, v) => Assert.AreEqual(vector[i], matrix[1, i]));
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(vector[i], matrix[1, i]));
         }
 
         /// <summary>
@@ -321,7 +321,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             var vector = CreateVector(Data);
             var sub = vector.SubVector(index, length);
             Assert.AreEqual(length, sub.Count);
-            AssertHelpers.ValuesAssertion(sub, (i, v) => Assert.AreEqual(vector[i + index], sub[i]));
+            AssertHelpers.IndexedAssertion(sub, i => Assert.AreEqual(vector[i + index], sub[i]));
         }
 
         /// <summary>
@@ -489,7 +489,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
             Complex[] testData = { new Complex(-20, -1), new Complex(-10, -1), new Complex(10, 1), new Complex(20, 1), new Complex(30, 1) };
             var vector = CreateVector(testData);
             vector.Clear();
-            AssertHelpers.VectorHasValue(vector, Complex.Zero);
+            AssertHelpers.AllVectorElementsHaveValue(vector, Complex.Zero);
         }
 
         /// <summary>

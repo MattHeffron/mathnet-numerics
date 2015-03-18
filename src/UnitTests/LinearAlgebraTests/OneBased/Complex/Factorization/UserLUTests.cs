@@ -57,15 +57,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             var matrixL = factorLU.L;
             Assert.AreEqual(matrixI.RowCount, matrixL.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, matrixL.ColumnCount);
-            AssertHelpers.IsDiagonal(matrixL);
-            AssertHelpers.DiagonalHasValue(matrixL, Complex.One);
+            AssertHelpers.IsIdentity(matrixL);
 
             // Check upper triangular part.
             var matrixU = factorLU.U;
             Assert.AreEqual(matrixI.RowCount, matrixU.RowCount);
             Assert.AreEqual(matrixI.ColumnCount, matrixU.ColumnCount);
-            AssertHelpers.IsDiagonal(matrixU);
-            AssertHelpers.DiagonalHasValue(matrixU, Complex.One);
+            AssertHelpers.IsIdentity(matrixU);
         }
 
         /// <summary>
@@ -294,7 +292,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Factori
             AssertHelpers.AreEqual(matrixACopy, matrixA);
 
             // Check if multiplication of A and AI produced identity matrix.
-            AssertHelpers.ValuesAssertion(matrixIdentity, (i, j, v) => AssertHelpers.AlmostEqualRelative(i == j ? Complex.One : Complex.Zero, matrixIdentity[i, j], 9));
+            AssertHelpers.AlmostEqualRelative(Matrix<Complex>.Build.DiagonalIdentity(order), matrixIdentity, 9);
         }
     }
 }

@@ -54,17 +54,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var copy = CreateVector(Data);
             var vector = copy.Add(2.0);
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] + 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] + 2.0, vector[i]));
 
             vector.Add(0.0);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] + 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] + 2.0, vector[i]));
         }
 
         /// <summary>
@@ -78,10 +71,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             vector.Add(2.0, result);
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] + 2.0, result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] + 2.0, result[i]));
 
             vector.Add(0.0, result);
             CollectionAssert.AreEqual(Data, result);
@@ -141,11 +131,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var copy = CreateVector(Data);
             var other = CreateVector(Data);
             var vector = copy.Add(other);
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
         }
 
         /// <summary>
@@ -161,10 +147,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * 2.0, result[i]));
         }
 
         /// <summary>
@@ -179,10 +162,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * 2.0, result[i]));
         }
 
         /// <summary>
@@ -194,10 +174,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var copy = CreateVector(Data);
             var vector = copy.Add(copy);
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
         }
 
         /// <summary>
@@ -211,10 +188,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             vector.Add(vector, result);
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * 2.0, result[i]));
         }
 
         /// <summary>
@@ -228,10 +202,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             vector.Add(other, vector);
 
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
         }
 
         /// <summary>
@@ -242,10 +213,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
             var other = vector.Negate();
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(-Data[i], other[i]);
-            }
+            AssertHelpers.IndexedAssertion(other, i => Assert.AreEqual(-Data[i - 1], other[i]));
         }
 
         /// <summary>
@@ -256,10 +224,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
             var other = -vector;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(-Data[i], other[i]);
-            }
+            AssertHelpers.IndexedAssertion(other, i => Assert.AreEqual(-Data[i - 1], other[i]));
         }
 
         /// <summary>
@@ -271,16 +236,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var copy = CreateVector(Data);
             var vector = copy.Subtract(2.0);
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] - 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] - 2.0, vector[i]));
 
             vector.Subtract(0.0);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] - 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] - 2.0, vector[i]));
         }
 
         /// <summary>
@@ -294,17 +253,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             vector.Subtract(2.0, result);
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i], vector[i], "Making sure the original vector wasn't modified.");
-                Assert.AreEqual(Data[i] - 2.0, result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] - 2.0, result[i]));
 
             vector.Subtract(0.0, result);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i], result[i]);
-            }
+            CollectionAssert.AreEqual(Data, result);
         }
 
         /// <summary>
@@ -362,10 +314,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var other = CreateVector(Data);
             var vector = copy.Subtract(other);
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(0.0, vector[i]);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(vector, 0.0);
         }
 
         /// <summary>
@@ -381,10 +330,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(0.0, result[i]);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(vector, 0.0);
         }
 
         /// <summary>
@@ -399,10 +345,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(0.0, result[i]);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(vector, 0.0);
         }
 
         /// <summary>
@@ -414,10 +357,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var copy = CreateVector(Data);
             var vector = copy.Subtract(copy);
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(0.0, vector[i]);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(vector, 0.0);
         }
 
         /// <summary>
@@ -431,10 +371,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             vector.Subtract(vector, result);
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(0.0, result[i]);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(result, 0.0);
         }
 
         /// <summary>
@@ -448,10 +385,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             vector.Subtract(other, vector);
 
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(0.0, vector[i]);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(vector, 0.0);
         }
 
         /// <summary>
@@ -462,17 +396,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var copy = CreateVector(Data);
             var vector = copy.Divide(2.0);
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] / 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2.0, vector[i]));
 
             vector.Divide(1.0);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] / 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2.0, vector[i]));
         }
 
         /// <summary>
@@ -486,16 +413,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             vector.Divide(2.0, result);
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] / 2.0, result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] / 2.0, result[i]));
 
             vector.Divide(1.0, result);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i], result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1], result[i]));
         }
 
         /// <summary>
@@ -506,17 +427,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var copy = CreateVector(Data);
             var vector = copy.Multiply(2.0);
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
 
             vector.Multiply(1.0);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
         }
 
         /// <summary>
@@ -529,17 +443,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var result = CreateVector(Data.Length);
             vector.Multiply(2.0, result);
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i], vector[i], "Making sure the original vector wasn't modified.");
-                Assert.AreEqual(Data[i] * 2.0, result[i]);
-            }
+            CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * 2.0, result[i]));
 
             vector.Multiply(1.0, result);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i], result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1], result[i]));
         }
 
         /// <summary>
@@ -572,31 +480,17 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
             vector = vector * 2.0;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
 
             vector = vector * 1.0;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
 
             vector = CreateVector(Data);
             vector = 2.0 * vector;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
 
             vector = 1.0 * vector;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] * 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
         }
 
         /// <summary>
@@ -607,17 +501,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
             vector = vector / 2.0;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] / 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2.0, vector[i]));
 
             vector = vector / 1.0;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i] / 2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2.0, vector[i]));
         }
 
         /// <summary>
@@ -677,10 +564,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector1 = CreateVector(Data);
             var vector2 = vector1.Clone();
             var result = vector1.PointwiseMultiply(vector2);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                Assert.AreEqual(Data[i] * Data[i], result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * Data[i - 1], result[i]));
         }
 
         /// <summary>
@@ -693,10 +577,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector2 = vector1.Clone();
             var result = CreateVector(vector1.Count);
             vector1.PointwiseMultiply(vector2, result);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                Assert.AreEqual(Data[i] * Data[i], result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * Data[i - 1], result[i]));
         }
 
         /// <summary>
@@ -720,10 +601,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector1 = CreateVector(Data);
             var vector2 = vector1.Clone();
             var result = vector1.PointwiseDivide(vector2);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                Assert.AreEqual(Data[i] / Data[i], result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] / Data[i - 1], result[i]));
+            // CONSIDER: they should all be 1.0
+            //AssertHelpers.AllVectorElementsHaveValue(result, 1.0);
         }
 
         /// <summary>
@@ -736,10 +616,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector2 = vector1.Clone();
             var result = CreateVector(vector1.Count);
             vector1.PointwiseDivide(vector2, result);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                Assert.AreEqual(Data[i] / Data[i], result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] / Data[i - 1], result[i]));
+            // CONSIDER: they should all be 1.0
+            //AssertHelpers.AllVectorElementsHaveValue(result, 1.0);
         }
 
         /// <summary>
@@ -763,13 +642,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector1 = CreateVector(Data);
             var vector2 = CreateVector(Data);
             var m = Vector<double>.OuterProduct(vector1, vector2);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                for (var j = 0; j < vector2.Count; j++)
-                {
-                    Assert.AreEqual(m[i, j], vector1[i] * vector2[j]);
-                }
-            }
+            AssertHelpers.IndexedAssertion(m, (i, j) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
         }
 
         /// <summary>
@@ -781,13 +654,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector1 = CreateVector(Data);
             var vector2 = CreateVector(Data);
             var m = vector1.OuterProduct(vector2);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                for (var j = 0; j < vector2.Count; j++)
-                {
-                    Assert.AreEqual(m[i, j], vector1[i] * vector2[j]);
-                }
-            }
+            AssertHelpers.IndexedAssertion(m, (i, j) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
         }
 
         [Test]
@@ -795,10 +662,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
             var mod = vector % (-4.5);
-            for (var index = 0; index < Data.Length; index++)
-            {
-                AssertHelpers.AlmostEqualRelative(Euclid.Remainder(Data[index], -4.5), mod[index], 14);
-            }
+            AssertHelpers.IndexedAssertion(mod, index => AssertHelpers.AlmostEqualRelative(Euclid.Remainder(Data[index - 1], -4.5), mod[index], 14));
         }
 
         [Test]
@@ -806,10 +670,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
             var mod = vector.Remainder(-3.2);
-            for (var index = 0; index < Data.Length; index++)
-            {
-                AssertHelpers.AlmostEqualRelative(Euclid.Remainder(Data[index], -3.2), mod[index], 14);
-            }
+            AssertHelpers.IndexedAssertion(mod, index => AssertHelpers.AlmostEqualRelative(Euclid.Remainder(Data[index - 1], -3.2), mod[index], 14));
         }
 
         [Test]
@@ -818,10 +679,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector = CreateVector(Data);
             var mod = CreateVector(vector.Count);
             vector.Remainder(-3.2, mod);
-            for (var index = 0; index < Data.Length; index++)
-            {
-                AssertHelpers.AlmostEqualRelative(Euclid.Remainder(Data[index], -3.2), mod[index], 14);
-            }
+            AssertHelpers.IndexedAssertion(mod, index => AssertHelpers.AlmostEqualRelative(Euclid.Remainder(Data[index - 1], -3.2), mod[index], 14));
         }
 
         [Test]
@@ -829,10 +687,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
             vector.Remainder(-3.2, vector);
-            for (var index = 0; index < Data.Length; index++)
-            {
-                AssertHelpers.AlmostEqualRelative(Euclid.Remainder(Data[index], -3.2), vector[index], 14);
-            }
+            AssertHelpers.IndexedAssertion(vector, index => AssertHelpers.AlmostEqualRelative(Euclid.Remainder(Data[index - 1], -3.2), vector[index], 14));
         }
 
         [Test]
@@ -840,10 +695,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
             var mod = vector.Modulus(-3.2);
-            for (var index = 0; index < Data.Length; index++)
-            {
-                AssertHelpers.AlmostEqualRelative(Euclid.Modulus(Data[index], -3.2), mod[index], 14);
-            }
+            AssertHelpers.IndexedAssertion(mod, index => AssertHelpers.AlmostEqualRelative(Euclid.Modulus(Data[index - 1], -3.2), mod[index], 14));
         }
 
         [Test]
@@ -852,10 +704,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector = CreateVector(Data);
             var mod = CreateVector(vector.Count);
             vector.Modulus(-3.2, mod);
-            for (var index = 0; index < Data.Length; index++)
-            {
-                AssertHelpers.AlmostEqualRelative(Euclid.Modulus(Data[index], -3.2), mod[index], 14);
-            }
+            AssertHelpers.IndexedAssertion(mod, index => AssertHelpers.AlmostEqualRelative(Euclid.Modulus(Data[index - 1], -3.2), mod[index], 14));
         }
 
         [Test]
@@ -863,10 +712,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = CreateVector(Data);
             vector.Modulus(-3.2, vector);
-            for (var index = 0; index < Data.Length; index++)
-            {
-                AssertHelpers.AlmostEqualRelative(Euclid.Modulus(Data[index], -3.2), vector[index], 14);
-            }
+            AssertHelpers.IndexedAssertion(vector, index => AssertHelpers.AlmostEqualRelative(Euclid.Modulus(Data[index - 1], -3.2), vector[index], 14));
         }
     }
 }

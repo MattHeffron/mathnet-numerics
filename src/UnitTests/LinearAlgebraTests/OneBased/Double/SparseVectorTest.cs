@@ -62,7 +62,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector = Vector<double>.Build.Sparse(data.Count);
             for (var index = 0; index < data.Count; index++)
             {
-                vector[index] = data[index];
+                vector[index + 1] = data[index];
             }
 
             return vector;
@@ -77,11 +77,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var data = new double[Data.Length];
             Array.Copy(Data, data, Data.Length);
             var vector = Vector<double>.Build.SparseOfEnumerable(data);
-
-            for (var i = 0; i < data.Length; i++)
-            {
-                Assert.AreEqual(data[i], vector[i]);
-            }
+            CollectionAssert.AreEqual(data, vector);
         }
 
         /// <summary>
@@ -94,10 +90,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var other = Vector<double>.Build.SparseOfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -110,10 +103,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var other = Vector<double>.Build.SparseOfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -125,10 +115,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector = new UserDefinedVector(Data);
             var other = Vector<double>.Build.SparseOfVector(vector);
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -165,7 +152,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var array = new[] {0.0, 1.0, 2.0, 3.0, 4.0};
             var vector = Vector<double>.Build.SparseOfEnumerable(array);
             Assert.IsInstanceOf(typeof (SparseVector), vector);
-            CollectionAssert.AreEqual(array, array);
+            CollectionAssert.AreEqual(array, vector);
         }
 
         /// <summary>
@@ -176,31 +163,17 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = Vector<double>.Build.SparseOfEnumerable(Data);
             vector = vector*2.0;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
 
             vector = vector*1.0;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
 
             vector = Vector<double>.Build.SparseOfEnumerable(Data);
             vector = 2.0*vector;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
 
             vector = 1.0*vector;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0, vector[i]));
         }
 
         /// <summary>
@@ -211,17 +184,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var vector = Vector<double>.Build.SparseOfEnumerable(Data);
             vector = vector/2.0;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]/2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2.0, vector[i]));
 
             vector = vector/1.0;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]/2.0, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2.0, vector[i]));
         }
 
         /// <summary>
@@ -233,13 +199,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector1 = CreateVector(Data);
             var vector2 = CreateVector(Data);
             var m = Vector<double>.OuterProduct(vector1, vector2);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                for (var j = 0; j < vector2.Count; j++)
-                {
-                    Assert.AreEqual(m[i, j], vector1[i]*vector2[j]);
-                }
-            }
+            AssertHelpers.IndexedAssertion(m, (i, j) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
         }
 
         /// <summary>
@@ -264,8 +224,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             Assert.AreEqual(5.5, vector[800]);
             Assert.AreEqual(3, storage.ValueCount);
 
-            vector[0] = 7.5;
-            Assert.AreEqual(7.5, vector[0]);
+            vector[1] = 7.5;
+            Assert.AreEqual(7.5, vector[1]);
             Assert.AreEqual(4, storage.ValueCount);
 
             // Remove non-zero elements
@@ -281,8 +241,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             Assert.AreEqual(0, vector[800]);
             Assert.AreEqual(1, storage.ValueCount);
 
-            vector[0] = 0;
-            Assert.AreEqual(0, vector[0]);
+            vector[1] = 0;
+            Assert.AreEqual(0, vector[1]);
             Assert.AreEqual(0, storage.ValueCount);
         }
 
@@ -298,7 +258,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             vector[200] = 1.5;
             vector[500] = 3.5;
             vector[800] = 5.5;
-            vector[0] = 7.5;
+            vector[1] = 7.5;
 
             // Multiply by 0
             vector *= 0;
@@ -307,7 +267,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             Assert.AreEqual(0, vector[200]);
             Assert.AreEqual(0, vector[500]);
             Assert.AreEqual(0, vector[800]);
-            Assert.AreEqual(0, vector[0]);
+            Assert.AreEqual(0, vector[1]);
             Assert.AreEqual(0, storage.ValueCount);
         }
 
@@ -344,11 +304,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var result = Vector<double>.Build.Sparse(vector1.Count);
 
             vector1.PointwiseMultiply(vector2, result);
-
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                Assert.AreEqual(Data[i]*zeroArray[i], result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * zeroArray[i - 1], result[i]));
 
             var resultStorage = (SparseVectorStorage<double>) result.Storage;
             Assert.AreEqual(2, resultStorage.ValueCount);
@@ -364,21 +320,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector2 = Vector<double>.Build.SparseOfEnumerable(new[] { 2.0, 2.0, 0.0, 0.0 });
             var result = vector1.OuterProduct(vector2);
 
-            Assert.AreEqual(4.0, result[0, 0]);
-            Assert.AreEqual(4.0, result[0, 1]);
-            Assert.AreEqual(4.0, result[1, 0]);
-            Assert.AreEqual(4.0, result[1, 1]);
-
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                for (var j = 0; j < vector2.Count; j++)
-                {
-                    if (i > 1 || j > 1)
-                    {
-                        Assert.AreEqual(0.0, result[i, j]);
-                    }
-                }
-            }
+            AssertHelpers.IndexedAssertion(result, (i, j) => Assert.AreEqual((i <= 2 && j <= 2) ? 4.0 : 0.0, result[i, j]));
+            ////Assert.AreEqual(4.0, result[0, 0]);
+            ////Assert.AreEqual(4.0, result[0, 1]);
+            ////Assert.AreEqual(4.0, result[1, 0]);
+            ////Assert.AreEqual(4.0, result[1, 1]);
         }
 
         /// <summary>
