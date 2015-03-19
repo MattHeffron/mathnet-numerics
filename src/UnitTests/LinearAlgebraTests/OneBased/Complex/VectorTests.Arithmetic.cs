@@ -336,7 +336,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.AllVectorElementsHaveValue(vector, Complex.Zero);
+            AssertHelpers.AllVectorElementsHaveValue(result, Complex.Zero);
         }
 
         /// <summary>
@@ -351,7 +351,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.AllVectorElementsHaveValue(vector, Complex.Zero);
+            AssertHelpers.AllVectorElementsHaveValue(result, Complex.Zero);
         }
 
         /// <summary>

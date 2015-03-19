@@ -69,7 +69,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
         {
             Matrix<T> a = matrix.MapIndexed((i, j, x) =>
             {
-                if (i != 0 || j != 1) Assert.That(matrix.At(i, j), Is.EqualTo(x));
+                if (i != 1 || j != 2) Assert.That(matrix.At(i, j), Is.EqualTo(x));
                 return x;
             }, Zeros.AllowSkip);
             Assert.That(a, Is.EqualTo(matrix));
@@ -124,7 +124,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             var a = matrix.Clone();
             a.MapIndexedInplace((i, j, x) =>
             {
-                if (i != 0 || j != 1) Assert.That(matrix.At(i, j), Is.EqualTo(x));
+                if (i != 1 || j != 2) Assert.That(matrix.At(i, j), Is.EqualTo(x));
                 return x;
 
             }, Zeros.AllowSkip);
@@ -152,18 +152,18 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
 
             // Full Range - not forced
             Matrix<T> target = Matrix<T>.Build.SameAs(matrix);
-            matrix.Storage.MapSubMatrixIndexedTo(target.Storage, (i, j, x) => x, 0, 0, matrix.RowCount, 0, 0, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
+            matrix.Storage.MapSubMatrixIndexedTo(target.Storage, (i, j, x) => x, 1, 1, matrix.RowCount, 1, 1, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
             Assert.That(target, Is.EqualTo(matrix), "Full Range - not forced");
-            matrix.Storage.MapSubMatrixIndexedTo(target.Storage, (i, j, x) => Zero.Equals(x) ? Zero : one, 0, 0, matrix.RowCount, 0, 0, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
+            matrix.Storage.MapSubMatrixIndexedTo(target.Storage, (i, j, x) => Zero.Equals(x) ? Zero : one, 1, 1, matrix.RowCount, 1, 1, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
             Assert.That(target.Enumerate().All(x => Zero.Equals(x) || one.Equals(x)), Is.True);
 
             if (matrix.Storage.IsFullyMutable)
             {
                 // Full Range - forced
                 target = Matrix<T>.Build.SameAs(matrix);
-                matrix.Storage.MapSubMatrixIndexedTo(target.Storage, (i, j, x) => x, 0, 0, matrix.RowCount, 0, 0, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
+                matrix.Storage.MapSubMatrixIndexedTo(target.Storage, (i, j, x) => x, 1, 1, matrix.RowCount, 1, 1, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
                 Assert.That(target, Is.EqualTo(matrix), "Full Range - forced");
-                matrix.Storage.MapSubMatrixIndexedTo(target.Storage, (i, j, x) => Zero.Equals(x) ? Zero : one, 0, 0, matrix.RowCount, 0, 0, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
+                matrix.Storage.MapSubMatrixIndexedTo(target.Storage, (i, j, x) => Zero.Equals(x) ? Zero : one, 1, 1, matrix.RowCount, 1, 1, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
                 Assert.That(target.Enumerate().All(x => Zero.Equals(x) || one.Equals(x)), Is.True);
             }
         }
@@ -177,34 +177,34 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Matrix<T> dense = Matrix<T>.Build.Dense(matrix.RowCount, matrix.ColumnCount, one);
             matrix.Storage.MapSubMatrixIndexedTo(dense.Storage, (i, j, x) =>
             {
-                if (i != 0 || j != 1) Assert.That(matrix.At(i, j), Is.EqualTo(x));
+                if (i != 1 || j != 2) Assert.That(matrix.At(i, j), Is.EqualTo(x));
                 return x;
-            }, 0, 0, matrix.RowCount, 0, 0, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
+            }, 1, 1, matrix.RowCount, 1, 1, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
             Assert.That(dense, Is.EqualTo(matrix), "Full Range - not forced");
 
             // Full Range - forced
             dense = Matrix<T>.Build.Dense(matrix.RowCount, matrix.ColumnCount, one);
             matrix.Storage.MapSubMatrixIndexedTo(dense.Storage, (i, j, x) =>
             {
-                if (i != 0 || j != 1) Assert.That(matrix.At(i, j), Is.EqualTo(x));
+                if (i != 1 || j != 2) Assert.That(matrix.At(i, j), Is.EqualTo(x));
                 return x;
-            }, 0, 0, matrix.RowCount, 0, 0, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
+            }, 1, 1, matrix.RowCount, 1, 1, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
             Assert.That(dense, Is.EqualTo(matrix), "Full Range - forced");
 
             // Sub Range - not forced - all except first column padded into 1-border
             dense = Matrix<T>.Build.Dense(matrix.RowCount + 2, matrix.ColumnCount + 1, one);
-            matrix.Storage.MapSubMatrixIndexedTo(dense.Storage, (i, j, x) => x, 0, 1, matrix.RowCount, 1, 1, matrix.ColumnCount - 1, Zeros.AllowSkip, ExistingData.Clear);
-            Assert.That(dense.SubMatrix(1, dense.RowCount - 2, 1, dense.ColumnCount - 2),
-                Is.EqualTo(matrix.SubMatrix(0, matrix.RowCount, 1, matrix.ColumnCount - 1)), "Sub Range - not forced - range");
-            dense.SetSubMatrix(1, 0, matrix.RowCount, 1, 0, matrix.ColumnCount - 1, Matrix<T>.Build.Dense(matrix.RowCount, matrix.ColumnCount - 1, one));
+            matrix.Storage.MapSubMatrixIndexedTo(dense.Storage, (i, j, x) => x, 1, 2, matrix.RowCount, 2, 2, matrix.ColumnCount - 1, Zeros.AllowSkip, ExistingData.Clear);
+            Assert.That(dense.SubMatrix(2, dense.RowCount - 2, 2, dense.ColumnCount - 2),
+                Is.EqualTo(matrix.SubMatrix(1, matrix.RowCount, 2, matrix.ColumnCount - 1)), "Sub Range - not forced - range");
+            dense.SetSubMatrix(2, 1, matrix.RowCount, 2, 1, matrix.ColumnCount - 1, Matrix<T>.Build.Dense(matrix.RowCount, matrix.ColumnCount - 1, one));
             Assert.That(dense.Enumerate().All(one.Equals), Is.True);
 
             // Sub Range - forced - all except first row padded into 1-border
             dense = Matrix<T>.Build.Dense(matrix.RowCount + 1, matrix.ColumnCount + 2, one);
-            matrix.Storage.MapSubMatrixIndexedTo(dense.Storage, (i, j, x) => x, 1, 1, matrix.RowCount - 1, 0, 1, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
-            Assert.That(dense.SubMatrix(1, dense.RowCount - 2, 1, dense.ColumnCount - 2),
-                Is.EqualTo(matrix.SubMatrix(1, matrix.RowCount - 1, 0, matrix.ColumnCount)), "Sub Range - forced - range");
-            dense.SetSubMatrix(1, 0, matrix.RowCount - 1, 1, 0, matrix.ColumnCount, Matrix<T>.Build.Dense(matrix.RowCount - 1, matrix.ColumnCount, one));
+            matrix.Storage.MapSubMatrixIndexedTo(dense.Storage, (i, j, x) => x, 2, 2, matrix.RowCount - 1, 1, 2, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
+            Assert.That(dense.SubMatrix(2, dense.RowCount - 2, 2, dense.ColumnCount - 2),
+                Is.EqualTo(matrix.SubMatrix(2, matrix.RowCount - 1, 1, matrix.ColumnCount)), "Sub Range - forced - range");
+            dense.SetSubMatrix(2, 1, matrix.RowCount - 1, 2, 1, matrix.ColumnCount, Matrix<T>.Build.Dense(matrix.RowCount - 1, matrix.ColumnCount, one));
             Assert.That(dense.Enumerate().All(one.Equals), Is.True);
         }
 
@@ -217,43 +217,43 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Matrix<T> sparse = Matrix<T>.Build.Sparse(matrix.RowCount, matrix.ColumnCount, one);
             matrix.Storage.MapSubMatrixIndexedTo(sparse.Storage, (i, j, x) =>
             {
-                if (i != 0 || j != 1) Assert.That(matrix.At(i, j), Is.EqualTo(x));
+                if (i != 1 || j != 2) Assert.That(matrix.At(i, j), Is.EqualTo(x));
                 return x;
-            }, 0, 0, matrix.RowCount, 0, 0, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
+            }, 1, 1, matrix.RowCount, 1, 1, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
             Assert.That(sparse, Is.EqualTo(matrix), "Full Range - filled, not forced");
 
             // Full Range - empty, not forced
             sparse = Matrix<T>.Build.Sparse(matrix.RowCount, matrix.ColumnCount);
             matrix.Storage.MapSubMatrixIndexedTo(sparse.Storage, (i, j, x) =>
             {
-                if (i != 0 || j != 1) Assert.That(matrix.At(i, j), Is.EqualTo(x));
+                if (i != 1 || j != 2) Assert.That(matrix.At(i, j), Is.EqualTo(x));
                 return x;
-            }, 0, 0, matrix.RowCount, 0, 0, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
+            }, 1, 1, matrix.RowCount, 1, 1, matrix.ColumnCount, Zeros.AllowSkip, ExistingData.Clear);
             Assert.That(sparse, Is.EqualTo(matrix), "Full Range - empty, not forced");
 
             // Full Range - filled, forced
             sparse = Matrix<T>.Build.Sparse(matrix.RowCount, matrix.ColumnCount, one);
             matrix.Storage.MapSubMatrixIndexedTo(sparse.Storage, (i, j, x) =>
             {
-                if (i != 0 || j != 1) Assert.That(matrix.At(i, j), Is.EqualTo(x));
+                if (i != 1 || j != 2) Assert.That(matrix.At(i, j), Is.EqualTo(x));
                 return x;
-            }, 0, 0, matrix.RowCount, 0, 0, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
+            }, 1, 1, matrix.RowCount, 1, 1, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
             Assert.That(sparse, Is.EqualTo(matrix), "Full Range - filled, forced");
 
             // Sub Range - filled, not forced - all except first column padded into 1-border
             sparse = Matrix<T>.Build.Sparse(matrix.RowCount + 2, matrix.ColumnCount + 1, one);
-            matrix.Storage.MapSubMatrixIndexedTo(sparse.Storage, (i, j, x) => x, 0, 1, matrix.RowCount, 1, 1, matrix.ColumnCount - 1, Zeros.AllowSkip, ExistingData.Clear);
-            Assert.That(sparse.SubMatrix(1, sparse.RowCount - 2, 1, sparse.ColumnCount - 2),
-                Is.EqualTo(matrix.SubMatrix(0, matrix.RowCount, 1, matrix.ColumnCount - 1)), "Sub Range - filled, not forced - range");
-            sparse.SetSubMatrix(1, 0, matrix.RowCount, 1, 0, matrix.ColumnCount - 1, Matrix<T>.Build.Dense(matrix.RowCount, matrix.ColumnCount - 1, one));
+            matrix.Storage.MapSubMatrixIndexedTo(sparse.Storage, (i, j, x) => x, 1, 2, matrix.RowCount, 2, 2, matrix.ColumnCount - 1, Zeros.AllowSkip, ExistingData.Clear);
+            Assert.That(sparse.SubMatrix(2, sparse.RowCount - 2, 2, sparse.ColumnCount - 2),
+                Is.EqualTo(matrix.SubMatrix(1, matrix.RowCount, 2, matrix.ColumnCount - 1)), "Sub Range - filled, not forced - range");
+            sparse.SetSubMatrix(2, 1, matrix.RowCount, 2, 1, matrix.ColumnCount - 1, Matrix<T>.Build.Dense(matrix.RowCount, matrix.ColumnCount - 1, one));
             Assert.That(sparse.Enumerate().All(one.Equals), Is.True);
 
             // Sub Range - filled, forced - all except first row padded into 1-border
             sparse = Matrix<T>.Build.Sparse(matrix.RowCount + 1, matrix.ColumnCount + 2, one);
-            matrix.Storage.MapSubMatrixIndexedTo(sparse.Storage, (i, j, x) => x, 1, 1, matrix.RowCount - 1, 0, 1, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
-            Assert.That(sparse.SubMatrix(1, sparse.RowCount - 2, 1, sparse.ColumnCount - 2),
-                Is.EqualTo(matrix.SubMatrix(1, matrix.RowCount - 1, 0, matrix.ColumnCount)), "Sub Range - filled, forced - range");
-            sparse.SetSubMatrix(1, 0, matrix.RowCount - 1, 1, 0, matrix.ColumnCount, Matrix<T>.Build.Dense(matrix.RowCount - 1, matrix.ColumnCount, one));
+            matrix.Storage.MapSubMatrixIndexedTo(sparse.Storage, (i, j, x) => x, 2, 2, matrix.RowCount - 1, 1, 2, matrix.ColumnCount, Zeros.Include, ExistingData.Clear);
+            Assert.That(sparse.SubMatrix(2, sparse.RowCount - 2, 2, sparse.ColumnCount - 2),
+                Is.EqualTo(matrix.SubMatrix(2, matrix.RowCount - 1, 1, matrix.ColumnCount)), "Sub Range - filled, forced - range");
+            sparse.SetSubMatrix(2, 1, matrix.RowCount - 1, 2, 1, matrix.ColumnCount, Matrix<T>.Build.Dense(matrix.RowCount - 1, matrix.ColumnCount, one));
             Assert.That(sparse.Enumerate().All(one.Equals), Is.True);
         }
 
@@ -264,14 +264,14 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             T[] rowSum = matrix.FoldByRow((s, x) => Operator<T>.Add(s, x), Operator<T>.Zero, Zeros.AllowSkip);
             for (int i = 0; i < rowSum.Length; i++)
             {
-                Assert.That(rowSum[i], Is.EqualTo(matrix.Row(i).Enumerate().Aggregate((a, b) => Operator<T>.Add(a, b))), "not forced");
+                Assert.That(rowSum[i], Is.EqualTo(matrix.Row(i + 1).Enumerate().Aggregate((a, b) => Operator<T>.Add(a, b))), "not forced");
             }
 
             // forced
             rowSum = matrix.FoldByRow((s, x) => Operator<T>.Add(s, x), Operator<T>.Zero, Zeros.Include);
             for (int i = 0; i < rowSum.Length; i++)
             {
-                Assert.That(rowSum[i], Is.EqualTo(matrix.Row(i).Enumerate().Aggregate((a, b) => Operator<T>.Add(a, b))), "forced");
+                Assert.That(rowSum[i], Is.EqualTo(matrix.Row(i + 1).Enumerate().Aggregate((a, b) => Operator<T>.Add(a, b))), "forced");
             }
 
             Assert.That(matrix.FoldByRow((s, x) => s + 1.0, 0.0, Zeros.Include),
@@ -285,14 +285,14 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             T[] colSum = matrix.FoldByColumn((s, x) => Operator<T>.Add(s, x), Operator<T>.Zero, Zeros.AllowSkip);
             for (int i = 0; i < colSum.Length; i++)
             {
-                Assert.That(colSum[i], Is.EqualTo(matrix.Column(i).Enumerate().Aggregate((a, b) => Operator<T>.Add(a, b))), "not forced");
+                Assert.That(colSum[i], Is.EqualTo(matrix.Column(i + 1).Enumerate().Aggregate((a, b) => Operator<T>.Add(a, b))), "not forced");
             }
 
             // forced
             colSum = matrix.FoldByColumn((s, x) => Operator<T>.Add(s, x), Operator<T>.Zero, Zeros.Include);
             for (int i = 0; i < colSum.Length; i++)
             {
-                Assert.That(colSum[i], Is.EqualTo(matrix.Column(i).Enumerate().Aggregate((a, b) => Operator<T>.Add(a, b))), "forced");
+                Assert.That(colSum[i], Is.EqualTo(matrix.Column(i + 1).Enumerate().Aggregate((a, b) => Operator<T>.Add(a, b))), "forced");
             }
 
             Assert.That(matrix.FoldByColumn((s, x) => s + 1.0, 0.0, Zeros.Include),

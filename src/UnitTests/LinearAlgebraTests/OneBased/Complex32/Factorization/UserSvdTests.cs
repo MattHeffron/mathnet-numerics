@@ -98,7 +98,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
 
             // Make sure the U*W*VT is the original matrix.
             var matrix = u * w * vt;
-            AssertHelpers.AlmostEqualRelative(matrixA, matrix, 3);
+            AssertHelpers.AreEqual(matrixA, matrix, 1e-3f);
         }
 
         /// <summary>
@@ -220,7 +220,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixBReconstruct = matrixA * resultx;
 
             // Check the reconstruction.
-            AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, 3);
+            AssertHelpers.AreEqual(vectorb, matrixBReconstruct, 1e-3f);
 
             // Make sure A didn't change.
             AssertHelpers.AreEqual(matrixACopy, matrixA);
@@ -255,7 +255,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 3);
+            AssertHelpers.AreEqual(matrixB, matrixBReconstruct, 1e-3f);
 
             // Make sure A didn't change.
             AssertHelpers.AreEqual(matrixACopy, matrixA);
@@ -285,7 +285,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixBReconstruct = matrixA * resultx;
 
             // Check the reconstruction.
-            AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, 3);
+            AssertHelpers.AreEqual(vectorb, matrixBReconstruct, 1e-3f);
 
             // Make sure A didn't change.
             AssertHelpers.AreEqual(matrixACopy, matrixA);
@@ -326,7 +326,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32.Facto
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 3);
+            AssertHelpers.AreEqual(matrixB, matrixBReconstruct, 1e-3f);
 
             // Make sure A didn't change.
             AssertHelpers.AreEqual(matrixACopy, matrixA);

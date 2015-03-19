@@ -118,7 +118,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixXfromLU = matrixL * matrixU;
             var permutationInverse = factorLU.P.Inverse();
             matrixXfromLU.PermuteRows(permutationInverse);
-            AssertHelpers.AlmostEqualRelative(matrixX, matrixXfromLU, 11);
+            AssertHelpers.AreEqual(matrixX, matrixXfromLU, 1.0e-11);
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA * resultx;
 
             // Check the reconstruction.
-            AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, 11);
+            AssertHelpers.AreEqual(vectorb, matrixBReconstruct, 1.0e-11);
 
             // Make sure A didn't change.
             AssertHelpers.AreEqual(matrixACopy, matrixA);
@@ -179,7 +179,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 11);
+            AssertHelpers.AreEqual(matrixB, matrixBReconstruct, 1.0e-11);
 
             // Make sure A didn't change.
             AssertHelpers.AreEqual(matrixACopy, matrixA);
@@ -210,7 +210,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA * resultx;
 
             // Check the reconstruction.
-            AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, 11);
+            AssertHelpers.AreEqual(vectorb, matrixBReconstruct, 1.0e-11);
 
             // Make sure A didn't change.
             AssertHelpers.AreEqual(matrixACopy, matrixA);
@@ -250,7 +250,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             var matrixBReconstruct = matrixA * matrixX;
 
             // Check the reconstruction.
-            AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, 11);
+            AssertHelpers.AreEqual(matrixB, matrixBReconstruct, 1.0e-11);
 
             // Make sure A didn't change.
             AssertHelpers.AreEqual(matrixACopy, matrixA);
@@ -287,7 +287,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             AssertHelpers.AreEqual(matrixACopy, matrixA);
 
             // Check if multiplication of A and AI produced identity matrix.
-            AssertHelpers.AlmostEqualRelative(Matrix<double>.Build.DiagonalIdentity(order), matrixIdentity, 11);
+            AssertHelpers.AreEqual(Matrix<double>.Build.DiagonalIdentity(order), matrixIdentity, 1.0e-11);
         }
     }
 }

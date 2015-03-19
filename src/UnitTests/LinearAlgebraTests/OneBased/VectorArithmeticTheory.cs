@@ -52,22 +52,22 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(a, Is.Not.SameAs(vector));
             Assert.That(a.Equals(vector), Is.True);
 
-            var a0 = a.At(0);
-            var a0Equals = a0.Equals(scalar);
-            a.At(0, scalar);
-            Assert.That(a.Equals(vector), Is.EqualTo(a0Equals));
-            Assert.That(vector.Equals(a), Is.EqualTo(a0Equals));
+            var a1 = a.At(1);
+            var a1Equals = a1.Equals(scalar);
+            a.At(1, scalar);
+            Assert.That(a.Equals(vector), Is.EqualTo(a1Equals));
+            Assert.That(vector.Equals(a), Is.EqualTo(a1Equals));
 
             var b = vector.Clone();
-            var b1 = b.At(1);
-            var b1Equals = b1.Equals(scalar);
-            b.At(1, scalar);
-            Assert.That(b.Equals(vector), Is.EqualTo(b1Equals));
-            Assert.That(vector.Equals(b), Is.EqualTo(b1Equals));
+            var b2 = b.At(2);
+            var b2Equals = b2.Equals(scalar);
+            b.At(2, scalar);
+            Assert.That(b.Equals(vector), Is.EqualTo(b2Equals));
+            Assert.That(vector.Equals(b), Is.EqualTo(b2Equals));
 
-            Assert.That(a.Equals(b), Is.EqualTo(a0Equals && b1Equals));
+            Assert.That(a.Equals(b), Is.EqualTo(a1Equals && b2Equals));
 
-            a.At(0, a0);
+            a.At(1, a1);
             Assert.That(a.Equals(vector), Is.True);
             Assert.That(vector.Equals(a), Is.True);
 
@@ -91,7 +91,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That((-result2).Equals(vector));
             Assert.That(result1.Equals(result2));
 
-            for (var i = 0; i < Math.Min(vector.Count, 20); i++)
+            for (var i = 1; i <= Math.Min(vector.Count, 20); i++)
             {
                 Assert.That(result1[i], Is.EqualTo(Minus(vector[i])), i.ToString(CultureInfo.InvariantCulture));
                 Assert.That(result2[i], Is.EqualTo(Minus(vector[i])), i.ToString(CultureInfo.InvariantCulture));
@@ -122,7 +122,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(result1.Equals(result2));
             Assert.That(result1.Equals(result3));
 
-            for (var i = 0; i < Math.Min(a.Count, 20); i++)
+            for (var i = 1; i <= Math.Min(a.Count, 20); i++)
             {
                 Assert.That(result1[i], Is.EqualTo(Add(a[i], b[i])), i.ToString(CultureInfo.InvariantCulture));
                 Assert.That(result2[i], Is.EqualTo(Add(a[i], b[i])), i.ToString(CultureInfo.InvariantCulture));
@@ -146,7 +146,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(result2, Is.Not.SameAs(vector));
             Assert.That(result1.Equals(result2));
 
-            for (var i = 0; i < Math.Min(vector.Count, 20); i++)
+            for (var i = 1; i <= Math.Min(vector.Count, 20); i++)
             {
                 Assert.That(result1[i], Is.EqualTo(Add(vector[i], scalar)), i.ToString(CultureInfo.InvariantCulture));
                 Assert.That(result2[i], Is.EqualTo(Add(vector[i], scalar)), i.ToString(CultureInfo.InvariantCulture));
@@ -177,7 +177,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(result1.Equals(result2));
             Assert.That(result1.Equals(result3));
 
-            for (var i = 0; i < Math.Min(a.Count, 20); i++)
+            for (var i = 1; i <= Math.Min(a.Count, 20); i++)
             {
                 Assert.That(result1[i], Is.EqualTo(Subtract(a[i], b[i])), i.ToString(CultureInfo.InvariantCulture));
                 Assert.That(result2[i], Is.EqualTo(Subtract(a[i], b[i])), i.ToString(CultureInfo.InvariantCulture));
@@ -201,7 +201,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(result2, Is.Not.SameAs(vector));
             Assert.That(result1.Equals(result2));
 
-            for (var i = 0; i < Math.Min(vector.Count, 20); i++)
+            for (var i = 1; i <= Math.Min(vector.Count, 20); i++)
             {
                 Assert.That(result1[i], Is.EqualTo(Subtract(vector[i], scalar)), i.ToString(CultureInfo.InvariantCulture));
                 Assert.That(result2[i], Is.EqualTo(Subtract(vector[i], scalar)), i.ToString(CultureInfo.InvariantCulture));

@@ -154,7 +154,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
         public void CanCreateIdentity()
         {
             var matrix = DiagonalMatrix.CreateIdentity(5);
-            AssertHelpers.DiagonalHasValue(matrix, 1.0f);
+            AssertHelpers.IsIdentity(matrix);
         }
 
         /// <summary>

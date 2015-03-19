@@ -117,7 +117,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         {
             var data = new int[] { 1, 2, 3, 4, 5 };
             var matrix = new DiagonalMatrix(5, 5, data);
-            matrix[0, 0] = 10;
+            matrix[1, 1] = 10;
             Assert.AreEqual(10, data[0]);
         }
 
@@ -133,14 +133,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         [TestCase("Wide2x3")]
         public void CanCreateMatrixFrom2DArray(string name)
         {
-            var matrix = DiagonalMatrix.OfArray(TestData2D[name]);
-            for (var i = 0; i < TestData2D[name].GetLength(0); i++)
-            {
-                for (var j = 0; j < TestData2D[name].GetLength(1); j++)
-                {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i, j]);
-                }
-            }
+            var sourceTestdata = TestData2D[name];
+            var matrix = DiagonalMatrix.OfArray(sourceTestdata);
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(sourceTestdata[i - 1, j - 1], matrix[i, j]));
         }
 
         /// <summary>
@@ -150,10 +145,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         public void CanCreateMatrixWithUniformValues()
         {
             var matrix = new DiagonalMatrix(10, 10, 10);
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                Assert.AreEqual(matrix[i, i], 10);
-            }
+            AssertHelpers.DiagonalHasValue(matrix, 10);
         }
 
         /// <summary>
@@ -163,20 +155,14 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         public void CanCreateIdentity()
         {
             var matrix = DiagonalMatrix.CreateIdentity(5);
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                for (var j = 0; j < matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? 1 : 0, matrix[i, j]);
-                }
-            }
+            AssertHelpers.IsIdentity(matrix);
         }
 
         /// <summary>
         /// Identity with wrong order throws <c>ArgumentOutOfRangeException</c>.
         /// </summary>
         /// <param name="order">The size of the square matrix</param>
-        [TestCase(0)]
+        //[TestCase(0)]     // Matlab allows empty matrix
         [TestCase(-1)]
         public void IdentityWithWrongOrderThrowsArgumentOutOfRangeException(int order)
         {
@@ -197,14 +183,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
 
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
-
-            for (var i = 0; i < matrixC.RowCount; i++)
-            {
-                for (var j = 0; j < matrixC.ColumnCount; j++)
-                {
-                    Assert.AreEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j]);
-                }
-            }
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => Assert.AreEqual(matrixA.Row(i) * matrixB.Column(j), matrixC[i, j]));
         }
 
         /// <summary>
@@ -240,13 +219,13 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
                 var result = data.Clone();
                 data.PointwiseDivide(other, result);    // CONSIDER: divide by zero here?? (NaNs with float/double?)
                 var min = Math.Min(data.RowCount, data.ColumnCount);
-                for (var i = 0; i < min; i++)
+                for (var i = 1; i <= min; i++)
                 {
                     Assert.AreEqual(data[i, i] / other[i, i], result[i, i]);
                 }
 
                 result = data.PointwiseDivide(other);
-                for (var i = 0; i < min; i++)
+                for (var i = 1; i <= min; i++)
                 {
                     Assert.AreEqual(data[i, i] / other[i, i], result[i, i]);
                 }
@@ -361,6 +340,16 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             matrix = TestMatrices["Square4x4"];
             data = TestData2D["Square4x4"];
             Assert.AreEqual(calcDiagDet(data), matrix.Determinant());
+        }
+
+        /// <summary>
+        /// Determinant of  non-square matrix throws <c>ArgumentException</c>.
+        /// </summary>
+        [Test]
+        public void DeterminantNotSquareMatrixThrowsArgumentException()
+        {
+            var matrix = TestMatrices["Tall3x2"];
+            Assert.That(() => matrix.Determinant(), Throws.ArgumentException);
         }
 
         /// <summary>

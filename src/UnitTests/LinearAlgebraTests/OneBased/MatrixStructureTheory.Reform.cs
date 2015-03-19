@@ -42,7 +42,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
         {
             var m = matrix.Clone();
             var rnd = new System.Random(0);
-            var permutation = new Permutation(Enumerable.Range(0, matrix.RowCount).OrderBy(i => rnd.Next()).ToArray());
+            var permutation = new Permutation(Enumerable.Range(1, matrix.RowCount).OrderBy(i => rnd.Next()).ToArray());
 
             try
             {
@@ -57,9 +57,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(m.RowCount, Is.EqualTo(matrix.RowCount));
             Assert.That(m.ColumnCount, Is.EqualTo(matrix.ColumnCount));
             var inverse = permutation.Inverse();
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     Assert.That(m[i, j], Is.EqualTo(matrix[inverse[i], j]));
                 }
@@ -71,7 +71,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
         {
             var m = matrix.Clone();
             var rnd = new System.Random(0);
-            var permutation = new Permutation(Enumerable.Range(0, matrix.ColumnCount).OrderBy(i => rnd.Next()).ToArray());
+            var permutation = new Permutation(Enumerable.Range(1, matrix.ColumnCount).OrderBy(i => rnd.Next()).ToArray());
 
             try
             {
@@ -86,9 +86,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(m.RowCount, Is.EqualTo(matrix.RowCount));
             Assert.That(m.ColumnCount, Is.EqualTo(matrix.ColumnCount));
             var inverse = permutation.Inverse();
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     Assert.That(m[i, j], Is.EqualTo(matrix[i, inverse[j]]));
                 }
@@ -99,23 +99,23 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
         public void CanInsertRow(Matrix<T> matrix)
         {
             var row = Vector<T>.Build.Random(matrix.ColumnCount, 0);
-            for (var position = 0; position < matrix.RowCount + 1; position++)
+            for (var position = 1; position <= matrix.RowCount + 1; position++)
             {
                 var result = matrix.InsertRow(position, row);
                 Assert.That(result.RowCount, Is.EqualTo(matrix.RowCount + 1));
-                for (int ir = 0, im = 0; ir < result.RowCount; ir++, im++)
+                for (int ir = 1, im = 1; ir <= result.RowCount; ir++, im++)
                 {
                     if (ir == position)
                     {
                         im--;
-                        for (var j = 0; j < result.ColumnCount; j++)
+                        for (var j = 1; j <= result.ColumnCount; j++)
                         {
                             Assert.That(result[ir, j], Is.EqualTo(row[j]), "A({0},{1}) for {2}", ir, j, matrix.GetType().FullName);
                         }
                     }
                     else
                     {
-                        for (var j = 0; j < result.ColumnCount; j++)
+                        for (var j = 1; j <= result.ColumnCount; j++)
                         {
                             Assert.That(result[ir, j], Is.EqualTo(matrix[im, j]), "A({0},{1}) for {2}", ir, j, matrix.GetType().FullName);
                         }
@@ -124,34 +124,34 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             }
 
             // Invalid
-            Assert.That(() => matrix.InsertRow(0, default(Vector<T>)), Throws.Exception);
+            Assert.That(() => matrix.InsertRow(1, default(Vector<T>)), Throws.Exception);
             Assert.That(() => matrix.InsertRow(-1, Vector<T>.Build.Dense(matrix.ColumnCount)), Throws.InstanceOf<ArgumentOutOfRangeException>());
-            Assert.That(() => matrix.InsertRow(matrix.RowCount + 1, Vector<T>.Build.Dense(matrix.ColumnCount)), Throws.InstanceOf<ArgumentOutOfRangeException>());
-            Assert.That(() => matrix.InsertRow(0, Vector<T>.Build.Dense(matrix.ColumnCount - 1)), Throws.ArgumentException);
-            Assert.That(() => matrix.InsertRow(0, Vector<T>.Build.Dense(matrix.ColumnCount + 1)), Throws.ArgumentException);
+            Assert.That(() => matrix.InsertRow(matrix.RowCount + 2, Vector<T>.Build.Dense(matrix.ColumnCount)), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            Assert.That(() => matrix.InsertRow(1, Vector<T>.Build.Dense(matrix.ColumnCount - 1)), Throws.ArgumentException);
+            Assert.That(() => matrix.InsertRow(1, Vector<T>.Build.Dense(matrix.ColumnCount + 1)), Throws.ArgumentException);
         }
 
         [Theory]
         public void CanRemoveRow(Matrix<T> matrix)
         {
-            for (var position = 0; position < matrix.RowCount; position++)
+            for (var position = 1; position <= matrix.RowCount; position++)
             {
                 var result = matrix.RemoveRow(position);
                 Assert.That(result.RowCount, Is.EqualTo(matrix.RowCount - 1));
-                for (int ir = 0, im = 0; ir < result.RowCount; ir++, im++)
+                for (int ir = 1, im = 1; ir <= result.RowCount; ir++, im++)
                 {
                     if (ir == position)
                     {
                         im++;
                     }
-                    for (var j = 0; j < result.ColumnCount; j++)
+                    for (var j = 1; j <= result.ColumnCount; j++)
                     {
                         Assert.That(result[ir, j], Is.EqualTo(matrix[im, j]), "A({0},{1}) for {2}", ir, j, matrix.GetType().FullName);
                     }
                 }
             }
 
-            Assert.That(() => matrix.RemoveRow(-1), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            Assert.That(() => matrix.RemoveRow(0), Throws.InstanceOf<ArgumentOutOfRangeException>());
             Assert.That(() => matrix.RemoveRow(matrix.RowCount + 1), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
@@ -159,23 +159,23 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
         public void CanInsertColumn(Matrix<T> matrix)
         {
             var column = Vector<T>.Build.Random(matrix.RowCount, 0);
-            for (var position = 0; position < matrix.ColumnCount + 1; position++)
+            for (var position = 1; position <= matrix.ColumnCount + 1; position++)
             {
                 var result = matrix.InsertColumn(position, column);
                 Assert.That(result.ColumnCount, Is.EqualTo(matrix.ColumnCount + 1));
-                for (int jr = 0, jm = 0; jr < result.ColumnCount; jr++, jm++)
+                for (int jr = 1, jm = 1; jr <= result.ColumnCount; jr++, jm++)
                 {
                     if (jr == position)
                     {
                         jm--;
-                        for (var i = 0; i < result.RowCount; i++)
+                        for (var i = 1; i <= result.RowCount; i++)
                         {
                             Assert.That(result[i, jr], Is.EqualTo(column[i]));
                         }
                     }
                     else
                     {
-                        for (var i = 0; i < result.RowCount; i++)
+                        for (var i = 1; i <= result.RowCount; i++)
                         {
                             Assert.That(result[i, jr], Is.EqualTo(matrix[i, jm]));
                         }
@@ -184,27 +184,27 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             }
 
             // Invalid
-            Assert.That(() => matrix.InsertColumn(0, default(Vector<T>)), Throws.Exception);
-            Assert.That(() => matrix.InsertColumn(-1, Vector<T>.Build.Dense(matrix.RowCount)), Throws.InstanceOf<ArgumentOutOfRangeException>());
-            Assert.That(() => matrix.InsertColumn(matrix.ColumnCount + 1, Vector<T>.Build.Dense(matrix.RowCount)), Throws.InstanceOf<ArgumentOutOfRangeException>());
-            Assert.That(() => matrix.InsertColumn(0, Vector<T>.Build.Dense(matrix.RowCount - 1)), Throws.ArgumentException);
-            Assert.That(() => matrix.InsertColumn(0, Vector<T>.Build.Dense(matrix.RowCount + 1)), Throws.ArgumentException);
+            Assert.That(() => matrix.InsertColumn(1, default(Vector<T>)), Throws.Exception);
+            Assert.That(() => matrix.InsertColumn(0, Vector<T>.Build.Dense(matrix.RowCount)), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            Assert.That(() => matrix.InsertColumn(matrix.ColumnCount + 2, Vector<T>.Build.Dense(matrix.RowCount)), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            Assert.That(() => matrix.InsertColumn(1, Vector<T>.Build.Dense(matrix.RowCount - 1)), Throws.ArgumentException);
+            Assert.That(() => matrix.InsertColumn(1, Vector<T>.Build.Dense(matrix.RowCount + 1)), Throws.ArgumentException);
         }
 
         [Theory]
         public void CanRemoveColumn(Matrix<T> matrix)
         {
-            for (var position = 0; position < matrix.ColumnCount; position++)
+            for (var position = 1; position <= matrix.ColumnCount; position++)
             {
                 var result = matrix.RemoveColumn(position);
                 Assert.That(result.ColumnCount, Is.EqualTo(matrix.ColumnCount - 1));
-                for (int jr = 0, jm = 0; jr < result.ColumnCount; jr++, jm++)
+                for (int jr = 1, jm = 1; jr <= result.ColumnCount; jr++, jm++)
                 {
                     if (jr == position)
                     {
                         jm++;
                     }
-                    for (var i = 0; i < result.RowCount; i++)
+                    for (var i = 1; i <= result.RowCount; i++)
                     {
                         Assert.That(result[i, jr], Is.EqualTo(matrix[i, jm]));
                     }
@@ -212,7 +212,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             }
 
             // Invalid
-            Assert.That(() => matrix.RemoveColumn(-1), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            Assert.That(() => matrix.RemoveColumn(0), Throws.InstanceOf<ArgumentOutOfRangeException>());
             Assert.That(() => matrix.RemoveColumn(matrix.ColumnCount + 1), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
@@ -226,11 +226,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             var result = left.Append(right);
 
             Assert.That(result.ColumnCount, Is.EqualTo(left.ColumnCount + right.ColumnCount));
-            for (var i = 0; i < result.RowCount; i++)
+            for (var i = 1; i <= result.RowCount; i++)
             {
-                for (var j = 0; j < result.ColumnCount; j++)
+                for (var j = 1; j <= result.ColumnCount; j++)
                 {
-                    Assert.That(result[i, j], Is.EqualTo(j < left.ColumnCount ? left[i, j] : right[i, j - left.ColumnCount]));
+                    Assert.That(result[i, j], Is.EqualTo(j <= left.ColumnCount ? left[i, j] : right[i, j - left.ColumnCount]));
                 }
             }
 
@@ -249,11 +249,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             left.Append(right, result);
 
             Assert.That(result.ColumnCount, Is.EqualTo(left.ColumnCount + right.ColumnCount));
-            for (var i = 0; i < result.RowCount; i++)
+            for (var i = 1; i <= result.RowCount; i++)
             {
-                for (var j = 0; j < result.ColumnCount; j++)
+                for (var j = 1; j <= result.ColumnCount; j++)
                 {
-                    Assert.That(result[i, j], Is.EqualTo(j < left.ColumnCount ? left[i, j] : right[i, j - left.ColumnCount]));
+                    Assert.That(result[i, j], Is.EqualTo(j <= left.ColumnCount ? left[i, j] : right[i, j - left.ColumnCount]));
                 }
             }
 
@@ -275,11 +275,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             var result = top.Stack(bottom);
 
             Assert.That(result.RowCount, Is.EqualTo(top.RowCount + bottom.RowCount));
-            for (var i = 0; i < result.RowCount; i++)
+            for (var i = 1; i <= result.RowCount; i++)
             {
-                for (var j = 0; j < result.ColumnCount; j++)
+                for (var j = 1; j <= result.ColumnCount; j++)
                 {
-                    Assert.That(result[i, j], Is.EqualTo(i < top.RowCount ? top[i, j] : bottom[i - top.RowCount, j]));
+                    Assert.That(result[i, j], Is.EqualTo(i <= top.RowCount ? top[i, j] : bottom[i - top.RowCount, j]));
                 }
             }
 
@@ -298,11 +298,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             top.Stack(bottom, result);
 
             Assert.That(result.RowCount, Is.EqualTo(top.RowCount + bottom.RowCount));
-            for (var i = 0; i < result.RowCount; i++)
+            for (var i = 1; i <= result.RowCount; i++)
             {
-                for (var j = 0; j < result.ColumnCount; j++)
+                for (var j = 1; j <= result.ColumnCount; j++)
                 {
-                    Assert.That(result[i, j], Is.EqualTo(i < top.RowCount ? top[i, j] : bottom[i - top.RowCount, j]));
+                    Assert.That(result[i, j], Is.EqualTo(i <= top.RowCount ? top[i, j] : bottom[i - top.RowCount, j]));
                 }
             }
 
@@ -321,16 +321,16 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
 
             Assert.That(result.RowCount, Is.EqualTo(left.RowCount + right.RowCount));
             Assert.That(result.ColumnCount, Is.EqualTo(left.ColumnCount + right.ColumnCount));
-            for (var i = 0; i < left.RowCount; i++)
+            for (var i = 1; i <= left.RowCount; i++)
             {
-                for (var j = 0; j < left.ColumnCount; j++)
+                for (var j = 1; j <= left.ColumnCount; j++)
                 {
                     Assert.That(result[i, j], Is.EqualTo(left[i, j]), "{0}+{1}->{2}", left.GetType(), right.GetType(), result.GetType());
                 }
             }
-            for (var i = 0; i < right.RowCount; i++)
+            for (var i = 1; i <= right.RowCount; i++)
             {
-                for (var j = 0; j < right.ColumnCount; j++)
+                for (var j = 1; j <= right.ColumnCount; j++)
                 {
                     Assert.That(result[left.RowCount + i, left.ColumnCount + j], Is.EqualTo(right[i, j]), "{0}+{1}->{2}", left.GetType(), right.GetType(), result.GetType());
                 }
@@ -348,16 +348,16 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
 
             Assert.That(result.RowCount, Is.EqualTo(left.RowCount + right.RowCount));
             Assert.That(result.ColumnCount, Is.EqualTo(left.ColumnCount + right.ColumnCount));
-            for (var i = 0; i < left.RowCount; i++)
+            for (var i = 1; i <= left.RowCount; i++)
             {
-                for (var j = 0; j < left.ColumnCount; j++)
+                for (var j = 1; j <= left.ColumnCount; j++)
                 {
                     Assert.That(result[i, j], Is.EqualTo(left[i, j]));
                 }
             }
-            for (var i = 0; i < right.RowCount; i++)
+            for (var i = 1; i <= right.RowCount; i++)
             {
-                for (var j = 0; j < right.ColumnCount; j++)
+                for (var j = 1; j <= right.ColumnCount; j++)
                 {
                     Assert.That(result[left.RowCount + i, left.ColumnCount + j], Is.EqualTo(right[i, j]));
                 }

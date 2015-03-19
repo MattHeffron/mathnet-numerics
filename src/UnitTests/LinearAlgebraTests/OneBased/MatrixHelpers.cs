@@ -51,9 +51,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             {
                 throw new ArgumentException("matrix must be square.", "matrix");
             }
-            for (var row = 0; row < matrix.RowCount; row++)
+            for (var row = 1; row <= matrix.RowCount; row++)
             {
-                for (var column = 0; column < row; column++)
+                for (var column = 1; column <= row; column++)
                 {
                     matrix.At(column, row, matrix.At(row, column));
                 }
@@ -71,9 +71,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             {
                 throw new ArgumentException("matrix must be square.", "matrix");
             }
-            for (var row = 0; row < matrix.RowCount; row++)
+            for (var row = 1; row <= matrix.RowCount; row++)
             {
-                for (var column = 0; column < row; column++)
+                for (var column = 1; column <= row; column++)
                 {
                     matrix.At(column, row, matrix.At(row, column).Conjugate());
                 }
@@ -91,9 +91,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             {
                 throw new ArgumentException("matrix must be square.", "matrix");
             }
-            for (var row = 0; row < matrix.RowCount; row++)
+            for (var row = 1; row <= matrix.RowCount; row++)
             {
-                for (var column = 0; column < row; column++)
+                for (var column = 1; column <= row; column++)
                 {
                     matrix.At(column, row, matrix.At(row, column).Conjugate());
                 }
@@ -101,18 +101,19 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
         }
 
         /// <summary>
-        /// Forces a matrix elements to symmetric. Copies the lower triangle to the upper triangle.
+        /// Create the matrix for solving the Poisson equation
+        /// on a rectangular grid.
         /// </summary>
         /// <typeparam name="T">The matrix type.</typeparam>
-        /// <param name="matrix">The matrix to make symmetric.</param>
-        static public Matrix<T> MakePoissonTestMatrix<T>() where T : struct, IEquatable<T>, IFormattable
+        /// <param name="gridSize">The gridsize within the matrix.</param>
+        static public Matrix<T> MakePoissonTestMatrix<T>(int gridSize) where T : struct, IEquatable<T>, IFormattable
         {
-            // Create the matrix
-            var matrix = Matrix<T>.Build.Sparse(100, 100);
-
             // Assemble the matrix. We assume we're solving the Poisson equation
-            // on a rectangular 10 x 10 grid
-            const int GridSize = 10;
+            // on a rectangular gridSize x gridSize grid
+            int fullSize = gridSize * gridSize;
+
+            // Create the matrix
+            var matrix = Matrix<T>.Build.Sparse(fullSize, fullSize);
 
             // This is a big HACK to get around the fact that I can't constrain T to be convertable from int
             // But since we know HOW this is being used in testing...
@@ -124,9 +125,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             for (var i = 1; i <= matrix.RowCount; i++)
             {
                 // Insert the first set of -1's
-                if (i > GridSize)
+                if (i > gridSize)
                 {
-                    matrix[i, i - GridSize + 1] = minusOne;
+                    matrix[i, i - gridSize + 1] = minusOne;
                 }
 
                 // Insert the second set of -1's
@@ -145,9 +146,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
                 }
 
                 // Insert the second trailing set of -1's
-                if (i < matrix.RowCount - GridSize + 1)
+                if (i < matrix.RowCount - gridSize + 1)
                 {
-                    matrix[i, i + GridSize - 1] = minusOne;
+                    matrix[i, i + gridSize - 1] = minusOne;
                 }
             }
 

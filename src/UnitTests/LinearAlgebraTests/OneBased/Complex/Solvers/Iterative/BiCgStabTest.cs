@@ -171,7 +171,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex.Solvers
         public void SolvePoissonMatrixAndBackMultiply()
         {
             // Create the matrix
-            var matrix = MatrixHelpers.MakePoissonTestMatrix<Complex>();
+            var matrix = MatrixHelpers.MakePoissonTestMatrix<Complex>(10);
 
             // Create the y vector
             var y = DenseVector.Create(matrix.RowCount, Complex.One);

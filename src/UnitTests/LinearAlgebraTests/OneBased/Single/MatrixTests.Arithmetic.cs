@@ -701,7 +701,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
         /// <summary>
         /// Can normalize columns of a matrix.
         /// </summary>
-        /// <param name="p">The norm under which to normalize the columns under.</param>
+        /// <param name="p">The norm under which to normalize the columns.</param>
         [TestCase(1)]
         [TestCase(2)]
         public void CanNormalizeColumns(int p)

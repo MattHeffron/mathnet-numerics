@@ -61,7 +61,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             var vector = new DenseVector(data.Count);
             for (var index = 0; index < data.Count; index++)
             {
-                vector[index] = data[index];
+                vector[index + 1] = data[index];
             }
 
             return vector;
@@ -79,10 +79,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
 
             for (var i = 0; i < data.Length; i++)
             {
-                Assert.AreEqual(data[i], vector[i]);
+                Assert.AreEqual(data[i], vector[i + 1]);
             }
 
-            vector[0] = 100;
+            vector[1] = 100;
             Assert.AreEqual(100, data[0]);
         }
 
@@ -96,10 +96,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             var other = DenseVector.OfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -112,10 +109,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             var other = DenseVector.OfVector(vector);
 
             Assert.AreNotSame(vector, other);
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -127,10 +121,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             var vector = new UserDefinedVector(Data);
             var other = DenseVector.OfVector(vector);
 
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -140,10 +131,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         public void CanCreateDenseVectorWithConstantValues()
         {
             var vector = DenseVector.Create(5, 5);
-            foreach (var t in vector)
-            {
-                Assert.AreEqual(t, 5);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(vector, 5);
         }
 
         /// <summary>
@@ -191,10 +179,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         {
             var vector = new DenseVector(Data);
             var other = +vector;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(vector[i], other[i]);
-            }
+            AssertHelpers.AreEqual(vector, other);
         }
 
         /// <summary>
@@ -208,11 +193,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             var result = vector + other;
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2, result[i]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1]*2, result[i]));
         }
 
         /// <summary>
@@ -223,10 +204,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         {
             var vector = new DenseVector(Data);
             var other = -vector;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(-Data[i], other[i]);
-            }
+            AssertHelpers.IndexedAssertion(other, i => Assert.AreEqual(-Data[i - 1], other[i]));
         }
 
         /// <summary>
@@ -240,11 +218,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             var result = vector - other;
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(0, result[i]);
-            }
+            AssertHelpers.AllVectorElementsHaveValue(result, 0);
         }
 
         /// <summary>
@@ -255,31 +229,17 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         {
             var vector = new DenseVector(Data);
             vector = vector*2;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2, vector[i]));
 
             vector = vector*1;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2, vector[i]));
 
             vector = new DenseVector(Data);
             vector = 2*vector;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2, vector[i]));
 
             vector = 1*vector;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]*2, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2, vector[i]));
         }
 
         /// <summary>
@@ -290,17 +250,10 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         {
             var vector = new DenseVector(Data);
             vector = vector/2;
-
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]/2, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2, vector[i]));
 
             vector = vector/1;
-            for (var i = 0; i < Data.Length; i++)
-            {
-                Assert.AreEqual(Data[i]/2, vector[i]);
-            }
+            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] / 2, vector[i]));
         }
 
         /// <summary>
@@ -312,13 +265,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             var vector1 = CreateVector(Data);
             var vector2 = CreateVector(Data);
             var m = Vector<int>.OuterProduct(vector1, vector2);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                for (var j = 0; j < vector2.Count; j++)
-                {
-                    Assert.AreEqual(m[i, j], vector1[i]*vector2[j]);
-                }
-            }
+            AssertHelpers.IndexedAssertion(m, (i, j) => Assert.AreEqual(vector1[i] * vector2[j], m[i, j]));
         }
     }
 }

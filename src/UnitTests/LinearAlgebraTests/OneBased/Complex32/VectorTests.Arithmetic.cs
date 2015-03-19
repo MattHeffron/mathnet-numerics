@@ -332,7 +332,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.AllVectorElementsHaveValue(vector, Complex32.Zero);
+            AssertHelpers.AllVectorElementsHaveValue(result, Complex32.Zero);
         }
 
         /// <summary>
@@ -347,7 +347,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.AllVectorElementsHaveValue(vector, Complex32.Zero);
+            AssertHelpers.AllVectorElementsHaveValue(result, Complex32.Zero);
         }
 
         /// <summary>
@@ -618,10 +618,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex32
             var vector2 = vector1.Clone();
             var result = CreateVector(vector1.Count);
             vector1.PointwiseDivide(vector2, result);
-            for (var i = 0; i < vector1.Count; i++)
-            {
-                Assert.AreEqual(Data[i] / Data[i], result[i + 1]);
-            }
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] / Data[i - 1], result[i]));
+            // CONSIDER: they should all be (1.0f,0.0)
+            //AssertHelpers.AllVectorElementsHaveValue(result, Complex32.One);
         }
 
         /// <summary>

@@ -124,14 +124,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Complex
         [TestCase("Wide2x3")]
         public void CanCreateMatrixFrom2DArray(string name)
         {
-            var matrix = DenseMatrix.OfArray(TestData2D[name]);
-            for (var i = 0; i < TestData2D[name].GetLength(0); i++)
-            {
-                for (var j = 0; j < TestData2D[name].GetLength(1); j++)
-                {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i + 1, j + 1]);
-                }
-            }
+            var sourceTestData = TestData2D[name];
+            var matrix = DenseMatrix.OfArray(sourceTestData);
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(sourceTestData[i - 1, j - 1], matrix[i, j]));
         }
 
         /// <summary>

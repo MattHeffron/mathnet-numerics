@@ -90,19 +90,19 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             }
 
             Matrix<T> permutation;
-            if (matrix.RowCount >= 2 && matrix.Row(1).Any(x => !Zero.Equals(x)))
+            if (matrix.RowCount >= 2 && matrix.Row(2).Any(x => !Zero.Equals(x)))
             {
-                matrix.ClearRow(0);
+                matrix.ClearRow(1);
                 permutation = matrix.Clone();
-                permutation.ClearRow(1);
-                permutation.SetRow(0, matrix.Row(1));
+                permutation.ClearRow(2);
+                permutation.SetRow(1, matrix.Row(2));
             }
-            else if (matrix.ColumnCount >= 2 && matrix.Column(1).Any(x => !Zero.Equals(x)))
+            else if (matrix.ColumnCount >= 2 && matrix.Column(2).Any(x => !Zero.Equals(x)))
             {
-                matrix.ClearColumn(0);
+                matrix.ClearColumn(1);
                 permutation = matrix.Clone();
-                permutation.ClearColumn(1);
-                permutation.SetColumn(0, matrix.Column(1));
+                permutation.ClearColumn(2);
+                permutation.SetColumn(1, matrix.Column(2));
             }
             else
             {
@@ -185,11 +185,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assume.That(matrix.ColumnCount, Is.GreaterThanOrEqualTo(2));
 
             var cleared = matrix.Clone();
-            cleared.ClearSubMatrix(0, 2, 1, 1);
-            Assert.That(cleared.At(0, 0), Is.EqualTo(matrix.At(0, 0)));
-            Assert.That(cleared.At(1, 0), Is.EqualTo(matrix.At(1, 0)));
-            Assert.That(cleared.At(0, 1), Is.EqualTo(Zero));
-            Assert.That(cleared.At(1, 1), Is.EqualTo(Zero));
+            cleared.ClearSubMatrix(1, 2, 2, 1);
+            Assert.That(cleared.At(1, 1), Is.EqualTo(matrix.At(1, 1)));
+            Assert.That(cleared.At(2, 1), Is.EqualTo(matrix.At(2, 1)));
+            Assert.That(cleared.At(1, 2), Is.EqualTo(Zero));
+            Assert.That(cleared.At(2, 2), Is.EqualTo(Zero));
         }
 
         [Theory]
@@ -198,9 +198,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assume.That(matrix.RowCount, Is.GreaterThanOrEqualTo(2));
 
             var cleared = matrix.Clone();
-            cleared.ClearRows(1);
-            Assert.That(cleared.At(0, 0), Is.EqualTo(matrix.At(0, 0)));
-            Assert.That(cleared.At(1, 0), Is.EqualTo(Zero));
+            cleared.ClearRows(2);
+            Assert.That(cleared.At(1, 1), Is.EqualTo(matrix.At(1, 1)));
+            Assert.That(cleared.At(2, 1), Is.EqualTo(Zero));
         }
 
         [Theory]
@@ -209,9 +209,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assume.That(matrix.ColumnCount, Is.GreaterThanOrEqualTo(2));
 
             var cleared = matrix.Clone();
-            cleared.ClearColumns(1);
-            Assert.That(cleared.At(0, 0), Is.EqualTo(matrix.At(0, 0)));
-            Assert.That(cleared.At(0, 1), Is.EqualTo(Zero));
+            cleared.ClearColumns(2);
+            Assert.That(cleared.At(1, 1), Is.EqualTo(matrix.At(1, 1)));
+            Assert.That(cleared.At(1, 2), Is.EqualTo(Zero));
         }
 
         [Theory]
@@ -220,11 +220,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             var array = matrix.ToArray();
             Assert.That(array.GetLength(0), Is.EqualTo(matrix.RowCount));
             Assert.That(array.GetLength(1), Is.EqualTo(matrix.ColumnCount));
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
-                    Assert.That(array[i, j], Is.EqualTo(matrix[i, j]));
+                    Assert.That(array[i - 1, j - 1], Is.EqualTo(matrix[i, j]));
                 }
             }
         }
@@ -235,11 +235,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             var columnArrays = matrix.ToColumnArrays();
             Assert.That(columnArrays.Length, Is.EqualTo(matrix.ColumnCount));
             Assert.That(columnArrays[0].Length, Is.EqualTo(matrix.RowCount));
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
-                    Assert.That(columnArrays[j][i], Is.EqualTo(matrix[i, j]));
+                    Assert.That(columnArrays[j - 1][i - 1], Is.EqualTo(matrix[i, j]));
                 }
             }
         }
@@ -250,11 +250,11 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             var rowArrays = matrix.ToRowArrays();
             Assert.That(rowArrays.Length, Is.EqualTo(matrix.RowCount));
             Assert.That(rowArrays[0].Length, Is.EqualTo(matrix.ColumnCount));
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
-                    Assert.That(rowArrays[i][j], Is.EqualTo(matrix[i, j]));
+                    Assert.That(rowArrays[i - 1][j - 1], Is.EqualTo(matrix[i, j]));
                 }
             }
         }
@@ -266,7 +266,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(array.Length, Is.EqualTo(matrix.RowCount*matrix.ColumnCount));
             for (int i = 0; i < array.Length; i++)
             {
-                Assert.That(array[i], Is.EqualTo(matrix[i%matrix.RowCount, i/matrix.RowCount]));
+                Assert.That(array[i], Is.EqualTo(matrix[1 + i%matrix.RowCount, 1 + i/matrix.RowCount]));
             }
         }
 
@@ -277,7 +277,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(array.Length, Is.EqualTo(matrix.RowCount*matrix.ColumnCount));
             for (int i = 0; i < array.Length; i++)
             {
-                Assert.That(array[i], Is.EqualTo(matrix[i/matrix.ColumnCount, i%matrix.ColumnCount]));
+                Assert.That(array[i], Is.EqualTo(matrix[1 + i/matrix.ColumnCount, 1 + i%matrix.ColumnCount]));
             }
         }
 
@@ -288,8 +288,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(empty, Is.EqualTo(Matrix<T>.Build.Dense(5, 6)));
             Assert.That(empty.Storage.IsDense, Is.EqualTo(matrix.Storage.IsDense));
 
-            Assert.That(() => Matrix<T>.Build.SameAs(matrix, 0, 2), Throws.InstanceOf<ArgumentOutOfRangeException>());
-            Assert.That(() => Matrix<T>.Build.SameAs(matrix, 2, 0), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            // OneBased allows for rows or columns == 0
+            ////Assert.That(() => Matrix<T>.Build.SameAs(matrix, 0, 2), Throws.InstanceOf<ArgumentOutOfRangeException>());
+            ////Assert.That(() => Matrix<T>.Build.SameAs(matrix, 2, 0), Throws.InstanceOf<ArgumentOutOfRangeException>());
             Assert.That(() => Matrix<T>.Build.SameAs(matrix, -1, -1), Throws.InstanceOf<ArgumentOutOfRangeException>());
         }
 
@@ -301,9 +302,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(matrix.GetType().Name, Is.EqualTo("DenseMatrix"));
             Assert.That(matrix.RowCount, Is.EqualTo(4));
             Assert.That(matrix.ColumnCount, Is.EqualTo(3));
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 3; j++)
-                    Assert.That(matrix[i, j], Is.EqualTo(array[i, j]));
+            for (int i = 1; i <= 4; i++)
+                for (int j = 1; j <= 3; j++)
+                    Assert.That(matrix[i, j], Is.EqualTo(array[i - 1, j - 1]));
         }
 
         [Test]
@@ -314,9 +315,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(matrix.GetType().Name, Is.EqualTo("SparseMatrix"));
             Assert.That(matrix.RowCount, Is.EqualTo(4));
             Assert.That(matrix.ColumnCount, Is.EqualTo(3));
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 3; j++)
-                    Assert.That(matrix[i, j], Is.EqualTo(array[i, j]));
+            for (int i = 1; i <= 4; i++)
+                for (int j = 1; j <= 3; j++)
+                    Assert.That(matrix[i, j], Is.EqualTo(array[i - 1, j - 1]));
         }
 
         [Test]
@@ -332,9 +333,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(matrix.GetType().Name, Is.EqualTo("DenseMatrix"));
             Assert.That(matrix.RowCount, Is.EqualTo(3));
             Assert.That(matrix.ColumnCount, Is.EqualTo(4));
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 4; j++)
-                    Assert.That(matrix[i, j], Is.EqualTo(array[i][j]));
+            for (int i = 1; i <= 3; i++)
+                for (int j = 1; j <= 4; j++)
+                    Assert.That(matrix[i, j], Is.EqualTo(array[i - 1][j - 1]));
         }
 
         [Test]
@@ -350,9 +351,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(matrix.GetType().Name, Is.EqualTo("SparseMatrix"));
             Assert.That(matrix.RowCount, Is.EqualTo(3));
             Assert.That(matrix.ColumnCount, Is.EqualTo(4));
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 4; j++)
-                    Assert.That(matrix[i, j], Is.EqualTo(array[i][j]));
+            for (int i = 1; i <= 3; i++)
+                for (int j = 1; j <= 4; j++)
+                    Assert.That(matrix[i, j], Is.EqualTo(array[i - 1][j - 1]));
         }
 
         [Test]
@@ -368,9 +369,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(matrix.GetType().Name, Is.EqualTo("DenseMatrix"));
             Assert.That(matrix.RowCount, Is.EqualTo(4));
             Assert.That(matrix.ColumnCount, Is.EqualTo(3));
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 3; j++)
-                    Assert.That(matrix[i, j], Is.EqualTo(columns[j][i]));
+            for (int i = 1; i <= 4; i++)
+                for (int j = 1; j <= 3; j++)
+                    Assert.That(matrix[i, j], Is.EqualTo(columns[j - 1][i]));
         }
 
         [Test]
@@ -386,9 +387,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(matrix.GetType().Name, Is.EqualTo("SparseMatrix"));
             Assert.That(matrix.RowCount, Is.EqualTo(4));
             Assert.That(matrix.ColumnCount, Is.EqualTo(3));
-            for (int i = 0; i < 4; i++)
-                for (int j = 0; j < 3; j++)
-                    Assert.That(matrix[i, j], Is.EqualTo(columns[j][i]));
+            for (int i = 1; i <= 4; i++)
+                for (int j = 1; j <= 3; j++)
+                    Assert.That(matrix[i, j], Is.EqualTo(columns[j - 1][i]));
         }
 
         [Test]
@@ -404,9 +405,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(matrix.GetType().Name, Is.EqualTo("DenseMatrix"));
             Assert.That(matrix.RowCount, Is.EqualTo(3));
             Assert.That(matrix.ColumnCount, Is.EqualTo(4));
-            for (int j = 0; j < 4; j++)
-                for (int i = 0; i < 3; i++)
-                    Assert.That(matrix[i, j], Is.EqualTo(rows[i][j]));
+            for (int j = 1; j <= 4; j++)
+                for (int i = 1; i <= 3; i++)
+                    Assert.That(matrix[i, j], Is.EqualTo(rows[i - 1][j]));
         }
 
         [Test]
@@ -422,9 +423,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
             Assert.That(matrix.GetType().Name, Is.EqualTo("SparseMatrix"));
             Assert.That(matrix.RowCount, Is.EqualTo(3));
             Assert.That(matrix.ColumnCount, Is.EqualTo(4));
-            for (int j = 0; j < 4; j++)
-                for (int i = 0; i < 3; i++)
-                    Assert.That(matrix[i, j], Is.EqualTo(rows[i][j]));
+            for (int j = 1; j <= 4; j++)
+                for (int i = 1; i <= 3; i++)
+                    Assert.That(matrix[i, j], Is.EqualTo(rows[i - 1][j]));
         }
 
         [Test]
@@ -438,8 +439,8 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased
                 colIdxSum += value.Item2;
                 Assert.AreEqual(dense[value.Item1, value.Item2], value.Item3);
             }
-            Assert.AreEqual(dense.RowCount*(dense.RowCount - 1)/2*dense.ColumnCount, rowIdxSum);
-            Assert.AreEqual(dense.ColumnCount*(dense.ColumnCount - 1)/2*dense.RowCount, colIdxSum);
+            Assert.AreEqual(dense.RowCount*(dense.RowCount + 1)/2*dense.ColumnCount, rowIdxSum);
+            Assert.AreEqual(dense.ColumnCount*(dense.ColumnCount + 1)/2*dense.RowCount, colIdxSum);
         }
     }
 }

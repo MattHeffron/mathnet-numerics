@@ -147,7 +147,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0f, vector[i]));
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * 2.0f, result[i]));
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.IndexedAssertion(vector, i => Assert.AreEqual(Data[i - 1] * 2.0f, vector[i]));
+            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * 2.0f, result[i]));
         }
 
         /// <summary>
@@ -256,7 +256,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] - 2.0f, result[i]));
 
             vector.Subtract(0.0f, result);
-            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] - 2.0f, result[i]));
+            CollectionAssert.AreEqual(Data, result);
         }
 
         /// <summary>
@@ -330,7 +330,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.AllVectorElementsHaveValue(vector, 0.0f);
+            AssertHelpers.AllVectorElementsHaveValue(result, 0.0f);
         }
 
         /// <summary>
@@ -345,7 +345,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
 
             CollectionAssert.AreEqual(Data, vector, "Making sure the original vector wasn't modified.");
             CollectionAssert.AreEqual(Data, other, "Making sure the original vector wasn't modified.");
-            AssertHelpers.AllVectorElementsHaveValue(vector, 0.0f);
+            AssertHelpers.AllVectorElementsHaveValue(result, 0.0f);
         }
 
         /// <summary>
@@ -416,7 +416,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] / 2.0f, result[i]));
 
             vector.Divide(1.0f, result);
-            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1], result[i]));
+            CollectionAssert.AreEqual(Data, result);
         }
 
         /// <summary>
@@ -447,7 +447,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single
             AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1] * 2.0f, result[i]));
 
             vector.Multiply(1.0f, result);
-            AssertHelpers.IndexedAssertion(result, i => Assert.AreEqual(Data[i - 1], result[i]));
+            CollectionAssert.AreEqual(Data, result);
         }
 
         /// <summary>

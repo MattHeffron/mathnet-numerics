@@ -92,7 +92,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             // Sparse Matrix copies values from int[], but no remember reference. 
             var data = new int[] {1, 1, 1, 1, 1, 1, 2, 2, 2};
             var matrix = SparseMatrix.OfColumnMajor(3, 3, data);
-            matrix[0, 0] = 10;
+            matrix[1, 1] = 10;
             Assert.AreNotEqual(10, data[0]);
         }
 
@@ -103,7 +103,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         public void MatrixFrom2DArrayIsCopy()
         {
             var matrix = SparseMatrix.OfArray(TestData2D["Singular3x3"]);
-            matrix[0, 0] = 10;
+            matrix[1, 1] = 10;
             Assert.AreEqual(10, TestData2D["Singular3x3"][0, 0]);
         }
 
@@ -119,14 +119,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         [TestCase("Wide2x3")]
         public void CanCreateMatrixFrom2DArray(string name)
         {
-            var matrix = SparseMatrix.OfArray(TestData2D[name]);
-            for (var i = 0; i < TestData2D[name].GetLength(0); i++)
-            {
-                for (var j = 0; j < TestData2D[name].GetLength(1); j++)
-                {
-                    Assert.AreEqual(TestData2D[name][i, j], matrix[i, j]);
-                }
-            }
+            var sourceTestData = TestData2D[name];
+            var matrix = Matrix<int>.Build.SparseOfArray(sourceTestData);
+            AssertHelpers.IndexedAssertion(matrix, (i, j) => Assert.AreEqual(sourceTestData[i - 1, j - 1], matrix[i, j]));
         }
 
         /// <summary>
@@ -136,13 +131,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
         public void CanCreateIdentity()
         {
             var matrix = SparseMatrix.CreateIdentity(5);
-            for (var i = 0; i < matrix.RowCount; i++)
-            {
-                for (var j = 0; j < matrix.ColumnCount; j++)
-                {
-                    Assert.AreEqual(i == j ? 1 : 0, matrix[i, j]);
-                }
-            }
+            AssertHelpers.IsIdentity(matrix);
         }
 
         /// <summary>
@@ -166,9 +155,9 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             var nonzero = 0;
             var rnd = new System.Random(0);
 
-            for (var i = 0; i < matrix.RowCount; i++)
+            for (var i = 1; i <= matrix.RowCount; i++)
             {
-                for (var j = 0; j < matrix.ColumnCount; j++)
+                for (var j = 1; j <= matrix.ColumnCount; j++)
                 {
                     var value = rnd.Next(10)*rnd.Next(10)*rnd.Next(10)*rnd.Next(10)*rnd.Next(10);
                     if (value != 0)
@@ -281,7 +270,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Integer
             var matrix = new SparseMatrix(Order);
             Assert.AreEqual(Order, matrix.RowCount);
             Assert.AreEqual(Order, matrix.ColumnCount);
-            Assert.DoesNotThrow(() => matrix[0, 0] = 1);
+            Assert.DoesNotThrow(() => matrix[1, 1] = 1);
         }
     }
 }

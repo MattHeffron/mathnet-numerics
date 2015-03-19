@@ -155,7 +155,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         {
             var matrix = Matrix<double>.Build.DiagonalIdentity(5);
             Assert.That(matrix, Is.TypeOf<DiagonalMatrix>());
-            AssertHelpers.DiagonalHasValue(matrix, 1.0);
+            AssertHelpers.IsIdentity(matrix);
         }
 
         /// <summary>

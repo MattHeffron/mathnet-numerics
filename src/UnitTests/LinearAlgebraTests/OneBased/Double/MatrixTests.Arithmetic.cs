@@ -410,7 +410,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             Assert.AreEqual(matrixC.RowCount, matrixA.RowCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.RowCount);
 
-            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 14));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Row(i) * matrixB.Row(j), matrixC[i, j], 15));
         }
 
         /// <summary>
@@ -569,7 +569,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             Assert.AreEqual(matrixC.RowCount, matrixA.ColumnCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
 
-            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 12));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 15));
         }
 
         /// <summary>
@@ -601,7 +601,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             Assert.AreEqual(matrixC.RowCount, matrixA.ColumnCount);
             Assert.AreEqual(matrixC.ColumnCount, matrixB.ColumnCount);
 
-            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 12));
+            AssertHelpers.IndexedAssertion(matrixC, (i, j) => AssertHelpers.AlmostEqual(matrixA.Column(i) * matrixB.Column(j), matrixC[i, j], 15));
         }
 
         /// <summary>

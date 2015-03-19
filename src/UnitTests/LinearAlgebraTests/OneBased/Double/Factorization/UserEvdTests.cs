@@ -90,7 +90,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
             // Make sure the A*V = λ*V 
             var matrixAv = matrixA * eigenVectors;
             var matrixLv = eigenVectors * d;
-            AssertHelpers.AlmostEqualRelative(matrixAv, matrixLv, 10);
+            AssertHelpers.AreEqual(matrixAv, matrixLv, 1.0e-10);
         }
 
         /// <summary>
@@ -118,7 +118,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double.Factoriz
 
             // Make sure the A = V*λ*VT 
             var matrix = eigenVectors * d * eigenVectors.Transpose();
-            AssertHelpers.AlmostEqualRelative(matrix, matrixA, 10);
+            AssertHelpers.AreEqual(matrix, matrixA, 1.0e-10);
         }
 
         /// <summary>

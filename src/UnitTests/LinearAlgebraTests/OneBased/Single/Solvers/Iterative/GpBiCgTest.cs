@@ -165,7 +165,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
         public void SolvePoissonMatrixAndBackMultiply()
         {
             // Create the matrix
-            var matrix = MatrixHelpers.MakePoissonTestMatrix<float>();
+            var matrix = MatrixHelpers.MakePoissonTestMatrix<float>(5);
 
             // Create the y vector
             var y = Vector<float>.Build.Dense(matrix.RowCount, 1);
@@ -227,7 +227,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
                 var matrixBReconstruct = matrixA * resultx;
 
                 // Check the reconstruction.
-                AssertHelpers.AlmostEqual(vectorb, matrixBReconstruct, iteration - 3);
+                AssertHelpers.AreEqual(vectorb, matrixBReconstruct, (float)Math.Pow(1.0/10.0, iteration - 3));
             }
         }
 
@@ -267,7 +267,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Single.Solvers.
                 var matrixBReconstruct = matrixA*matrixX;
 
                 // Check the reconstruction.
-                AssertHelpers.AlmostEqual(matrixB, matrixBReconstruct, iteration - 3);
+                AssertHelpers.AreEqual(matrixB, matrixBReconstruct, (float)Math.Pow(1.0/10.0, iteration - 3));
             }
         }
     }
