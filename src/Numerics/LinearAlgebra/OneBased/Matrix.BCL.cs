@@ -107,6 +107,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public string[,] ToMatrixStringArray(int upperRows, int lowerRows, int leftColumns, int rightColumns,
             string horizontalEllipsis, string verticalEllipsis, string diagonalEllipsis, Func<T, string> formatValue)
         {
+            if (RowCount == 0 || ColumnCount == 0)
+                return new string[0, 0];
             upperRows = Math.Max(upperRows, 1);
             lowerRows = Math.Max(lowerRows, 0);
             leftColumns = Math.Max(leftColumns, 1);
@@ -185,6 +187,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
         public string[,] ToMatrixStringArray(int upperRows, int lowerRows, int minLeftColumns, int rightColumns, int maxWidth, int padding,
             string horizontalEllipsis, string verticalEllipsis, string diagonalEllipsis, Func<T, string> formatValue)
         {
+            if (RowCount == 0 || ColumnCount == 0)
+                return new string[0, 0];
             upperRows = Math.Max(upperRows, 1);
             lowerRows = Math.Max(lowerRows, 0);
             minLeftColumns = Math.Max(minLeftColumns, 1);

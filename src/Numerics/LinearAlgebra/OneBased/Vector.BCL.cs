@@ -262,13 +262,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
 
         public string[,] ToVectorStringArray(int maxPerColumn, int maxWidth, int padding, string ellipsis, Func<T, string> formatValue)
         {
+            if (Count == 0)
+                return new string[0, 0];
             maxPerColumn = Math.Max(maxPerColumn, 1);
             maxWidth = Math.Max(maxWidth, 12);
 
             var columns = new List<Tuple<int, string[]>>();
             int chars = 0;
             int offset = 0;
-            while (offset <= Count)
+            while (offset < Count)
             {
                 // full column
                 int height = Math.Min(maxPerColumn, Count - offset);
@@ -281,7 +283,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
                 columns.Add(candidate);
                 offset += height;
             }
-            if (offset <= Count)
+            if (offset < Count)
             {
                 // we're not done yet, but adding the last column has failed
                 // --> make the last column partial
@@ -348,7 +350,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased
             {
                 c[index++] = formatValue(At(offset + k + 1));       // adjust for one-based indexing
             }
-            int w = c.Max(x => x.Length);
+            int w = height > 0 ? c.Max(x => x.Length) : 0;
             return new Tuple<int, string[]>(w, c);
         }
 

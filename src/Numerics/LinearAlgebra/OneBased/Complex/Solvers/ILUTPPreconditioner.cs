@@ -390,7 +390,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
                 var vectorNorm = workVector.InfinityNorm();
 
                 // for j = 1, .. , i - 1)
-                for (var j = 1; j <= i; j++)
+                for (var j = 1; j < i; j++)
                 {
                     // if (w(j) != 0)
                     // {
@@ -446,7 +446,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
                 }
 
                 // spaceRow = spaceLeft / (n - i + 1) // Determine the space for this row
-                var spaceRow = spaceLeft / (order - i + 1);       // CONSIDER: in 0-based impl. this should NOT have +1
+                var spaceRow = spaceLeft / (order - i + 2);       // CONSIDER: in 0-based impl. this should NOT have +1, but for consistency, adjust it here.
 
                 // lfil = spaceRow / 2  // space for this row of L
                 var fillLevel = spaceRow/2;
@@ -476,7 +476,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Solvers
                 // u(i,j) = w(j) for j = i + 1, .. , n // only the largest lfil - 1 elements
                 var upperNonZeroCount = 0;
                 count = 0;
-                for (var j = 1; j <= order - i; j++)
+                for (var j = 0; j <= order - i; j++)
                 {
                     int iSj = indexSorting[j]; // indexSorting is 0-based but contains 1-based index values
                     if ((count > fillLevel - 1) || (iSj == 0))
