@@ -967,7 +967,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
 
         public override string ToTypeString()
         {
-            return string.Format("SparseVector[1] {0}-Complex {1:P2} Filled", Count, NonZerosCount / (double)Count);
+            return string.Format("SparseVector[1] {0}-Complex {1:P2} Filled", Count, NonZerosCount / (double)Math.Max(1, Count));      // prevent divide by zero if empty
         }
     }
 }

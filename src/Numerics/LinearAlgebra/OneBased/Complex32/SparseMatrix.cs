@@ -1490,7 +1490,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
 
         public override string ToTypeString()
         {
-            return string.Format("SparseMatrix[1] {0}x{1}-Complex32 {2:P2} Filled", RowCount, ColumnCount, 100d * NonZerosCount / (RowCount * (double)ColumnCount));
+            double denominatorCount = Math.Max(1, RowCount * ColumnCount);      // prevent divide by zero if empty
+            return string.Format("SparseMatrix[1] {0}x{1}-Complex32 {2:P2} Filled", RowCount, ColumnCount, NonZerosCount / denominatorCount);
         }
     }
 }

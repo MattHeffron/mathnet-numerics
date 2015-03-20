@@ -1512,7 +1512,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
 
         public override string ToTypeString()
         {
-            return string.Format("SparseMatrix[1] {0}x{1}-Integer {2:P2} Filled", RowCount, ColumnCount, NonZerosCount / (RowCount * (double)ColumnCount));
+            double denominatorCount = Math.Max(1, RowCount * ColumnCount);      // prevent divide by zero if empty
+            return string.Format("SparseMatrix[1] {0}x{1}-Integer {2:P2} Filled", RowCount, ColumnCount, NonZerosCount / denominatorCount);
         }
     }
 }
