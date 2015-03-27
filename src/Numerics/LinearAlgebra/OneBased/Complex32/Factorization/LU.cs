@@ -59,9 +59,9 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32.Factorization
             get
             {
                 var det = Complex32.One;
-                for (var j = 0; j < Factors.RowCount; j++)
+                for (var j = 1; j <= Factors.RowCount; j++)
                 {
-                    if (Pivots[j] != j)
+                    if (Pivots[j - 1] != j - 1) // the Pivots are always zero based
                     {
                         det *= -Factors.At(j, j);
                     }

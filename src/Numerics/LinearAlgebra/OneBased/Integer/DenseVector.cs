@@ -563,7 +563,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <returns>The value of the absolute minimum element.</returns>
         public override int AbsoluteMinimum()
         {
-            return Math.Abs(_values[AbsoluteMinimumIndex()]);
+            return Math.Abs(_values[AbsoluteMinimumIndex() - 1]);
         }
 
         /// <summary>
@@ -572,7 +572,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Integer
         /// <returns>The value of the absolute maximum element.</returns>
         public override int AbsoluteMaximum()
         {
-            return Math.Abs(_values[AbsoluteMaximumIndex()]);
+            return Math.Abs(_values[AbsoluteMaximumIndex() - 1]);
         }
 
         /// <summary>

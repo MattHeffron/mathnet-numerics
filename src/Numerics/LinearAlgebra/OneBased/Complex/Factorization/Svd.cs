@@ -83,7 +83,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         {
             get
             {
-                return S[0].Magnitude;
+                return S[1].Magnitude;
             }
         }
 
@@ -95,8 +95,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
         {
             get
             {
-                var tmp = Math.Min(U.RowCount, VT.ColumnCount) - 1;
-                return S[0].Magnitude / S[tmp].Magnitude;
+                var tmp = Math.Min(U.RowCount, VT.ColumnCount);
+                return S[1].Magnitude / S[tmp].Magnitude;
             }
         }
 

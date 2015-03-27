@@ -624,7 +624,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
                 var d = Math.Min(ColumnCount, other.ColumnCount);
                 if (d < other.ColumnCount)
                 {
-                    result.ClearSubMatrix(0, RowCount, ColumnCount, other.ColumnCount - ColumnCount);
+                    result.ClearSubMatrix(1, RowCount, ColumnCount, other.ColumnCount - ColumnCount);
                 }
                 int index = 0;
                 for (int j = 0; j < d; j++)
@@ -674,7 +674,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
                 var d = Math.Min(ColumnCount, other.RowCount);
                 if (d < other.RowCount)
                 {
-                    result.ClearSubMatrix(0, RowCount, ColumnCount, other.RowCount - ColumnCount);
+                    result.ClearSubMatrix(1, RowCount, ColumnCount, other.RowCount - ColumnCount);
                 }
                 int index = 0;
                 for (int j = 0; j < d; j++)
@@ -755,7 +755,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single
                 var d = Math.Min(RowCount, other.ColumnCount);
                 if (d < other.ColumnCount)
                 {
-                    result.ClearSubMatrix(0, ColumnCount, RowCount, other.ColumnCount - RowCount);
+                    result.ClearSubMatrix(1, ColumnCount, RowCount, other.ColumnCount - RowCount);
                 }
                 int index = 0;
                 for (int i = 0; i < ColumnCount; i++)

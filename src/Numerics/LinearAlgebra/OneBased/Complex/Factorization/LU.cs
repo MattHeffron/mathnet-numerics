@@ -66,7 +66,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
                 var det = Complex.One;
                 for (var j = 1; j <= Factors.RowCount; j++)
                 {
-                    if (Pivots[j - 1] != j)
+                    if (Pivots[j - 1] != j - 1) // the Pivots are always zero based
                     {
                         det *= -Factors.At(j, j);
                     }

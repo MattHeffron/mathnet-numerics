@@ -344,7 +344,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Double
                 var d = Math.Min(denseOther.RowCount, RowCount);
                 if (d <= RowCount)
                 {
-                    result.ClearSubMatrix(denseOther.RowCount, RowCount - denseOther.RowCount, 0, denseOther.ColumnCount);
+                    result.ClearSubMatrix(denseOther.RowCount, RowCount - denseOther.RowCount, 1, denseOther.ColumnCount);
                 }
                 int index = 0;
                 for (int i = 1; i <= denseOther.ColumnCount; i++)

@@ -191,13 +191,14 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         }
 
         /// <summary>
-        /// <c>CreateVector</c> throws <c>ArgumentOutOfRangeException</c> if size is not positive.
+        /// <c>CreateVector</c> throws <c>ArgumentOutOfRangeException</c> if size is negative.
         /// </summary>
         [Test]
-        public void SizeIsNotPositiveThrowsArgumentOutOfRangeException()
+        public void SizeIsNegativeThrowsArgumentOutOfRangeException()
         {
             Assert.That(() => CreateVector(-1), Throws.TypeOf<ArgumentOutOfRangeException>());
-            Assert.That(() => CreateVector(0), Throws.TypeOf<ArgumentOutOfRangeException>());
+            // 0 length is allowed on OneBased because Matlab allows it
+            //Assert.That(() => CreateVector(0), Throws.TypeOf<ArgumentOutOfRangeException>());
         }
 
         /// <summary>
@@ -313,7 +314,7 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
             var vector = CreateVector(Data);
             var sub = vector.SubVector(index, length);
             Assert.AreEqual(length, sub.Count);
-            AssertHelpers.IndexedAssertion(sub, i => Assert.AreEqual(vector[i + index], sub[i]));
+            AssertHelpers.IndexedAssertion(sub, i => Assert.AreEqual(vector[i + index - 1], sub[i]));
         }
 
         /// <summary>

@@ -847,12 +847,12 @@ namespace MathNet.Numerics.UnitTests.LinearAlgebraTests.OneBased.Double
         }
 
         /// <summary>
-        /// Create random matrix with non-positive number of rows throw <c>ArgumentException</c>.
+        /// Create random matrix with negative number of rows throw <c>ArgumentException</c>.
         /// </summary>
         /// <param name="numberOfRows">Number of rows.</param>
-        [TestCase(0)]
+        //[TestCase(0)] // empty matrix is allowed for OneBased (because Matlab allows it)
         [TestCase(-2)]
-        public void RandomWithNonPositiveNumberOfRowsThrowsArgumentException(int numberOfRows)
+        public void RandomWithNegativeNumberOfRowsThrowsArgumentException(int numberOfRows)
         {
             Assert.That(() => Matrix<double>.Build.Random(numberOfRows, 4, new ContinuousUniform()), Throws.TypeOf<ArgumentOutOfRangeException>());
         }

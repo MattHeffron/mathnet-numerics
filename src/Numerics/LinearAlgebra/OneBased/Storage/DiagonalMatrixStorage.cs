@@ -597,11 +597,13 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
         public override IEnumerable<Tuple<int, int, T>> EnumerateNonZeroIndexed()
         {
-            for (int i = 0, i1 = 1; i < Data.Length; i++, i1++)
+            for (int i = 0; i < Data.Length; i++)
             {
-                if (!Zero.Equals(Data[i]))
+                T value = Data[i];
+                if (!Zero.Equals(value))
                 {
-                    yield return new Tuple<int, int, T>(i1, i1, Data[i]);
+                    ++i;    // adjust to report as one based indexing
+                    yield return new Tuple<int, int, T>(i, i, value);
                 }
             }
         }
@@ -612,16 +614,18 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         {
             for (int i = 0; i < Data.Length; i++)
             {
-                if (predicate(Data[i]))
+                T value = Data[i];
+                if (predicate(value))
                 {
-                    return new Tuple<int, int, T>(i, i, Data[i]);
+                    ++i;    // adjust to report as one based indexing
+                    return new Tuple<int, int, T>(i, i, value);
                 }
             }
             if (zeros == Zeros.Include && (RowCount > 1 || ColumnCount > 1))
             {
                 if (predicate(Zero))
                 {
-                    return new Tuple<int, int, T>(RowCount > 1 ? 1 : 0, RowCount > 1 ? 0 : 1, Zero);
+                    return new Tuple<int, int, T>(RowCount > 1 ? 2 : 1, RowCount > 1 ? 1 : 2, Zero);
                 }
             }
             return null;
@@ -634,13 +638,15 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             {
                 TOther[] otherData = denseOther.Data;
                 int k = 0;
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
-                    for (int i = 0; i < RowCount; i++)
+                    for (int i = 1; i <= RowCount; i++)
                     {
-                        if (predicate(i == j ? Data[i] : Zero, otherData[k]))
+                        T value = Data[i - 1];
+                        TOther otherValue = otherData[k];
+                        if (predicate(i == j ? value : Zero, otherValue))
                         {
-                            return new Tuple<int, int, T, TOther>(i, j, i == j ? Data[i] : Zero, otherData[k]);
+                            return new Tuple<int, int, T, TOther>(i, j, i == j ? value : Zero, otherValue);
                         }
                         k++;
                     }
@@ -654,9 +660,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 TOther[] otherData = diagonalOther.Data;
                 for (int i = 0; i < Data.Length; i++)
                 {
-                    if (predicate(Data[i], otherData[i]))
+                    T value = Data[i];
+                    TOther otherValue = otherData[i];
+                    if (predicate(value, otherValue))
                     {
-                        return new Tuple<int, int, T, TOther>(i, i, Data[i], otherData[i]);
+                        return new Tuple<int, int, T, TOther>(i + 1, i + 1, value, otherValue);
                     }
                 }
                 if (zeros == Zeros.Include && (RowCount > 1 || ColumnCount > 1))
@@ -664,7 +672,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
                     if (predicate(Zero, otherZero))
                     {
-                        return new Tuple<int, int, T, TOther>(RowCount > 1 ? 1 : 0, RowCount > 1 ? 0 : 1, Zero, otherZero);
+                        return new Tuple<int, int, T, TOther>(RowCount > 1 ? 2 : 1, RowCount > 1 ? 1 : 2, Zero, otherZero);
                     }
                 }
                 return null;
@@ -677,34 +685,36 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 int[] otherColumnIndices = sparseOther.ColumnIndices;
                 TOther[] otherValues = sparseOther.Values;
                 TOther otherZero = BuilderInstance<TOther>.Matrix.Zero;
-                for (int row = 0; row < RowCount; row++)
+                for (int row = 1; row <= RowCount; row++)
                 {
+                    T value = Data[row - 1];
                     bool diagonal = false;
-                    var startIndex = otherRowPointers[row];
-                    var endIndex = otherRowPointers[row + 1];
+                    var startIndex = otherRowPointers[row - 1];
+                    var endIndex = otherRowPointers[row];
                     for (var j = startIndex; j < endIndex; j++)
                     {
+                        TOther otherValuej = otherValues[j];
                         if (otherColumnIndices[j] == row)
                         {
                             diagonal = true;
-                            if (predicate(Data[row], otherValues[j]))
+                            if (predicate(value, otherValuej))
                             {
-                                return new Tuple<int, int, T, TOther>(row, row, Data[row], otherValues[j]);
+                                return new Tuple<int, int, T, TOther>(row, row, value, otherValuej);
                             }
                         }
                         else
                         {
                             if (predicate(Zero, otherValues[j]))
                             {
-                                return new Tuple<int, int, T, TOther>(row, otherColumnIndices[j], Zero, otherValues[j]);
+                                return new Tuple<int, int, T, TOther>(row, otherColumnIndices[j], Zero, otherValuej);
                             }
                         }
                     }
-                    if (!diagonal && row < ColumnCount)
+                    if (!diagonal && row <= ColumnCount)
                     {
-                        if (predicate(Data[row], otherZero))
+                        if (predicate(value, otherZero))
                         {
-                            return new Tuple<int, int, T, TOther>(row, row, Data[row], otherZero);
+                            return new Tuple<int, int, T, TOther>(row, row, value, otherZero);
                         }
                     }
                 }
@@ -713,11 +723,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     if (predicate(Zero, otherZero))
                     {
                         int k = 0;
-                        for (int row = 0; row < RowCount; row++)
+                        for (int row = 1; row <= RowCount; row++)
                         {
-                            for (int col = 0; col < ColumnCount; col++)
+                            for (int col = 1; col <= ColumnCount; col++)
                             {
-                                if (k < otherRowPointers[row + 1] && otherColumnIndices[k] == col)
+                                if (k < otherRowPointers[row] && otherColumnIndices[k] == col)
                                 {
                                     k++;
                                 }
@@ -766,7 +776,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             {
                 for (int i = a; i < b; i++)
                 {
-                    Data[i] = f(i, i, Data[i]);
+                    Data[i] = f(i + 1, i + 1, Data[i]);
                 }
             });
         }
@@ -803,11 +813,11 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             if (processZeros)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
-                    for (int i = 0; i < RowCount; i++)
+                    for (int i = 1; i <= RowCount; i++)
                     {
-                        target.At(i, j, f(i == j ? Data[i] : Zero));
+                        target.At(i, j, f(i == j ? Data[i - 1] : Zero));
                     }
                 }
             }
@@ -815,7 +825,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             {
                 for (int i = 0; i < Data.Length; i++)
                 {
-                    target.At(i, i, f(Data[i]));
+                    target.At(i + 1, i + 1, f(Data[i]));
                 }
             }
         }
@@ -823,7 +833,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
         internal override void MapIndexedToUnchecked<TU>(MatrixStorage<TU> target, Func<int, int, T, TU> f,
             Zeros zeros, ExistingData existingData)
         {
-            var processZeros = zeros == Zeros.Include || !Zero.Equals(f(0, 1, Zero));
+            var processZeros = zeros == Zeros.Include || !Zero.Equals(f(1, 2, Zero));
 
             var diagonalTarget = target as DiagonalMatrixStorage<TU>;
             if (diagonalTarget != null)
@@ -837,7 +847,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 {
                     for (int i = a; i < b; i++)
                     {
-                        diagonalTarget.Data[i] = f(i, i, Data[i]);
+                        diagonalTarget.Data[i] = f(i + 1, i + 1, Data[i]);
                     }
                 });
                 return;
@@ -852,19 +862,19 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
 
             if (processZeros)
             {
-                for (int j = 0; j < ColumnCount; j++)
+                for (int j = 1; j <= ColumnCount; j++)
                 {
-                    for (int i = 0; i < RowCount; i++)
+                    for (int i = 1; i <= RowCount; i++)
                     {
-                        target.At(i, j, f(i, j, i == j ? Data[i] : Zero));
+                        target.At(i, j, f(i, j, i == j ? Data[i - 1] : Zero));
                     }
                 }
             }
             else
             {
-                for (int i = 0; i < Data.Length; i++)
+                for (int i = 1; i <= Data.Length; i++)
                 {
-                    target.At(i, i, f(i, i, Data[i]));
+                    target.At(i, i, f(i, i, Data[i - 1]));
                 }
             }
         }
@@ -901,6 +911,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             {
                 int targetRow = targetRowIndex;
                 int targetColumn = targetColumnIndex;
+                // adjust sourceRowIndex for 0-based indexing calculation
+                --sourceRowIndex;
                 for (var i = 0; i < Math.Min(columnCount, rowCount); i++)
                 {
                     target.At(targetRow, targetColumn, f(targetRow, targetColumn, Data[sourceRowIndex + i]));
@@ -914,6 +926,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 int columnInit = sourceRowIndex - sourceColumnIndex;
                 int targetRow = targetRowIndex;
                 int targetColumn = targetColumnIndex + columnInit;
+                // adjust sourceRowIndex for 0-based indexing calculation
+                --sourceRowIndex;
                 for (var i = 0; i < Math.Min(columnCount - columnInit, rowCount); i++)
                 {
                     target.At(targetRow, targetColumn, f(targetRow, targetColumn, Data[sourceRowIndex + i]));
@@ -927,6 +941,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                 int rowInit = sourceColumnIndex - sourceRowIndex;
                 int targetRow = targetRowIndex + rowInit;
                 int targetColumn = targetColumnIndex;
+                // adjust sourceColumnIndex for 0-based indexing calculation
+                --sourceColumnIndex;
                 for (var i = 0; i < Math.Min(columnCount, rowCount - rowInit); i++)
                 {
                     target.At(targetRow, targetColumn, f(targetRow, targetColumn, Data[sourceColumnIndex + i]));
@@ -942,7 +958,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             Zeros zeros)
             where TU : struct, IEquatable<TU>, IFormattable
         {
-            var processZeros = zeros == Zeros.Include || !Zero.Equals(f(0, 1, Zero));
+            var processZeros = zeros == Zeros.Include || !Zero.Equals(f(1, 2, Zero));
             if (processZeros || sourceRowIndex - sourceColumnIndex != targetRowIndex - targetColumnIndex)
             {
                 throw new NotSupportedException("Cannot map non-zero off-diagonal values into a diagonal matrix");
@@ -953,12 +969,14 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             if (count > 0)
             {
                 var beginTarget = Math.Max(targetRowIndex, targetColumnIndex);
+                // adjust beginInclusive for 0-based indexing calculation
+                --beginInclusive;
                 CommonParallel.For(0, count, 4096, (a, b) =>
                 {
                     int targetIndex = beginTarget + a;
                     for (int i = a; i < b; i++)
                     {
-                        target.Data[targetIndex] = f(targetIndex, targetIndex, Data[beginInclusive + i]);
+                        target.Data[targetIndex - 1] = f(targetIndex, targetIndex, Data[beginInclusive + i]);
                         targetIndex++;
                     }
                 });
@@ -971,7 +989,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
             Zeros zeros, ExistingData existingData)
             where TU : struct, IEquatable<TU>, IFormattable
         {
-            var processZeros = zeros == Zeros.Include || !Zero.Equals(f(0, 1, Zero));
+            var processZeros = zeros == Zeros.Include || !Zero.Equals(f(1, 2, Zero));
             if (existingData == ExistingData.Clear && !processZeros)
             {
                 target.ClearUnchecked(targetRowIndex, rowCount, targetColumnIndex, columnCount);
@@ -985,12 +1003,13 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     int targetColumn = targetColumnIndex + a;
                     for (int j = a; j < b; j++)
                     {
-                        int targetIndex = targetRowIndex + (j + targetColumnIndex)*target.RowCount;
+                        int sourceIndex = sourceColumn - 1;
+                        int targetIndex = targetRowIndex - 1 + (j + targetColumnIndex - 1)*target.RowCount;
                         int sourceRow = sourceRowIndex;
                         int targetRow = targetRowIndex;
                         for (int i = 0; i < rowCount; i++)
                         {
-                            target.Data[targetIndex++] = f(targetRow++, targetColumn, sourceRow++ == sourceColumn ? Data[sourceColumn] : Zero);
+                            target.Data[targetIndex++] = f(targetRow++, targetColumn, sourceRow++ == sourceColumn ? Data[sourceIndex] : Zero);
                         }
                         sourceColumn++;
                         targetColumn++;
@@ -1007,6 +1026,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     int offset = (columnInit + targetColumnIndex)*target.RowCount + targetRowIndex;
                     int step = target.RowCount + 1;
                     int count = Math.Min(columnCount - columnInit, rowCount);
+                    // adjust sourceRowIndex for 0-based indexing calculation
+                    --sourceRowIndex;
 
                     for (int k = 0, j = offset; k < count; j += step, k++)
                     {
@@ -1021,6 +1042,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     int offset = targetColumnIndex*target.RowCount + rowInit + targetRowIndex;
                     int step = target.RowCount + 1;
                     int count = Math.Min(columnCount, rowCount - rowInit);
+                    // adjust sourceColumnIndex for 0-based indexing calculation
+                    --sourceColumnIndex;
 
                     for (int k = 0, j = offset; k < count; j += step, k++)
                     {
@@ -1032,6 +1055,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Storage
                     int offset = targetColumnIndex*target.RowCount + targetRowIndex;
                     int step = target.RowCount + 1;
                     var count = Math.Min(columnCount, rowCount);
+                    // adjust sourceRowIndex for 0-based indexing calculation
+                    --sourceRowIndex;
 
                     for (int k = 0, j = offset; k < count; j += step, k++)
                     {

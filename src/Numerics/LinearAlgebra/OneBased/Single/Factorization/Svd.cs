@@ -76,7 +76,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         {
             get
             {
-                return Math.Abs(S[0]);
+                return Math.Abs(S[1]);
             }
         }
 
@@ -88,8 +88,8 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Single.Factorization
         {
             get
             {
-                var tmp = Math.Min(U.RowCount, VT.ColumnCount) - 1;
-                return Math.Abs(S[0]) / Math.Abs(S[tmp]);
+                var tmp = Math.Min(U.RowCount, VT.ColumnCount);
+                return Math.Abs(S[1]) / Math.Abs(S[tmp]);
             }
         }
 

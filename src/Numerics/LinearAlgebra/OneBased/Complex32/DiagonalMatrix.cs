@@ -361,7 +361,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
                 var d = Math.Min(denseOther.RowCount, RowCount);
                 if (d < RowCount)
                 {
-                    result.ClearSubMatrix(denseOther.RowCount, RowCount - denseOther.RowCount, 0, denseOther.ColumnCount);
+                    result.ClearSubMatrix(denseOther.RowCount, RowCount - denseOther.RowCount, 1, denseOther.ColumnCount);
                 }
                 int index = 0;
                 for (int i = 0; i < denseOther.ColumnCount; i++)
@@ -414,7 +414,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
                 var d = Math.Min(denseOther.ColumnCount, RowCount);
                 if (d < RowCount)
                 {
-                    result.ClearSubMatrix(denseOther.ColumnCount, RowCount - denseOther.ColumnCount, 0, denseOther.RowCount);
+                    result.ClearSubMatrix(denseOther.ColumnCount, RowCount - denseOther.ColumnCount, 1, denseOther.RowCount);
                 }
                 int index = 0;
                 for (int j = 0; j < d; j++)
@@ -460,7 +460,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
                 var d = Math.Min(denseOther.ColumnCount, RowCount);
                 if (d < RowCount)
                 {
-                    result.ClearSubMatrix(denseOther.ColumnCount, RowCount - denseOther.ColumnCount, 0, denseOther.RowCount);
+                    result.ClearSubMatrix(denseOther.ColumnCount, RowCount - denseOther.ColumnCount, 1, denseOther.RowCount);
                 }
                 int index = 0;
                 for (int j = 0; j < d; j++)
@@ -504,7 +504,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
                 var d = Math.Min(denseOther.RowCount, ColumnCount);
                 if (d < ColumnCount)
                 {
-                    result.ClearSubMatrix(denseOther.RowCount, ColumnCount - denseOther.RowCount, 0, denseOther.ColumnCount);
+                    result.ClearSubMatrix(denseOther.RowCount, ColumnCount - denseOther.RowCount, 1, denseOther.ColumnCount);
                 }
                 int index = 0;
                 for (int i = 0; i < denseOther.ColumnCount; i++)
@@ -564,7 +564,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex32
                 var d = Math.Min(denseOther.RowCount, ColumnCount);
                 if (d < ColumnCount)
                 {
-                    result.ClearSubMatrix(denseOther.RowCount, ColumnCount - denseOther.RowCount, 0, denseOther.ColumnCount);
+                    result.ClearSubMatrix(denseOther.RowCount, ColumnCount - denseOther.RowCount, 1, denseOther.ColumnCount);
                 }
                 int index = 0;
                 for (int i = 0; i < denseOther.ColumnCount; i++)

@@ -75,7 +75,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex.Factorization
             // Create a new matrix for the LU factors, then perform factorization (while overwriting).
             var factors = (DenseMatrix) matrix.Clone();
             Control.LinearAlgebraProvider.LUFactor(factors.Values, factors.RowCount, pivots);
-
+            
             return new DenseLU(factors, pivots);
         }
 

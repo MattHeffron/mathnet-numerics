@@ -524,7 +524,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <returns>The value of the absolute minimum element.</returns>
         public override Complex AbsoluteMinimum()
         {
-            return _values[AbsoluteMinimumIndex()].Magnitude;
+            return _values[AbsoluteMinimumIndex() - 1].Magnitude;
         }
 
         /// <summary>
@@ -533,7 +533,7 @@ namespace MathNet.Numerics.LinearAlgebra.OneBased.Complex
         /// <returns>The value of the absolute maximum element.</returns>
         public override Complex AbsoluteMaximum()
         {
-            return _values[AbsoluteMaximumIndex()].Magnitude;
+            return _values[AbsoluteMaximumIndex() - 1].Magnitude;
         }
 
         /// <summary>
